@@ -23,12 +23,10 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 				Properties: map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"integer"},
-						Format:      "int64",
 						Description: "hey there! I'm an int64 type.",
 					}),
 					"int64_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"integer"},
-						Format:      "int64",
 						Description: "hey there! I'm an int64 type, required.",
 					}),
 				},
@@ -40,63 +38,16 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "int64_prop",
-								Type: ir.ResourceAttributeType{
-									Int64: &ir.ResourceInt64{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm an int64 type."),
-									},
+								Int64: &ir.ResourceInt64Attribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm an int64 type."),
 								},
 							},
 							{
 								Name: "int64_prop_required",
-								Type: ir.ResourceAttributeType{
-									Int64: &ir.ResourceInt64{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm an int64 type, required."),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		"number (integer) attributes": {
-			requestSchema: &base.Schema{
-				Type:     []string{"object"},
-				Required: []string{"int_number_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
-					"int_number_prop": base.CreateSchemaProxy(&base.Schema{
-						Type:        []string{"integer"},
-						Description: "hey there! I'm a number type, from an integer.",
-					}),
-					"int_number_prop_required": base.CreateSchemaProxy(&base.Schema{
-						Type:        []string{"integer"},
-						Description: "hey there! I'm a number type, from an integer, required.",
-					}),
-				},
-			},
-			expectedIR: &[]ir.Resource{
-				{
-					Name: "test_resource",
-					Schema: ir.ResourceSchema{
-						Attributes: []ir.ResourceAttribute{
-							{
-								Name: "int_number_prop",
-								Type: ir.ResourceAttributeType{
-									Number: &ir.ResourceNumber{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a number type, from an integer."),
-									},
-								},
-							},
-							{
-								Name: "int_number_prop_required",
-								Type: ir.ResourceAttributeType{
-									Number: &ir.ResourceNumber{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a number type, from an integer, required."),
-									},
+								Int64: &ir.ResourceInt64Attribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm an int64 type, required."),
 								},
 							},
 						},
@@ -107,17 +58,27 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 		"float64 attributes": {
 			requestSchema: &base.Schema{
 				Type:     []string{"object"},
-				Required: []string{"number_float64_prop_required"},
+				Required: []string{"double_float64_prop_required", "float_float64_prop_required"},
 				Properties: map[string]*base.SchemaProxy{
-					"number_float64_prop": base.CreateSchemaProxy(&base.Schema{
+					"double_float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Format:      "double",
-						Description: "hey there! I'm a float64 type.",
+						Description: "hey there! I'm a float64 type, from a double.",
 					}),
-					"number_float64_prop_required": base.CreateSchemaProxy(&base.Schema{
+					"double_float64_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Format:      "double",
-						Description: "hey there! I'm a float64 type, required.",
+						Description: "hey there! I'm a float64 type, from a double, required.",
+					}),
+					"float_float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"number"},
+						Format:      "float",
+						Description: "hey there! I'm a float64 type, from a float.",
+					}),
+					"float_float64_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"number"},
+						Format:      "float",
+						Description: "hey there! I'm a float64 type, from a float, required.",
 					}),
 				},
 			},
@@ -127,21 +88,31 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 					Schema: ir.ResourceSchema{
 						Attributes: []ir.ResourceAttribute{
 							{
-								Name: "number_float64_prop",
-								Type: ir.ResourceAttributeType{
-									Float64: &ir.ResourceFloat64{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a float64 type."),
-									},
+								Name: "double_float64_prop",
+								Float64: &ir.ResourceFloat64Attribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a float64 type, from a double."),
 								},
 							},
 							{
-								Name: "number_float64_prop_required",
-								Type: ir.ResourceAttributeType{
-									Float64: &ir.ResourceFloat64{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a float64 type, required."),
-									},
+								Name: "double_float64_prop_required",
+								Float64: &ir.ResourceFloat64Attribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a float64 type, from a double, required."),
+								},
+							},
+							{
+								Name: "float_float64_prop",
+								Float64: &ir.ResourceFloat64Attribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a float64 type, from a float."),
+								},
+							},
+							{
+								Name: "float_float64_prop_required",
+								Float64: &ir.ResourceFloat64Attribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a float64 type, from a float, required."),
 								},
 							},
 						},
@@ -171,20 +142,16 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "number_prop",
-								Type: ir.ResourceAttributeType{
-									Number: &ir.ResourceNumber{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a number type."),
-									},
+								Number: &ir.ResourceNumberAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a number type."),
 								},
 							},
 							{
 								Name: "number_prop_required",
-								Type: ir.ResourceAttributeType{
-									Number: &ir.ResourceNumber{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a number type, required."),
-									},
+								Number: &ir.ResourceNumberAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a number type, required."),
 								},
 							},
 						},
@@ -215,22 +182,18 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "string_prop",
-								Type: ir.ResourceAttributeType{
-									String: &ir.ResourceString{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a string type, not sensitive, required."),
-										Sensitive:                pointer(false),
-									},
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a string type, not sensitive, required."),
+									Sensitive:                pointer(false),
 								},
 							},
 							{
 								Name: "string_sensitive_prop",
-								Type: ir.ResourceAttributeType{
-									String: &ir.ResourceString{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a string type, sensitive"),
-										Sensitive:                pointer(true),
-									},
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a string type, sensitive"),
+									Sensitive:                pointer(true),
 								},
 							},
 						},
@@ -260,20 +223,16 @@ func TestResourceMapper_PrimitiveAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "bool_prop",
-								Type: ir.ResourceAttributeType{
-									Bool: &ir.ResourceBool{
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a bool type."),
-									},
+								Bool: &ir.ResourceBoolAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a bool type."),
 								},
 							},
 							{
 								Name: "bool_prop_required",
-								Type: ir.ResourceAttributeType{
-									Bool: &ir.ResourceBool{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a bool type, required."),
-									},
+								Bool: &ir.ResourceBoolAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a bool type, required."),
 								},
 							},
 						},
@@ -347,42 +306,34 @@ func TestResourceMapper_NestedAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "nested_obj_prop",
-								Type: ir.ResourceAttributeType{
-									SingleNested: &ir.SingleNestedAttribute{
-										Attributes: []ir.ResourceAttribute{
-											{
-												Name: "nested_obj_prop_required",
-												Type: ir.ResourceAttributeType{
-													SingleNested: &ir.SingleNestedAttribute{
-														Attributes: []ir.ResourceAttribute{
-															{
-																Name: "nested_float64",
-																Type: ir.ResourceAttributeType{
-																	Float64: &ir.ResourceFloat64{
-																		ComputedOptionalRequired: ir.Optional,
-																		Description:              pointer("hey there! I'm a nested float64 type."),
-																	},
-																},
-															},
-															{
-																Name: "nested_int64_required",
-																Type: ir.ResourceAttributeType{
-																	Int64: &ir.ResourceInt64{
-																		ComputedOptionalRequired: ir.Required,
-																		Description:              pointer("hey there! I'm a nested int64 type, required."),
-																	},
-																},
-															},
+								SingleNested: &ir.ResourceSingleNestedAttribute{
+									Attributes: []ir.ResourceAttribute{
+										{
+											Name: "nested_obj_prop_required",
+											SingleNested: &ir.ResourceSingleNestedAttribute{
+												Attributes: []ir.ResourceAttribute{
+													{
+														Name: "nested_float64",
+														Float64: &ir.ResourceFloat64Attribute{
+															ComputedOptionalRequired: ir.ComputedOptional,
+															Description:              pointer("hey there! I'm a nested float64 type."),
 														},
-														ComputedOptionalRequired: ir.Required,
-														Description:              pointer("hey there! I'm a single nested object type, required."),
+													},
+													{
+														Name: "nested_int64_required",
+														Int64: &ir.ResourceInt64Attribute{
+															ComputedOptionalRequired: ir.Required,
+															Description:              pointer("hey there! I'm a nested int64 type, required."),
+														},
 													},
 												},
+												ComputedOptionalRequired: ir.Required,
+												Description:              pointer("hey there! I'm a single nested object type, required."),
 											},
 										},
-										ComputedOptionalRequired: ir.Optional,
-										Description:              pointer("hey there! I'm a single nested object type."),
 									},
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a single nested object type."),
 								},
 							},
 						},
@@ -426,33 +377,207 @@ func TestResourceMapper_NestedAttributes(t *testing.T) {
 						Attributes: []ir.ResourceAttribute{
 							{
 								Name: "nested_list_prop_required",
-								Type: ir.ResourceAttributeType{
-									ListNested: &ir.ListNestedAttribute{
-										ComputedOptionalRequired: ir.Required,
-										Description:              pointer("hey there! I'm a list nested array type, required."),
-										NestedObject: ir.NestedObjectClass{
-											Attributes: []ir.ResourceAttribute{
-												{
-													Name: "nested_float64",
-													Type: ir.ResourceAttributeType{
-														Float64: &ir.ResourceFloat64{
-															ComputedOptionalRequired: ir.Optional,
-															Description:              pointer("hey there! I'm a nested float64 type."),
-														},
-													},
+								ListNested: &ir.ResourceListNestedAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a list nested array type, required."),
+									NestedObject: ir.ResourceAttributeNestedObject{
+										Attributes: []ir.ResourceAttribute{
+											{
+												Name: "nested_float64",
+												Float64: &ir.ResourceFloat64Attribute{
+													ComputedOptionalRequired: ir.ComputedOptional,
+													Description:              pointer("hey there! I'm a nested float64 type."),
 												},
-												{
-													Name: "nested_int64_required",
-													Type: ir.ResourceAttributeType{
-														Int64: &ir.ResourceInt64{
-															ComputedOptionalRequired: ir.Required,
-															Description:              pointer("hey there! I'm a nested int64 type, required."),
-														},
-													},
+											},
+											{
+												Name: "nested_int64_required",
+												Int64: &ir.ResourceInt64Attribute{
+													ComputedOptionalRequired: ir.Required,
+													Description:              pointer("hey there! I'm a nested int64 type, required."),
 												},
 											},
 										},
 									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			testResources := createTestResources(testCase.requestSchema)
+
+			resourceMapper := mapper.NewResourceMapper()
+			irResources, err := resourceMapper.MapToIR(testResources)
+			if err != nil {
+				t.Errorf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(irResources, testCase.expectedIR); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestResourceMapper_NullableMultiTypes(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		requestSchema *base.Schema
+		expectedIR    *[]ir.Resource
+	}{
+		"nullable type - Type array": {
+			requestSchema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nullable_string_two"},
+				Properties: map[string]*base.SchemaProxy{
+					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"null", "string"},
+						Description: "hey there! I'm a nullable string type.",
+					}),
+					"nullable_string_two": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string", "null"},
+						Description: "hey there! I'm a nullable string type, required.",
+					}),
+				},
+			},
+			expectedIR: &[]ir.Resource{
+				{
+					Name: "test_resource",
+					Schema: ir.ResourceSchema{
+						Attributes: []ir.ResourceAttribute{
+							{
+								Name: "nullable_string_one",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a nullable string type."),
+									Sensitive:                pointer(false),
+								},
+							},
+							{
+								Name: "nullable_string_two",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a nullable string type, required."),
+									Sensitive:                pointer(false),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"nullable type - anyOf": {
+			requestSchema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nullable_string_two"},
+				Properties: map[string]*base.SchemaProxy{
+					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
+						AnyOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"null"},
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a string type.",
+							}),
+						},
+					}),
+					"nullable_string_two": base.CreateSchemaProxy(&base.Schema{
+						AnyOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a string type, required.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"null"},
+							}),
+						},
+					}),
+				},
+			},
+			expectedIR: &[]ir.Resource{
+				{
+					Name: "test_resource",
+					Schema: ir.ResourceSchema{
+						Attributes: []ir.ResourceAttribute{
+							{
+								Name: "nullable_string_one",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a string type."),
+									Sensitive:                pointer(false),
+								},
+							},
+							{
+								Name: "nullable_string_two",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a string type, required."),
+									Sensitive:                pointer(false),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"nullable type - oneOf": {
+			requestSchema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nullable_string_two"},
+				Properties: map[string]*base.SchemaProxy{
+					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
+						OneOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"null"},
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a string type.",
+							}),
+						},
+					}),
+					"nullable_string_two": base.CreateSchemaProxy(&base.Schema{
+						OneOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a string type, required.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"null"},
+							}),
+						},
+					}),
+				},
+			},
+			expectedIR: &[]ir.Resource{
+				{
+					Name: "test_resource",
+					Schema: ir.ResourceSchema{
+						Attributes: []ir.ResourceAttribute{
+							{
+								Name: "nullable_string_one",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.ComputedOptional,
+									Description:              pointer("hey there! I'm a string type."),
+									Sensitive:                pointer(false),
+								},
+							},
+							{
+								Name: "nullable_string_two",
+								String: &ir.ResourceStringAttribute{
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a string type, required."),
+									Sensitive:                pointer(false),
 								},
 							},
 						},

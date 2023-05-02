@@ -12,8 +12,14 @@ const (
 	oas_type_boolean = "boolean"
 	oas_type_array   = "array"
 	oas_type_object  = "object"
+	oas_type_null    = "null"
 
-	oas_format_int64    = "int64"
 	oas_format_double   = "double"
+	oas_format_float    = "float"
 	oas_format_password = "password"
+
+	oas_mediatype_json = "application/json"
+
+	oas_response_code_ok      = "200"
+	oas_response_code_created = "201"
 )

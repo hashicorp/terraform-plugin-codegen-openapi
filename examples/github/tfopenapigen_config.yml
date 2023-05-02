@@ -1,0 +1,19 @@
+# Ref: https://registry.terraform.io/providers/integrations/github/latest/docs
+provider:
+  name: github
+
+resources:
+  # Ref: https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository
+  repository:
+    create:
+      path: /user/repos
+      method: POST
+    read:
+      path: /repos/{owner}/{repo}
+      method: GET
+    update:
+      path: /repos/{owner}/{repo}
+      method: PATCH
+    delete:
+      path: /repos/{owner}/{repo}
+      method: DELETE

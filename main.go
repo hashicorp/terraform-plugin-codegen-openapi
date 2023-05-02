@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	name := "openapi"
+	// TODO: Temporary name for CLI :)
+	name := "tfopenapigen"
 	version := name + " Version " + version
 	if commit != "" {
 		version += " from commit " + commit

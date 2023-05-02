@@ -2,28 +2,10 @@ package explorer
 
 import high "github.com/pb33f/libopenapi/datamodel/high/v3"
 
-// Implementations of the Explorer interface will relate OpenAPIv3 operations to a set of Terraform Provider actions
+// Implementations of the Explorer interface relate OpenAPIv3 operations to a set of Terraform Provider resource/data source actions (CRUD)
 //   - https://spec.openapis.org/oas/latest.html#operation-object
 type Explorer interface {
-	// TODO: Add Provider in here?
-	//
-	// Maps all the way down!
-	//   _____     ____
-	//  /      \  |  o |
-	// |  map   |/ ___\|
-	// |_________/
-	// |_|_| |_|_|
-	//   _____     ____
-	//  /      \  |  o |
-	// |  map   |/ ___\|
-	// |_________/
-	// |_|_| |_|_|
-	//   _____     ____
-	//  /      \  |  o |
-	// |  map   |/ ___\|
-	// |_________/
-	// |_|_| |_|_|
-	//
+	FindProvider() (Provider, error)
 	FindResources() (map[string]Resource, error)
 	FindDataSources() (map[string]DataSource, error)
 }
@@ -37,4 +19,8 @@ type Resource struct {
 
 type DataSource struct {
 	ReadOp *high.Operation
+}
+
+type Provider struct {
+	Name string
 }

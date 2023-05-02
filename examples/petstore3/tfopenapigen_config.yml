@@ -1,0 +1,52 @@
+provider:
+  name: petstore
+
+resources:
+  pet:
+    create:
+      path: /pet
+      method: POST
+    read:
+      path: /pet/{petId}
+      method: GET
+    update:
+      path: /pet
+      method: PUT
+    delete:
+      path: /pet/{petId}
+      method: DELETE
+
+  order:
+    create:
+      path: /store/order
+      method: POST
+    read:
+      path: /store/order/{orderId}
+      method: GET
+    delete:
+      path: /store/order/{orderId}
+      method: DELETE
+
+  user:
+    create:
+      path: /user
+      method: POST
+    read:
+      path: /user/{username}
+      method: GET
+
+data_sources:
+  pet:
+    read:
+      path: /pet/{petId}
+      method: GET
+
+  pets:
+    read:
+      path: /pet/findByStatus
+      method: GET
+
+  order:
+    read:
+      path: /store/order/{orderId}
+      method: GET

@@ -8,13 +8,12 @@ import (
 )
 
 func mapSchemaToAttribute(name string, checkBehavior behaviorChecker, proxy *base.SchemaProxy) (*ir.ResourceAttribute, error) {
-	schema, err := proxy.BuildSchema()
+	schema, err := buildSchema(proxy)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
+		return nil, err
 	}
 
-	// Type can have multiple values or no values in an OAS, need to handle that - (╯°□°)╯︵ ┻━┻
-	oasType, err := retrieveType(schema.Type)
+	oasType, err := retrieveType(schema)
 	if err != nil {
 		return nil, err
 	}
@@ -25,68 +24,47 @@ func mapSchemaToAttribute(name string, checkBehavior behaviorChecker, proxy *bas
 
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				String: &ir.ResourceString{
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
-					Sensitive:                &isSensitive,
-				},
+			String: &ir.ResourceStringAttribute{
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
+				Sensitive:                &isSensitive,
 			},
 		}, nil
 
 	case oas_type_integer:
-		if schema.Format == oas_format_int64 {
-			return &ir.ResourceAttribute{
-				Name: name,
-				Type: ir.ResourceAttributeType{
-					Int64: &ir.ResourceInt64{
-						ComputedOptionalRequired: checkBehavior(name),
-						Description:              &schema.Description,
-					},
-				},
-			}, nil
-		}
-
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				Number: &ir.ResourceNumber{
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
-				},
+			Int64: &ir.ResourceInt64Attribute{
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
 			},
 		}, nil
 
 	case oas_type_number:
-		if schema.Format == oas_format_double {
+		if schema.Format == oas_format_double || schema.Format == oas_format_float {
 			return &ir.ResourceAttribute{
 				Name: name,
-				Type: ir.ResourceAttributeType{
-					Float64: &ir.ResourceFloat64{
-						ComputedOptionalRequired: checkBehavior(name),
-						Description:              &schema.Description,
-					},
+				Float64: &ir.ResourceFloat64Attribute{
+					ComputedOptionalRequired: checkBehavior(name, schema),
+					Description:              &schema.Description,
 				},
 			}, nil
 		}
+
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				Number: &ir.ResourceNumber{
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
-				},
+			Number: &ir.ResourceNumberAttribute{
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
 			},
 		}, nil
 
 	case oas_type_boolean:
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				Bool: &ir.ResourceBool{
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
-				},
+			Bool: &ir.ResourceBoolAttribute{
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
 			},
 		}, nil
 	case oas_type_array:
@@ -100,12 +78,10 @@ func mapSchemaToAttribute(name string, checkBehavior behaviorChecker, proxy *bas
 
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				SingleNested: &ir.SingleNestedAttribute{
-					Attributes:               *objectAttributes,
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
-				},
+			SingleNested: &ir.ResourceSingleNestedAttribute{
+				Attributes:               *objectAttributes,
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
 			},
 		}, nil
 
@@ -115,7 +91,7 @@ func mapSchemaToAttribute(name string, checkBehavior behaviorChecker, proxy *bas
 }
 
 func mapSchemaToObjectAttributes(proxy *base.SchemaProxy) (*[]ir.ResourceAttribute, error) {
-	schema, err := proxy.BuildSchema()
+	schema, err := buildSchema(proxy)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build object schema proxy - %w", err)
 	}
@@ -123,14 +99,14 @@ func mapSchemaToObjectAttributes(proxy *base.SchemaProxy) (*[]ir.ResourceAttribu
 	objectAttributes := []ir.ResourceAttribute{}
 
 	// Required properties are defined a level higher then the property itself as an array ¯\_(ツ)_/¯
-	behaviorChecker := propBehaviorChecker(schema.Required)
+	checkBehavior := propBehaviorChecker(schema.Required)
 
 	// Guarantee the order of processing
 	propertyNames := sortedKeys(schema.Properties)
 	for _, name := range propertyNames {
 		pProxy := schema.Properties[name]
 
-		attribute, err := mapSchemaToAttribute(name, behaviorChecker, pProxy)
+		attribute, err := mapSchemaToAttribute(name, checkBehavior, pProxy)
 		if err != nil {
 			return nil, fmt.Errorf("failed to map object property '%s' schema - %w", name, err)
 		}
@@ -144,11 +120,12 @@ func mapSchemaToArrayAttribute(name string, checkBehavior behaviorChecker, schem
 	if !schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
-	arraySchema, err := schema.Items.A.BuildSchema()
+
+	arraySchema, err := buildSchema(schema.Items.A)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
-	oasType, err := retrieveType(arraySchema.Type)
+	oasType, err := retrieveType(arraySchema)
 	if err != nil {
 		return nil, err
 	}
@@ -161,14 +138,12 @@ func mapSchemaToArrayAttribute(name string, checkBehavior behaviorChecker, schem
 
 		return &ir.ResourceAttribute{
 			Name: name,
-			Type: ir.ResourceAttributeType{
-				ListNested: &ir.ListNestedAttribute{
-					NestedObject: ir.NestedObjectClass{
-						Attributes: *objectAttributes,
-					},
-					ComputedOptionalRequired: checkBehavior(name),
-					Description:              &schema.Description,
+			ListNested: &ir.ResourceListNestedAttribute{
+				NestedObject: ir.ResourceAttributeNestedObject{
+					Attributes: *objectAttributes,
 				},
+				ComputedOptionalRequired: checkBehavior(name, schema),
+				Description:              &schema.Description,
 			},
 		}, nil
 	}
@@ -180,12 +155,10 @@ func mapSchemaToArrayAttribute(name string, checkBehavior behaviorChecker, schem
 
 	return &ir.ResourceAttribute{
 		Name: name,
-		Type: ir.ResourceAttributeType{
-			List: &ir.ResourceList{
-				ElementType:              *elemType,
-				ComputedOptionalRequired: checkBehavior(name),
-				Description:              &schema.Description,
-			},
+		List: &ir.ResourceListAttribute{
+			ElementType:              *elemType,
+			ComputedOptionalRequired: checkBehavior(name, schema),
+			Description:              &schema.Description,
 		},
 	}, nil
 }

@@ -1,11 +1,9 @@
 ## Running the example spec
 ```sh
 # Build the binary
-go build .
+go build -o tfopenapigen .
 
-# Pass OpenAPI spec (JSON or YML) to --input argument
-./terraform-providers-code-generator-openapi generate --input ./examples/scaleway.instance.v1.api.yml
-
-# Outputs to `generated_framework_ir.json`
-cat generated_framework_ir.json
+# Pass generator config to --config and OpenAPI spec (JSON or YML) as positional argument
+# Outputs to STDOUT
+./tfopenapigen generate --config ./examples/petstore3/tfopenapigen_config.yml ./examples/petstore3/openapi_spec.json
 ```

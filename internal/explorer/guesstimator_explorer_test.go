@@ -7,7 +7,7 @@ import (
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-func TestFindResources_Basic(t *testing.T) {
+func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
@@ -116,7 +116,7 @@ func TestFindResources_Basic(t *testing.T) {
 	}
 }
 
-func TestFindDataSources_Basic(t *testing.T) {
+func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {

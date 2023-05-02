@@ -1,0 +1,48 @@
+# Ref: https://registry.terraform.io/providers/scaleway/scaleway/latest/docs
+provider:
+  name: scaleway
+
+resources:
+  # Ref: https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/instance_image
+  instance_image:
+    create:
+      path: /instance/v1/zones/{zone}/images
+      method: POST
+    read:
+      path: /instance/v1/zones/{zone}/images/{image_id}
+      method: GET
+
+    update:
+      path: /instance/v1/zones/{zone}/images/{id}
+      method: PUT
+    delete:
+      path: /instance/v1/zones/{zone}/images/{image_id}
+      method: DELETE
+
+  # Ref: https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/instance_ip
+  instance_ip:
+    create:
+      path: /instance/v1/zones/{zone}/ips
+      method: POST
+    read:
+      path: /instance/v1/zones/{zone}/ips/{ip}
+      method: GET
+    update:
+      path: /instance/v1/zones/{zone}/ips/{ip}
+      method: PATCH
+    delete:
+      path: /instance/v1/zones/{zone}/ips/{ip}
+      method: DELETE
+
+data_sources:
+  # Ref: https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/data-sources/instance_servers
+  instance_servers:
+    read:
+      path: /instance/v1/zones/{zone}/servers
+      method: GET
+
+  # Ref: https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/data-sources/instance_server
+  instance_server:
+    read:
+      path: /instance/v1/zones/{zone}/servers/{server_id}
+      method: GET

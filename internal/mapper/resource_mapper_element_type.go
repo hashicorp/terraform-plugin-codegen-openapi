@@ -8,7 +8,7 @@ import (
 )
 
 func mapSchemaToElementType(schema *base.Schema) (*ir.ElementType, error) {
-	oasType, err := retrieveType(schema.Type)
+	oasType, err := retrieveType(schema)
 	if err != nil {
 		return nil, err
 	}
@@ -16,34 +16,28 @@ func mapSchemaToElementType(schema *base.Schema) (*ir.ElementType, error) {
 	switch oasType {
 	case oas_type_string:
 		return &ir.ElementType{
-			String: &ir.ElementTypeString{},
+			String: &ir.StringElement{},
 		}, nil
 
 	case oas_type_integer:
-		if schema.Format == oas_format_int64 {
-			return &ir.ElementType{
-				Int64: &ir.ElementTypeInt64{},
-			}, nil
-		}
-
 		return &ir.ElementType{
-			Number: &ir.ElementTypeNumber{},
+			Int64: &ir.Int64Element{},
 		}, nil
 
 	case oas_type_number:
-		if schema.Format == oas_format_double {
+		if schema.Format == oas_format_double || schema.Format == oas_format_float {
 			return &ir.ElementType{
-				Float64: &ir.ElementTypeFloat64{},
+				Float64: &ir.Float64Element{},
 			}, nil
 		}
 
 		return &ir.ElementType{
-			Number: &ir.ElementTypeNumber{},
+			Number: &ir.NumberElement{},
 		}, nil
 
 	case oas_type_boolean:
 		return &ir.ElementType{
-			Bool: &ir.ElementTypeBool{},
+			Bool: &ir.BoolElement{},
 		}, nil
 
 	case oas_type_array:
@@ -64,15 +58,15 @@ func mapSchemaToElementType(schema *base.Schema) (*ir.ElementType, error) {
 	}
 }
 
-func mapSchemaToObjectElementTypes(schema *base.Schema) (*[]ir.ElementTypeObject, error) {
-	objectElemTypes := []ir.ElementTypeObject{}
+func mapSchemaToObjectElementTypes(schema *base.Schema) (*[]ir.ObjectElement, error) {
+	objectElemTypes := []ir.ObjectElement{}
 
 	// Guarantee the order of processing
 	propertyNames := sortedKeys(schema.Properties)
 	for _, pName := range propertyNames {
 		pProxy := schema.Properties[pName]
 
-		pSchema, err := pProxy.BuildSchema()
+		pSchema, err := buildSchema(pProxy)
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
@@ -81,9 +75,9 @@ func mapSchemaToObjectElementTypes(schema *base.Schema) (*[]ir.ElementTypeObject
 		if err != nil {
 			return nil, fmt.Errorf("failed to build object property '%s' schema proxy - %w", pName, err)
 		}
-		objectElemTypes = append(objectElemTypes, ir.ElementTypeObject{
-			Name: pName,
-			Type: *elemType,
+		objectElemTypes = append(objectElemTypes, ir.ObjectElement{
+			Name:        pName,
+			ElementType: elemType,
 		})
 	}
 
@@ -94,7 +88,7 @@ func mapSchemaToArrayElementType(schema *base.Schema) (*ir.ElementType, error) {
 	if !schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
 	}
-	iSchema, err := schema.Items.A.BuildSchema()
+	iSchema, err := buildSchema(schema.Items.A)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested array items schema")
 	}
@@ -105,8 +99,8 @@ func mapSchemaToArrayElementType(schema *base.Schema) (*ir.ElementType, error) {
 	}
 
 	return &ir.ElementType{
-		List: &ir.ElementTypeList{
-			ElementType: *elementType,
+		List: &ir.ListElement{
+			ElementType: elementType,
 		},
 	}, nil
 }

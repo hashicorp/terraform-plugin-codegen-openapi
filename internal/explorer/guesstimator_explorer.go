@@ -27,7 +27,7 @@ type resourceOperations struct {
 	CollectionOps map[string]*high.Operation
 }
 
-// As the name suggests, the Guesstimator evaluates an OpenAPIhigh spec and will return
+// As the name suggests, the Guesstimator evaluates an OpenAPIv3 spec and will return
 // Resources, DataSources, and their respective names, based on RESTful conventions:
 // https://swagger.io/resources/articles/best-practices-in-api-design/
 //
@@ -51,6 +51,14 @@ func NewGuesstimatorExplorer(spec high.Document) Explorer {
 	return guesstimatorExplorer{
 		spec: spec,
 	}
+}
+
+func (e guesstimatorExplorer) FindProvider() (Provider, error) {
+	// TODO: not sure the best place to automatically pull the provider name... Info section?
+	// https://spec.openapis.org/oas/latest.html#info-object
+	return Provider{
+		Name: "guesstimator_placeholder",
+	}, nil
 }
 
 // Resource behavior:
@@ -138,6 +146,7 @@ func (e guesstimatorExplorer) groupPathItems() map[string]resourceOperations {
 	return groups
 }
 
+// TODO: Consider moving this functionality into a Go type / methods, OASPath.HasIdentityToken(), OASPath.ResourceName(), etc.
 // convertPathToResourceName takes a given API path, /example/user/{username},
 // and converts it to a valid resource name by combining the paths with underscores, i.e. example_user
 func convertPathToResourceName(urlPath string) (string, bool) {

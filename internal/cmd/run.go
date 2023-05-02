@@ -32,7 +32,7 @@ func Run(name, version string, args []string, stdin io.Reader, stdout, stderr io
 	}
 
 	commands := initCommands(ui)
-	openapiCLI := cli.CLI{
+	openAPIGen := cli.CLI{
 		Name:       name,
 		Args:       args,
 		Commands:   commands,
@@ -40,7 +40,7 @@ func Run(name, version string, args []string, stdin io.Reader, stdout, stderr io
 		HelpWriter: stderr,
 		Version:    version,
 	}
-	exitCode, err := openapiCLI.Run()
+	exitCode, err := openAPIGen.Run()
 	if err != nil {
 		return 1
 	}
