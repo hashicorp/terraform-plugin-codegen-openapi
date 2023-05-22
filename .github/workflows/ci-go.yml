@@ -1,0 +1,28 @@
+# Continuous integration handling for Go
+name: ci-go
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/ci-go.yml
+      - go.mod
+      - '**.go'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
+        with:
+          go-version-file: 'go.mod'
+      - run: go mod download
+      - run: go test -coverprofile=coverage.out ./...
+      - run: go tool cover -html=coverage.out -o coverage.html
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: go-coverage
+          path: coverage.html
