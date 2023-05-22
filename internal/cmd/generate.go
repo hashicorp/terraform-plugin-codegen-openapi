@@ -8,7 +8,8 @@ import (
 	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
 	"github/hashicorp/terraform-providers-code-generator-openapi/internal/explorer"
 	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper"
+	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/datasource"
+	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/resource"
 	"log"
 	"os"
 	"strings"
@@ -130,7 +131,7 @@ func (cmd *generateCmd) runInternal() error {
 
 	// 4. Generate framework IR w/ config
 	oasExplorer := explorer.NewConfigExplorer(model.Model, *config)
-	frameworkIr, err := generateFrameworkIr(oasExplorer, mapper.NewResourceMapper())
+	frameworkIr, err := generateFrameworkIr(oasExplorer, *config)
 	if err != nil {
 		return err
 	}
@@ -158,7 +159,7 @@ func (cmd *generateCmd) runInternal() error {
 	return nil
 }
 
-func generateFrameworkIr(dora explorer.Explorer, resourceMapper mapper.ResourceMapper) (*ir.IntermediateRepresentation, error) {
+func generateFrameworkIr(dora explorer.Explorer, cfg config.Config) (*ir.IntermediateRepresentation, error) {
 	// 1. Find TF resources
 	resources, err := dora.FindResources()
 	if err != nil {
@@ -166,7 +167,7 @@ func generateFrameworkIr(dora explorer.Explorer, resourceMapper mapper.ResourceM
 	}
 
 	// 2. Find TF data sources
-	_, err = dora.FindDataSources()
+	dataSources, err := dora.FindDataSources()
 	if err != nil {
 		return nil, fmt.Errorf("error finding data sources: %w", err)
 	}
@@ -177,18 +178,25 @@ func generateFrameworkIr(dora explorer.Explorer, resourceMapper mapper.ResourceM
 		return nil, fmt.Errorf("error finding provider: %w", err)
 	}
 
-	resourcesIR, err := resourceMapper.MapToIR(resources)
+	// 4. Use TF info to generate framework IR for resources
+	resourceMapper := resource.NewResourceMapper(resources, cfg)
+	resourcesIR, err := resourceMapper.MapToIR()
 	if err != nil {
 		return nil, fmt.Errorf("error generating Framework IR for resources: %w", err)
 	}
 
 	// 5. Use TF info to generate framework IR for data sources
-	// TODO: implement data source mapper
+	dataSourceMapper := datasource.NewDataSourceMapper(dataSources, cfg)
+	dataSourcesIR, err := dataSourceMapper.MapToIR()
+	if err != nil {
+		return nil, fmt.Errorf("error generating Framework IR for data sources: %w", err)
+	}
 
 	return &ir.IntermediateRepresentation{
 		Provider: ir.Provider{
 			Name: provider.Name,
 		},
-		Resources: *resourcesIR,
+		Resources:   resourcesIR,
+		DataSources: dataSourcesIR,
 	}, nil
 }

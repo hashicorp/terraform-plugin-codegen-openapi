@@ -686,5 +686,2324 @@
 				]
 			}
 		}
+	],
+	"datasources": [
+		{
+			"name": "instance_server",
+			"schema": {
+				"attributes": [
+					{
+						"name": "zone",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "The zone you want to target",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "server_id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "UUID of the server you want to get.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "server",
+						"single_nested": {
+							"attributes": [
+								{
+									"name": "allowed_actions",
+									"list": {
+										"computed_optional_required": "computed_optional",
+										"description": "Provide as list of allowed actions on the server.",
+										"element_type": {
+											"string": {}
+										}
+									}
+								},
+								{
+									"name": "arch",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server arch.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "boot_type",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server boot type.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "bootscript",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "arch",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript arch.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "bootcmdargs",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript arguments.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "default",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
+												}
+											},
+											{
+												"name": "dtb",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "initrd",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The initrd (initial ramdisk) configuration.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "kernel",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The server kernel version.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "organization",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript organization ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "project",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript project ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "public",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "Provide information if the bootscript is public."
+												}
+											},
+											{
+												"name": "title",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript title.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "zone",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The zone in which is the bootscript.",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server bootscript."
+									}
+								},
+								{
+									"name": "commercial_type",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server commercial type (eg. GP1-M).",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "creation_date",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server creation date. (RFC 3339 format)",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "dynamic_ip_required",
+									"bool": {
+										"computed_optional_required": "computed_optional",
+										"description": "True if a dynamic IP is required."
+									}
+								},
+								{
+									"name": "enable_ipv6",
+									"bool": {
+										"computed_optional_required": "computed_optional",
+										"description": "True if IPv6 is enabled."
+									}
+								},
+								{
+									"name": "hostname",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server host name.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server unique ID.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "image",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "arch",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "creation_date",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "(RFC 3339 format)",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "default_bootscript",
+												"single_nested": {
+													"attributes": [
+														{
+															"name": "arch",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript arch.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "bootcmdargs",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript arguments.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "default",
+															"bool": {
+																"computed_optional_required": "computed_optional",
+																"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
+															}
+														},
+														{
+															"name": "dtb",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "id",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "initrd",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The initrd (initial ramdisk) configuration.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "kernel",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The server kernel version.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "organization",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript organization ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "project",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript project ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "public",
+															"bool": {
+																"computed_optional_required": "computed_optional",
+																"description": "Provide information if the bootscript is public."
+															}
+														},
+														{
+															"name": "title",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The bootscript title.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "zone",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The zone in which is the bootscript.",
+																"sensitive": false
+															}
+														}
+													],
+													"computed_optional_required": "computed_optional",
+													"description": ""
+												}
+											},
+											{
+												"name": "extra_volumes",
+												"single_nested": {
+													"attributes": [
+														{
+															"name": "\u003cextra_volumeKey\u003e",
+															"single_nested": {
+																"attributes": [
+																	{
+																		"name": "creation_date",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume creation date. (RFC 3339 format)",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "export_uri",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "Show the volume NBD export URI.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "id",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume unique ID.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "modification_date",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume modification date. (RFC 3339 format)",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "name",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume name.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "organization",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume organization ID.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "project",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume project ID.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "server",
+																		"single_nested": {
+																			"attributes": [
+																				{
+																					"name": "id",
+																					"string": {
+																						"computed_optional_required": "computed_optional",
+																						"description": "",
+																						"sensitive": false
+																					}
+																				},
+																				{
+																					"name": "name",
+																					"string": {
+																						"computed_optional_required": "computed_optional",
+																						"description": "",
+																						"sensitive": false
+																					}
+																				}
+																			],
+																			"computed_optional_required": "computed_optional",
+																			"description": "The server attached to the volume."
+																		}
+																	},
+																	{
+																		"name": "size",
+																		"int64": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume disk size. (in bytes)"
+																		}
+																	},
+																	{
+																		"name": "state",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume state.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "tags",
+																		"list": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume tags.",
+																			"element_type": {
+																				"string": {}
+																			}
+																		}
+																	},
+																	{
+																		"name": "volume_type",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The volume type.",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "zone",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "The zone in which is the volume.",
+																			"sensitive": false
+																		}
+																	}
+																],
+																"computed_optional_required": "computed_optional",
+																"description": ""
+															}
+														}
+													],
+													"computed_optional_required": "computed_optional",
+													"description": ""
+												}
+											},
+											{
+												"name": "from_server",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "modification_date",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "(RFC 3339 format)",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "organization",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "project",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "public",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": ""
+												}
+											},
+											{
+												"name": "root_volume",
+												"single_nested": {
+													"attributes": [
+														{
+															"name": "id",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "name",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "size",
+															"int64": {
+																"computed_optional_required": "computed_optional",
+																"description": "(in bytes)"
+															}
+														},
+														{
+															"name": "volume_type",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														}
+													],
+													"computed_optional_required": "computed_optional",
+													"description": ""
+												}
+											},
+											{
+												"name": "state",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "tags",
+												"list": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"element_type": {
+														"string": {}
+													}
+												}
+											},
+											{
+												"name": "zone",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "Provide information on the server image."
+									}
+								},
+								{
+									"name": "ipv6",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "address",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The server IPv6 IP-Address. (IPv6 address)",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "gateway",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The IPv6 IP-addresses gateway. (IPv6 address)",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "netmask",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The IPv6 IP-addresses CIDR netmask.",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server IPv6 address."
+									}
+								},
+								{
+									"name": "location",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "cluster_id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "hypervisor_id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "node_id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "platform_id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "zone_id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server location."
+									}
+								},
+								{
+									"name": "maintenances",
+									"list_nested": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server planned maintenances.",
+										"nested_object": {
+											"attributes": [
+												{
+													"name": "reason",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												}
+											]
+										}
+									}
+								},
+								{
+									"name": "modification_date",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server modification date. (RFC 3339 format)",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "name",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server name.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "organization",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server organization ID.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "placement_group",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The placement group unique ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The placement group name.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "organization",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The placement group organization ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "policy_mode",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Select the failling mode when the placement cannot be respected, either optional or enforced.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "policy_respected",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "Returns true if the policy is respected, false otherwise."
+												}
+											},
+											{
+												"name": "policy_type",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Select the behavior of the placement group, either low_latency (group) or max_availability (spread).",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "project",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The placement group project ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "tags",
+												"list": {
+													"computed_optional_required": "computed_optional",
+													"description": "The placement group tags.",
+													"element_type": {
+														"string": {}
+													}
+												}
+											},
+											{
+												"name": "zone",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The zone in which is the placement group.",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server placement group."
+									}
+								},
+								{
+									"name": "private_ip",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server private IP address.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "private_nics",
+									"list_nested": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server private NICs.",
+										"nested_object": {
+											"attributes": [
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The private NIC unique ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "mac_address",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The private NIC MAC address.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "private_network_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The private network where the private NIC is attached.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "server_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The server the private NIC is attached to.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "state",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The private NIC state.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "tags",
+													"list": {
+														"computed_optional_required": "computed_optional",
+														"description": "The private NIC tags.",
+														"element_type": {
+															"string": {}
+														}
+													}
+												}
+											]
+										}
+									}
+								},
+								{
+									"name": "project",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server project ID.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "protected",
+									"bool": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server protection option is activated."
+									}
+								},
+								{
+									"name": "public_ip",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "address",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The server public IPv4 IP-Address. (IPv4 address)",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "dynamic",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "True if the IP address is dynamic."
+												}
+											},
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The unique ID of the IP address.",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "Information about the public IP."
+									}
+								},
+								{
+									"name": "security_group",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server security group."
+									}
+								},
+								{
+									"name": "state",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server state.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "state_detail",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server state_detail.",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "tags",
+									"list": {
+										"computed_optional_required": "computed_optional",
+										"description": "The server associated tags.",
+										"element_type": {
+											"string": {}
+										}
+									}
+								},
+								{
+									"name": "volumes",
+									"single_nested": {
+										"attributes": [
+											{
+												"name": "\u003cvolumeKey\u003e",
+												"single_nested": {
+													"attributes": [
+														{
+															"name": "boot",
+															"bool": {
+																"computed_optional_required": "computed_optional",
+																"description": ""
+															}
+														},
+														{
+															"name": "creation_date",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "(RFC 3339 format)",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "export_uri",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "id",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "modification_date",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "(RFC 3339 format)",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "name",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "organization",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "project",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "server",
+															"single_nested": {
+																"attributes": [
+																	{
+																		"name": "id",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "name",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "",
+																			"sensitive": false
+																		}
+																	}
+																],
+																"computed_optional_required": "computed_optional",
+																"description": ""
+															}
+														},
+														{
+															"name": "size",
+															"int64": {
+																"computed_optional_required": "computed_optional",
+																"description": "(in bytes)"
+															}
+														},
+														{
+															"name": "state",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "volume_type",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "zone",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "",
+																"sensitive": false
+															}
+														}
+													],
+													"computed_optional_required": "computed_optional",
+													"description": ""
+												}
+											}
+										],
+										"computed_optional_required": "computed_optional",
+										"description": "The server volumes."
+									}
+								},
+								{
+									"name": "zone",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "The zone in which is the server.",
+										"sensitive": false
+									}
+								}
+							],
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "instance_servers",
+			"schema": {
+				"attributes": [
+					{
+						"name": "zone",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "The zone you want to target",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "per_page",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": "A positive integer lower or equal to 100 to select the number of items to return."
+						}
+					},
+					{
+						"name": "page",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": "A positive integer to choose the page to return."
+						}
+					},
+					{
+						"name": "organization",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List only servers of this organization ID.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "project",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List only servers of this project ID.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Filter servers by name (for eg. \"server1\" will return \"server100\" and \"server1\" but not \"foo\").",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "private_ip",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers by private_ip. (IP address)",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "without_ip",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers that are not attached to a public IP."
+						}
+					},
+					{
+						"name": "commercial_type",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers of this commercial type.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "state",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers in this state.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "tags",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers with these exact tags (to filter with several tags, use commas to separate them).",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "private_network",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "List servers in this Private Network.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "order",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Define the order of the returned servers.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "servers",
+						"list_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "List of servers.",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "allowed_actions",
+										"list": {
+											"computed_optional_required": "computed_optional",
+											"description": "Provide as list of allowed actions on the server.",
+											"element_type": {
+												"string": {}
+											}
+										}
+									},
+									{
+										"name": "arch",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server arch.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "boot_type",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server boot type.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "bootscript",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "arch",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript arch.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "bootcmdargs",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript arguments.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "default",
+													"bool": {
+														"computed_optional_required": "computed_optional",
+														"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
+													}
+												},
+												{
+													"name": "dtb",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "initrd",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The initrd (initial ramdisk) configuration.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "kernel",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The server kernel version.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "organization",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript organization ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "project",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript project ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "public",
+													"bool": {
+														"computed_optional_required": "computed_optional",
+														"description": "Provide information if the bootscript is public."
+													}
+												},
+												{
+													"name": "title",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The bootscript title.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "zone",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The zone in which is the bootscript.",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server bootscript."
+										}
+									},
+									{
+										"name": "commercial_type",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server commercial type (eg. GP1-M).",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "creation_date",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server creation date. (RFC 3339 format)",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "dynamic_ip_required",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "True if a dynamic IP is required."
+										}
+									},
+									{
+										"name": "enable_ipv6",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "True if IPv6 is enabled."
+										}
+									},
+									{
+										"name": "hostname",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server host name.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server unique ID.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "image",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "arch",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "creation_date",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "(RFC 3339 format)",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "default_bootscript",
+													"single_nested": {
+														"attributes": [
+															{
+																"name": "arch",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript arch.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "bootcmdargs",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript arguments.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "default",
+																"bool": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
+																}
+															},
+															{
+																"name": "dtb",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "id",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript ID.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "initrd",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The initrd (initial ramdisk) configuration.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "kernel",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The server kernel version.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "organization",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript organization ID.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "project",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript project ID.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "public",
+																"bool": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "Provide information if the bootscript is public."
+																}
+															},
+															{
+																"name": "title",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The bootscript title.",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "zone",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "The zone in which is the bootscript.",
+																	"sensitive": false
+																}
+															}
+														],
+														"computed_optional_required": "computed_optional",
+														"description": ""
+													}
+												},
+												{
+													"name": "extra_volumes",
+													"single_nested": {
+														"attributes": [
+															{
+																"name": "\u003cextra_volumeKey\u003e",
+																"single_nested": {
+																	"attributes": [
+																		{
+																			"name": "creation_date",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume creation date. (RFC 3339 format)",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "export_uri",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "Show the volume NBD export URI.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "id",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume unique ID.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "modification_date",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume modification date. (RFC 3339 format)",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "name",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume name.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "organization",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume organization ID.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "project",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume project ID.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "server",
+																			"single_nested": {
+																				"attributes": [
+																					{
+																						"name": "id",
+																						"string": {
+																							"computed_optional_required": "computed_optional",
+																							"description": "",
+																							"sensitive": false
+																						}
+																					},
+																					{
+																						"name": "name",
+																						"string": {
+																							"computed_optional_required": "computed_optional",
+																							"description": "",
+																							"sensitive": false
+																						}
+																					}
+																				],
+																				"computed_optional_required": "computed_optional",
+																				"description": "The server attached to the volume."
+																			}
+																		},
+																		{
+																			"name": "size",
+																			"int64": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume disk size. (in bytes)"
+																			}
+																		},
+																		{
+																			"name": "state",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume state.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "tags",
+																			"list": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume tags.",
+																				"element_type": {
+																					"string": {}
+																				}
+																			}
+																		},
+																		{
+																			"name": "volume_type",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The volume type.",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "zone",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "The zone in which is the volume.",
+																				"sensitive": false
+																			}
+																		}
+																	],
+																	"computed_optional_required": "computed_optional",
+																	"description": ""
+																}
+															}
+														],
+														"computed_optional_required": "computed_optional",
+														"description": ""
+													}
+												},
+												{
+													"name": "from_server",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "modification_date",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "(RFC 3339 format)",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "organization",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "project",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "public",
+													"bool": {
+														"computed_optional_required": "computed_optional",
+														"description": ""
+													}
+												},
+												{
+													"name": "root_volume",
+													"single_nested": {
+														"attributes": [
+															{
+																"name": "id",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "name",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "size",
+																"int64": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "(in bytes)"
+																}
+															},
+															{
+																"name": "volume_type",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															}
+														],
+														"computed_optional_required": "computed_optional",
+														"description": ""
+													}
+												},
+												{
+													"name": "state",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "tags",
+													"list": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"element_type": {
+															"string": {}
+														}
+													}
+												},
+												{
+													"name": "zone",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "Provide information on the server image."
+										}
+									},
+									{
+										"name": "ipv6",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "address",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The server IPv6 IP-Address. (IPv6 address)",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "gateway",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The IPv6 IP-addresses gateway. (IPv6 address)",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "netmask",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The IPv6 IP-addresses CIDR netmask.",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server IPv6 address."
+										}
+									},
+									{
+										"name": "location",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "cluster_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "hypervisor_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "node_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "platform_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "zone_id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server location."
+										}
+									},
+									{
+										"name": "maintenances",
+										"list_nested": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server planned maintenances.",
+											"nested_object": {
+												"attributes": [
+													{
+														"name": "reason",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "",
+															"sensitive": false
+														}
+													}
+												]
+											}
+										}
+									},
+									{
+										"name": "modification_date",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server modification date. (RFC 3339 format)",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "name",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server name.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "organization",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server organization ID.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "placement_group",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The placement group unique ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The placement group name.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "organization",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The placement group organization ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "policy_mode",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "Select the failling mode when the placement cannot be respected, either optional or enforced.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "policy_respected",
+													"bool": {
+														"computed_optional_required": "computed_optional",
+														"description": "Returns true if the policy is respected, false otherwise."
+													}
+												},
+												{
+													"name": "policy_type",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "Select the behavior of the placement group, either low_latency (group) or max_availability (spread).",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "project",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The placement group project ID.",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "tags",
+													"list": {
+														"computed_optional_required": "computed_optional",
+														"description": "The placement group tags.",
+														"element_type": {
+															"string": {}
+														}
+													}
+												},
+												{
+													"name": "zone",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The zone in which is the placement group.",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server placement group."
+										}
+									},
+									{
+										"name": "private_ip",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server private IP address.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "private_nics",
+										"list_nested": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server private NICs.",
+											"nested_object": {
+												"attributes": [
+													{
+														"name": "id",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "The private NIC unique ID.",
+															"sensitive": false
+														}
+													},
+													{
+														"name": "mac_address",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "The private NIC MAC address.",
+															"sensitive": false
+														}
+													},
+													{
+														"name": "private_network_id",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "The private network where the private NIC is attached.",
+															"sensitive": false
+														}
+													},
+													{
+														"name": "server_id",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "The server the private NIC is attached to.",
+															"sensitive": false
+														}
+													},
+													{
+														"name": "state",
+														"string": {
+															"computed_optional_required": "computed_optional",
+															"description": "The private NIC state.",
+															"sensitive": false
+														}
+													},
+													{
+														"name": "tags",
+														"list": {
+															"computed_optional_required": "computed_optional",
+															"description": "The private NIC tags.",
+															"element_type": {
+																"string": {}
+															}
+														}
+													}
+												]
+											}
+										}
+									},
+									{
+										"name": "project",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server project ID.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "protected",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server protection option is activated."
+										}
+									},
+									{
+										"name": "public_ip",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "address",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The server public IPv4 IP-Address. (IPv4 address)",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "dynamic",
+													"bool": {
+														"computed_optional_required": "computed_optional",
+														"description": "True if the IP address is dynamic."
+													}
+												},
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "The unique ID of the IP address.",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "Information about the public IP."
+										}
+									},
+									{
+										"name": "security_group",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "id",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed_optional",
+														"description": "",
+														"sensitive": false
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server security group."
+										}
+									},
+									{
+										"name": "state",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server state.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "state_detail",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server state_detail.",
+											"sensitive": false
+										}
+									},
+									{
+										"name": "tags",
+										"list": {
+											"computed_optional_required": "computed_optional",
+											"description": "The server associated tags.",
+											"element_type": {
+												"string": {}
+											}
+										}
+									},
+									{
+										"name": "volumes",
+										"single_nested": {
+											"attributes": [
+												{
+													"name": "\u003cvolumeKey\u003e",
+													"single_nested": {
+														"attributes": [
+															{
+																"name": "boot",
+																"bool": {
+																	"computed_optional_required": "computed_optional",
+																	"description": ""
+																}
+															},
+															{
+																"name": "creation_date",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "(RFC 3339 format)",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "export_uri",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "id",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "modification_date",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "(RFC 3339 format)",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "name",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "organization",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "project",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "server",
+																"single_nested": {
+																	"attributes": [
+																		{
+																			"name": "id",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "",
+																				"sensitive": false
+																			}
+																		},
+																		{
+																			"name": "name",
+																			"string": {
+																				"computed_optional_required": "computed_optional",
+																				"description": "",
+																				"sensitive": false
+																			}
+																		}
+																	],
+																	"computed_optional_required": "computed_optional",
+																	"description": ""
+																}
+															},
+															{
+																"name": "size",
+																"int64": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "(in bytes)"
+																}
+															},
+															{
+																"name": "state",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "volume_type",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															},
+															{
+																"name": "zone",
+																"string": {
+																	"computed_optional_required": "computed_optional",
+																	"description": "",
+																	"sensitive": false
+																}
+															}
+														],
+														"computed_optional_required": "computed_optional",
+														"description": ""
+													}
+												}
+											],
+											"computed_optional_required": "computed_optional",
+											"description": "The server volumes."
+										}
+									},
+									{
+										"name": "zone",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "The zone in which is the server.",
+											"sensitive": false
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		}
 	]
 }

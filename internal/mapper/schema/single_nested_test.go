@@ -1,0 +1,198 @@
+package schema_test
+
+import (
+	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
+	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/schema"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/pb33f/libopenapi/datamodel/high/base"
+)
+
+// TODO: add error test for nested objects
+
+func TestBuildSingleNestedResource(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema             *base.Schema
+		expectedAttributes *[]ir.ResourceAttribute
+	}{
+		"single nested attributes": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Required:    []string{"nested_obj_prop_required"},
+						Description: "hey there! I'm a single nested object type.",
+						Properties: map[string]*base.SchemaProxy{
+							"nested_obj_prop_required": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"object"},
+								Required:    []string{"nested_int64_required"},
+								Description: "hey there! I'm a single nested object type, required.",
+								Properties: map[string]*base.SchemaProxy{
+									"nested_float64": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"number"},
+										Format:      "double",
+										Description: "hey there! I'm a nested float64 type.",
+									}),
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"integer"},
+										Format:      "int64",
+										Description: "hey there! I'm a nested int64 type, required.",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]ir.ResourceAttribute{
+				{
+					Name: "nested_obj_prop",
+					SingleNested: &ir.ResourceSingleNestedAttribute{
+						Attributes: []ir.ResourceAttribute{
+							{
+								Name: "nested_obj_prop_required",
+								SingleNested: &ir.ResourceSingleNestedAttribute{
+									Attributes: []ir.ResourceAttribute{
+										{
+											Name: "nested_float64",
+											Float64: &ir.ResourceFloat64Attribute{
+												ComputedOptionalRequired: ir.ComputedOptional,
+												Description:              pointer("hey there! I'm a nested float64 type."),
+											},
+										},
+										{
+											Name: "nested_int64_required",
+											Int64: &ir.ResourceInt64Attribute{
+												ComputedOptionalRequired: ir.Required,
+												Description:              pointer("hey there! I'm a nested int64 type, required."),
+											},
+										},
+									},
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a single nested object type, required."),
+								},
+							},
+						},
+						ComputedOptionalRequired: ir.ComputedOptional,
+						Description:              pointer("hey there! I'm a single nested object type."),
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema := schema.OASSchema{Schema: testCase.schema}
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestBuildSingleNestedDataSource(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema             *base.Schema
+		expectedAttributes *[]ir.DataSourceAttribute
+	}{
+		"single nested attributes": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Required:    []string{"nested_obj_prop_required"},
+						Description: "hey there! I'm a single nested object type.",
+						Properties: map[string]*base.SchemaProxy{
+							"nested_obj_prop_required": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"object"},
+								Required:    []string{"nested_int64_required"},
+								Description: "hey there! I'm a single nested object type, required.",
+								Properties: map[string]*base.SchemaProxy{
+									"nested_float64": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"number"},
+										Format:      "double",
+										Description: "hey there! I'm a nested float64 type.",
+									}),
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"integer"},
+										Format:      "int64",
+										Description: "hey there! I'm a nested int64 type, required.",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]ir.DataSourceAttribute{
+				{
+					Name: "nested_obj_prop",
+					SingleNested: &ir.DataSourceSingleNestedAttribute{
+						Attributes: []ir.DataSourceAttribute{
+							{
+								Name: "nested_obj_prop_required",
+								SingleNested: &ir.DataSourceSingleNestedAttribute{
+									Attributes: []ir.DataSourceAttribute{
+										{
+											Name: "nested_float64",
+											Float64: &ir.DataSourceFloat64Attribute{
+												ComputedOptionalRequired: ir.ComputedOptional,
+												Description:              pointer("hey there! I'm a nested float64 type."),
+											},
+										},
+										{
+											Name: "nested_int64_required",
+											Int64: &ir.DataSourceInt64Attribute{
+												ComputedOptionalRequired: ir.Required,
+												Description:              pointer("hey there! I'm a nested int64 type, required."),
+											},
+										},
+									},
+									ComputedOptionalRequired: ir.Required,
+									Description:              pointer("hey there! I'm a single nested object type, required."),
+								},
+							},
+						},
+						ComputedOptionalRequired: ir.ComputedOptional,
+						Description:              pointer("hey there! I'm a single nested object type."),
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema := schema.OASSchema{Schema: testCase.schema}
+			attributes, err := schema.BuildDataSourceAttributes()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}

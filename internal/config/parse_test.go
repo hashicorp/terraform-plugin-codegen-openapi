@@ -261,8 +261,7 @@ data_sources:
 
 			_, err := config.ParseConfig([]byte(testCase.input))
 			if err == nil {
-				t.Errorf("Expected err to match %q, got nil", testCase.expectedErrRegex)
-				return
+				t.Fatalf("Expected err to match %q, got nil", testCase.expectedErrRegex)
 			}
 			if !errRegex.Match([]byte(err.Error())) {
 				t.Errorf("Expected error to match %q, got %q", testCase.expectedErrRegex, err.Error())

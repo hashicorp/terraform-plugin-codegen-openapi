@@ -1133,33 +1133,6 @@
                             }
                         }
                     },
-                    "avTestElementType": {
-                        "type": "array",
-                        "items": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "test_int": {
-                                        "type": "number",
-                                        "format": "float"
-                                    },
-                                    "test_string": {
-                                        "type": "string"
-                                    },
-                                    "test_bool": {
-                                        "type": "boolean"
-                                    },
-                                    "test_array": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
                     "tags": {
                         "type": "array",
                         "xml": {
