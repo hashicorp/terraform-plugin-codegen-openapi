@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 )
 
 func (s *OASSchema) BuildStringResource(name string, behavior ir.ComputedOptionalRequired) (*ir.ResourceAttribute, error) {

@@ -1,8 +1,9 @@
 package explorer
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
 	"strings"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 	low "github.com/pb33f/libopenapi/datamodel/low/v3"

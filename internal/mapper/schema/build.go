@@ -3,8 +3,9 @@ package schema
 import (
 	"errors"
 	"fmt"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/util"
 	"strconv"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"

@@ -2,8 +2,9 @@ package schema
 
 import (
 	"fmt"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/util"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func (s *OASSchema) BuildListResource(name string, behavior ir.ComputedOptionalRequired) (*ir.ResourceAttribute, error) {

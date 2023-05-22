@@ -2,7 +2,8 @@ package schema
 
 import (
 	"fmt"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 )
 
 // TODO: move to object go file?

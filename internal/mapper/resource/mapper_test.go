@@ -1,12 +1,13 @@
 package resource_test
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/explorer"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/resource"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/util"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
