@@ -3,12 +3,13 @@ package resource
 import (
 	"errors"
 	"fmt"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/explorer"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/schema"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/util"
 	"log"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 var _ ResourceMapper = resourceMapper{}

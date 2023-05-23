@@ -1,9 +1,10 @@
 package config_test
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
 	"regexp"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 )
 
 func TestParseConfig_Valid(t *testing.T) {

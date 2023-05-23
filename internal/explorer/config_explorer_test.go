@@ -1,9 +1,10 @@
 package explorer_test
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/config"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/explorer"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"

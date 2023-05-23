@@ -1,9 +1,10 @@
 package schema_test
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/ir"
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/mapper/schema"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github/hashicorp/terraform-providers-code-generator-openapi/internal/cmd"
 	"os"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
 
 	"github.com/mattn/go-colorable"
 )

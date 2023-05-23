@@ -1,4 +1,8 @@
-## Running the example spec
+# terraform-plugin-codegen-openapi
+
+_Experimental: This code is under active development and not intended for production usage._
+
+## Running an example spec
 ```sh
 # Build the binary
 go build -o tfopenapigen .
