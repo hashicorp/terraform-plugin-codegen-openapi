@@ -6,7 +6,7 @@ require (
 	github.com/google/go-cmp v0.5.9
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mitchellh/cli v1.1.5
-	github.com/pb33f/libopenapi v0.7.0
+	github.com/pb33f/libopenapi v0.8.3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
