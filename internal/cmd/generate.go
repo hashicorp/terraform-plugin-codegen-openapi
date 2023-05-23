@@ -144,12 +144,14 @@ func (cmd *GenerateCommand) runInternal() error {
 	}
 
 	// 6. Output to STDOUT or file
-	output := os.Stdout
-	if cmd.flagOutputPath != "" {
-		output, err = os.Create(cmd.flagOutputPath)
-		if err != nil {
-			return fmt.Errorf("error creating output file for Framework IR: %w", err)
-		}
+	if cmd.flagOutputPath == "" {
+		cmd.UI.Output(string(bytes))
+		return nil
+	}
+
+	output, err := os.Create(cmd.flagOutputPath)
+	if err != nil {
+		return fmt.Errorf("error creating output file for Framework IR: %w", err)
 	}
 
 	_, err = output.Write(bytes)
