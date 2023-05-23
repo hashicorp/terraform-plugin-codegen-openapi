@@ -1,16 +1,38 @@
-package cmd
+package main
 
 import (
 	"io"
+	"os"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
 	"github.com/mitchellh/cli"
+
+	"github.com/mattn/go-colorable"
 )
+
+func main() {
+	// TODO: Temporary name for CLI :)
+	name := "terraform-plugin-codegen-openapi"
+	version := name + " Version " + version
+	if commit != "" {
+		version += " from commit " + commit
+	}
+
+	os.Exit(runCLI(
+		name,
+		version,
+		os.Args[1:],
+		os.Stdin,
+		colorable.NewColorableStdout(),
+		colorable.NewColorableStderr(),
+	))
+}
 
 func initCommands(ui cli.Ui) map[string]cli.CommandFactory {
 
 	generateFactory := func() (cli.Command, error) {
-		return &generateCmd{
-			ui: ui,
+		return &cmd.GenerateCommand{
+			UI: ui,
 		}, nil
 	}
 
@@ -19,7 +41,7 @@ func initCommands(ui cli.Ui) map[string]cli.CommandFactory {
 	}
 }
 
-func Run(name, version string, args []string, stdin io.Reader, stdout, stderr io.Writer) int {
+func runCLI(name, version string, args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	ui := &cli.ColoredUi{
 		ErrorColor: cli.UiColorRed,
 		WarnColor:  cli.UiColorYellow,

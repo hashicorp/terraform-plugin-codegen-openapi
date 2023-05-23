@@ -19,21 +19,21 @@ import (
 	"github.com/pb33f/libopenapi"
 )
 
-type generateCmd struct {
-	ui             cli.Ui
+type GenerateCommand struct {
+	UI             cli.Ui
 	oasInputPath   string
 	flagConfigPath string
 	flagOutputPath string
 }
 
-func (cmd *generateCmd) Flags() *flag.FlagSet {
+func (cmd *GenerateCommand) Flags() *flag.FlagSet {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
 	fs.StringVar(&cmd.flagConfigPath, "config", "./tfopenapigen_config.yml", "path to config file (YAML)")
 	fs.StringVar(&cmd.flagOutputPath, "output", "", "path to output generated Framework IR file (JSON)")
 	return fs
 }
 
-func (cmd *generateCmd) Help() string {
+func (cmd *GenerateCommand) Help() string {
 	strBuilder := &strings.Builder{}
 
 	longestName := 0
@@ -71,34 +71,34 @@ func (cmd *generateCmd) Help() string {
 	return strBuilder.String()
 }
 
-func (cmd *generateCmd) Synopsis() string {
+func (cmd *GenerateCommand) Synopsis() string {
 	return "Generates Framework Intermediate Representation (IR) JSON for an OpenAPI spec (JSON or YAML format)"
 }
 
-func (cmd *generateCmd) Run(args []string) int {
+func (cmd *GenerateCommand) Run(args []string) int {
 	fs := cmd.Flags()
 	err := fs.Parse(args)
 	if err != nil {
-		cmd.ui.Error(fmt.Sprintf("unable to parse flags: %s", err))
+		cmd.UI.Error(fmt.Sprintf("unable to parse flags: %s", err))
 		return 1
 	}
 
 	cmd.oasInputPath = fs.Arg(0)
 	if cmd.oasInputPath == "" {
-		cmd.ui.Error("Error executing command: OpenAPI specification file is required as last argument")
+		cmd.UI.Error("Error executing command: OpenAPI specification file is required as last argument")
 		return 1
 	}
 
 	err = cmd.runInternal()
 	if err != nil {
-		cmd.ui.Error(fmt.Sprintf("Error executing command: %s\n", err))
+		cmd.UI.Error(fmt.Sprintf("Error executing command: %s\n", err))
 		return 1
 	}
 
 	return 0
 }
 
-func (cmd *generateCmd) runInternal() error {
+func (cmd *GenerateCommand) runInternal() error {
 	// 1. Read and parse generator config file
 	configBytes, err := os.ReadFile(cmd.flagConfigPath)
 	if err != nil {
@@ -144,12 +144,14 @@ func (cmd *generateCmd) runInternal() error {
 	}
 
 	// 6. Output to STDOUT or file
-	output := os.Stdout
-	if cmd.flagOutputPath != "" {
-		output, err = os.Create(cmd.flagOutputPath)
-		if err != nil {
-			return fmt.Errorf("error creating output file for Framework IR: %w", err)
-		}
+	if cmd.flagOutputPath == "" {
+		cmd.UI.Output(string(bytes))
+		return nil
+	}
+
+	output, err := os.Create(cmd.flagOutputPath)
+	if err != nil {
+		return fmt.Errorf("error creating output file for Framework IR: %w", err)
 	}
 
 	_, err = output.Write(bytes)
