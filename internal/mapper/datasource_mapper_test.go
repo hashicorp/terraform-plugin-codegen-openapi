@@ -1,13 +1,14 @@
-package datasource_test
+package mapper_test
 
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -22,7 +23,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 	testCases := map[string]struct {
 		readResponseSchema *base.SchemaProxy
 		readParams         []*high.Parameter
-		want               []ir.DataSourceAttribute
+		want               []datasource.Attribute
 	}{
 		"merge primitives across all ops": {
 			readParams: []*high.Parameter{
@@ -68,33 +69,33 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.DataSourceAttribute{
+			want: []datasource.Attribute{
 				{
 					Name: "string_prop",
-					String: &ir.DataSourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is a string, required!"),
 						Sensitive:                pointer(true),
 					},
 				},
 				{
 					Name: "bool_prop",
-					Bool: &ir.DataSourceBoolAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is a bool, required!"),
 					},
 				},
 				{
 					Name: "float64_prop",
-					Float64: &ir.DataSourceFloat64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is a float64!"),
 					},
 				},
 				{
 					Name: "number_prop",
-					Number: &ir.DataSourceNumberAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Number: &datasource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is a number!"),
 					},
 				},
@@ -159,51 +160,51 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.DataSourceAttribute{
+			want: []datasource.Attribute{
 				{
 					Name: "nested_object_one",
-					SingleNested: &ir.DataSourceSingleNestedAttribute{
-						Attributes: []ir.DataSourceAttribute{
+					SingleNested: &datasource.SingleNestedAttribute{
+						Attributes: []datasource.Attribute{
 							{
 								Name: "nested_object_two",
-								SingleNested: &ir.DataSourceSingleNestedAttribute{
-									Attributes: []ir.DataSourceAttribute{
+								SingleNested: &datasource.SingleNestedAttribute{
+									Attributes: []datasource.Attribute{
 										{
 											Name: "bool_prop",
-											Bool: &ir.DataSourceBoolAttribute{
-												ComputedOptionalRequired: ir.ComputedOptional,
+											Bool: &datasource.BoolAttribute{
+												ComputedOptionalRequired: schema.ComputedOptional,
 												Description:              pointer("hey this is a bool!"),
 											},
 										},
 										{
 											Name: "int64_prop",
-											Int64: &ir.DataSourceInt64Attribute{
-												ComputedOptionalRequired: ir.Required,
+											Int64: &datasource.Int64Attribute{
+												ComputedOptionalRequired: schema.Required,
 												Description:              pointer("hey this is a integer!"),
 											},
 										},
 										{
 											Name: "number_prop",
-											Number: &ir.DataSourceNumberAttribute{
-												ComputedOptionalRequired: ir.ComputedOptional,
+											Number: &datasource.NumberAttribute{
+												ComputedOptionalRequired: schema.ComputedOptional,
 												Description:              pointer("hey this is a number!"),
 											},
 										},
 									},
-									ComputedOptionalRequired: ir.ComputedOptional,
+									ComputedOptionalRequired: schema.ComputedOptional,
 									Description:              pointer("hey this is an object!"),
 								},
 							},
 							{
 								Name: "string_prop",
-								String: &ir.DataSourceStringAttribute{
-									ComputedOptionalRequired: ir.ComputedOptional,
+								String: &datasource.StringAttribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
 									Description:              pointer("hey this is a string!"),
 									Sensitive:                pointer(true),
 								},
 							},
 						},
-						ComputedOptionalRequired: ir.Required,
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is an object, required!"),
 					},
 				},
@@ -294,46 +295,46 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.DataSourceAttribute{
+			want: []datasource.Attribute{
 				{
 					Name: "array_prop",
-					ListNested: &ir.DataSourceListNestedAttribute{
-						ComputedOptionalRequired: ir.Required,
+					ListNested: &datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is an array, required!"),
-						NestedObject: ir.DataSourceAttributeNestedObject{
-							Attributes: []ir.DataSourceAttribute{
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
 								{
 									Name: "nested_array_prop",
-									ListNested: &ir.DataSourceListNestedAttribute{
-										ComputedOptionalRequired: ir.Required,
+									ListNested: &datasource.ListNestedAttribute{
+										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey this is a nested array, required!"),
-										NestedObject: ir.DataSourceAttributeNestedObject{
-											Attributes: []ir.DataSourceAttribute{
+										NestedObject: datasource.NestedAttributeObject{
+											Attributes: []datasource.Attribute{
 												{
 													Name: "super_nested_bool_one",
-													Bool: &ir.DataSourceBoolAttribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													Bool: &datasource.BoolAttribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a boolean!"),
 													},
 												},
 												{
 													Name: "super_nested_bool_two",
-													Bool: &ir.DataSourceBoolAttribute{
-														ComputedOptionalRequired: ir.Required,
+													Bool: &datasource.BoolAttribute{
+														ComputedOptionalRequired: schema.Required,
 														Description:              pointer("hey this is a boolean, required!"),
 													},
 												},
 												{
 													Name: "super_nested_int64",
-													Int64: &ir.DataSourceInt64Attribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													Int64: &datasource.Int64Attribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a integer!"),
 													},
 												},
 												{
 													Name: "super_nested_string",
-													String: &ir.DataSourceStringAttribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													String: &datasource.StringAttribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a string!"),
 														Sensitive:                pointer(false),
 													},
@@ -344,15 +345,15 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 								},
 								{
 									Name: "number_prop",
-									Number: &ir.DataSourceNumberAttribute{
-										ComputedOptionalRequired: ir.ComputedOptional,
+									Number: &datasource.NumberAttribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
 										Description:              pointer("hey this is a number!"),
 									},
 								},
 								{
 									Name: "float64_prop",
-									Float64: &ir.DataSourceFloat64Attribute{
-										ComputedOptionalRequired: ir.ComputedOptional,
+									Float64: &datasource.Float64Attribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
 										Description:              pointer("hey this is a float64!"),
 									},
 								},
@@ -448,39 +449,31 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.DataSourceAttribute{
+			want: []datasource.Attribute{
 				{
 					Name: "array_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is an array!"),
-						ElementType: ir.ElementType{
-							List: &ir.ListElement{
-								ElementType: &ir.ElementType{
-									Object: []ir.ObjectElement{
+						ElementType: schema.ElementType{
+							List: &schema.ListType{
+								ElementType: schema.ElementType{
+									Object: []schema.ObjectAttributeType{
 										{
 											Name: "deep_nested_list",
-											ElementType: &ir.ElementType{
-												List: &ir.ListElement{
-													ElementType: &ir.ElementType{
-														Object: []ir.ObjectElement{
-															{
-																Name: "deep_deep_nested_object",
-																ElementType: &ir.ElementType{
-																	Object: []ir.ObjectElement{
-																		{
-																			Name: "deep_deep_nested_bool",
-																			ElementType: &ir.ElementType{
-																				Bool: &ir.BoolElement{},
-																			},
-																		},
-																		{
-																			Name: "deep_deep_nested_string",
-																			ElementType: &ir.ElementType{
-																				String: &ir.StringElement{},
-																			},
-																		},
-																	},
+											List: &schema.ListType{
+												ElementType: schema.ElementType{
+													Object: []schema.ObjectAttributeType{
+														{
+															Name: "deep_deep_nested_object",
+															Object: []schema.ObjectAttributeType{
+																{
+																	Name: "deep_deep_nested_bool",
+																	Bool: &schema.BoolType{},
+																},
+																{
+																	Name:   "deep_deep_nested_string",
+																	String: &schema.StringType{},
 																},
 															},
 														},
@@ -490,15 +483,11 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 										},
 										{
 											Name: "deep_nested_bool",
-											ElementType: &ir.ElementType{
-												Bool: &ir.BoolElement{},
-											},
+											Bool: &schema.BoolType{},
 										},
 										{
-											Name: "deep_nested_int64",
-											ElementType: &ir.ElementType{
-												Int64: &ir.Int64Element{},
-											},
+											Name:  "deep_nested_int64",
+											Int64: &schema.Int64Type{},
 										},
 									},
 								},
@@ -514,7 +503,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			mapper := datasource.NewDataSourceMapper(map[string]explorer.DataSource{
+			mapper := mapper.NewDataSourceMapper(map[string]explorer.DataSource{
 				"test_datasource": {
 					ReadOp: createTestReadOp(testCase.readResponseSchema, testCase.readParams),
 				},
@@ -533,25 +522,4 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 			}
 		})
 	}
-}
-
-func createTestReadOp(response *base.SchemaProxy, params []*high.Parameter) *high.Operation {
-	return &high.Operation{
-		Responses: &high.Responses{
-			Codes: map[string]*high.Response{
-				"200": {
-					Content: map[string]*high.MediaType{
-						"application/json": {
-							Schema: response,
-						},
-					},
-				},
-			},
-		},
-		Parameters: params,
-	}
-}
-
-func pointer[T any](value T) *T {
-	return &value
 }

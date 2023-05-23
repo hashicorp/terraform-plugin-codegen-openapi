@@ -1,10 +1,12 @@
-package schema_test
+package oas_test
 
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -15,7 +17,7 @@ func TestBuildNumberResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.ResourceAttribute
+		expectedAttributes *[]resource.Attribute
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -44,32 +46,32 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "double_float64_prop",
-					Float64: &ir.ResourceFloat64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
 				{
 					Name: "double_float64_prop_required",
-					Float64: &ir.ResourceFloat64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
 				{
 					Name: "float_float64_prop",
-					Float64: &ir.ResourceFloat64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
 				{
 					Name: "float_float64_prop_required",
-					Float64: &ir.ResourceFloat64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a float, required."),
 					},
 				},
@@ -90,18 +92,18 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "number_prop",
-					Number: &ir.ResourceNumberAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Number: &resource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a number type."),
 					},
 				},
 				{
 					Name: "number_prop_required",
-					Number: &ir.ResourceNumberAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Number: &resource.NumberAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
 					},
 				},
@@ -154,44 +156,44 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "double_float64_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "double_float64_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "float_float64_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "float_float64_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
@@ -222,24 +224,24 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "number_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of numbers."),
-						ElementType: ir.ElementType{
-							Number: &ir.NumberElement{},
+						ElementType: schema.ElementType{
+							Number: &schema.NumberType{},
 						},
 					},
 				},
 				{
 					Name: "number_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of numbers, required."),
-						ElementType: ir.ElementType{
-							Number: &ir.NumberElement{},
+						ElementType: schema.ElementType{
+							Number: &schema.NumberType{},
 						},
 					},
 				},
@@ -253,7 +255,7 @@ func TestBuildNumberResource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildResourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
@@ -271,7 +273,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.DataSourceAttribute
+		expectedAttributes *[]datasource.Attribute
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -300,32 +302,32 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "double_float64_prop",
-					Float64: &ir.DataSourceFloat64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
 				{
 					Name: "double_float64_prop_required",
-					Float64: &ir.DataSourceFloat64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
 				{
 					Name: "float_float64_prop",
-					Float64: &ir.DataSourceFloat64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
 				{
 					Name: "float_float64_prop_required",
-					Float64: &ir.DataSourceFloat64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a float, required."),
 					},
 				},
@@ -346,18 +348,18 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "number_prop",
-					Number: &ir.DataSourceNumberAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Number: &datasource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a number type."),
 					},
 				},
 				{
 					Name: "number_prop_required",
-					Number: &ir.DataSourceNumberAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Number: &datasource.NumberAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
 					},
 				},
@@ -410,44 +412,44 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "double_float64_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "double_float64_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "float_float64_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
 				{
 					Name: "float_float64_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
-						ElementType: ir.ElementType{
-							Float64: &ir.Float64Element{},
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
 						},
 					},
 				},
@@ -478,24 +480,24 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "number_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of numbers."),
-						ElementType: ir.ElementType{
-							Number: &ir.NumberElement{},
+						ElementType: schema.ElementType{
+							Number: &schema.NumberType{},
 						},
 					},
 				},
 				{
 					Name: "number_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of numbers, required."),
-						ElementType: ir.ElementType{
-							Number: &ir.NumberElement{},
+						ElementType: schema.ElementType{
+							Number: &schema.NumberType{},
 						},
 					},
 				},
@@ -509,7 +511,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)

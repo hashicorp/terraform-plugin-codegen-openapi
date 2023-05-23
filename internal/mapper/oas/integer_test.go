@@ -1,10 +1,12 @@
-package schema_test
+package oas_test
 
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -15,7 +17,7 @@ func TestBuildIntegerResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.ResourceAttribute
+		expectedAttributes *[]resource.Attribute
 	}{
 		"int64 attributes": {
 			schema: &base.Schema{
@@ -32,18 +34,18 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "int64_prop",
-					Int64: &ir.ResourceInt64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Int64: &resource.Int64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm an int64 type."),
 					},
 				},
 				{
 					Name: "int64_prop_required",
-					Int64: &ir.ResourceInt64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Int64: &resource.Int64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm an int64 type, required."),
 					},
 				},
@@ -74,24 +76,24 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "int64_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of int64s."),
-						ElementType: ir.ElementType{
-							Int64: &ir.Int64Element{},
+						ElementType: schema.ElementType{
+							Int64: &schema.Int64Type{},
 						},
 					},
 				},
 				{
 					Name: "int64_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of int64s, required."),
-						ElementType: ir.ElementType{
-							Int64: &ir.Int64Element{},
+						ElementType: schema.ElementType{
+							Int64: &schema.Int64Type{},
 						},
 					},
 				},
@@ -105,7 +107,7 @@ func TestBuildIntegerResource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildResourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
@@ -123,7 +125,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.DataSourceAttribute
+		expectedAttributes *[]datasource.Attribute
 	}{
 		"int64 attributes": {
 			schema: &base.Schema{
@@ -140,18 +142,18 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "int64_prop",
-					Int64: &ir.DataSourceInt64Attribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Int64: &datasource.Int64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm an int64 type."),
 					},
 				},
 				{
 					Name: "int64_prop_required",
-					Int64: &ir.DataSourceInt64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Int64: &datasource.Int64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm an int64 type, required."),
 					},
 				},
@@ -182,24 +184,24 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "int64_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of int64s."),
-						ElementType: ir.ElementType{
-							Int64: &ir.Int64Element{},
+						ElementType: schema.ElementType{
+							Int64: &schema.Int64Type{},
 						},
 					},
 				},
 				{
 					Name: "int64_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of int64s, required."),
-						ElementType: ir.ElementType{
-							Int64: &ir.Int64Element{},
+						ElementType: schema.ElementType{
+							Int64: &schema.Int64Type{},
 						},
 					},
 				},
@@ -213,7 +215,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)

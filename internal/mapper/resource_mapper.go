@@ -1,4 +1,4 @@
-package resource
+package mapper
 
 import (
 	"errors"
@@ -7,15 +7,16 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 var _ ResourceMapper = resourceMapper{}
 
 type ResourceMapper interface {
-	MapToIR() ([]ir.Resource, error)
+	MapToIR() ([]resource.Resource, error)
 }
 
 type resourceMapper struct {
@@ -31,38 +32,38 @@ func NewResourceMapper(resources map[string]explorer.Resource, cfg config.Config
 	}
 }
 
-func (m resourceMapper) MapToIR() ([]ir.Resource, error) {
-	resourceSchemas := []ir.Resource{}
+func (m resourceMapper) MapToIR() ([]resource.Resource, error) {
+	resourceSchemas := []resource.Resource{}
 
 	// Guarantee the order of processing
 	resourceNames := util.SortedKeys(m.resources)
 	for _, name := range resourceNames {
-		resource := m.resources[name]
+		explorerResource := m.resources[name]
 
-		schema, err := generateResourceSchema(resource)
+		schema, err := generateResourceSchema(explorerResource)
 		if err != nil {
 			log.Printf("[WARN] skipping '%s' resource schema: %s\n", name, err)
 			continue
 		}
 
-		resourceSchemas = append(resourceSchemas, ir.Resource{
+		resourceSchemas = append(resourceSchemas, resource.Resource{
 			Name:   name,
-			Schema: *schema,
+			Schema: schema,
 		})
 	}
 
 	return resourceSchemas, nil
 }
 
-func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, error) {
-	resourceSchema := &ir.ResourceSchema{
-		Attributes: []ir.ResourceAttribute{},
+func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schema, error) {
+	resourceSchema := &resource.Schema{
+		Attributes: []resource.Attribute{},
 	}
 
 	// ********************
 	// Create Request Body (required)
 	// ********************
-	createRequestSchema, err := schema.BuildSchemaFromRequest(resource.CreateOp)
+	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp)
 	if err != nil {
 		return nil, err
 	}
@@ -74,9 +75,9 @@ func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, err
 	// *********************
 	// Create Response Body (optional)
 	// *********************
-	createResponseAttributes := &[]ir.ResourceAttribute{}
-	createResponseSchema, err := schema.BuildSchemaFromResponse(resource.CreateOp)
-	if err != nil && !errors.Is(err, schema.ErrSchemaNotFound) {
+	createResponseAttributes := &[]resource.Attribute{}
+	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp)
+	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if createResponseSchema != nil {
 		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
@@ -88,9 +89,9 @@ func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, err
 	// *******************
 	// READ Response Body (optional)
 	// *******************
-	readResponseAttributes := &[]ir.ResourceAttribute{}
-	readResponseSchema, err := schema.BuildSchemaFromResponse(resource.ReadOp)
-	if err != nil && !errors.Is(err, schema.ErrSchemaNotFound) {
+	readResponseAttributes := &[]resource.Attribute{}
+	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp)
+	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if readResponseSchema != nil {
 		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
@@ -102,17 +103,17 @@ func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, err
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	readParameterAttributes := []ir.ResourceAttribute{}
-	if resource.ReadOp != nil && resource.ReadOp.Parameters != nil {
-		for _, param := range resource.ReadOp.Parameters {
+	readParameterAttributes := []resource.Attribute{}
+	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
+		for _, param := range explorerResource.ReadOp.Parameters {
 			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
-			s, err := schema.BuildSchema(param.Schema)
+			s, err := oas.BuildSchema(param.Schema)
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
 			// TODO: schema description is preferred over param.Description. This should probably be changed
-			parameterAttribute, err := s.BuildResourceAttribute(param.Name, ir.ComputedOptional)
+			parameterAttribute, err := s.BuildResourceAttribute(param.Name, schema.ComputedOptional)
 			if err != nil {
 				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
 			}
@@ -121,7 +122,7 @@ func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, err
 		}
 	}
 
-	resourceAttributes := deepMergeAttributes(
+	resourceAttributes := mergeResourceAttributes(
 		*createRequestAttributes,
 		*createResponseAttributes,
 		*readResponseAttributes,
@@ -134,7 +135,7 @@ func generateResourceSchema(resource explorer.Resource) (*ir.ResourceSchema, err
 
 // mainSlice takes priority in the merge, will have each subsequent mergeAttributeSlice applied in sequence
 // - No re-ordering of the mainSlice is done, so will append new attributes as they are encountered
-func deepMergeAttributes(mainSlice []ir.ResourceAttribute, mergeAttributeSlices ...[]ir.ResourceAttribute) *[]ir.ResourceAttribute {
+func mergeResourceAttributes(mainSlice []resource.Attribute, mergeAttributeSlices ...[]resource.Attribute) *[]resource.Attribute {
 	for _, attributeSlice := range mergeAttributeSlices {
 
 		for _, compareAttribute := range attributeSlice {
@@ -144,14 +145,14 @@ func deepMergeAttributes(mainSlice []ir.ResourceAttribute, mergeAttributeSlices 
 				if mainAttribute.Name == compareAttribute.Name {
 					// Handle types that require nested merging
 					if mainAttribute.SingleNested != nil && compareAttribute.SingleNested != nil {
-						mergedAttributes := deepMergeAttributes(mainAttribute.SingleNested.Attributes, compareAttribute.SingleNested.Attributes)
+						mergedAttributes := mergeResourceAttributes(mainAttribute.SingleNested.Attributes, compareAttribute.SingleNested.Attributes)
 						mainSlice[mainIndex].SingleNested.Attributes = *mergedAttributes
 					} else if mainAttribute.ListNested != nil && compareAttribute.ListNested != nil {
-						mergedAttributes := deepMergeAttributes(mainAttribute.ListNested.NestedObject.Attributes, compareAttribute.ListNested.NestedObject.Attributes)
+						mergedAttributes := mergeResourceAttributes(mainAttribute.ListNested.NestedObject.Attributes, compareAttribute.ListNested.NestedObject.Attributes)
 						mainSlice[mainIndex].ListNested.NestedObject.Attributes = *mergedAttributes
 					} else if mainAttribute.List != nil && compareAttribute.List != nil {
-						mergedElementType := deepMergeElementType(&mainAttribute.List.ElementType, &compareAttribute.List.ElementType)
-						mainSlice[mainIndex].List.ElementType = *mergedElementType
+						mergedElementType := mergeElementType(mainAttribute.List.ElementType, compareAttribute.List.ElementType)
+						mainSlice[mainIndex].List.ElementType = mergedElementType
 					}
 
 					isNewAttribute = false
@@ -167,37 +168,4 @@ func deepMergeAttributes(mainSlice []ir.ResourceAttribute, mergeAttributeSlices 
 
 	}
 	return &mainSlice
-}
-
-func deepMergeElementType(mainElementType *ir.ElementType, mergeElementType *ir.ElementType) *ir.ElementType {
-	if mainElementType.List != nil && mergeElementType.List != nil {
-		mainElementType.List.ElementType = deepMergeElementType(mainElementType.List.ElementType, mergeElementType.List.ElementType)
-	} else if mainElementType.Object != nil && mergeElementType.Object != nil {
-		objectElemTypes := deepMergeObjectElementTypes(mainElementType.Object, mergeElementType.Object)
-		mainElementType.Object = objectElemTypes
-	}
-
-	return mainElementType
-}
-
-func deepMergeObjectElementTypes(mainObject []ir.ObjectElement, mergeObject []ir.ObjectElement) []ir.ObjectElement {
-	for _, compareElemType := range mergeObject {
-		isNewElemType := true
-
-		for mainIndex, mainElemType := range mainObject {
-			if mainElemType.Name == compareElemType.Name {
-				mergedElementType := deepMergeElementType(mainElemType.ElementType, compareElemType.ElementType)
-				mainObject[mainIndex].ElementType = mergedElementType
-
-				isNewElemType = false
-				break
-			}
-		}
-
-		if isNewElemType {
-			mainObject = append(mainObject, compareElemType)
-		}
-	}
-
-	return mainObject
 }

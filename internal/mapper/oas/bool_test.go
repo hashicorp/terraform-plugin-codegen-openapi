@@ -1,10 +1,12 @@
-package schema_test
+package oas_test
 
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -15,7 +17,7 @@ func TestBuildBoolResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.ResourceAttribute
+		expectedAttributes *[]resource.Attribute
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -32,18 +34,18 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "bool_prop",
-					Bool: &ir.ResourceBoolAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a bool type."),
 					},
 				},
 				{
 					Name: "bool_prop_required",
-					Bool: &ir.ResourceBoolAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a bool type, required."),
 					},
 				},
@@ -74,24 +76,24 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "bool_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of bools."),
-						ElementType: ir.ElementType{
-							Bool: &ir.BoolElement{},
+						ElementType: schema.ElementType{
+							Bool: &schema.BoolType{},
 						},
 					},
 				},
 				{
 					Name: "bool_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of bools, required."),
-						ElementType: ir.ElementType{
-							Bool: &ir.BoolElement{},
+						ElementType: schema.ElementType{
+							Bool: &schema.BoolType{},
 						},
 					},
 				},
@@ -105,7 +107,7 @@ func TestBuildBoolResource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildResourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
@@ -123,7 +125,7 @@ func TestBuildBoolDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.DataSourceAttribute
+		expectedAttributes *[]datasource.Attribute
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -140,18 +142,18 @@ func TestBuildBoolDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "bool_prop",
-					Bool: &ir.DataSourceBoolAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a bool type."),
 					},
 				},
 				{
 					Name: "bool_prop_required",
-					Bool: &ir.DataSourceBoolAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a bool type, required."),
 					},
 				},
@@ -182,24 +184,24 @@ func TestBuildBoolDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "bool_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of bools."),
-						ElementType: ir.ElementType{
-							Bool: &ir.BoolElement{},
+						ElementType: schema.ElementType{
+							Bool: &schema.BoolType{},
 						},
 					},
 				},
 				{
 					Name: "bool_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of bools, required."),
-						ElementType: ir.ElementType{
-							Bool: &ir.BoolElement{},
+						ElementType: schema.ElementType{
+							Bool: &schema.BoolType{},
 						},
 					},
 				},
@@ -213,7 +215,7 @@ func TestBuildBoolDataSource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)

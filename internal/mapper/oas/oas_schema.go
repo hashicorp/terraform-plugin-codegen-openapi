@@ -1,8 +1,8 @@
-package schema
+package oas
 
 import (
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
@@ -27,12 +27,12 @@ func (s *OASSchema) IsSensitive() *bool {
 	return &isSensitive
 }
 
-func (s *OASSchema) GetBehavior(name string) ir.ComputedOptionalRequired {
+func (s *OASSchema) GetBehavior(name string) schema.ComputedOptionalRequired {
 	for _, prop := range s.Schema.Required {
 		if name == prop {
-			return ir.Required
+			return schema.Required
 		}
 	}
 
-	return ir.ComputedOptional
+	return schema.ComputedOptional
 }

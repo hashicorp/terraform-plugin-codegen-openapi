@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 	"github.com/mitchellh/cli"
 )
 
@@ -74,7 +74,7 @@ func getFrameworkIRCmpOption() cmp.Option {
 	return cmp.FilterValues(func(x, y []byte) bool {
 		return json.Valid(x) && json.Valid(y)
 	}, cmp.Transformer("ParseIRJSON", func(in []byte) (out interface{}) {
-		var irStruct ir.IntermediateRepresentation
+		var irStruct spec.Specification
 		decoder := json.NewDecoder(strings.NewReader(string(in)))
 		decoder.DisallowUnknownFields()
 
