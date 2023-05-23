@@ -9,5 +9,5 @@ go build ./cmd/terraform-plugin-codegen-openapi
 
 # Pass generator config to --config and OpenAPI spec (JSON or YML) as positional argument
 # Outputs to STDOUT
-./terraform-plugin-codegen-openapi generate --config ./examples/petstore3/tfopenapigen_config.yml ./examples/petstore3/openapi_spec.json
+./terraform-plugin-codegen-openapi  generate --config ./internal/cmd/testdata/petstore3/tfopenapigen_config.yml ./internal/cmd/testdata/petstore3/openapi_spec.json
 ```
