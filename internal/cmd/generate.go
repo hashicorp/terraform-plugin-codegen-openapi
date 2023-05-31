@@ -164,32 +164,32 @@ func (cmd *GenerateCommand) runInternal() error {
 
 func generateFrameworkIr(dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
 	// 1. Find TF resources
-	resources, err := dora.FindResources()
+	explorerResources, err := dora.FindResources()
 	if err != nil {
 		return nil, fmt.Errorf("error finding resources: %w", err)
 	}
 
 	// 2. Find TF data sources
-	dataSources, err := dora.FindDataSources()
+	explorerDataSources, err := dora.FindDataSources()
 	if err != nil {
 		return nil, fmt.Errorf("error finding data sources: %w", err)
 	}
 
 	// 3. Find TF provider
-	providerExp, err := dora.FindProvider()
+	explorerProvider, err := dora.FindProvider()
 	if err != nil {
 		return nil, fmt.Errorf("error finding provider: %w", err)
 	}
 
 	// 4. Use TF info to generate framework IR for resources
-	resourceMapper := mapper.NewResourceMapper(resources, cfg)
+	resourceMapper := mapper.NewResourceMapper(explorerResources, cfg)
 	resourcesIR, err := resourceMapper.MapToIR()
 	if err != nil {
 		return nil, fmt.Errorf("error generating Framework IR for resources: %w", err)
 	}
 
 	// 5. Use TF info to generate framework IR for data sources
-	dataSourceMapper := mapper.NewDataSourceMapper(dataSources, cfg)
+	dataSourceMapper := mapper.NewDataSourceMapper(explorerDataSources, cfg)
 	dataSourcesIR, err := dataSourceMapper.MapToIR()
 	if err != nil {
 		return nil, fmt.Errorf("error generating Framework IR for data sources: %w", err)
@@ -197,7 +197,7 @@ func generateFrameworkIr(dora explorer.Explorer, cfg config.Config) (*spec.Speci
 
 	return &spec.Specification{
 		Provider: &provider.Provider{
-			Name: providerExp.Name,
+			Name: explorerProvider.Name,
 		},
 		Resources:   resourcesIR,
 		DataSources: dataSourcesIR,

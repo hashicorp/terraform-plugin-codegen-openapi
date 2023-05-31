@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-// TODO: move to object go file?
 func (s *OASSchema) BuildSingleNestedResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	objectAttributes, err := s.BuildResourceAttributes()
 	if err != nil {
