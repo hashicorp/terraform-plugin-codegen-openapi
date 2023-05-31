@@ -25,7 +25,7 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, error) {
 			return schema.ElementType{}, fmt.Errorf("failed to create object property '%s' schema proxy - %w", name, err)
 		}
 
-		objectElemTypes = append(objectElemTypes, util.ConvertToAttributeType(name, elemType))
+		objectElemTypes = append(objectElemTypes, util.CreateObjectAttributeType(name, elemType))
 	}
 
 	return schema.ElementType{

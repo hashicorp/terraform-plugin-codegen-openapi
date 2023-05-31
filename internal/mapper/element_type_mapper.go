@@ -22,9 +22,8 @@ func mergeObjectAttributeTypes(mainObject []schema.ObjectAttributeType, mergeObj
 
 		for mainIndex, mainAttrType := range mainObject {
 			if mainAttrType.Name == compareAttrType.Name {
-				// TODO: update here for new object attribute structure
-				mergedElementType := mergeElementType(util.ConvertToElementType(mainAttrType), util.ConvertToElementType(compareAttrType))
-				mainObject[mainIndex] = util.ConvertToAttributeType(mainAttrType.Name, mergedElementType)
+				mergedElementType := mergeElementType(util.CreateElementType(mainAttrType), util.CreateElementType(compareAttrType))
+				mainObject[mainIndex] = util.CreateObjectAttributeType(mainAttrType.Name, mergedElementType)
 
 				isNewElemType = false
 				break

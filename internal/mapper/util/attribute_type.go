@@ -2,8 +2,9 @@ package util
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-// TODO: hackish conversion ¯\_(ツ)_/¯
-func ConvertToAttributeType(name string, elemType schema.ElementType) schema.ObjectAttributeType {
+// CreateObjectAttributeType is a helper function that assists in mapping between ElementType and ObjectAttributeType
+// as their structs share the same underlying types
+func CreateObjectAttributeType(name string, elemType schema.ElementType) schema.ObjectAttributeType {
 	attrType := schema.ObjectAttributeType{Name: name}
 
 	switch {
@@ -30,8 +31,9 @@ func ConvertToAttributeType(name string, elemType schema.ElementType) schema.Obj
 	return attrType
 }
 
-// TODO: hackish conversion ¯\_(ツ)_/¯
-func ConvertToElementType(attrType schema.ObjectAttributeType) schema.ElementType {
+// CreateElementType is a helper function that assists in mapping between ObjectAttributeType and ElementType
+// as their structs share the same underlying types
+func CreateElementType(attrType schema.ObjectAttributeType) schema.ElementType {
 	elemType := schema.ElementType{}
 
 	switch {
