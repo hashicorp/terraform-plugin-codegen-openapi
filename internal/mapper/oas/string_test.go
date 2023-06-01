@@ -1,10 +1,12 @@
-package schema_test
+package oas_test
 
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -15,7 +17,7 @@ func TestBuildStringResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.ResourceAttribute
+		expectedAttributes *[]resource.Attribute
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -33,19 +35,19 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "string_prop",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
 						Sensitive:                pointer(false),
 					},
 				},
 				{
 					Name: "string_sensitive_prop",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:                pointer(true),
 					},
@@ -77,24 +79,24 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "string_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of strings."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
 				{
 					Name: "string_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of strings, required."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
@@ -108,7 +110,7 @@ func TestBuildStringResource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildResourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
@@ -126,7 +128,7 @@ func TestBuildStringDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]ir.DataSourceAttribute
+		expectedAttributes *[]datasource.Attribute
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -144,19 +146,19 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "string_prop",
-					String: &ir.DataSourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
 						Sensitive:                pointer(false),
 					},
 				},
 				{
 					Name: "string_sensitive_prop",
-					String: &ir.DataSourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:                pointer(true),
 					},
@@ -188,24 +190,24 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]ir.DataSourceAttribute{
+			expectedAttributes: &[]datasource.Attribute{
 				{
 					Name: "string_list_prop",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of strings."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
 				{
 					Name: "string_list_prop_required",
-					List: &ir.DataSourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of strings, required."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
@@ -219,7 +221,7 @@ func TestBuildStringDataSource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema := schema.OASSchema{Schema: testCase.schema}
+			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)

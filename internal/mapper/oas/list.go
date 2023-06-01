@@ -1,13 +1,15 @@
-package schema
+package oas
 
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildListResource(name string, behavior ir.ComputedOptionalRequired) (*ir.ResourceAttribute, error) {
+func (s *OASSchema) BuildListResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -23,10 +25,10 @@ func (s *OASSchema) BuildListResource(name string, behavior ir.ComputedOptionalR
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
 		}
 
-		return &ir.ResourceAttribute{
+		return &resource.Attribute{
 			Name: name,
-			ListNested: &ir.ResourceListNestedAttribute{
-				NestedObject: ir.ResourceAttributeNestedObject{
+			ListNested: &resource.ListNestedAttribute{
+				NestedObject: resource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: behavior,
@@ -40,17 +42,17 @@ func (s *OASSchema) BuildListResource(name string, behavior ir.ComputedOptionalR
 		return nil, fmt.Errorf("failed to create list elem type - %w", err)
 	}
 
-	return &ir.ResourceAttribute{
+	return &resource.Attribute{
 		Name: name,
-		List: &ir.ResourceListAttribute{
-			ElementType:              *elemType,
+		List: &resource.ListAttribute{
+			ElementType:              elemType,
 			ComputedOptionalRequired: behavior,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildListDataSource(name string, behavior ir.ComputedOptionalRequired) (*ir.DataSourceAttribute, error) {
+func (s *OASSchema) BuildListDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -66,10 +68,10 @@ func (s *OASSchema) BuildListDataSource(name string, behavior ir.ComputedOptiona
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
 		}
 
-		return &ir.DataSourceAttribute{
+		return &datasource.Attribute{
 			Name: name,
-			ListNested: &ir.DataSourceListNestedAttribute{
-				NestedObject: ir.DataSourceAttributeNestedObject{
+			ListNested: &datasource.ListNestedAttribute{
+				NestedObject: datasource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: behavior,
@@ -83,32 +85,32 @@ func (s *OASSchema) BuildListDataSource(name string, behavior ir.ComputedOptiona
 		return nil, fmt.Errorf("failed to create list elem type - %w", err)
 	}
 
-	return &ir.DataSourceAttribute{
+	return &datasource.Attribute{
 		Name: name,
-		List: &ir.DataSourceListAttribute{
-			ElementType:              *elemType,
+		List: &datasource.ListAttribute{
+			ElementType:              elemType,
 			ComputedOptionalRequired: behavior,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildListElementType() (*ir.ElementType, error) {
+func (s *OASSchema) BuildListElementType() (schema.ElementType, error) {
 	if !s.Schema.Items.IsA() {
-		return nil, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
+		return schema.ElementType{}, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
 	}
 	itemSchema, err := BuildSchema(s.Schema.Items.A)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build nested array items schema")
+		return schema.ElementType{}, fmt.Errorf("failed to build nested array items schema")
 	}
 
 	elemType, err := itemSchema.BuildElementType()
 	if err != nil {
-		return nil, err
+		return schema.ElementType{}, err
 	}
 
-	return &ir.ElementType{
-		List: &ir.ListElement{
+	return schema.ElementType{
+		List: &schema.ListType{
 			ElementType: elemType,
 		},
 	}, nil

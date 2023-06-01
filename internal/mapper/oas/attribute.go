@@ -1,14 +1,16 @@
-package schema
+package oas
 
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildResourceAttributes() (*[]ir.ResourceAttribute, error) {
-	objectAttributes := []ir.ResourceAttribute{}
+func (s *OASSchema) BuildResourceAttributes() (*[]resource.Attribute, error) {
+	objectAttributes := []resource.Attribute{}
 
 	// TODO: throw error if it's not an object?
 
@@ -33,7 +35,7 @@ func (s *OASSchema) BuildResourceAttributes() (*[]ir.ResourceAttribute, error) {
 	return &objectAttributes, nil
 }
 
-func (s *OASSchema) BuildResourceAttribute(name string, behavior ir.ComputedOptionalRequired) (*ir.ResourceAttribute, error) {
+func (s *OASSchema) BuildResourceAttribute(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringResource(name, behavior)
@@ -52,8 +54,8 @@ func (s *OASSchema) BuildResourceAttribute(name string, behavior ir.ComputedOpti
 	}
 }
 
-func (s *OASSchema) BuildDataSourceAttributes() (*[]ir.DataSourceAttribute, error) {
-	objectAttributes := []ir.DataSourceAttribute{}
+func (s *OASSchema) BuildDataSourceAttributes() (*[]datasource.Attribute, error) {
+	objectAttributes := []datasource.Attribute{}
 
 	// TODO: throw error if it's not an object?
 
@@ -78,7 +80,7 @@ func (s *OASSchema) BuildDataSourceAttributes() (*[]ir.DataSourceAttribute, erro
 	return &objectAttributes, nil
 }
 
-func (s *OASSchema) BuildDataSourceAttribute(name string, behavior ir.ComputedOptionalRequired) (*ir.DataSourceAttribute, error) {
+func (s *OASSchema) BuildDataSourceAttribute(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringDataSource(name, behavior)

@@ -1,13 +1,14 @@
-package resource_test
+package mapper_test
 
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -24,7 +25,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 		createResponseSchema *base.SchemaProxy
 		readResponseSchema   *base.SchemaProxy
 		readParams           []*high.Parameter
-		want                 []ir.ResourceAttribute
+		want                 []resource.Attribute
 	}{
 		"merge primitives across all ops": {
 			createRequestSchema: base.CreateSchemaProxy(&base.Schema{
@@ -70,32 +71,32 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			},
-			want: []ir.ResourceAttribute{
+			want: []resource.Attribute{
 				{
 					Name: "bool_prop",
-					Bool: &ir.ResourceBoolAttribute{
-						ComputedOptionalRequired: ir.Required,
+					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is a bool, required!"),
 					},
 				},
 				{
 					Name: "int64_prop",
-					Int64: &ir.ResourceInt64Attribute{
-						ComputedOptionalRequired: ir.Required,
+					Int64: &resource.Int64Attribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is an int64, required!"),
 					},
 				},
 				{
 					Name: "number_prop",
-					Number: &ir.ResourceNumberAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					Number: &resource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is a number!"),
 					},
 				},
 				{
 					Name: "string_prop",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is a string!"),
 						Sensitive:                pointer(true),
 					},
@@ -177,58 +178,58 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			},
-			want: []ir.ResourceAttribute{
+			want: []resource.Attribute{
 				{
 					Name: "nested_object_one",
-					SingleNested: &ir.ResourceSingleNestedAttribute{
-						Attributes: []ir.ResourceAttribute{
+					SingleNested: &resource.SingleNestedAttribute{
+						Attributes: []resource.Attribute{
 							{
 								Name: "bool_prop",
-								Bool: &ir.ResourceBoolAttribute{
-									ComputedOptionalRequired: ir.Required,
+								Bool: &resource.BoolAttribute{
+									ComputedOptionalRequired: schema.Required,
 									Description:              pointer("hey this is a bool, required!"),
 								},
 							},
 							{
 								Name: "nested_object_two",
-								SingleNested: &ir.ResourceSingleNestedAttribute{
-									Attributes: []ir.ResourceAttribute{
+								SingleNested: &resource.SingleNestedAttribute{
+									Attributes: []resource.Attribute{
 										{
 											Name: "bool_prop",
-											Bool: &ir.ResourceBoolAttribute{
-												ComputedOptionalRequired: ir.ComputedOptional,
+											Bool: &resource.BoolAttribute{
+												ComputedOptionalRequired: schema.ComputedOptional,
 												Description:              pointer("hey this is a bool!"),
 											},
 										},
 										{
 											Name: "number_prop",
-											Number: &ir.ResourceNumberAttribute{
-												ComputedOptionalRequired: ir.ComputedOptional,
+											Number: &resource.NumberAttribute{
+												ComputedOptionalRequired: schema.ComputedOptional,
 												Description:              pointer("hey this is a number!"),
 											},
 										},
 										{
 											Name: "int64_prop",
-											Int64: &ir.ResourceInt64Attribute{
-												ComputedOptionalRequired: ir.Required,
+											Int64: &resource.Int64Attribute{
+												ComputedOptionalRequired: schema.Required,
 												Description:              pointer("hey this is a integer!"),
 											},
 										},
 									},
-									ComputedOptionalRequired: ir.ComputedOptional,
+									ComputedOptionalRequired: schema.ComputedOptional,
 									Description:              pointer("hey this is an object!"),
 								},
 							},
 							{
 								Name: "string_prop",
-								String: &ir.ResourceStringAttribute{
-									ComputedOptionalRequired: ir.ComputedOptional,
+								String: &resource.StringAttribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
 									Description:              pointer("hey this is a string!"),
 									Sensitive:                pointer(true),
 								},
 							},
 						},
-						ComputedOptionalRequired: ir.Required,
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is an object, required!"),
 					},
 				},
@@ -319,54 +320,54 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.ResourceAttribute{
+			want: []resource.Attribute{
 				{
 					Name: "array_prop",
-					ListNested: &ir.ResourceListNestedAttribute{
-						ComputedOptionalRequired: ir.Required,
+					ListNested: &resource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey this is an array, required!"),
-						NestedObject: ir.ResourceAttributeNestedObject{
-							Attributes: []ir.ResourceAttribute{
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
 								{
 									Name: "float64_prop",
-									Float64: &ir.ResourceFloat64Attribute{
-										ComputedOptionalRequired: ir.ComputedOptional,
+									Float64: &resource.Float64Attribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
 										Description:              pointer("hey this is a float64!"),
 									},
 								},
 								{
 									Name: "nested_array_prop",
-									ListNested: &ir.ResourceListNestedAttribute{
-										ComputedOptionalRequired: ir.Required,
+									ListNested: &resource.ListNestedAttribute{
+										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey this is a nested array, required!"),
-										NestedObject: ir.ResourceAttributeNestedObject{
-											Attributes: []ir.ResourceAttribute{
+										NestedObject: resource.NestedAttributeObject{
+											Attributes: []resource.Attribute{
 												{
 													Name: "super_nested_string",
-													String: &ir.ResourceStringAttribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													String: &resource.StringAttribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a string!"),
 														Sensitive:                pointer(false),
 													},
 												},
 												{
 													Name: "super_nested_bool_one",
-													Bool: &ir.ResourceBoolAttribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													Bool: &resource.BoolAttribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a boolean!"),
 													},
 												},
 												{
 													Name: "super_nested_bool_two",
-													Bool: &ir.ResourceBoolAttribute{
-														ComputedOptionalRequired: ir.Required,
+													Bool: &resource.BoolAttribute{
+														ComputedOptionalRequired: schema.Required,
 														Description:              pointer("hey this is a boolean, required!"),
 													},
 												},
 												{
 													Name: "super_nested_int64",
-													Int64: &ir.ResourceInt64Attribute{
-														ComputedOptionalRequired: ir.ComputedOptional,
+													Int64: &resource.Int64Attribute{
+														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a integer!"),
 													},
 												},
@@ -376,8 +377,8 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 								},
 								{
 									Name: "number_prop",
-									Number: &ir.ResourceNumberAttribute{
-										ComputedOptionalRequired: ir.ComputedOptional,
+									Number: &resource.NumberAttribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
 										Description:              pointer("hey this is a number!"),
 									},
 								},
@@ -500,63 +501,47 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []ir.ResourceAttribute{
+			want: []resource.Attribute{
 				{
 					Name: "array_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey this is an array!"),
-						ElementType: ir.ElementType{
-							List: &ir.ListElement{
-								ElementType: &ir.ElementType{
-									Object: []ir.ObjectElement{
+						ElementType: schema.ElementType{
+							List: &schema.ListType{
+								ElementType: schema.ElementType{
+									Object: []schema.ObjectAttributeType{
 										{
-											Name: "deep_nested_float64",
-											ElementType: &ir.ElementType{
-												Float64: &ir.Float64Element{},
-											},
+											Name:    "deep_nested_float64",
+											Float64: &schema.Float64Type{},
 										},
 										{
-											Name: "deep_nested_string",
-											ElementType: &ir.ElementType{
-												String: &ir.StringElement{},
-											},
+											Name:   "deep_nested_string",
+											String: &schema.StringType{},
 										},
 										{
 											Name: "deep_nested_bool",
-											ElementType: &ir.ElementType{
-												Bool: &ir.BoolElement{},
-											},
+											Bool: &schema.BoolType{},
 										},
 										{
-											Name: "deep_nested_int64",
-											ElementType: &ir.ElementType{
-												Int64: &ir.Int64Element{},
-											},
+											Name:  "deep_nested_int64",
+											Int64: &schema.Int64Type{},
 										},
 										{
 											Name: "deep_nested_list",
-											ElementType: &ir.ElementType{
-												List: &ir.ListElement{
-													ElementType: &ir.ElementType{
-														Object: []ir.ObjectElement{
-															{
-																Name: "deep_deep_nested_object",
-																ElementType: &ir.ElementType{
-																	Object: []ir.ObjectElement{
-																		{
-																			Name: "deep_deep_nested_string",
-																			ElementType: &ir.ElementType{
-																				String: &ir.StringElement{},
-																			},
-																		},
-																		{
-																			Name: "deep_deep_nested_bool",
-																			ElementType: &ir.ElementType{
-																				Bool: &ir.BoolElement{},
-																			},
-																		},
-																	},
+											List: &schema.ListType{
+												ElementType: schema.ElementType{
+													Object: []schema.ObjectAttributeType{
+														{
+															Name: "deep_deep_nested_object",
+															Object: []schema.ObjectAttributeType{
+																{
+																	Name:   "deep_deep_nested_string",
+																	String: &schema.StringType{},
+																},
+																{
+																	Name: "deep_deep_nested_bool",
+																	Bool: &schema.BoolType{},
 																},
 															},
 														},
@@ -578,7 +563,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			mapper := resource.NewResourceMapper(map[string]explorer.Resource{
+			mapper := mapper.NewResourceMapper(map[string]explorer.Resource{
 				"test_resource": {
 					CreateOp: createTestCreateOp(testCase.createRequestSchema, testCase.createResponseSchema),
 					ReadOp:   createTestReadOp(testCase.readResponseSchema, testCase.readParams),

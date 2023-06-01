@@ -1,4 +1,4 @@
-package datasource
+package mapper
 
 import (
 	"fmt"
@@ -6,15 +6,16 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 var _ DataSourceMapper = dataSourceMapper{}
 
 type DataSourceMapper interface {
-	MapToIR() ([]ir.DataSource, error)
+	MapToIR() ([]datasource.DataSource, error)
 }
 
 type dataSourceMapper struct {
@@ -30,8 +31,8 @@ func NewDataSourceMapper(dataSources map[string]explorer.DataSource, cfg config.
 	}
 }
 
-func (m dataSourceMapper) MapToIR() ([]ir.DataSource, error) {
-	dataSourceSchemas := []ir.DataSource{}
+func (m dataSourceMapper) MapToIR() ([]datasource.DataSource, error) {
+	dataSourceSchemas := []datasource.DataSource{}
 
 	// Guarantee the order of processing
 	dataSourceNames := util.SortedKeys(m.dataSources)
@@ -44,35 +45,35 @@ func (m dataSourceMapper) MapToIR() ([]ir.DataSource, error) {
 			continue
 		}
 
-		dataSourceSchemas = append(dataSourceSchemas, ir.DataSource{
+		dataSourceSchemas = append(dataSourceSchemas, datasource.DataSource{
 			Name:   name,
-			Schema: *schema,
+			Schema: schema,
 		})
 	}
 
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(dataSource explorer.DataSource) (*ir.DataSourceSchema, error) {
-	dataSourceSchema := &ir.DataSourceSchema{
-		Attributes: []ir.DataSourceAttribute{},
+func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schema, error) {
+	dataSourceSchema := &datasource.Schema{
+		Attributes: []datasource.Attribute{},
 	}
 
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	readParameterAttributes := []ir.DataSourceAttribute{}
+	readParameterAttributes := []datasource.Attribute{}
 	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
 		for _, param := range dataSource.ReadOp.Parameters {
 			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
-			s, err := schema.BuildSchema(param.Schema)
+			s, err := oas.BuildSchema(param.Schema)
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
-			behavior := ir.ComputedOptional
+			behavior := schema.ComputedOptional
 			if param.Required {
-				behavior = ir.Required
+				behavior = schema.Required
 			}
 
 			// TODO: schema description is preferred over param.Description. This should probably be changed
@@ -88,7 +89,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*ir.DataSourceSch
 	// ********************
 	// READ Response Body (required)
 	// ********************
-	readResponseSchema, err := schema.BuildSchemaFromResponse(dataSource.ReadOp)
+	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +98,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*ir.DataSourceSch
 		return nil, err
 	}
 
-	dataSourceAttributes := deepMergeAttributes(
+	dataSourceAttributes := mergeDataSourceAttributes(
 		readParameterAttributes,
 		*readResponseAttributes,
 	)
@@ -108,7 +109,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*ir.DataSourceSch
 
 // mainSlice takes priority in the merge, will have each subsequent mergeAttributeSlice applied in sequence
 // - No re-ordering of the mainSlice is done, so will append new attributes as they are encountered
-func deepMergeAttributes(mainSlice []ir.DataSourceAttribute, mergeAttributeSlices ...[]ir.DataSourceAttribute) *[]ir.DataSourceAttribute {
+func mergeDataSourceAttributes(mainSlice []datasource.Attribute, mergeAttributeSlices ...[]datasource.Attribute) *[]datasource.Attribute {
 	for _, attributeSlice := range mergeAttributeSlices {
 
 		for _, compareAttribute := range attributeSlice {
@@ -118,14 +119,14 @@ func deepMergeAttributes(mainSlice []ir.DataSourceAttribute, mergeAttributeSlice
 				if mainAttribute.Name == compareAttribute.Name {
 					// Handle types that require nested merging
 					if mainAttribute.SingleNested != nil && compareAttribute.SingleNested != nil {
-						mergedAttributes := deepMergeAttributes(mainAttribute.SingleNested.Attributes, compareAttribute.SingleNested.Attributes)
+						mergedAttributes := mergeDataSourceAttributes(mainAttribute.SingleNested.Attributes, compareAttribute.SingleNested.Attributes)
 						mainSlice[mainIndex].SingleNested.Attributes = *mergedAttributes
 					} else if mainAttribute.ListNested != nil && compareAttribute.ListNested != nil {
-						mergedAttributes := deepMergeAttributes(mainAttribute.ListNested.NestedObject.Attributes, compareAttribute.ListNested.NestedObject.Attributes)
+						mergedAttributes := mergeDataSourceAttributes(mainAttribute.ListNested.NestedObject.Attributes, compareAttribute.ListNested.NestedObject.Attributes)
 						mainSlice[mainIndex].ListNested.NestedObject.Attributes = *mergedAttributes
 					} else if mainAttribute.List != nil && compareAttribute.List != nil {
-						mergedElementType := deepMergeElementType(&mainAttribute.List.ElementType, &compareAttribute.List.ElementType)
-						mainSlice[mainIndex].List.ElementType = *mergedElementType
+						mergedElementType := mergeElementType(mainAttribute.List.ElementType, compareAttribute.List.ElementType)
+						mainSlice[mainIndex].List.ElementType = mergedElementType
 					}
 
 					isNewAttribute = false
@@ -141,37 +142,4 @@ func deepMergeAttributes(mainSlice []ir.DataSourceAttribute, mergeAttributeSlice
 
 	}
 	return &mainSlice
-}
-
-func deepMergeElementType(mainElementType *ir.ElementType, mergeElementType *ir.ElementType) *ir.ElementType {
-	if mainElementType.List != nil && mergeElementType.List != nil {
-		mainElementType.List.ElementType = deepMergeElementType(mainElementType.List.ElementType, mergeElementType.List.ElementType)
-	} else if mainElementType.Object != nil && mergeElementType.Object != nil {
-		objectElemTypes := deepMergeObjectElementTypes(mainElementType.Object, mergeElementType.Object)
-		mainElementType.Object = objectElemTypes
-	}
-
-	return mainElementType
-}
-
-func deepMergeObjectElementTypes(mainObject []ir.ObjectElement, mergeObject []ir.ObjectElement) []ir.ObjectElement {
-	for _, compareElemType := range mergeObject {
-		isNewElemType := true
-
-		for mainIndex, mainElemType := range mainObject {
-			if mainElemType.Name == compareElemType.Name {
-				mergedElementType := deepMergeElementType(mainElemType.ElementType, compareElemType.ElementType)
-				mainObject[mainIndex].ElementType = mergedElementType
-
-				isNewElemType = false
-				break
-			}
-		}
-
-		if isNewElemType {
-			mainObject = append(mainObject, compareElemType)
-		}
-	}
-
-	return mainObject
 }

@@ -1,21 +1,22 @@
-package schema
+package oas
 
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-// TODO: move to object go file?
-func (s *OASSchema) BuildSingleNestedResource(name string, behavior ir.ComputedOptionalRequired) (*ir.ResourceAttribute, error) {
+func (s *OASSchema) BuildSingleNestedResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	objectAttributes, err := s.BuildResourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 	}
 
-	return &ir.ResourceAttribute{
+	return &resource.Attribute{
 		Name: name,
-		SingleNested: &ir.ResourceSingleNestedAttribute{
+		SingleNested: &resource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
 			ComputedOptionalRequired: behavior,
 			Description:              s.GetDescription(),
@@ -23,15 +24,15 @@ func (s *OASSchema) BuildSingleNestedResource(name string, behavior ir.ComputedO
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedDataSource(name string, behavior ir.ComputedOptionalRequired) (*ir.DataSourceAttribute, error) {
+func (s *OASSchema) BuildSingleNestedDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	objectAttributes, err := s.BuildDataSourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 	}
 
-	return &ir.DataSourceAttribute{
+	return &datasource.Attribute{
 		Name: name,
-		SingleNested: &ir.DataSourceSingleNestedAttribute{
+		SingleNested: &datasource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
 			ComputedOptionalRequired: behavior,
 			Description:              s.GetDescription(),

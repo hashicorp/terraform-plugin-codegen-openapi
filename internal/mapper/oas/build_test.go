@@ -1,11 +1,12 @@
-package schema_test
+package oas_test
 
 import (
 	"regexp"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -20,7 +21,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 
 	testCases := map[string]struct {
 		op             *high.Operation
-		expectedSchema *schema.OASSchema
+		expectedSchema *oas.OASSchema
 	}{
 		"default to application/json": {
 			op: &high.Operation{
@@ -41,7 +42,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this is the correct one!",
@@ -68,7 +69,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this is will get used because of sorting!",
@@ -95,7 +96,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this will get used!",
@@ -111,13 +112,13 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := schema.BuildSchemaFromRequest(testCase.op)
+			got, err := oas.BuildSchemaFromRequest(testCase.op)
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
 			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
-			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, schema.OASSchema{})); diff != "" {
+			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, oas.OASSchema{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
@@ -134,19 +135,19 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 	}{
 		"nil op": {
 			op:               nil,
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"nil request body": {
 			op: &high.Operation{
 				RequestBody: nil,
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"empty request body content": {
 			op: &high.Operation{
 				RequestBody: &high.RequestBody{},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"no media type schemas": {
 			op: &high.Operation{
@@ -161,7 +162,7 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 	}
 
@@ -172,7 +173,7 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := schema.BuildSchemaFromRequest(testCase.op)
+			_, err := oas.BuildSchemaFromRequest(testCase.op)
 
 			if err == nil {
 				t.Errorf("Expected err to match %q, got nil", testCase.expectedErrRegex)
@@ -190,7 +191,7 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 
 	testCases := map[string]struct {
 		op             *high.Operation
-		expectedSchema *schema.OASSchema
+		expectedSchema *oas.OASSchema
 	}{
 		"default to 200 and application/json": {
 			op: &high.Operation{
@@ -225,7 +226,7 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this is the correct one!",
@@ -266,7 +267,7 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this is the correct one!",
@@ -307,7 +308,7 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 					},
 				},
 			},
-			expectedSchema: &schema.OASSchema{
+			expectedSchema: &oas.OASSchema{
 				Type: "string",
 				Schema: &base.Schema{
 					Description: "this is the correct one!",
@@ -323,13 +324,13 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := schema.BuildSchemaFromResponse(testCase.op)
+			got, err := oas.BuildSchemaFromResponse(testCase.op)
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
 			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
-			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, schema.OASSchema{})); diff != "" {
+			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, oas.OASSchema{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
@@ -346,19 +347,19 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 	}{
 		"nil op": {
 			op:               nil,
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"nil responses": {
 			op: &high.Operation{
 				Responses: nil,
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"empty response codes": {
 			op: &high.Operation{
 				Responses: &high.Responses{},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"no success response code media type schemas": {
 			op: &high.Operation{
@@ -397,7 +398,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"200 response code with no valid schema": {
 			op: &high.Operation{
@@ -413,7 +414,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"201 response code with no valid schema": {
 			op: &high.Operation{
@@ -429,7 +430,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 		"success response code with no valid schema": {
 			op: &high.Operation{
@@ -445,7 +446,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErrRegex: schema.ErrSchemaNotFound.Error(),
+			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
 		},
 	}
 
@@ -456,7 +457,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := schema.BuildSchemaFromResponse(testCase.op)
+			_, err := oas.BuildSchemaFromResponse(testCase.op)
 
 			if err == nil {
 				t.Fatalf("Expected err to match %q, got nil", testCase.expectedErrRegex)
@@ -474,7 +475,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 
 	testCases := map[string]struct {
 		schemaProxy        *base.SchemaProxy
-		expectedAttributes *[]ir.ResourceAttribute
+		expectedAttributes *[]resource.Attribute
 	}{
 		"nullable type - Type array": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
@@ -491,19 +492,19 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "nullable_string_one",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a nullable string type."),
 						Sensitive:                pointer(false),
 					},
 				},
 				{
 					Name: "nullable_string_two",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a nullable string type, required."),
 						Sensitive:                pointer(false),
 					},
@@ -539,19 +540,19 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "nullable_string_one",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 						Sensitive:                pointer(false),
 					},
 				},
 				{
 					Name: "nullable_string_two",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
 						Sensitive:                pointer(false),
 					},
@@ -587,19 +588,19 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "nullable_string_one",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 						Sensitive:                pointer(false),
 					},
 				},
 				{
 					Name: "nullable_string_two",
-					String: &ir.ResourceStringAttribute{
-						ComputedOptionalRequired: ir.Required,
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
 						Sensitive:                pointer(false),
 					},
@@ -631,24 +632,24 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "string_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
 				{
 					Name: "string_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
@@ -693,24 +694,24 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "string_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
 				{
 					Name: "string_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
@@ -755,24 +756,24 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]ir.ResourceAttribute{
+			expectedAttributes: &[]resource.Attribute{
 				{
 					Name: "string_list_prop",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.ComputedOptional,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
 				{
 					Name: "string_list_prop_required",
-					List: &ir.ResourceListAttribute{
-						ComputedOptionalRequired: ir.Required,
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
-						ElementType: ir.ElementType{
-							String: &ir.StringElement{},
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
 						},
 					},
 				},
@@ -786,7 +787,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema, err := schema.BuildSchema(testCase.schemaProxy)
+			schema, err := oas.BuildSchema(testCase.schemaProxy)
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

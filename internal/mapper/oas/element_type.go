@@ -1,15 +1,13 @@
-package schema
+package oas
 
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/ir"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-type ElementTypeBuilder func() (*ir.ElementType, error)
-
-func (s *OASSchema) BuildElementType() (*ir.ElementType, error) {
+func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringElementType()
@@ -25,6 +23,6 @@ func (s *OASSchema) BuildElementType() (*ir.ElementType, error) {
 		return s.BuildObjectElementType()
 
 	default:
-		return nil, fmt.Errorf("invalid schema type '%s'", s.Type)
+		return schema.ElementType{}, fmt.Errorf("invalid schema type '%s'", s.Type)
 	}
 }
