@@ -1,3 +1,6 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: MPL-2.0
+
 package util
 
 // JSON schema base types: https://json-schema.org/draft/2020-12/json-schema-core.html#name-instance-data-model
