@@ -23,5 +23,8 @@ project {
 
     # Release Engineering tooling configuration
     ".release/*.hcl",
+
+    # Unit test data files
+    "internal/cmd/testdata/**",
   ]
 }
