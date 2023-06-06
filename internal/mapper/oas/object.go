@@ -18,7 +18,7 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, error) {
 	for _, name := range propertyNames {
 		pProxy := s.Schema.Properties[name]
 
-		pSchema, err := BuildSchema(pProxy)
+		pSchema, err := BuildSchema(pProxy, s.GlobalSchemaOpts)
 		if err != nil {
 			return schema.ElementType{}, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}

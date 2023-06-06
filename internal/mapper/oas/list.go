@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildListResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildListResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
@@ -34,7 +34,7 @@ func (s *OASSchema) BuildListResource(name string, behavior schema.ComputedOptio
 				NestedObject: resource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
-				ComputedOptionalRequired: behavior,
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -49,18 +49,18 @@ func (s *OASSchema) BuildListResource(name string, behavior schema.ComputedOptio
 		Name: name,
 		List: &resource.ListAttribute{
 			ElementType:              elemType,
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildListDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildListDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
@@ -77,7 +77,7 @@ func (s *OASSchema) BuildListDataSource(name string, behavior schema.ComputedOpt
 				NestedObject: datasource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
-				ComputedOptionalRequired: behavior,
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -92,7 +92,7 @@ func (s *OASSchema) BuildListDataSource(name string, behavior schema.ComputedOpt
 		Name: name,
 		List: &datasource.ListAttribute{
 			ElementType:              elemType,
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
@@ -102,7 +102,7 @@ func (s *OASSchema) BuildListElementType() (schema.ElementType, error) {
 	if !s.Schema.Items.IsA() {
 		return schema.ElementType{}, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
 	}
-	itemSchema, err := BuildSchema(s.Schema.Items.A)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
 	if err != nil {
 		return schema.ElementType{}, fmt.Errorf("failed to build nested array items schema")
 	}

@@ -19,30 +19,30 @@ var ErrSchemaNotFound = errors.New("no compatible schema found")
 
 // BuildSchemaFromRequest will extract and build the schema from the request body of an operation
 //   - Media type will default to "application/json", then continue to the next available media type with a schema
-func BuildSchemaFromRequest(op *high.Operation) (*OASSchema, error) {
+func BuildSchemaFromRequest(op *high.Operation, opts GlobalSchemaOpts) (*OASSchema, error) {
 	if op == nil || op.RequestBody == nil || len(op.RequestBody.Content) == 0 {
 		return nil, ErrSchemaNotFound
 	}
 
-	return getSchemaFromMediaType(op.RequestBody.Content)
+	return getSchemaFromMediaType(op.RequestBody.Content, opts)
 }
 
 // BuildSchemaFromResponse will extract and build the schema from the response body of an operation
 //   - Response codes of 200 and then 201 will be prioritized, then will continue to the next available 2xx code
 //   - Media type will default to "application/json", then continue to the next available media type with a schema
-func BuildSchemaFromResponse(op *high.Operation) (*OASSchema, error) {
+func BuildSchemaFromResponse(op *high.Operation, opts GlobalSchemaOpts) (*OASSchema, error) {
 	if op == nil || op.Responses == nil || len(op.Responses.Codes) == 0 {
 		return nil, ErrSchemaNotFound
 	}
 
 	okResponse, ok := op.Responses.Codes[util.OAS_response_code_ok]
 	if ok {
-		return getSchemaFromMediaType(okResponse.Content)
+		return getSchemaFromMediaType(okResponse.Content, opts)
 	}
 
 	createdResponse, ok := op.Responses.Codes[util.OAS_response_code_created]
 	if ok {
-		return getSchemaFromMediaType(createdResponse.Content)
+		return getSchemaFromMediaType(createdResponse.Content, opts)
 	}
 
 	// Guarantee the order of processing
@@ -55,18 +55,18 @@ func BuildSchemaFromResponse(op *high.Operation) (*OASSchema, error) {
 		}
 
 		if statusCode >= 200 && statusCode <= 299 {
-			return getSchemaFromMediaType(responseCode.Content)
+			return getSchemaFromMediaType(responseCode.Content, opts)
 		}
 	}
 
 	return nil, ErrSchemaNotFound
 }
 
-func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType) (*OASSchema, error) {
+func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, opts GlobalSchemaOpts) (*OASSchema, error) {
 	// TODO: we might consider vendored JSON media types and maybe do a "contains" check instead of strict equality
 	jsonMediaType, ok := mediaTypes[util.OAS_mediatype_json]
 	if ok && jsonMediaType.Schema != nil {
-		s, err := BuildSchema(jsonMediaType.Schema)
+		s, err := BuildSchema(jsonMediaType.Schema, opts)
 		if err != nil {
 			return nil, err
 		}
@@ -78,7 +78,7 @@ func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType) (*OASSchema, 
 	for _, key := range mediaTypeKeys {
 		mediaType := mediaTypes[key]
 		if mediaType.Schema != nil {
-			s, err := BuildSchema(mediaType.Schema)
+			s, err := BuildSchema(mediaType.Schema, opts)
 			if err != nil {
 				return nil, err
 			}
@@ -91,7 +91,7 @@ func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType) (*OASSchema, 
 
 // BuildSchema will build a schema from a schema proxy. It can also handle nullable schemas/types,
 // implemented with oneOf/anyOf OAS keywords or an array on the "type" property
-func BuildSchema(proxy *base.SchemaProxy) (*OASSchema, error) {
+func BuildSchema(proxy *base.SchemaProxy, opts GlobalSchemaOpts) (*OASSchema, error) {
 	resp := OASSchema{}
 
 	schema, err := proxy.BuildSchema()
@@ -99,6 +99,7 @@ func BuildSchema(proxy *base.SchemaProxy) (*OASSchema, error) {
 		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
 	}
 
+	resp.GlobalSchemaOpts = opts
 	resp.original = schema
 	resp.Schema = schema
 

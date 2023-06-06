@@ -103,7 +103,7 @@
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "required",
+							"computed_optional_required": "computed_optional",
 							"description": "",
 							"sensitive": false
 						}
@@ -111,7 +111,7 @@
 					{
 						"name": "photoUrls",
 						"list": {
-							"computed_optional_required": "required",
+							"computed_optional_required": "computed_optional",
 							"element_type": {
 								"string": {}
 							},
@@ -135,7 +135,7 @@
 									{
 										"name": "id",
 										"int64": {
-											"computed_optional_required": "required",
+											"computed_optional_required": "computed_optional",
 											"description": ""
 										}
 									},

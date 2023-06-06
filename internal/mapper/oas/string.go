@@ -9,22 +9,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildStringResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	return &resource.Attribute{
 		Name: name,
 		String: &resource.StringAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildStringDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	return &datasource.Attribute{
 		Name: name,
 		String: &datasource.StringAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
