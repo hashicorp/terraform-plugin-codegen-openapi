@@ -1,692 +1,4 @@
 {
-	"provider": {
-		"name": "scaleway"
-	},
-	"resources": [
-		{
-			"name": "instance_image",
-			"schema": {
-				"attributes": [
-					{
-						"name": "arch",
-						"string": {
-							"computed_optional_required": "required",
-							"description": "Architecture of the image.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "default_bootscript",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Default bootscript of the image.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "extra_volumes",
-						"single_nested": {
-							"attributes": [
-								{
-									"name": "\u003cextra_volumeKey\u003e",
-									"single_nested": {
-										"attributes": [
-											{
-												"name": "id",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "UUID of the volume.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "name",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "Name of the volume.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "organization",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "Organization ID of the volume.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "project",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "Project ID of the volume.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "size",
-												"int64": {
-													"computed_optional_required": "computed_optional",
-													"description": "Disk size of the volume, must be a multiple of 512. (in bytes)"
-												}
-											},
-											{
-												"name": "volume_type",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "Type of the volume.",
-													"sensitive": false
-												}
-											}
-										],
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								}
-							],
-							"computed_optional_required": "computed_optional",
-							"description": "Additional volumes of the image."
-						}
-					},
-					{
-						"name": "name",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Name of the image.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "organization",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Organization ID of the image.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "project",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Project ID of the image.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "public",
-						"bool": {
-							"computed_optional_required": "computed_optional",
-							"description": "True to create a public image."
-						}
-					},
-					{
-						"name": "root_volume",
-						"string": {
-							"computed_optional_required": "required",
-							"description": "UUID of the snapshot.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "tags",
-						"list": {
-							"computed_optional_required": "computed_optional",
-							"description": "The tags of the image.",
-							"element_type": {
-								"string": {}
-							}
-						}
-					},
-					{
-						"name": "image",
-						"single_nested": {
-							"attributes": [
-								{
-									"name": "arch",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "creation_date",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "(RFC 3339 format)",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "default_bootscript",
-									"single_nested": {
-										"attributes": [
-											{
-												"name": "arch",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript arch.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "bootcmdargs",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript arguments.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "default",
-												"bool": {
-													"computed_optional_required": "computed_optional",
-													"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
-												}
-											},
-											{
-												"name": "dtb",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "id",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript ID.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "initrd",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The initrd (initial ramdisk) configuration.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "kernel",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The server kernel version.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "organization",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript organization ID.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "project",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript project ID.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "public",
-												"bool": {
-													"computed_optional_required": "computed_optional",
-													"description": "Provide information if the bootscript is public."
-												}
-											},
-											{
-												"name": "title",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The bootscript title.",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "zone",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "The zone in which is the bootscript.",
-													"sensitive": false
-												}
-											}
-										],
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "extra_volumes",
-									"single_nested": {
-										"attributes": [
-											{
-												"name": "\u003cextra_volumeKey\u003e",
-												"single_nested": {
-													"attributes": [
-														{
-															"name": "creation_date",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume creation date. (RFC 3339 format)",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "export_uri",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "Show the volume NBD export URI.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "id",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume unique ID.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "modification_date",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume modification date. (RFC 3339 format)",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "name",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume name.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "organization",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume organization ID.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "project",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume project ID.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "server",
-															"single_nested": {
-																"attributes": [
-																	{
-																		"name": "id",
-																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
-																		}
-																	},
-																	{
-																		"name": "name",
-																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
-																		}
-																	}
-																],
-																"computed_optional_required": "computed_optional",
-																"description": "The server attached to the volume."
-															}
-														},
-														{
-															"name": "size",
-															"int64": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume disk size. (in bytes)"
-															}
-														},
-														{
-															"name": "state",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume state.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "tags",
-															"list": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume tags.",
-																"element_type": {
-																	"string": {}
-																}
-															}
-														},
-														{
-															"name": "volume_type",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The volume type.",
-																"sensitive": false
-															}
-														},
-														{
-															"name": "zone",
-															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "The zone in which is the volume.",
-																"sensitive": false
-															}
-														}
-													],
-													"computed_optional_required": "computed_optional",
-													"description": ""
-												}
-											}
-										],
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "from_server",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "id",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "modification_date",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "(RFC 3339 format)",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "name",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "organization",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "project",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "public",
-									"bool": {
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "root_volume",
-									"single_nested": {
-										"attributes": [
-											{
-												"name": "id",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "name",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "size",
-												"int64": {
-													"computed_optional_required": "computed_optional",
-													"description": "(in bytes)"
-												}
-											},
-											{
-												"name": "volume_type",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
-												}
-											}
-										],
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "state",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "tags",
-									"list": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"element_type": {
-											"string": {}
-										}
-									}
-								},
-								{
-									"name": "zone",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								}
-							],
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "zone",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The zone you want to target",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "image_id",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "UUID of the image you want to get.",
-							"sensitive": false
-						}
-					}
-				]
-			}
-		},
-		{
-			"name": "instance_ip",
-			"schema": {
-				"attributes": [
-					{
-						"name": "organization",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The organization ID the IP is reserved in.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "project",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The project ID the IP is reserved in.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "server",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "UUID of the server you want to attach the IP to.",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "tags",
-						"list": {
-							"computed_optional_required": "computed_optional",
-							"description": "The tags of the IP.",
-							"element_type": {
-								"string": {}
-							}
-						}
-					},
-					{
-						"name": "ip",
-						"single_nested": {
-							"attributes": [
-								{
-									"name": "address",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "(IPv4 address)",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "id",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "organization",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "project",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "reverse",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								},
-								{
-									"name": "server",
-									"single_nested": {
-										"attributes": [
-											{
-												"name": "id",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
-												}
-											},
-											{
-												"name": "name",
-												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
-												}
-											}
-										],
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "tags",
-									"list": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"element_type": {
-											"string": {}
-										}
-									}
-								},
-								{
-									"name": "zone",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								}
-							],
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "zone",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The zone you want to target",
-							"sensitive": false
-						}
-					}
-				]
-			}
-		}
-	],
 	"datasources": [
 		{
 			"name": "instance_server",
@@ -711,15 +23,16 @@
 					{
 						"name": "server",
 						"single_nested": {
+							"computed_optional_required": "computed_optional",
 							"attributes": [
 								{
 									"name": "allowed_actions",
 									"list": {
 										"computed_optional_required": "computed_optional",
-										"description": "Provide as list of allowed actions on the server.",
 										"element_type": {
 											"string": {}
-										}
+										},
+										"description": "Provide as list of allowed actions on the server."
 									}
 								},
 								{
@@ -741,6 +54,7 @@
 								{
 									"name": "bootscript",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "arch",
@@ -837,7 +151,6 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server bootscript."
 									}
 								},
@@ -890,6 +203,7 @@
 								{
 									"name": "image",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "arch",
@@ -910,6 +224,7 @@
 											{
 												"name": "default_bootscript",
 												"single_nested": {
+													"computed_optional_required": "computed_optional",
 													"attributes": [
 														{
 															"name": "arch",
@@ -1006,17 +321,18 @@
 															}
 														}
 													],
-													"computed_optional_required": "computed_optional",
 													"description": ""
 												}
 											},
 											{
 												"name": "extra_volumes",
 												"single_nested": {
+													"computed_optional_required": "computed_optional",
 													"attributes": [
 														{
 															"name": "\u003cextra_volumeKey\u003e",
 															"single_nested": {
+																"computed_optional_required": "computed_optional",
 																"attributes": [
 																	{
 																		"name": "creation_date",
@@ -1077,6 +393,7 @@
 																	{
 																		"name": "server",
 																		"single_nested": {
+																			"computed_optional_required": "computed_optional",
 																			"attributes": [
 																				{
 																					"name": "id",
@@ -1095,7 +412,6 @@
 																					}
 																				}
 																			],
-																			"computed_optional_required": "computed_optional",
 																			"description": "The server attached to the volume."
 																		}
 																	},
@@ -1118,10 +434,10 @@
 																		"name": "tags",
 																		"list": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume tags.",
 																			"element_type": {
 																				"string": {}
-																			}
+																			},
+																			"description": "The volume tags."
 																		}
 																	},
 																	{
@@ -1141,12 +457,10 @@
 																		}
 																	}
 																],
-																"computed_optional_required": "computed_optional",
 																"description": ""
 															}
 														}
 													],
-													"computed_optional_required": "computed_optional",
 													"description": ""
 												}
 											},
@@ -1208,6 +522,7 @@
 											{
 												"name": "root_volume",
 												"single_nested": {
+													"computed_optional_required": "computed_optional",
 													"attributes": [
 														{
 															"name": "id",
@@ -1241,7 +556,6 @@
 															}
 														}
 													],
-													"computed_optional_required": "computed_optional",
 													"description": ""
 												}
 											},
@@ -1257,10 +571,10 @@
 												"name": "tags",
 												"list": {
 													"computed_optional_required": "computed_optional",
-													"description": "",
 													"element_type": {
 														"string": {}
-													}
+													},
+													"description": ""
 												}
 											},
 											{
@@ -1272,13 +586,13 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "Provide information on the server image."
 									}
 								},
 								{
 									"name": "ipv6",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "address",
@@ -1305,13 +619,13 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server IPv6 address."
 									}
 								},
 								{
 									"name": "location",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "cluster_id",
@@ -1354,7 +668,6 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server location."
 									}
 								},
@@ -1362,7 +675,6 @@
 									"name": "maintenances",
 									"list_nested": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server planned maintenances.",
 										"nested_object": {
 											"attributes": [
 												{
@@ -1374,7 +686,8 @@
 													}
 												}
 											]
-										}
+										},
+										"description": "The server planned maintenances."
 									}
 								},
 								{
@@ -1404,6 +717,7 @@
 								{
 									"name": "placement_group",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "id",
@@ -1464,10 +778,10 @@
 												"name": "tags",
 												"list": {
 													"computed_optional_required": "computed_optional",
-													"description": "The placement group tags.",
 													"element_type": {
 														"string": {}
-													}
+													},
+													"description": "The placement group tags."
 												}
 											},
 											{
@@ -1479,7 +793,6 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server placement group."
 									}
 								},
@@ -1495,7 +808,6 @@
 									"name": "private_nics",
 									"list_nested": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server private NICs.",
 										"nested_object": {
 											"attributes": [
 												{
@@ -1542,14 +854,15 @@
 													"name": "tags",
 													"list": {
 														"computed_optional_required": "computed_optional",
-														"description": "The private NIC tags.",
 														"element_type": {
 															"string": {}
-														}
+														},
+														"description": "The private NIC tags."
 													}
 												}
 											]
-										}
+										},
+										"description": "The server private NICs."
 									}
 								},
 								{
@@ -1570,6 +883,7 @@
 								{
 									"name": "public_ip",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "address",
@@ -1595,13 +909,13 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "Information about the public IP."
 									}
 								},
 								{
 									"name": "security_group",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "id",
@@ -1620,7 +934,6 @@
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server security group."
 									}
 								},
@@ -1644,19 +957,21 @@
 									"name": "tags",
 									"list": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server associated tags.",
 										"element_type": {
 											"string": {}
-										}
+										},
+										"description": "The server associated tags."
 									}
 								},
 								{
 									"name": "volumes",
 									"single_nested": {
+										"computed_optional_required": "computed_optional",
 										"attributes": [
 											{
 												"name": "\u003cvolumeKey\u003e",
 												"single_nested": {
+													"computed_optional_required": "computed_optional",
 													"attributes": [
 														{
 															"name": "boot",
@@ -1724,6 +1039,7 @@
 														{
 															"name": "server",
 															"single_nested": {
+																"computed_optional_required": "computed_optional",
 																"attributes": [
 																	{
 																		"name": "id",
@@ -1742,7 +1058,6 @@
 																		}
 																	}
 																],
-																"computed_optional_required": "computed_optional",
 																"description": ""
 															}
 														},
@@ -1778,12 +1093,10 @@
 															}
 														}
 													],
-													"computed_optional_required": "computed_optional",
 													"description": ""
 												}
 											}
 										],
-										"computed_optional_required": "computed_optional",
 										"description": "The server volumes."
 									}
 								},
@@ -1796,7 +1109,6 @@
 									}
 								}
 							],
-							"computed_optional_required": "computed_optional",
 							"description": ""
 						}
 					}
@@ -1912,17 +1224,16 @@
 						"name": "servers",
 						"list_nested": {
 							"computed_optional_required": "computed_optional",
-							"description": "List of servers.",
 							"nested_object": {
 								"attributes": [
 									{
 										"name": "allowed_actions",
 										"list": {
 											"computed_optional_required": "computed_optional",
-											"description": "Provide as list of allowed actions on the server.",
 											"element_type": {
 												"string": {}
-											}
+											},
+											"description": "Provide as list of allowed actions on the server."
 										}
 									},
 									{
@@ -1944,6 +1255,7 @@
 									{
 										"name": "bootscript",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "arch",
@@ -2040,7 +1352,6 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server bootscript."
 										}
 									},
@@ -2093,6 +1404,7 @@
 									{
 										"name": "image",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "arch",
@@ -2113,6 +1425,7 @@
 												{
 													"name": "default_bootscript",
 													"single_nested": {
+														"computed_optional_required": "computed_optional",
 														"attributes": [
 															{
 																"name": "arch",
@@ -2209,17 +1522,18 @@
 																}
 															}
 														],
-														"computed_optional_required": "computed_optional",
 														"description": ""
 													}
 												},
 												{
 													"name": "extra_volumes",
 													"single_nested": {
+														"computed_optional_required": "computed_optional",
 														"attributes": [
 															{
 																"name": "\u003cextra_volumeKey\u003e",
 																"single_nested": {
+																	"computed_optional_required": "computed_optional",
 																	"attributes": [
 																		{
 																			"name": "creation_date",
@@ -2280,6 +1594,7 @@
 																		{
 																			"name": "server",
 																			"single_nested": {
+																				"computed_optional_required": "computed_optional",
 																				"attributes": [
 																					{
 																						"name": "id",
@@ -2298,7 +1613,6 @@
 																						}
 																					}
 																				],
-																				"computed_optional_required": "computed_optional",
 																				"description": "The server attached to the volume."
 																			}
 																		},
@@ -2321,10 +1635,10 @@
 																			"name": "tags",
 																			"list": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume tags.",
 																				"element_type": {
 																					"string": {}
-																				}
+																				},
+																				"description": "The volume tags."
 																			}
 																		},
 																		{
@@ -2344,12 +1658,10 @@
 																			}
 																		}
 																	],
-																	"computed_optional_required": "computed_optional",
 																	"description": ""
 																}
 															}
 														],
-														"computed_optional_required": "computed_optional",
 														"description": ""
 													}
 												},
@@ -2411,6 +1723,7 @@
 												{
 													"name": "root_volume",
 													"single_nested": {
+														"computed_optional_required": "computed_optional",
 														"attributes": [
 															{
 																"name": "id",
@@ -2444,7 +1757,6 @@
 																}
 															}
 														],
-														"computed_optional_required": "computed_optional",
 														"description": ""
 													}
 												},
@@ -2460,10 +1772,10 @@
 													"name": "tags",
 													"list": {
 														"computed_optional_required": "computed_optional",
-														"description": "",
 														"element_type": {
 															"string": {}
-														}
+														},
+														"description": ""
 													}
 												},
 												{
@@ -2475,13 +1787,13 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "Provide information on the server image."
 										}
 									},
 									{
 										"name": "ipv6",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "address",
@@ -2508,13 +1820,13 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server IPv6 address."
 										}
 									},
 									{
 										"name": "location",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "cluster_id",
@@ -2557,7 +1869,6 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server location."
 										}
 									},
@@ -2565,7 +1876,6 @@
 										"name": "maintenances",
 										"list_nested": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server planned maintenances.",
 											"nested_object": {
 												"attributes": [
 													{
@@ -2577,7 +1887,8 @@
 														}
 													}
 												]
-											}
+											},
+											"description": "The server planned maintenances."
 										}
 									},
 									{
@@ -2607,6 +1918,7 @@
 									{
 										"name": "placement_group",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "id",
@@ -2667,10 +1979,10 @@
 													"name": "tags",
 													"list": {
 														"computed_optional_required": "computed_optional",
-														"description": "The placement group tags.",
 														"element_type": {
 															"string": {}
-														}
+														},
+														"description": "The placement group tags."
 													}
 												},
 												{
@@ -2682,7 +1994,6 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server placement group."
 										}
 									},
@@ -2698,7 +2009,6 @@
 										"name": "private_nics",
 										"list_nested": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server private NICs.",
 											"nested_object": {
 												"attributes": [
 													{
@@ -2745,14 +2055,15 @@
 														"name": "tags",
 														"list": {
 															"computed_optional_required": "computed_optional",
-															"description": "The private NIC tags.",
 															"element_type": {
 																"string": {}
-															}
+															},
+															"description": "The private NIC tags."
 														}
 													}
 												]
-											}
+											},
+											"description": "The server private NICs."
 										}
 									},
 									{
@@ -2773,6 +2084,7 @@
 									{
 										"name": "public_ip",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "address",
@@ -2798,13 +2110,13 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "Information about the public IP."
 										}
 									},
 									{
 										"name": "security_group",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "id",
@@ -2823,7 +2135,6 @@
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server security group."
 										}
 									},
@@ -2847,19 +2158,21 @@
 										"name": "tags",
 										"list": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server associated tags.",
 											"element_type": {
 												"string": {}
-											}
+											},
+											"description": "The server associated tags."
 										}
 									},
 									{
 										"name": "volumes",
 										"single_nested": {
+											"computed_optional_required": "computed_optional",
 											"attributes": [
 												{
 													"name": "\u003cvolumeKey\u003e",
 													"single_nested": {
+														"computed_optional_required": "computed_optional",
 														"attributes": [
 															{
 																"name": "boot",
@@ -2927,6 +2240,7 @@
 															{
 																"name": "server",
 																"single_nested": {
+																	"computed_optional_required": "computed_optional",
 																	"attributes": [
 																		{
 																			"name": "id",
@@ -2945,7 +2259,6 @@
 																			}
 																		}
 																	],
-																	"computed_optional_required": "computed_optional",
 																	"description": ""
 																}
 															},
@@ -2981,12 +2294,10 @@
 																}
 															}
 														],
-														"computed_optional_required": "computed_optional",
 														"description": ""
 													}
 												}
 											],
-											"computed_optional_required": "computed_optional",
 											"description": "The server volumes."
 										}
 									},
@@ -2999,7 +2310,696 @@
 										}
 									}
 								]
-							}
+							},
+							"description": "List of servers."
+						}
+					}
+				]
+			}
+		}
+	],
+	"provider": {
+		"name": "scaleway"
+	},
+	"resources": [
+		{
+			"name": "instance_image",
+			"schema": {
+				"attributes": [
+					{
+						"name": "arch",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "Architecture of the image.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "default_bootscript",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Default bootscript of the image.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "extra_volumes",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "\u003cextra_volumeKey\u003e",
+									"single_nested": {
+										"computed_optional_required": "computed_optional",
+										"attributes": [
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "UUID of the volume.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Name of the volume.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "organization",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Organization ID of the volume.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "project",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Project ID of the volume.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "size",
+												"int64": {
+													"computed_optional_required": "computed_optional",
+													"description": "Disk size of the volume, must be a multiple of 512. (in bytes)"
+												}
+											},
+											{
+												"name": "volume_type",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Type of the volume.",
+													"sensitive": false
+												}
+											}
+										],
+										"description": ""
+									}
+								}
+							],
+							"description": "Additional volumes of the image."
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Name of the image.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "organization",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Organization ID of the image.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "project",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Project ID of the image.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "public",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": "True to create a public image."
+						}
+					},
+					{
+						"name": "root_volume",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "UUID of the snapshot.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "tags",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "The tags of the image."
+						}
+					},
+					{
+						"name": "image",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "arch",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "creation_date",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "(RFC 3339 format)",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "default_bootscript",
+									"single_nested": {
+										"computed_optional_required": "computed_optional",
+										"attributes": [
+											{
+												"name": "arch",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript arch.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "bootcmdargs",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript arguments.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "default",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
+												}
+											},
+											{
+												"name": "dtb",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "initrd",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The initrd (initial ramdisk) configuration.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "kernel",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The server kernel version.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "organization",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript organization ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "project",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript project ID.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "public",
+												"bool": {
+													"computed_optional_required": "computed_optional",
+													"description": "Provide information if the bootscript is public."
+												}
+											},
+											{
+												"name": "title",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The bootscript title.",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "zone",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "The zone in which is the bootscript.",
+													"sensitive": false
+												}
+											}
+										],
+										"description": ""
+									}
+								},
+								{
+									"name": "extra_volumes",
+									"single_nested": {
+										"computed_optional_required": "computed_optional",
+										"attributes": [
+											{
+												"name": "\u003cextra_volumeKey\u003e",
+												"single_nested": {
+													"computed_optional_required": "computed_optional",
+													"attributes": [
+														{
+															"name": "creation_date",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume creation date. (RFC 3339 format)",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "export_uri",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "Show the volume NBD export URI.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "id",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume unique ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "modification_date",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume modification date. (RFC 3339 format)",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "name",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume name.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "organization",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume organization ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "project",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume project ID.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "server",
+															"single_nested": {
+																"computed_optional_required": "computed_optional",
+																"attributes": [
+																	{
+																		"name": "id",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "",
+																			"sensitive": false
+																		}
+																	},
+																	{
+																		"name": "name",
+																		"string": {
+																			"computed_optional_required": "computed_optional",
+																			"description": "",
+																			"sensitive": false
+																		}
+																	}
+																],
+																"description": "The server attached to the volume."
+															}
+														},
+														{
+															"name": "size",
+															"int64": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume disk size. (in bytes)"
+															}
+														},
+														{
+															"name": "state",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume state.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "tags",
+															"list": {
+																"computed_optional_required": "computed_optional",
+																"element_type": {
+																	"string": {}
+																},
+																"description": "The volume tags."
+															}
+														},
+														{
+															"name": "volume_type",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The volume type.",
+																"sensitive": false
+															}
+														},
+														{
+															"name": "zone",
+															"string": {
+																"computed_optional_required": "computed_optional",
+																"description": "The zone in which is the volume.",
+																"sensitive": false
+															}
+														}
+													],
+													"description": ""
+												}
+											}
+										],
+										"description": ""
+									}
+								},
+								{
+									"name": "from_server",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "modification_date",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "(RFC 3339 format)",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "name",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "organization",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "project",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "public",
+									"bool": {
+										"computed_optional_required": "computed_optional",
+										"description": ""
+									}
+								},
+								{
+									"name": "root_volume",
+									"single_nested": {
+										"computed_optional_required": "computed_optional",
+										"attributes": [
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "size",
+												"int64": {
+													"computed_optional_required": "computed_optional",
+													"description": "(in bytes)"
+												}
+											},
+											{
+												"name": "volume_type",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											}
+										],
+										"description": ""
+									}
+								},
+								{
+									"name": "state",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "tags",
+									"list": {
+										"computed_optional_required": "computed_optional",
+										"element_type": {
+											"string": {}
+										},
+										"description": ""
+									}
+								},
+								{
+									"name": "zone",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								}
+							],
+							"description": ""
+						}
+					},
+					{
+						"name": "zone",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The zone you want to target",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "image_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "UUID of the image you want to get.",
+							"sensitive": false
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "instance_ip",
+			"schema": {
+				"attributes": [
+					{
+						"name": "organization",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The organization ID the IP is reserved in.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "project",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The project ID the IP is reserved in.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "server",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "UUID of the server you want to attach the IP to.",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "tags",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "The tags of the IP."
+						}
+					},
+					{
+						"name": "ip",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "address",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "(IPv4 address)",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "organization",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "project",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "reverse",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								},
+								{
+									"name": "server",
+									"single_nested": {
+										"computed_optional_required": "computed_optional",
+										"attributes": [
+											{
+												"name": "id",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed_optional",
+													"description": "",
+													"sensitive": false
+												}
+											}
+										],
+										"description": ""
+									}
+								},
+								{
+									"name": "tags",
+									"list": {
+										"computed_optional_required": "computed_optional",
+										"element_type": {
+											"string": {}
+										},
+										"description": ""
+									}
+								},
+								{
+									"name": "zone",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								}
+							],
+							"description": ""
+						}
+					},
+					{
+						"name": "zone",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The zone you want to target",
+							"sensitive": false
 						}
 					}
 				]
