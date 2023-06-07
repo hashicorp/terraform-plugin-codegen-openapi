@@ -1,233 +1,4 @@
 {
-	"provider": {
-		"name": "petstore"
-	},
-	"resources": [
-		{
-			"name": "order",
-			"schema": {
-				"attributes": [
-					{
-						"name": "complete",
-						"bool": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "id",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "petId",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "quantity",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "shipDate",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "status",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Order Status",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "orderId",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					}
-				]
-			}
-		},
-		{
-			"name": "pet",
-			"schema": {
-				"attributes": [
-					{
-						"name": "category",
-						"single_nested": {
-							"attributes": [
-								{
-									"name": "id",
-									"int64": {
-										"computed_optional_required": "computed_optional",
-										"description": ""
-									}
-								},
-								{
-									"name": "name",
-									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
-									}
-								}
-							],
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "id",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "name",
-						"string": {
-							"computed_optional_required": "required",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "photoUrls",
-						"list": {
-							"computed_optional_required": "required",
-							"description": "",
-							"element_type": {
-								"string": {}
-							}
-						}
-					},
-					{
-						"name": "status",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "pet status in the store",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "tags",
-						"list_nested": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"nested_object": {
-								"attributes": [
-									{
-										"name": "id",
-										"int64": {
-											"computed_optional_required": "required",
-											"description": ""
-										}
-									},
-									{
-										"name": "name",
-										"string": {
-											"computed_optional_required": "computed_optional",
-											"description": "",
-											"sensitive": false
-										}
-									}
-								]
-							}
-						}
-					},
-					{
-						"name": "petId",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					}
-				]
-			}
-		},
-		{
-			"name": "user",
-			"schema": {
-				"attributes": [
-					{
-						"name": "email",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "firstName",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "id",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
-						}
-					},
-					{
-						"name": "lastName",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "password",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "phone",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					},
-					{
-						"name": "userStatus",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": "User Status"
-						}
-					},
-					{
-						"name": "username",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
-						}
-					}
-				]
-			}
-		}
-	],
 	"datasources": [
 		{
 			"name": "order",
@@ -301,6 +72,7 @@
 					{
 						"name": "category",
 						"single_nested": {
+							"computed_optional_required": "computed_optional",
 							"attributes": [
 								{
 									"name": "id",
@@ -318,7 +90,6 @@
 									}
 								}
 							],
-							"computed_optional_required": "computed_optional",
 							"description": ""
 						}
 					},
@@ -341,10 +112,10 @@
 						"name": "photoUrls",
 						"list": {
 							"computed_optional_required": "required",
-							"description": "",
 							"element_type": {
 								"string": {}
-							}
+							},
+							"description": ""
 						}
 					},
 					{
@@ -359,7 +130,6 @@
 						"name": "tags",
 						"list_nested": {
 							"computed_optional_required": "computed_optional",
-							"description": "",
 							"nested_object": {
 								"attributes": [
 									{
@@ -378,7 +148,8 @@
 										}
 									}
 								]
-							}
+							},
+							"description": ""
 						}
 					}
 				]
@@ -390,6 +161,235 @@
 				"attributes": [
 					{
 						"name": "status",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					}
+				]
+			}
+		}
+	],
+	"provider": {
+		"name": "petstore"
+	},
+	"resources": [
+		{
+			"name": "order",
+			"schema": {
+				"attributes": [
+					{
+						"name": "complete",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "id",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "petId",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "quantity",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "shipDate",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "status",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Order Status",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "orderId",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "pet",
+			"schema": {
+				"attributes": [
+					{
+						"name": "category",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "id",
+									"int64": {
+										"computed_optional_required": "computed_optional",
+										"description": ""
+									}
+								},
+								{
+									"name": "name",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "",
+										"sensitive": false
+									}
+								}
+							],
+							"description": ""
+						}
+					},
+					{
+						"name": "id",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "photoUrls",
+						"list": {
+							"computed_optional_required": "required",
+							"element_type": {
+								"string": {}
+							},
+							"description": ""
+						}
+					},
+					{
+						"name": "status",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "pet status in the store",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "tags",
+						"list_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "id",
+										"int64": {
+											"computed_optional_required": "required",
+											"description": ""
+										}
+									},
+									{
+										"name": "name",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "",
+											"sensitive": false
+										}
+									}
+								]
+							},
+							"description": ""
+						}
+					},
+					{
+						"name": "petId",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "user",
+			"schema": {
+				"attributes": [
+					{
+						"name": "email",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "firstName",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "id",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": ""
+						}
+					},
+					{
+						"name": "lastName",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "password",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "phone",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "",
+							"sensitive": false
+						}
+					},
+					{
+						"name": "userStatus",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": "User Status"
+						}
+					},
+					{
+						"name": "username",
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "",
