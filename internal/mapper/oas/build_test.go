@@ -115,7 +115,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := oas.BuildSchemaFromRequest(testCase.op)
+			got, err := oas.BuildSchemaFromRequest(testCase.op, oas.GlobalSchemaOpts{})
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
@@ -176,7 +176,7 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := oas.BuildSchemaFromRequest(testCase.op)
+			_, err := oas.BuildSchemaFromRequest(testCase.op, oas.GlobalSchemaOpts{})
 
 			if err == nil {
 				t.Errorf("Expected err to match %q, got nil", testCase.expectedErrRegex)
@@ -327,7 +327,7 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := oas.BuildSchemaFromResponse(testCase.op)
+			got, err := oas.BuildSchemaFromResponse(testCase.op, oas.GlobalSchemaOpts{})
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
@@ -460,7 +460,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := oas.BuildSchemaFromResponse(testCase.op)
+			_, err := oas.BuildSchemaFromResponse(testCase.op, oas.GlobalSchemaOpts{})
 
 			if err == nil {
 				t.Fatalf("Expected err to match %q, got nil", testCase.expectedErrRegex)
@@ -790,7 +790,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			schema, err := oas.BuildSchema(testCase.schemaProxy)
+			schema, err := oas.BuildSchema(testCase.schemaProxy, oas.GlobalSchemaOpts{})
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

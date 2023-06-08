@@ -173,7 +173,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 									}),
 									"int64_prop": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"integer"},
-										Description: "hey this is a integer!",
+										Description: "hey this is a integer, switched to computed optional!",
 									}),
 								},
 							}),
@@ -214,8 +214,8 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 										{
 											Name: "int64_prop",
 											Int64: &resource.Int64Attribute{
-												ComputedOptionalRequired: schema.Required,
-												Description:              pointer("hey this is a integer!"),
+												ComputedOptionalRequired: schema.ComputedOptional,
+												Description:              pointer("hey this is a integer, switched to computed optional!"),
 											},
 										},
 									},
@@ -303,7 +303,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 													}),
 													"super_nested_bool_two": base.CreateSchemaProxy(&base.Schema{
 														Type:        []string{"boolean"},
-														Description: "hey this is a boolean, required!",
+														Description: "hey this is a boolean, switched to computed optional!",
 													}),
 													"super_nested_int64": base.CreateSchemaProxy(&base.Schema{
 														Type:        []string{"integer"},
@@ -363,8 +363,8 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 												{
 													Name: "super_nested_bool_two",
 													Bool: &resource.BoolAttribute{
-														ComputedOptionalRequired: schema.Required,
-														Description:              pointer("hey this is a boolean, required!"),
+														ComputedOptionalRequired: schema.ComputedOptional,
+														Description:              pointer("hey this is a boolean, switched to computed optional!"),
 													},
 												},
 												{

@@ -9,21 +9,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildBoolResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	return &resource.Attribute{
 		Name: name,
 		Bool: &resource.BoolAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildBoolDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	return &datasource.Attribute{
 		Name: name,
 		Bool: &datasource.BoolAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil

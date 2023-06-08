@@ -66,7 +66,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// ********************
 	// Create Request Body (required)
 	// ********************
-	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp)
+	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, oas.GlobalSchemaOpts{})
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// Create Response Body (optional)
 	// *********************
 	createResponseAttributes := &[]resource.Attribute{}
-	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp)
+	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if createResponseSchema != nil {
@@ -93,7 +93,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// READ Response Body (optional)
 	// *******************
 	readResponseAttributes := &[]resource.Attribute{}
-	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp)
+	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if readResponseSchema != nil {
@@ -110,7 +110,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {
 			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
-			s, err := oas.BuildSchema(param.Schema)
+			s, err := oas.BuildSchema(param.Schema, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}

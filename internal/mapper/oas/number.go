@@ -10,12 +10,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildNumberResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		return &resource.Attribute{
 			Name: name,
 			Float64: &resource.Float64Attribute{
-				ComputedOptionalRequired: behavior,
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -24,18 +24,18 @@ func (s *OASSchema) BuildNumberResource(name string, behavior schema.ComputedOpt
 	return &resource.Attribute{
 		Name: name,
 		Number: &resource.NumberAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildNumberDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		return &datasource.Attribute{
 			Name: name,
 			Float64: &datasource.Float64Attribute{
-				ComputedOptionalRequired: behavior,
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -44,7 +44,7 @@ func (s *OASSchema) BuildNumberDataSource(name string, behavior schema.ComputedO
 	return &datasource.Attribute{
 		Name: name,
 		Number: &datasource.NumberAttribute{
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil

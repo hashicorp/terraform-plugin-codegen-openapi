@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildSingleNestedResource(name string, behavior schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	objectAttributes, err := s.BuildResourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
@@ -21,13 +21,13 @@ func (s *OASSchema) BuildSingleNestedResource(name string, behavior schema.Compu
 		Name: name,
 		SingleNested: &resource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedDataSource(name string, behavior schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	objectAttributes, err := s.BuildDataSourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
@@ -37,7 +37,7 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, behavior schema.Com
 		Name: name,
 		SingleNested: &datasource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
-			ComputedOptionalRequired: behavior,
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil

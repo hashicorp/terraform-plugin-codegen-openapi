@@ -69,18 +69,18 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
 		for _, param := range dataSource.ReadOp.Parameters {
 			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
-			s, err := oas.BuildSchema(param.Schema)
+			s, err := oas.BuildSchema(param.Schema, oas.GlobalSchemaOpts{})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
-			behavior := schema.ComputedOptional
+			computability := schema.ComputedOptional
 			if param.Required {
-				behavior = schema.Required
+				computability = schema.Required
 			}
 
 			// TODO: schema description is preferred over param.Description. This should probably be changed
-			parameterAttribute, err := s.BuildDataSourceAttribute(param.Name, behavior)
+			parameterAttribute, err := s.BuildDataSourceAttribute(param.Name, computability)
 			if err != nil {
 				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
 			}
@@ -92,7 +92,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	// ********************
 	// READ Response Body (required)
 	// ********************
-	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp)
+	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 	if err != nil {
 		return nil, err
 	}
