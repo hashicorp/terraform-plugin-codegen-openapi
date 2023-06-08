@@ -23,7 +23,10 @@ type OASSchema struct {
 
 // GlobalSchemaOpts is passed recursively through built OASSchema structs
 type GlobalSchemaOpts struct {
-	// OverrideComputability will default all attribute's and nested attribute's `ComputedOptionalRequired` field to this value
+	// OverrideComputability will set all attribute and nested attribute `ComputedOptionalRequired` fields
+	// to this value. This ensures that an optional attribute from a higher precedence operation, such as a
+	// create request for a resource, does not become required from a lower precedence operation, such as an
+	// read response for a resource.
 	OverrideComputability schema.ComputedOptionalRequired
 }
 
