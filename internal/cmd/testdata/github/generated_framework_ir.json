@@ -8,7 +8,7 @@
 						"name": "owner",
 						"string": {
 							"computed_optional_required": "required",
-							"description": "The account owner of the repository. The name is not case sensitive.",
+							"description": "",
 							"sensitive": false
 						}
 					},
@@ -16,7 +16,7 @@
 						"name": "repo",
 						"string": {
 							"computed_optional_required": "required",
-							"description": "The name of the repository. The name is not case sensitive.",
+							"description": "",
 							"sensitive": false
 						}
 					},
@@ -14689,7 +14689,7 @@
 						"name": "repo",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "The name of the repository. The name is not case sensitive.",
+							"description": "",
 							"sensitive": false
 						}
 					}
