@@ -31,13 +31,14 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 		"merge primitives across all ops": {
 			readParams: []*high.Parameter{
 				{
-					Name:     "string_prop",
-					Required: true,
-					In:       "path",
+					Name:        "string_prop",
+					Required:    true,
+					In:          "path",
+					Description: "hey this is a string, required and overidden!",
 					Schema: base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Format:      util.OAS_format_password,
-						Description: "hey this is a string, required!",
+						Description: "you shouldn't see this because the description is overridden!",
 					}),
 				},
 				{
@@ -77,7 +78,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					Name: "string_prop",
 					String: &datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("hey this is a string, required!"),
+						Description:              pointer("hey this is a string, required and overidden!"),
 						Sensitive:                pointer(true),
 					},
 				},
@@ -107,12 +108,13 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 		"deep merge single nested object": {
 			readParams: []*high.Parameter{
 				{
-					Name:     "nested_object_one",
-					In:       "query",
-					Required: true,
+					Name:        "nested_object_one",
+					In:          "query",
+					Required:    true,
+					Description: "hey this is an object, required + overidden!",
 					Schema: base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
-						Description: "hey this is an object, required!",
+						Description: "you shouldn't see this because the description is overridden!",
 						Properties: map[string]*base.SchemaProxy{
 							"nested_object_two": base.CreateSchemaProxy(&base.Schema{
 								Type:        []string{"object"},
@@ -208,7 +210,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 							},
 						},
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("hey this is an object, required!"),
+						Description:              pointer("hey this is an object, required + overidden!"),
 					},
 				},
 			},

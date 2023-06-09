@@ -66,7 +66,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// ********************
 	// Create Request Body (required)
 	// ********************
-	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, oas.GlobalSchemaOpts{})
+	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// Create Response Body (optional)
 	// *********************
 	createResponseAttributes := &[]resource.Attribute{}
-	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if createResponseSchema != nil {
@@ -93,7 +93,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// READ Response Body (optional)
 	// *******************
 	readResponseAttributes := &[]resource.Attribute{}
-	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if readResponseSchema != nil {
@@ -109,13 +109,15 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	readParameterAttributes := []resource.Attribute{}
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {
+			schemaOpts := oas.SchemaOpts{
+				OverrideDescription: param.Description,
+			}
 			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
-			s, err := oas.BuildSchema(param.Schema, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
-			// TODO: schema description is preferred over param.Description. This should probably be changed
 			parameterAttribute, err := s.BuildResourceAttribute(param.Name, schema.ComputedOptional)
 			if err != nil {
 				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())

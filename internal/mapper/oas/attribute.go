@@ -22,7 +22,7 @@ func (s *OASSchema) BuildResourceAttributes() (*[]resource.Attribute, error) {
 	for _, name := range propertyNames {
 
 		pProxy := s.Schema.Properties[name]
-		pSchema, err := BuildSchema(pProxy, s.GlobalSchemaOpts)
+		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
 			return nil, err
 		}
@@ -67,7 +67,7 @@ func (s *OASSchema) BuildDataSourceAttributes() (*[]datasource.Attribute, error)
 	for _, name := range propertyNames {
 
 		pProxy := s.Schema.Properties[name]
-		pSchema, err := BuildSchema(pProxy, s.GlobalSchemaOpts)
+		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
 			return nil, err
 		}
