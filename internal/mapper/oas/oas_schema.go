@@ -16,12 +16,14 @@ type OASSchema struct {
 	Schema *base.Schema
 
 	GlobalSchemaOpts GlobalSchemaOpts
+	SchemaOpts       SchemaOpts
 
 	// TODO: Should we export the original schema? In the case of nullable schemas, we may want to consider using the original schema's description/annotations/etc.
 	original *base.Schema
 }
 
-// GlobalSchemaOpts is passed recursively through built OASSchema structs
+// GlobalSchemaOpts is passed recursively through built OASSchema structs. This is used for options that need to control
+// the entire of a schema and it's potential nested schemas, like overriding computability. (Required, Optional, Computed)
 type GlobalSchemaOpts struct {
 	// OverrideComputability will set all attribute and nested attribute `ComputedOptionalRequired` fields
 	// to this value. This ensures that an optional attribute from a higher precedence operation, such as a
@@ -30,7 +32,19 @@ type GlobalSchemaOpts struct {
 	OverrideComputability schema.ComputedOptionalRequired
 }
 
+// SchemaOpts is NOT passed recursively through built OASSchema structs, and will only be available to the top level schema. This is used
+// for options that need to control just the top level schema, like overriding descriptions.
+type SchemaOpts struct {
+	// OverrideDescription will set the attribute description to this field if populated, otherwise the attribute description
+	// will be set to the description field of the `schema`.
+	OverrideDescription string
+}
+
 func (s *OASSchema) GetDescription() *string {
+	if s.SchemaOpts.OverrideDescription != "" {
+		return &s.SchemaOpts.OverrideDescription
+	}
+
 	// TODO: potentially use original description for nullable types?
 	return &s.Schema.Description
 }

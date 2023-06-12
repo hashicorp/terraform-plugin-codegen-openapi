@@ -17,7 +17,7 @@ func (s *OASSchema) BuildListResource(name string, computability schema.Computed
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
@@ -60,7 +60,7 @@ func (s *OASSchema) BuildListDataSource(name string, computability schema.Comput
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
@@ -102,7 +102,7 @@ func (s *OASSchema) BuildListElementType() (schema.ElementType, error) {
 	if !s.Schema.Items.IsA() {
 		return schema.ElementType{}, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
 	}
-	itemSchema, err := BuildSchema(s.Schema.Items.A, s.GlobalSchemaOpts)
+	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return schema.ElementType{}, fmt.Errorf("failed to build nested array items schema")
 	}

@@ -65,12 +65,13 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 			}),
 			readParams: []*high.Parameter{
 				{
-					Name: "string_prop",
-					In:   "path",
+					Name:        "string_prop",
+					In:          "path",
+					Description: "hey this is a string, overridden!",
 					Schema: base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Format:      util.OAS_format_password,
-						Description: "hey this is a string!",
+						Description: "you shouldn't see this because the description is overridden!",
 					}),
 				},
 			},
@@ -100,7 +101,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					Name: "string_prop",
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
-						Description:              pointer("hey this is a string!"),
+						Description:              pointer("hey this is a string, overridden!"),
 						Sensitive:                pointer(true),
 					},
 				},
