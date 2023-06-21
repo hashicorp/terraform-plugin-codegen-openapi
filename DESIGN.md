@@ -36,7 +36,7 @@ The [generator config file](./README.md) defines the CRUD (`Create`, `Read`, `Up
     - Will attempt to use `200` or `201` first, then will grab the first 2xx response code if not found (lexicographic sort)
     - Will attempt to use `application/json` first, then will grab the first content-type if not found (alphabetical sort)
 - `Read` operation [parameters](https://spec.openapis.org/oas/v3.1.0#parameterObject)
-    - The generator will [deep merge](#deep-merge-of-schemas-resources) the parameters defined belong at the root of the schema.
+    - The generator will [deep merge](#deep-merge-of-schemas-resources) the parameters defined at the root of the schema.
 
 #### Deep merge of schemas (resources)
 All schemas found will be deep merged together, with the `requestBody` schema from the `Create` operation being the `main schema` that the others will be merged on top. The deep merge has the following characteristics:
@@ -54,7 +54,7 @@ The [generator config file](./README.md) defines the `Read` operation for a data
     - Will attempt to use `200` or `201` first, then will grab the first 2xx response code if not found (lexicographic sort)
     - Will attempt to use `application/json` first, then will grab the first content-type if not found (alphabetical sort)
 - `Read` operation [parameters](https://spec.openapis.org/oas/v3.1.0#parameterObject)
-    - The generator will [deep merge](#deep-merge-of-schemas-data-sources) the parameters defined belong at the root of the schema.
+    - The generator will [deep merge](#deep-merge-of-schemas-data-sources) the parameters defined at the root of the schema.
 
 #### Deep merge of schemas (data sources)
 The response body schema found will be deep merged with the query/path `parameters`, with the `parameters` being the `main schema` that the others will be merged on top. The deep merge has the following characteristics:
