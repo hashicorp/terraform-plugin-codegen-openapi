@@ -16,10 +16,14 @@ As the OpenAPI specification (OAS) is designed to describe HTTP APIs in general,
 
 Users of the generator can adjust their OAS to match these assumptions, or suggest changes/customization via the [generator config file](./README.md).
 
-## Determining the OAS Schema to map from CRUD operations
+## Determining the OAS Schema to map from operations
+
+### Provider
+<!-- TODO: Update this when we have the provider schema mapping :) -->
+Currently, there is no option in the OpenAPI generator to define the mapping for a provider schema. The `provider.name` property is directly copied to the Framework IR.
 
 ### Resources
-The [generator config file](./README.md) defines the CRUD (Create, Read, Update, Delete) operations in an OAS. In those operations, the generator will search `Create` and `Read` operations for schemas to map to Framework IR. Multiple schemas will be [deep merged](#deep-merge-of-schemas-resources) and the final result will be the Resource schema represented in Framework IR.
+The [generator config file](./README.md) defines the CRUD (`Create`, `Read`, `Update`, `Delete`) operations for a resource in an OAS. In those operations, the generator will search `Create` and `Read` operations for schemas to map to Framework IR. Multiple schemas will be [deep merged](#deep-merge-of-schemas-resources) and the final result will be the Resource schema represented in Framework IR.
 
 #### OAS Schema order (resources)
 - `Create` operation [requestBody](https://spec.openapis.org/oas/v3.1.0#requestBodyObject)
@@ -42,8 +46,22 @@ All schemas found will be deep merged together, with the `requestBody` schema fr
 - Arrays and Objects will have their child properties merged, so `example_object.string_field` and `example_object.bool_field` will be merged into the same `SingleNestedAttribute` schema.
 
 ### Data Sources
-<!-- TODO: Fill this out once data source implementation is complete -->
-TBD
+The [generator config file](./README.md) defines the `Read` operation for a data source in an OAS. In that operation, the generator will search for a response body schema to map to Framework IR. The response body will be [deep merged](#deep-merge-of-schemas-data-sources) with the query parameters and path parameters of the same `Read` operation and the final result will be the Data Source schema represented in Framework IR.
+
+#### OAS Schema order (data sources)
+- `Read` operation [response](https://spec.openapis.org/oas/v3.1.0#responsesObject)
+    - `response` is the only schema **required** for data sources, if not present will log a warning and skip the data source without mapping.
+    - Will attempt to use `200` or `201` first, then will grab the first 2xx response code if not found (lexicographic sort)
+    - Will attempt to use `application/json` first, then will grab the first content-type if not found (alphabetical sort)
+- `Read` operation [parameters](https://spec.openapis.org/oas/v3.1.0#parameterObject)
+    - The generator will [deep merge](#deep-merge-of-schemas-data-sources) the parameters defined belong at the root of the schema.
+
+#### Deep merge of schemas (data sources)
+The response body schema found will be deep merged with the query/path `parameters`, with the `parameters` being the `main schema` that the others will be merged on top. The deep merge has the following characteristics:
+
+- Only attribute name is compared, if the attribute doesn't already exist in the main schema, it will be added. Any mismatched types of the same name will not raise an error and priority will favor the `main schema`.
+- Names are strictly compared, so `id` and `user_id` would be two separate attributes in a schema.
+- Arrays and Objects will have their child properties merged, so `example_object.string_field` and `example_object.bool_field` will be merged into the same `SingleNestedAttribute` schema.
 
 ## Mapping OAS Schema to Plugin Framework Types
 
@@ -87,13 +105,14 @@ For attributes that don’t have additional schema information (currently only `
 ### Required, Computed, and Optional
 
 #### Resources
-For resources, all fields marked in the OAS schema as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
+For resources, all fields, in the `Create` operation `requestBody` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
 
-If not required, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
+If not required, or if the field is in a different schema than the `Create` operation `requestbody`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
 
 #### Data Sources
-<!-- TODO: Fill this out once data source implementation is complete -->
-TBD
+For data sources, all fields, in the `Read` operation `parameters` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
+
+If not required, or if the field is in a different schema than the `Read` operation `parameters`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
 
 ### Other field mapping
 
