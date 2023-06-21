@@ -143,14 +143,16 @@ func TestBuildListResource(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name:    "float64_prop",
-											Float64: &schema.Float64Type{},
-										},
-										{
-											Name:  "int64_prop",
-											Int64: &schema.Int64Type{},
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:    "float64_prop",
+												Float64: &schema.Float64Type{},
+											},
+											{
+												Name:  "int64_prop",
+												Int64: &schema.Int64Type{},
+											},
 										},
 									},
 								},
@@ -166,14 +168,16 @@ func TestBuildListResource(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name: "bool_prop",
-											Bool: &schema.BoolType{},
-										},
-										{
-											Name:   "string_prop",
-											String: &schema.StringType{},
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "bool_prop",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "string_prop",
+												String: &schema.StringType{},
+											},
 										},
 									},
 								},
@@ -330,14 +334,16 @@ func TestBuildListDataSource(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name:    "float64_prop",
-											Float64: &schema.Float64Type{},
-										},
-										{
-											Name:  "int64_prop",
-											Int64: &schema.Int64Type{},
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:    "float64_prop",
+												Float64: &schema.Float64Type{},
+											},
+											{
+												Name:  "int64_prop",
+												Int64: &schema.Int64Type{},
+											},
 										},
 									},
 								},
@@ -353,14 +359,16 @@ func TestBuildListDataSource(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name: "bool_prop",
-											Bool: &schema.BoolType{},
-										},
-										{
-											Name:   "string_prop",
-											String: &schema.StringType{},
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "bool_prop",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "string_prop",
+												String: &schema.StringType{},
+											},
 										},
 									},
 								},

@@ -12,8 +12,8 @@ func mergeElementType(mainElementType schema.ElementType, secondElementType sche
 	if mainElementType.List != nil && secondElementType.List != nil {
 		mainElementType.List.ElementType = mergeElementType(mainElementType.List.ElementType, secondElementType.List.ElementType)
 	} else if mainElementType.Object != nil && secondElementType.Object != nil {
-		objectElemTypes := mergeObjectAttributeTypes(mainElementType.Object, secondElementType.Object)
-		mainElementType.Object = objectElemTypes
+		objectElemTypes := mergeObjectAttributeTypes(mainElementType.Object.AttributeTypes, secondElementType.Object.AttributeTypes)
+		mainElementType.Object.AttributeTypes = objectElemTypes
 	}
 
 	return mainElementType

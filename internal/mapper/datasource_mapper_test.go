@@ -26,7 +26,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 	testCases := map[string]struct {
 		readResponseSchema *base.SchemaProxy
 		readParams         []*high.Parameter
-		want               []datasource.Attribute
+		want               datasource.Attributes
 	}{
 		"merge primitives across all ops": {
 			readParams: []*high.Parameter{
@@ -73,7 +73,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []datasource.Attribute{
+			want: datasource.Attributes{
 				{
 					Name: "string_prop",
 					String: &datasource.StringAttribute{
@@ -165,7 +165,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []datasource.Attribute{
+			want: datasource.Attributes{
 				{
 					Name: "nested_object_one",
 					SingleNested: &datasource.SingleNestedAttribute{
@@ -300,7 +300,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []datasource.Attribute{
+			want: datasource.Attributes{
 				{
 					Name: "array_prop",
 					ListNested: &datasource.ListNestedAttribute{
@@ -454,7 +454,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []datasource.Attribute{
+			want: datasource.Attributes{
 				{
 					Name: "array_prop",
 					List: &datasource.ListAttribute{
@@ -463,36 +463,42 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name: "deep_nested_list",
-											List: &schema.ListType{
-												ElementType: schema.ElementType{
-													Object: []schema.ObjectAttributeType{
-														{
-															Name: "deep_deep_nested_object",
-															Object: []schema.ObjectAttributeType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "deep_nested_list",
+												List: &schema.ListType{
+													ElementType: schema.ElementType{
+														Object: &schema.ObjectType{
+															AttributeTypes: []schema.ObjectAttributeType{
 																{
-																	Name: "deep_deep_nested_bool",
-																	Bool: &schema.BoolType{},
-																},
-																{
-																	Name:   "deep_deep_nested_string",
-																	String: &schema.StringType{},
+																	Name: "deep_deep_nested_object",
+																	Object: &schema.ObjectType{
+																		AttributeTypes: []schema.ObjectAttributeType{
+																			{
+																				Name: "deep_deep_nested_bool",
+																				Bool: &schema.BoolType{},
+																			},
+																			{
+																				Name:   "deep_deep_nested_string",
+																				String: &schema.StringType{},
+																			},
+																		},
+																	},
 																},
 															},
 														},
 													},
 												},
 											},
-										},
-										{
-											Name: "deep_nested_bool",
-											Bool: &schema.BoolType{},
-										},
-										{
-											Name:  "deep_nested_int64",
-											Int64: &schema.Int64Type{},
+											{
+												Name: "deep_nested_bool",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:  "deep_nested_int64",
+												Int64: &schema.Int64Type{},
+											},
 										},
 									},
 								},

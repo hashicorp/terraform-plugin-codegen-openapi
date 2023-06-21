@@ -28,7 +28,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 		createResponseSchema *base.SchemaProxy
 		readResponseSchema   *base.SchemaProxy
 		readParams           []*high.Parameter
-		want                 []resource.Attribute
+		want                 resource.Attributes
 	}{
 		"merge primitives across all ops": {
 			createRequestSchema: base.CreateSchemaProxy(&base.Schema{
@@ -75,7 +75,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			},
-			want: []resource.Attribute{
+			want: resource.Attributes{
 				{
 					Name: "bool_prop",
 					Bool: &resource.BoolAttribute{
@@ -182,7 +182,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			},
-			want: []resource.Attribute{
+			want: resource.Attributes{
 				{
 					Name: "nested_object_one",
 					SingleNested: &resource.SingleNestedAttribute{
@@ -324,7 +324,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []resource.Attribute{
+			want: resource.Attributes{
 				{
 					Name: "array_prop",
 					ListNested: &resource.ListNestedAttribute{
@@ -505,7 +505,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			want: []resource.Attribute{
+			want: resource.Attributes{
 				{
 					Name: "array_prop",
 					List: &resource.ListAttribute{
@@ -514,38 +514,44 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 						ElementType: schema.ElementType{
 							List: &schema.ListType{
 								ElementType: schema.ElementType{
-									Object: []schema.ObjectAttributeType{
-										{
-											Name:    "deep_nested_float64",
-											Float64: &schema.Float64Type{},
-										},
-										{
-											Name:   "deep_nested_string",
-											String: &schema.StringType{},
-										},
-										{
-											Name: "deep_nested_bool",
-											Bool: &schema.BoolType{},
-										},
-										{
-											Name:  "deep_nested_int64",
-											Int64: &schema.Int64Type{},
-										},
-										{
-											Name: "deep_nested_list",
-											List: &schema.ListType{
-												ElementType: schema.ElementType{
-													Object: []schema.ObjectAttributeType{
-														{
-															Name: "deep_deep_nested_object",
-															Object: []schema.ObjectAttributeType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:    "deep_nested_float64",
+												Float64: &schema.Float64Type{},
+											},
+											{
+												Name:   "deep_nested_string",
+												String: &schema.StringType{},
+											},
+											{
+												Name: "deep_nested_bool",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:  "deep_nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+											{
+												Name: "deep_nested_list",
+												List: &schema.ListType{
+													ElementType: schema.ElementType{
+														Object: &schema.ObjectType{
+															AttributeTypes: []schema.ObjectAttributeType{
 																{
-																	Name:   "deep_deep_nested_string",
-																	String: &schema.StringType{},
-																},
-																{
-																	Name: "deep_deep_nested_bool",
-																	Bool: &schema.BoolType{},
+																	Name: "deep_deep_nested_object",
+																	Object: &schema.ObjectType{
+																		AttributeTypes: []schema.ObjectAttributeType{
+																			{
+																				Name:   "deep_deep_nested_string",
+																				String: &schema.StringType{},
+																			},
+																			{
+																				Name: "deep_deep_nested_bool",
+																				Bool: &schema.BoolType{},
+																			},
+																		},
+																	},
 																},
 															},
 														},

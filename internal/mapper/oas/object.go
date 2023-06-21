@@ -32,6 +32,8 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, error) {
 	}
 
 	return schema.ElementType{
-		Object: objectElemTypes,
+		Object: &schema.ObjectType{
+			AttributeTypes: objectElemTypes,
+		},
 	}, nil
 }
