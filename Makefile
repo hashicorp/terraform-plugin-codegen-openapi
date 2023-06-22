@@ -28,4 +28,9 @@ testdata:
 		--output ./internal/cmd/testdata/scaleway/generated_framework_ir.json \
 		./internal/cmd/testdata/scaleway/openapi_spec.yml
 
+	go run ./cmd/terraform-plugin-codegen-openapi generate \
+		--config ./internal/cmd/testdata/edgecase/tfopenapigen_config.yml \
+		--output ./internal/cmd/testdata/edgecase/generated_framework_ir.json \
+		./internal/cmd/testdata/edgecase/openapi_spec.yml
+
 .PHONY: lint fmt test

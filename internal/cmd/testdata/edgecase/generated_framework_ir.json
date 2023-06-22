@@ -1,0 +1,26 @@
+{
+	"datasources": [
+		{
+			"name": "nested_lists",
+			"schema": {
+				"attributes": [
+					{
+						"name": "main_list",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"list": {
+									"string": {}
+								}
+							},
+							"description": "This list has another list nested underneath!"
+						}
+					}
+				]
+			}
+		}
+	],
+	"provider": {
+		"name": "edgecase"
+	}
+}

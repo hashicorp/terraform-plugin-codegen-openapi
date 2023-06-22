@@ -39,7 +39,11 @@ func TestGenerate_WithConfig(t *testing.T) {
 			configPath:     "testdata/scaleway/tfopenapigen_config.yml",
 			goldenFilePath: "testdata/scaleway/generated_framework_ir.json",
 		},
-		// TODO: add cloudflare, fastly, and maybe edge cases with stripe?
+		"Edgecase API": {
+			oasSpecPath:    "testdata/edgecase/openapi_spec.yml",
+			configPath:     "testdata/edgecase/tfopenapigen_config.yml",
+			goldenFilePath: "testdata/edgecase/generated_framework_ir.json",
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
