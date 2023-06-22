@@ -62,6 +62,18 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 		Attributes: []datasource.Attribute{},
 	}
 
+	// ********************
+	// READ Response Body (required)
+	// ********************
+	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+	if err != nil {
+		return nil, err
+	}
+	readResponseAttributes, err := readResponseSchema.BuildDataSourceAttributes()
+	if err != nil {
+		return nil, err
+	}
+
 	// ****************
 	// READ Parameters (optional)
 	// ****************
@@ -89,18 +101,6 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 
 			readParameterAttributes = append(readParameterAttributes, *parameterAttribute)
 		}
-	}
-
-	// ********************
-	// READ Response Body (required)
-	// ********************
-	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
-	if err != nil {
-		return nil, err
-	}
-	readResponseAttributes, err := readResponseSchema.BuildDataSourceAttributes()
-	if err != nil {
-		return nil, err
 	}
 
 	dataSourceAttributes := mergeDataSourceAttributes(
