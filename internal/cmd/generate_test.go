@@ -35,7 +35,7 @@ func TestGenerate_WithConfig(t *testing.T) {
 			configPath:     "testdata/scaleway/tfopenapigen_config.yml",
 			goldenFilePath: "testdata/scaleway/generated_framework_ir.json",
 		},
-		"Edgecase API": {
+		"EdgeCase API": {
 			oasSpecPath:    "testdata/edgecase/openapi_spec.yml",
 			configPath:     "testdata/edgecase/tfopenapigen_config.yml",
 			goldenFilePath: "testdata/edgecase/generated_framework_ir.json",
