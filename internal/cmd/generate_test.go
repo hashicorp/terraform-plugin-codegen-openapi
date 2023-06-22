@@ -4,15 +4,11 @@
 package cmd_test
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 	"github.com/mitchellh/cli"
 )
 
@@ -39,7 +35,11 @@ func TestGenerate_WithConfig(t *testing.T) {
 			configPath:     "testdata/scaleway/tfopenapigen_config.yml",
 			goldenFilePath: "testdata/scaleway/generated_framework_ir.json",
 		},
-		// TODO: add cloudflare, fastly, and maybe edge cases with stripe?
+		"EdgeCase API": {
+			oasSpecPath:    "testdata/edgecase/openapi_spec.yml",
+			configPath:     "testdata/edgecase/tfopenapigen_config.yml",
+			goldenFilePath: "testdata/edgecase/generated_framework_ir.json",
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
@@ -63,27 +63,9 @@ func TestGenerate_WithConfig(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			// TODO: write logic to allow updating of golden files?
-			if diff := cmp.Diff(mockUi.OutputWriter.Bytes(), goldenFileBytes, getFrameworkIRCmpOption()); diff != "" {
+			if diff := cmp.Diff(mockUi.OutputWriter.Bytes(), goldenFileBytes); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
 	}
-}
-
-// getFrameworkIRCmpOption returns a go-cmp transformer that will unmarshal JSON into Framework IR structs and compare.
-// This produces a nicer diff for comparing golden files and will error with any unknown fields. Based off: https://github.com/google/go-cmp/issues/224#issuecomment-650429859
-func getFrameworkIRCmpOption() cmp.Option {
-	return cmp.FilterValues(func(x, y []byte) bool {
-		return json.Valid(x) && json.Valid(y)
-	}, cmp.Transformer("ParseIRJSON", func(in []byte) (out interface{}) {
-		var irStruct spec.Specification
-		decoder := json.NewDecoder(strings.NewReader(string(in)))
-		decoder.DisallowUnknownFields()
-
-		if err := decoder.Decode(&irStruct); err != nil {
-			panic(fmt.Errorf("error parsing Framework IR JSON bytes: %w", err))
-		}
-		return irStruct
-	}))
 }
