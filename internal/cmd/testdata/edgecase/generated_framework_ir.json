@@ -10,7 +10,9 @@
 							"computed_optional_required": "computed_optional",
 							"element_type": {
 								"list": {
-									"string": {}
+									"element_type": {
+										"string": {}
+									}
 								}
 							},
 							"description": "This list has another list nested underneath!"
