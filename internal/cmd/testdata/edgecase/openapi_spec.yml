@@ -22,5 +22,33 @@ paths:
                         type: array
                         items:
                           type: string
-                required:
-                  - main_list
+  /set_collections:
+    get:
+      summary: Test for SetNested attributes and Set attributes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  setnested_prop:
+                    description: This is a set with a nested object
+                    type: array
+                    format: set
+                    items:
+                        type: object
+                        properties:
+                          string_prop:
+                            description: String inside a set!
+                            type: string
+                          bool_prop:
+                            description: Bool inside a set!
+                            type: string
+                  set_prop:
+                    description: This is a set of strings
+                    type: array
+                    format: set
+                    items:
+                        type: string

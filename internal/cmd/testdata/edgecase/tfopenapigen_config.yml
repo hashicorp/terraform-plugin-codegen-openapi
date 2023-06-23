@@ -1,4 +1,3 @@
-# Ref: https://registry.terraform.io/providers/integrations/github/latest/docs
 provider:
   name: edgecase
 
@@ -8,4 +7,8 @@ data_sources:
   nested_lists:
     read:
       path: /nested_lists
+      method: GET
+  set_collections:
+    read:
+      path: /set_collections
       method: GET
