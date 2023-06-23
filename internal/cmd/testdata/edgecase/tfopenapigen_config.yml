@@ -9,6 +9,13 @@ resources:
     read:
       path: /set_collections
       method: GET
+  map_test:
+    create:
+      path: /map_test
+      method: POST
+    read:
+      path: /map_test
+      method: GET
 
 data_sources:
   nested_lists:
@@ -18,4 +25,8 @@ data_sources:
   set_collections:
     read:
       path: /set_collections
+      method: GET
+  map_test:
+    read:
+      path: /map_test
       method: GET

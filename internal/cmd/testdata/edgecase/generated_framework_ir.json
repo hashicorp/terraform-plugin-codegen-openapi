@@ -1,6 +1,27 @@
 {
 	"datasources": [
 		{
+			"name": "map_test",
+			"schema": {
+				"attributes": [
+					{
+						"name": "map_prop",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "This is a map of strings"
+						}
+					},
+					{
+						"name": "mapnested_prop",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "This is a map with a nested object"
+						}
+					}
+				]
+			}
+		},
+		{
 			"name": "nested_lists",
 			"schema": {
 				"attributes": [
@@ -69,6 +90,27 @@
 		"name": "edgecase"
 	},
 	"resources": [
+		{
+			"name": "map_test",
+			"schema": {
+				"attributes": [
+					{
+						"name": "map_prop",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "This is a map of strings"
+						}
+					},
+					{
+						"name": "mapnested_prop",
+						"single_nested": {
+							"computed_optional_required": "required",
+							"description": "This is a map with a nested object"
+						}
+					}
+				]
+			}
+		},
 		{
 			"name": "set_collections",
 			"schema": {

@@ -17,6 +17,42 @@ paths:
                 properties:
                   main_list:
                     $ref: "#/components/schemas/multidimensional_array_schema"
+  /map_test:
+    get:
+      summary: Test for MapNested attributes and Map attributes in a data source
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mapnested_prop:
+                    $ref: "#/components/schemas/mapnested_schema"
+                  map_prop:
+                    description: This is a map of strings
+                    type: object
+                    additionalProperties:
+                      type: string
+    post:
+      summary: Test for MapNested attributes and Map attributes in a resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mapnested_prop
+              properties:
+                mapnested_prop:
+                  $ref: "#/components/schemas/mapnested_schema"
+                map_prop:
+                  description: This is a map of strings
+                  type: object
+                  additionalProperties:
+                    type: string
   /set_collections:
     get:
       summary: Test for SetNested attributes and Set attributes in a data source
@@ -76,4 +112,16 @@ components:
             type: string
           bool_prop:
             description: Bool inside a set!
+            type: boolean
+    mapnested_schema:
+      description: This is a map with a nested object
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          string_prop:
+            description: String inside a map!
+            type: string
+          bool_prop:
+            description: Bool inside a map!
             type: boolean
