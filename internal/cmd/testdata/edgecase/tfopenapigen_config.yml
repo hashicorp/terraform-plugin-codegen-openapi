@@ -2,12 +2,12 @@ provider:
   name: edgecase
 
 resources:
-  set_collections:
+  set_test:
     create:
-      path: /set_collections
+      path: /set_test
       method: POST
     read:
-      path: /set_collections
+      path: /set_test
       method: GET
   map_test:
     create:
@@ -22,9 +22,9 @@ data_sources:
     read:
       path: /nested_collections
       method: GET
-  set_collections:
+  set_test:
     read:
-      path: /set_collections
+      path: /set_test
       method: GET
   map_test:
     read:
