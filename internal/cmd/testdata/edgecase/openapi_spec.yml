@@ -15,8 +15,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  main_list:
-                    $ref: "#/components/schemas/nested_collection_schema"
+                  double_nested_list:
+                    $ref: "#/components/schemas/double_nested_list_schema"
   /map_test:
     get:
       summary: Test for MapNested attributes and Map attributes in a data source
@@ -93,7 +93,7 @@ paths:
                     type: string
 components:
   schemas:
-    nested_collection_schema:
+    double_nested_list_schema:
       description: This list has another list nested underneath!
       type: array
       items:
