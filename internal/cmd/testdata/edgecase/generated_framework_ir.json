@@ -27,7 +27,7 @@
 				"attributes": [
 					{
 						"name": "set_prop",
-						"list": {
+						"set": {
 							"computed_optional_required": "computed_optional",
 							"element_type": {
 								"string": {}
@@ -37,7 +37,7 @@
 					},
 					{
 						"name": "setnested_prop",
-						"list_nested": {
+						"set_nested": {
 							"computed_optional_required": "computed_optional",
 							"nested_object": {
 								"attributes": [
@@ -76,7 +76,7 @@
 				"attributes": [
 					{
 						"name": "set_prop",
-						"list": {
+						"set": {
 							"computed_optional_required": "computed_optional",
 							"element_type": {
 								"string": {}
@@ -86,7 +86,7 @@
 					},
 					{
 						"name": "setnested_prop",
-						"list_nested": {
+						"set_nested": {
 							"computed_optional_required": "required",
 							"nested_object": {
 								"attributes": [

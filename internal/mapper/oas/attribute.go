@@ -49,7 +49,7 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 	case util.OAS_type_boolean:
 		return s.BuildBoolResource(name, computability)
 	case util.OAS_type_array:
-		return s.BuildListResource(name, computability)
+		return s.BuildCollectionResource(name, computability)
 	case util.OAS_type_object:
 		return s.BuildSingleNestedResource(name, computability)
 	default:
@@ -94,7 +94,7 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 	case util.OAS_type_boolean:
 		return s.BuildBoolDataSource(name, computability)
 	case util.OAS_type_array:
-		return s.BuildListDataSource(name, computability)
+		return s.BuildCollectionDataSource(name, computability)
 	case util.OAS_type_object:
 		return s.BuildSingleNestedDataSource(name, computability)
 	default:

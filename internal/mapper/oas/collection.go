@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildListResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -26,6 +26,19 @@ func (s *OASSchema) BuildListResource(name string, computability schema.Computed
 		objectAttributes, err := itemSchema.BuildResourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		}
+
+		if s.Schema.Format == util.TF_format_set {
+			return &resource.Attribute{
+				Name: name,
+				SetNested: &resource.SetNestedAttribute{
+					NestedObject: resource.NestedAttributeObject{
+						Attributes: *objectAttributes,
+					},
+					ComputedOptionalRequired: computability,
+					Description:              s.GetDescription(),
+				},
+			}, nil
 		}
 
 		return &resource.Attribute{
@@ -42,7 +55,18 @@ func (s *OASSchema) BuildListResource(name string, computability schema.Computed
 
 	elemType, err := itemSchema.BuildElementType()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create list elem type - %w", err)
+		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	}
+
+	if s.Schema.Format == util.TF_format_set {
+		return &resource.Attribute{
+			Name: name,
+			Set: &resource.SetAttribute{
+				ElementType:              elemType,
+				ComputedOptionalRequired: computability,
+				Description:              s.GetDescription(),
+			},
+		}, nil
 	}
 
 	return &resource.Attribute{
@@ -55,7 +79,7 @@ func (s *OASSchema) BuildListResource(name string, computability schema.Computed
 	}, nil
 }
 
-func (s *OASSchema) BuildListDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -69,6 +93,19 @@ func (s *OASSchema) BuildListDataSource(name string, computability schema.Comput
 		objectAttributes, err := itemSchema.BuildDataSourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		}
+
+		if s.Schema.Format == util.TF_format_set {
+			return &datasource.Attribute{
+				Name: name,
+				SetNested: &datasource.SetNestedAttribute{
+					NestedObject: datasource.NestedAttributeObject{
+						Attributes: *objectAttributes,
+					},
+					ComputedOptionalRequired: computability,
+					Description:              s.GetDescription(),
+				},
+			}, nil
 		}
 
 		return &datasource.Attribute{
@@ -85,7 +122,18 @@ func (s *OASSchema) BuildListDataSource(name string, computability schema.Comput
 
 	elemType, err := itemSchema.BuildElementType()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create list elem type - %w", err)
+		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	}
+
+	if s.Schema.Format == util.TF_format_set {
+		return &datasource.Attribute{
+			Name: name,
+			Set: &datasource.SetAttribute{
+				ElementType:              elemType,
+				ComputedOptionalRequired: computability,
+				Description:              s.GetDescription(),
+			},
+		}, nil
 	}
 
 	return &datasource.Attribute{
@@ -98,7 +146,7 @@ func (s *OASSchema) BuildListDataSource(name string, computability schema.Comput
 	}, nil
 }
 
-func (s *OASSchema) BuildListElementType() (schema.ElementType, error) {
+func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, error) {
 	if !s.Schema.Items.IsA() {
 		return schema.ElementType{}, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
 	}
@@ -110,6 +158,14 @@ func (s *OASSchema) BuildListElementType() (schema.ElementType, error) {
 	elemType, err := itemSchema.BuildElementType()
 	if err != nil {
 		return schema.ElementType{}, err
+	}
+
+	if s.Schema.Format == util.TF_format_set {
+		return schema.ElementType{
+			Set: &schema.SetType{
+				ElementType: elemType,
+			},
+		}, nil
 	}
 
 	return schema.ElementType{
