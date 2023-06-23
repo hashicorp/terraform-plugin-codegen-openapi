@@ -54,8 +54,8 @@ github.com/hashicorp/errwrap v1.1.0/go.mod h1:YH+1FKiLXxHSkmPseP+kNlulaMuP3n2brv
 github.com/hashicorp/go-multierror v1.0.0/go.mod h1:dHtQlpGsu+cZNNAkkCN/P3hoUDHhCYQXV3UM06sGGrk=
 github.com/hashicorp/go-multierror v1.1.1 h1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+lD48awMYo=
 github.com/hashicorp/go-multierror v1.1.1/go.mod h1:iw975J/qwKPdAO1clOe2L8331t/9/fmwbPZ6JB6eMoM=
-github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230622133831-8ed4d77d321e h1:+BPglv17monTwovwckVW/ZXbi3ZzGLanhQvBccSdWSQ=
-github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230622133831-8ed4d77d321e/go.mod h1:4aZFKiOI2xiQFOpeQMMyDL8vRmKAZXHUY4kWol7Fdco=
+github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230623193314-2a16a9d0b6f3 h1:6IiMR/31Wu/HvEGhLNzx1wSWvYCU2gkRv39sB24Cpis=
+github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230623193314-2a16a9d0b6f3/go.mod h1:4aZFKiOI2xiQFOpeQMMyDL8vRmKAZXHUY4kWol7Fdco=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/huandu/xstrings v1.3.1/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/huandu/xstrings v1.3.2/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=

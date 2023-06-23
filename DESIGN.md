@@ -69,6 +69,8 @@ The response body schema found will be deep merged with the query/path `paramete
 
 For a given [OAS type](https://spec.openapis.org/oas/v3.1.0#data-types) and format combination, the following rules will be applied for mapping to Framework  attribute types. Not all Framework types are represented natively with OAS, those types are noted below in [Unsupported Attribute Types](#unsupported-attribute-types).
 
+> **NOTE:** All `Type` and `Format` fields below are native to OpenAPI Spec 3.x, with the exception of the format `set`, which is a custom field that only this generator tool is expected to support.
+
 | Type (OAS) | Format (OAS)        | Items type (OAS `array`) | Plugin Framework Attribute Type                                                             |
 |------------|---------------------|--------------------------|---------------------------------------------------------------------------------------------|
 | `integer`  | -                   | -                        | `Int64Attribute`                                                                            |
@@ -77,7 +79,9 @@ For a given [OAS type](https://spec.openapis.org/oas/v3.1.0#data-types) and form
 | `string`   | -                   | -                        | `StringAttribute`                                                                           |
 | `boolean`  | -                   | -                        | `BoolAttribute`                                                                             |
 | `array`    | -                   | `object`                 | `ListNestedAttribute`                                                                       |
-| `array`    | -                   | (all others)             | `ListAttribute` (nests with [element types](#oas-to-plugin-framework-element-types)) |
+| `array`    | -                   | (all others)             | `ListAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))        |
+| `array`    | `set`               | `object`                 | `SetNestedAttribute`                                                                        |
+| `array`    | `set`               | (all others)             | `SetAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))         |
 | `object`   | -                   | -                        | `SingleNestedAttribute`                                                                     |
 
 #### Unsupported Attribute Types
@@ -85,12 +89,12 @@ For a given [OAS type](https://spec.openapis.org/oas/v3.1.0#data-types) and form
     - While the Plugin Framework supports blocks, the Plugin Framework team encourages provider developers to prefer `ListNestedAttribute`, `SetNestedAttribute`, and `SingleNestedAttribute` for new provider development.
 - `ObjectAttribute`
     - The generator will default to `SingleNestedAttribute` for object types to provide the additional schema information.
-- `SetNestedAttribute`, `SetAttribute`, `MapNestedAttribute`, and `MapAttribute`
+- `MapNestedAttribute`, and `MapAttribute`
     - Mapping for these types is currently not supported, but will be considered in future versions.
 
 ### OAS to Plugin Framework Element Types
 
-For attributes that don’t have additional schema information (currently only `ListAttribute`), the following rules will be applied for mapping from OAS type and format combinations, into Framework element types.
+For attributes that don't have additional schema information (currently only `ListAttribute` and `SetAttribute`), the following rules will be applied for mapping from OAS type and format combinations, into Framework element types.
 
 | Type (OAS) | Format (OAS)        | Items type (OAS `array`) | Plugin Framework Element Type   |
 |------------|---------------------|--------------------------|---------------------------------|
@@ -100,6 +104,7 @@ For attributes that don’t have additional schema information (currently only `
 | `string`   | -                   | -                        | `StringType`                    |
 | `boolean`  | -                   | -                        | `BoolType`                      |
 | `array`    | -                   | (all)                    | `ListType`                      |
+| `array`    | `set`               | (all)                    | `SetType`                       |
 | `object`   | -                   | -                        | `ObjectType`                    |
 
 ### Required, Computed, and Optional

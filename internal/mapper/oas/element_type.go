@@ -21,7 +21,7 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 	case util.OAS_type_boolean:
 		return s.BuildBoolElementType()
 	case util.OAS_type_array:
-		return s.BuildListElementType()
+		return s.BuildCollectionElementType()
 	case util.OAS_type_object:
 		return s.BuildObjectElementType()
 

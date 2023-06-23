@@ -20,9 +20,97 @@
 					}
 				]
 			}
+		},
+		{
+			"name": "set_collections",
+			"schema": {
+				"attributes": [
+					{
+						"name": "set_prop",
+						"set": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "This is a set of strings"
+						}
+					},
+					{
+						"name": "setnested_prop",
+						"set_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "bool_prop",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "Bool inside a set!"
+										}
+									},
+									{
+										"name": "string_prop",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "String inside a set!",
+											"sensitive": false
+										}
+									}
+								]
+							},
+							"description": "This is a set with a nested object"
+						}
+					}
+				]
+			}
 		}
 	],
 	"provider": {
 		"name": "edgecase"
-	}
+	},
+	"resources": [
+		{
+			"name": "set_collections",
+			"schema": {
+				"attributes": [
+					{
+						"name": "set_prop",
+						"set": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "This is a set of strings"
+						}
+					},
+					{
+						"name": "setnested_prop",
+						"set_nested": {
+							"computed_optional_required": "required",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "bool_prop",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "Bool inside a set!"
+										}
+									},
+									{
+										"name": "string_prop",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "String inside a set!",
+											"sensitive": false
+										}
+									}
+								]
+							},
+							"description": "This is a set with a nested object"
+						}
+					}
+				]
+			}
+		}
+	]
 }

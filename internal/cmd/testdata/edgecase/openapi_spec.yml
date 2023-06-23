@@ -8,7 +8,7 @@ paths:
     get:
       summary: Test for nested lists (list within a list)
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -16,11 +16,64 @@ paths:
                 type: object
                 properties:
                   main_list:
-                    description: This list has another list nested underneath!
+                    $ref: "#/components/schemas/multidimensional_array_schema"
+  /set_collections:
+    get:
+      summary: Test for SetNested attributes and Set attributes in a data source
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  setnested_prop:
+                    $ref: "#/components/schemas/setnested_schema"
+                  set_prop:
+                    description: This is a set of strings
                     type: array
+                    format: set
                     items:
-                        type: array
-                        items:
-                          type: string
-                required:
-                  - main_list
+                      type: string
+    post:
+      summary: Test for SetNested attributes and Set attributes in a resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - setnested_prop
+              properties:
+                setnested_prop:
+                  $ref: "#/components/schemas/setnested_schema"
+                set_prop:
+                  description: This is a set of strings
+                  type: array
+                  format: set
+                  items:
+                    type: string
+components:
+  schemas:
+    multidimensional_array_schema:
+      description: This list has another list nested underneath!
+      type: array
+      items:
+        type: array
+        items:
+          type: string
+    setnested_schema:
+      description: This is a set with a nested object
+      type: array
+      format: set
+      items:
+        type: object
+        properties:
+          string_prop:
+            description: String inside a set!
+            type: string
+          bool_prop:
+            description: Bool inside a set!
+            type: boolean
