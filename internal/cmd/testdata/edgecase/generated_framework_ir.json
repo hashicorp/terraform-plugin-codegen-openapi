@@ -22,7 +22,7 @@
 			}
 		},
 		{
-			"name": "nested_lists",
+			"name": "nested_collections",
 			"schema": {
 				"attributes": [
 					{

@@ -18,9 +18,9 @@ resources:
       method: GET
 
 data_sources:
-  nested_lists:
+  nested_collections:
     read:
-      path: /nested_lists
+      path: /nested_collections
       method: GET
   set_collections:
     read:
