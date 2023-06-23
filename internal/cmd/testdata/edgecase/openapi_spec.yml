@@ -76,4 +76,4 @@ components:
             type: string
           bool_prop:
             description: Bool inside a set!
-            type: string
+            type: boolean

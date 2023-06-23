@@ -43,10 +43,9 @@
 								"attributes": [
 									{
 										"name": "bool_prop",
-										"string": {
+										"bool": {
 											"computed_optional_required": "computed_optional",
-											"description": "Bool inside a set!",
-											"sensitive": false
+											"description": "Bool inside a set!"
 										}
 									},
 									{
@@ -92,10 +91,9 @@
 								"attributes": [
 									{
 										"name": "bool_prop",
-										"string": {
+										"bool": {
 											"computed_optional_required": "computed_optional",
-											"description": "Bool inside a set!",
-											"sensitive": false
+											"description": "Bool inside a set!"
 										}
 									},
 									{
