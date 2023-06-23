@@ -2,6 +2,13 @@ provider:
   name: edgecase
 
 resources:
+  set_collections:
+    create:
+      path: /set_collections
+      method: POST
+    read:
+      path: /set_collections
+      method: GET
 
 data_sources:
   nested_lists:
