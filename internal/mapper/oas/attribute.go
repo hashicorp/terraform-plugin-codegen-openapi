@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
-	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
 func (s *OASSchema) BuildResourceAttributes() (*[]resource.Attribute, error) {
@@ -52,8 +51,7 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 	case util.OAS_type_array:
 		return s.BuildCollectionResource(name, computability)
 	case util.OAS_type_object:
-		_, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-		if ok {
+		if s.IsMap() {
 			return s.BuildMapResource(name, computability)
 		}
 		return s.BuildSingleNestedResource(name, computability)
@@ -101,8 +99,7 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 	case util.OAS_type_array:
 		return s.BuildCollectionDataSource(name, computability)
 	case util.OAS_type_object:
-		_, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-		if ok {
+		if s.IsMap() {
 			return s.BuildMapDataSource(name, computability)
 		}
 		return s.BuildSingleNestedDataSource(name, computability)

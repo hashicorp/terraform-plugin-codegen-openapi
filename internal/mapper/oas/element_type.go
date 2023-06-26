@@ -8,7 +8,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
-	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
 func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
@@ -24,8 +23,7 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 	case util.OAS_type_array:
 		return s.BuildCollectionElementType()
 	case util.OAS_type_object:
-		_, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-		if ok {
+		if s.IsMap() {
 			return s.BuildMapElementType()
 		}
 		return s.BuildObjectElementType()

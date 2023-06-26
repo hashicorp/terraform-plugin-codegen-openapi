@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
-	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
 func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
@@ -23,9 +22,8 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	_, hasAdditionalProperties := itemSchema.Schema.AdditionalProperties.(*base.SchemaProxy)
-
-	if itemSchema.Type == util.OAS_type_object && !hasAdditionalProperties {
+	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
+	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildResourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
@@ -92,9 +90,8 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	_, hasAdditionalProperties := itemSchema.Schema.AdditionalProperties.(*base.SchemaProxy)
-
-	if itemSchema.Type == util.OAS_type_object && !hasAdditionalProperties {
+	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
+	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildDataSourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)

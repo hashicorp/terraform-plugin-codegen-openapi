@@ -12,7 +12,7 @@ import (
 
 func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
-	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should perform this type assertion as well.
+	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
 		return nil, fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties)
@@ -57,7 +57,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 
 func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
-	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should perform this type assertion as well.
+	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
 		return nil, fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties)
@@ -102,7 +102,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 
 func (s *OASSchema) BuildMapElementType() (schema.ElementType, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
-	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should perform this type assertion as well.
+	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
 		return schema.ElementType{}, fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties)
