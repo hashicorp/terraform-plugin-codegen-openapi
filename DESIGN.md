@@ -71,41 +71,42 @@ For a given [OAS type](https://spec.openapis.org/oas/v3.1.0#data-types) and form
 
 > **NOTE:** All `Type` and `Format` fields below are native to OpenAPI Spec 3.x, with the exception of the format `set`, which is a custom field that only this generator tool is expected to support.
 
-| Type (OAS) | Format (OAS)        | Items type (OAS `array`) | Plugin Framework Attribute Type                                                             |
-|------------|---------------------|--------------------------|---------------------------------------------------------------------------------------------|
-| `integer`  | -                   | -                        | `Int64Attribute`                                                                            |
-| `number`   | `double` or `float` | -                        | `Float64Attribute`                                                                          |
-| `number`   | (all others)        | -                        | `NumberAttribute`                                                                           |
-| `string`   | -                   | -                        | `StringAttribute`                                                                           |
-| `boolean`  | -                   | -                        | `BoolAttribute`                                                                             |
-| `array`    | -                   | `object`                 | `ListNestedAttribute`                                                                       |
-| `array`    | -                   | (all others)             | `ListAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))        |
-| `array`    | `set`               | `object`                 | `SetNestedAttribute`                                                                        |
-| `array`    | `set`               | (all others)             | `SetAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))         |
-| `object`   | -                   | -                        | `SingleNestedAttribute`                                                                     |
+| Type (OAS) | Format (OAS)        | Other Criteria                               | Plugin Framework Attribute Type                                                             |
+|------------|---------------------|----------------------------------------------|---------------------------------------------------------------------------------------------|
+| `integer`  | -                   | -                                            | `Int64Attribute`                                                                            |
+| `number`   | `double` or `float` | -                                            | `Float64Attribute`                                                                          |
+| `number`   | -                   | -                                            | `NumberAttribute`                                                                           |
+| `string`   | -                   | -                                            | `StringAttribute`                                                                           |
+| `boolean`  | -                   | -                                            | `BoolAttribute`                                                                             |
+| `array`    | -                   | `items.type == object`                       | `ListNestedAttribute`                                                                       |
+| `array`    | -                   | `items.type == (any)`                        | `ListAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))        |
+| `array`    | `set`               | `items.type == object`                       | `SetNestedAttribute`                                                                        |
+| `array`    | `set`               | `items.type == (any)`                        | `SetAttribute` (nests with [element types](#oas-to-plugin-framework-element-types))         |
+| `object`   | -                   | `additionalProperties.type == object`        | `MapNestedAttribute`                                                                        |
+| `object`   | -                   | `additionalProperties.type == (any)`         | `MapAttribute`  (nests with [element types](#oas-to-plugin-framework-element-types))        |
+| `object`   | -                   | -                                            | `SingleNestedAttribute`                                                                     |
 
 #### Unsupported Attribute Types
 - `ListNestedBlock`, `SetNestedBlock`, and `SingleNestedBlock`
     - While the Plugin Framework supports blocks, the Plugin Framework team encourages provider developers to prefer `ListNestedAttribute`, `SetNestedAttribute`, and `SingleNestedAttribute` for new provider development.
 - `ObjectAttribute`
     - The generator will default to `SingleNestedAttribute` for object types to provide the additional schema information.
-- `MapNestedAttribute`, and `MapAttribute`
-    - Mapping for these types is currently not supported, but will be considered in future versions.
 
 ### OAS to Plugin Framework Element Types
 
-For attributes that don't have additional schema information (currently only `ListAttribute` and `SetAttribute`), the following rules will be applied for mapping from OAS type and format combinations, into Framework element types.
+For attributes that don't have additional schema information (`ListAttribute`, `SetAttribute`, and `MapAttribute`), the following rules will be applied for mapping from OAS type and format combinations, into Framework element types.
 
-| Type (OAS) | Format (OAS)        | Items type (OAS `array`) | Plugin Framework Element Type   |
-|------------|---------------------|--------------------------|---------------------------------|
-| `integer`  | -                   | -                        | `Int64Type`                     |
-| `number`   | `double` or `float` | -                        | `Float64Type`                   |
-| `number`   | (all others)        | -                        | `NumberType`                    |
-| `string`   | -                   | -                        | `StringType`                    |
-| `boolean`  | -                   | -                        | `BoolType`                      |
-| `array`    | -                   | (all)                    | `ListType`                      |
-| `array`    | `set`               | (all)                    | `SetType`                       |
-| `object`   | -                   | -                        | `ObjectType`                    |
+| Type (OAS) | Format (OAS)        | Other Criteria                        | Plugin Framework Element Type   |
+|------------|---------------------|---------------------------------------|---------------------------------|
+| `integer`  | -                   | -                                     | `Int64Type`                     |
+| `number`   | `double` or `float` | -                                     | `Float64Type`                   |
+| `number`   | -                   | -                                     | `NumberType`                    |
+| `string`   | -                   | -                                     | `StringType`                    |
+| `boolean`  | -                   | -                                     | `BoolType`                      |
+| `array`    | -                   | -                                     | `ListType`                      |
+| `array`    | `set`               | -                                     | `SetType`                       |
+| `object`   | -                   | `additionalProperties.type == (any)`  | `MapType`                       |
+| `object`   | -                   | -                                     | `ObjectType`                    |
 
 ### Required, Computed, and Optional
 
