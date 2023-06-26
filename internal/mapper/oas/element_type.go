@@ -24,7 +24,6 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 	case util.OAS_type_array:
 		return s.BuildCollectionElementType()
 	case util.OAS_type_object:
-		// Maps are defined as `type: object`, with an additionalProperties field that is a schema (can also be a boolean, hence the type assertion)
 		_, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 		if ok {
 			return s.BuildMapElementType()
