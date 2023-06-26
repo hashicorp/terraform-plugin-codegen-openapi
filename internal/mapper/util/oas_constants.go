@@ -21,6 +21,9 @@ const (
 	OAS_format_float    = "float"
 	OAS_format_password = "password"
 
+	// Custom format for SetNested and Set attributes
+	TF_format_set = "set"
+
 	OAS_mediatype_json = "application/json"
 
 	OAS_response_code_ok      = "200"
