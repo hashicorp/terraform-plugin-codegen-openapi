@@ -23,8 +23,6 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	// Maps are defined as `type: object`, with an additionalProperties field that is a schema (can also be a boolean, hence the type assertion)
-	// If a list has a map as an item, then we can only handle that scenario with a ListAttribute
 	_, hasAdditionalProperties := itemSchema.Schema.AdditionalProperties.(*base.SchemaProxy)
 
 	if itemSchema.Type == util.OAS_type_object && !hasAdditionalProperties {
@@ -94,8 +92,6 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	// Maps are defined as `type: object`, with an additionalProperties field that is a schema (can also be a boolean, hence the type assertion)
-	// If a list has a map as an item, then we can only handle that scenario with a ListAttribute
 	_, hasAdditionalProperties := itemSchema.Schema.AdditionalProperties.(*base.SchemaProxy)
 
 	if itemSchema.Type == util.OAS_type_object && !hasAdditionalProperties {
