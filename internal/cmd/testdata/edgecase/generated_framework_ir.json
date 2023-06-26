@@ -186,7 +186,7 @@
 					{
 						"name": "mapnested_prop",
 						"map_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "required",
 							"nested_object": {
 								"attributes": [
 									{

@@ -34,7 +34,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 				NestedObject: resource.NestedAttributeObject{
 					Attributes: *mapAttributes,
 				},
-				ComputedOptionalRequired: s.GetComputability(name),
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -49,7 +49,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		Name: name,
 		Map: &resource.MapAttribute{
 			ElementType:              elemType,
-			ComputedOptionalRequired: s.GetComputability(name),
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
@@ -79,7 +79,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 				NestedObject: datasource.NestedAttributeObject{
 					Attributes: *mapAttributes,
 				},
-				ComputedOptionalRequired: s.GetComputability(name),
+				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
 			},
 		}, nil
@@ -94,7 +94,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		Name: name,
 		Map: &datasource.MapAttribute{
 			ElementType:              elemType,
-			ComputedOptionalRequired: s.GetComputability(name),
+			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
 	}, nil
