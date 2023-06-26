@@ -37,10 +37,11 @@ paths:
                   mapnested_prop:
                     $ref: "#/components/schemas/mapnested_schema"
                   map_prop:
-                    description: This is a map of strings
+                    description: This is a map of floats
                     type: object
                     additionalProperties:
-                      type: string
+                      type: number
+                      format: float
     post:
       summary: Test for MapNested attributes and Map attributes in a resource
       requestBody:

@@ -9,9 +9,9 @@
 						"map": {
 							"computed_optional_required": "computed_optional",
 							"element_type": {
-								"string": {}
+								"float64": {}
 							},
-							"description": "This is a map of strings"
+							"description": "This is a map of floats"
 						}
 					},
 					{
