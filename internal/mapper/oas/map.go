@@ -14,7 +14,7 @@ import (
 )
 
 func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
+	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
@@ -59,7 +59,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 }
 
 func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
+	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
@@ -104,7 +104,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 }
 
 func (s *OASSchema) BuildMapElementType() (schema.ElementType, error) {
-	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema `additionalProperties` can
+	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
