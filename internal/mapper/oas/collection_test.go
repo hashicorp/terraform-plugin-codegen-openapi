@@ -355,6 +355,112 @@ func TestBuildCollectionResource(t *testing.T) {
 				},
 			},
 		},
+		"list and set attribute - nested map results in element type": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"list_with_map": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Description: "hey there! I'm a list with a nested map of objects.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"object"},
+								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"object"},
+									Properties: map[string]*base.SchemaProxy{
+										"nested_boolean": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"boolean"},
+											Description: "this won't be added, since it will map to element type",
+										}),
+										"nested_string": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"string"},
+											Description: "this won't be added, since it will map to element type",
+										}),
+									},
+								}),
+							}),
+						},
+					}),
+					"set_with_map": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Format:      "set",
+						Description: "hey there! I'm a set with a nested map of objects.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"object"},
+								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"object"},
+									Properties: map[string]*base.SchemaProxy{
+										"nested_float64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"number"},
+											Format:      "double",
+											Description: "this won't be added, since it will map to element type",
+										}),
+										"nested_int64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"integer"},
+											Format:      "int64",
+											Description: "this won't be added, since it will map to element type",
+										}),
+									},
+								}),
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "list_with_map",
+					List: &resource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a list with a nested map of objects."),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_boolean",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "nested_string",
+												String: &schema.StringType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_with_map",
+					Set: &resource.SetAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a set with a nested map of objects."),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:    "nested_float64",
+												Float64: &schema.Float64Type{},
+											},
+											{
+												Name:  "nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -704,6 +810,112 @@ func TestBuildCollectionDataSource(t *testing.T) {
 											{
 												Name:   "string_prop",
 												String: &schema.StringType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"list and set attribute - nested map results in element type": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"list_with_map": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Description: "hey there! I'm a list with a nested map of objects.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"object"},
+								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"object"},
+									Properties: map[string]*base.SchemaProxy{
+										"nested_boolean": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"boolean"},
+											Description: "this won't be added, since it will map to element type",
+										}),
+										"nested_string": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"string"},
+											Description: "this won't be added, since it will map to element type",
+										}),
+									},
+								}),
+							}),
+						},
+					}),
+					"set_with_map": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Format:      "set",
+						Description: "hey there! I'm a set with a nested map of objects.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"object"},
+								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"object"},
+									Properties: map[string]*base.SchemaProxy{
+										"nested_float64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"number"},
+											Format:      "double",
+											Description: "this won't be added, since it will map to element type",
+										}),
+										"nested_int64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"integer"},
+											Format:      "int64",
+											Description: "this won't be added, since it will map to element type",
+										}),
+									},
+								}),
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "list_with_map",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a list with a nested map of objects."),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_boolean",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "nested_string",
+												String: &schema.StringType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_with_map",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a set with a nested map of objects."),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:    "nested_float64",
+												Float64: &schema.Float64Type{},
+											},
+											{
+												Name:  "nested_int64",
+												Int64: &schema.Int64Type{},
 											},
 										},
 									},

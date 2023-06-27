@@ -23,6 +23,9 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 	case util.OAS_type_array:
 		return s.BuildCollectionElementType()
 	case util.OAS_type_object:
+		if s.IsMap() {
+			return s.BuildMapElementType()
+		}
 		return s.BuildObjectElementType()
 
 	default:

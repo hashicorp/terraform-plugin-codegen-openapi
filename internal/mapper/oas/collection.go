@@ -22,7 +22,8 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	if itemSchema.Type == util.OAS_type_object {
+	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
+	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildResourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
@@ -89,7 +90,8 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
-	if itemSchema.Type == util.OAS_type_object {
+	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
+	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildDataSourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)

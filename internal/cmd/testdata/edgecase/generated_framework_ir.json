@@ -1,11 +1,54 @@
 {
 	"datasources": [
 		{
-			"name": "nested_lists",
+			"name": "map_test",
 			"schema": {
 				"attributes": [
 					{
-						"name": "main_list",
+						"name": "map_prop",
+						"map": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"float64": {}
+							},
+							"description": "This is a map of floats"
+						}
+					},
+					{
+						"name": "mapnested_prop",
+						"map_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "bool_prop",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "Bool inside a map!"
+										}
+									},
+									{
+										"name": "string_prop",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "String inside a map!",
+											"sensitive": false
+										}
+									}
+								]
+							},
+							"description": "This is a map with a nested object"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "nested_collections",
+			"schema": {
+				"attributes": [
+					{
+						"name": "double_nested_list",
 						"list": {
 							"computed_optional_required": "computed_optional",
 							"element_type": {
@@ -15,14 +58,71 @@
 									}
 								}
 							},
-							"description": "This list has another list nested underneath!"
+							"description": "This list has a list nested underneath!"
+						}
+					},
+					{
+						"name": "double_nested_map",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"map": {
+									"element_type": {
+										"string": {}
+									}
+								}
+							},
+							"description": "This list has a map nested underneath!"
+						}
+					},
+					{
+						"name": "double_nested_set",
+						"set": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"set": {
+									"element_type": {
+										"string": {}
+									}
+								}
+							},
+							"description": "This set has a set nested underneath!"
+						}
+					},
+					{
+						"name": "triple_nested_map",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"set": {
+									"element_type": {
+										"map": {
+											"element_type": {
+												"object": {
+													"attribute_types": [
+														{
+															"name": "bool_prop",
+															"bool": {}
+														},
+														{
+															"name": "string_prop",
+															"string": {}
+														}
+													]
+												}
+											}
+										}
+									}
+								}
+							},
+							"description": "This list has a set of maps nested underneath!"
 						}
 					}
 				]
 			}
 		},
 		{
-			"name": "set_collections",
+			"name": "set_test",
 			"schema": {
 				"attributes": [
 					{
@@ -70,7 +170,50 @@
 	},
 	"resources": [
 		{
-			"name": "set_collections",
+			"name": "map_test",
+			"schema": {
+				"attributes": [
+					{
+						"name": "map_prop",
+						"map": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "This is a map of strings"
+						}
+					},
+					{
+						"name": "mapnested_prop",
+						"map_nested": {
+							"computed_optional_required": "required",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "bool_prop",
+										"bool": {
+											"computed_optional_required": "computed_optional",
+											"description": "Bool inside a map!"
+										}
+									},
+									{
+										"name": "string_prop",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "String inside a map!",
+											"sensitive": false
+										}
+									}
+								]
+							},
+							"description": "This is a map with a nested object"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "set_test",
 			"schema": {
 				"attributes": [
 					{

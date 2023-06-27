@@ -40,6 +40,13 @@ type SchemaOpts struct {
 	OverrideDescription string
 }
 
+// IsMap will perform a type assertion on the `additionalProperties` field to determine if a map type
+// is appropriate. See: https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties
+func (s *OASSchema) IsMap() bool {
+	_, isMap := s.Schema.AdditionalProperties.(*base.SchemaProxy)
+	return isMap
+}
+
 func (s *OASSchema) GetDescription() *string {
 	if s.SchemaOpts.OverrideDescription != "" {
 		return &s.SchemaOpts.OverrideDescription

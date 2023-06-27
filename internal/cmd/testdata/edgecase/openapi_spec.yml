@@ -4,9 +4,9 @@ info:
   description: This is a fake API spec that was built to test some of the less common API schema structures and their mapping in the OpenAPI to Framework code generator
   version: 1.0.0
 paths:
-  /nested_lists:
+  /nested_collections:
     get:
-      summary: Test for nested lists (list within a list)
+      summary: Test for nested collections (list within a list, set within a list, map within a list)
       responses:
         "200":
           description: OK
@@ -15,9 +15,52 @@ paths:
               schema:
                 type: object
                 properties:
-                  main_list:
-                    $ref: "#/components/schemas/multidimensional_array_schema"
-  /set_collections:
+                  double_nested_list:
+                    $ref: "#/components/schemas/double_nested_list_schema"
+                  double_nested_set:
+                    $ref: "#/components/schemas/double_nested_set_schema"
+                  double_nested_map:
+                    $ref: "#/components/schemas/double_nested_map_schema"
+                  triple_nested_map:
+                    $ref: "#/components/schemas/triple_nested_map_schema"
+  /map_test:
+    get:
+      summary: Test for MapNested attributes and Map attributes in a data source
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mapnested_prop:
+                    $ref: "#/components/schemas/mapnested_schema"
+                  map_prop:
+                    description: This is a map of floats
+                    type: object
+                    additionalProperties:
+                      type: number
+                      format: float
+    post:
+      summary: Test for MapNested attributes and Map attributes in a resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mapnested_prop
+              properties:
+                mapnested_prop:
+                  $ref: "#/components/schemas/mapnested_schema"
+                map_prop:
+                  description: This is a map of strings
+                  type: object
+                  additionalProperties:
+                    type: string
+  /set_test:
     get:
       summary: Test for SetNested attributes and Set attributes in a data source
       responses:
@@ -57,13 +100,48 @@ paths:
                     type: string
 components:
   schemas:
-    multidimensional_array_schema:
-      description: This list has another list nested underneath!
+    double_nested_list_schema:
+      description: This list has a list nested underneath!
       type: array
       items:
         type: array
         items:
           type: string
+    double_nested_set_schema:
+      description: This set has a set nested underneath!
+      type: array
+      format: set
+      items:
+        type: array
+        format: set
+        items:
+          type: string
+    double_nested_map_schema:
+      description: This list has a map nested underneath!
+      type: array
+      items:
+        type: object
+        description: This is a double nested map of strings
+        additionalProperties:
+          type: string
+    triple_nested_map_schema:
+      description: This list has a set of maps nested underneath!
+      type: array
+      items:
+        type: array
+        format: set
+        items:
+          type: object
+          description: This is a triple nested map of objects
+          additionalProperties:
+            type: object
+            properties:
+              string_prop:
+                description: String inside a map!
+                type: string
+              bool_prop:
+                description: Bool inside a map!
+                type: boolean
     setnested_schema:
       description: This is a set with a nested object
       type: array
@@ -76,4 +154,16 @@ components:
             type: string
           bool_prop:
             description: Bool inside a set!
+            type: boolean
+    mapnested_schema:
+      description: This is a map with a nested object
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          string_prop:
+            description: String inside a map!
+            type: string
+          bool_prop:
+            description: Bool inside a map!
             type: boolean

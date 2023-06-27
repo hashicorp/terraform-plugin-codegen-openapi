@@ -51,6 +51,9 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 	case util.OAS_type_array:
 		return s.BuildCollectionResource(name, computability)
 	case util.OAS_type_object:
+		if s.IsMap() {
+			return s.BuildMapResource(name, computability)
+		}
 		return s.BuildSingleNestedResource(name, computability)
 	default:
 		return nil, fmt.Errorf("invalid schema type '%s'", s.Type)
@@ -96,6 +99,9 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 	case util.OAS_type_array:
 		return s.BuildCollectionDataSource(name, computability)
 	case util.OAS_type_object:
+		if s.IsMap() {
+			return s.BuildMapDataSource(name, computability)
+		}
 		return s.BuildSingleNestedDataSource(name, computability)
 	default:
 		return nil, fmt.Errorf("invalid schema type '%s'", s.Type)
