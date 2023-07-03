@@ -52,7 +52,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Order Status",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"placed\",\n\"approved\",\n\"delivered\",\n)"
+									}
+								}
+							]
 						}
 					}
 				]
@@ -123,7 +135,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "pet status in the store",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"pending\",\n\"sold\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -164,7 +188,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Status values that need to be considered for filter",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"pending\",\n\"sold\",\n)"
+									}
+								}
+							]
 						}
 					}
 				]
@@ -220,7 +256,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Order Status",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"placed\",\n\"approved\",\n\"delivered\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -291,7 +339,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "pet status in the store",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"pending\",\n\"sold\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{

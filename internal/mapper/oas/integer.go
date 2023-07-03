@@ -4,33 +4,75 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	return &resource.Attribute{
+	result := &resource.Attribute{
 		Name: name,
 		Int64: &resource.Int64Attribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
-	}, nil
+	}
+
+	if computability != schema.Computed {
+		result.Int64.Validators = s.GetIntegerValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	return &datasource.Attribute{
+	result := &datasource.Attribute{
 		Name: name,
 		Int64: &datasource.Int64Attribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
-	}, nil
+	}
+
+	if computability != schema.Computed {
+		result.Int64.Validators = s.GetIntegerValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildIntegerElementType() (schema.ElementType, error) {
 	return schema.ElementType{
 		Int64: &schema.Int64Type{},
 	}, nil
+}
+
+func (s *OASSchema) GetIntegerValidators() []schema.Int64Validator {
+	var result []schema.Int64Validator
+
+	if len(s.Schema.Enum) > 0 {
+		var enum []int64
+
+		for _, valueIface := range s.Schema.Enum {
+			value, ok := valueIface.(int64)
+
+			if !ok {
+				// could consider error/panic here to notify developers
+				continue
+			}
+
+			enum = append(enum, value)
+		}
+
+		customValidator := frameworkvalidators.Int64ValidatorOneOf(enum)
+
+		if customValidator != nil {
+			result = append(result, schema.Int64Validator{
+				Custom: customValidator,
+			})
+		}
+	}
+
+	return result
 }
