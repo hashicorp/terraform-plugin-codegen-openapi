@@ -333,6 +333,67 @@ func TestGetIntegerValidators(t *testing.T) {
 				},
 			},
 		},
+		"maximum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Maximum: pointer(int64(123)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.AtMost(123)",
+					},
+				},
+			},
+		},
+		"maximum-and-minimum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Minimum: pointer(int64(123)),
+					Maximum: pointer(int64(456)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.Between(123, 456)",
+					},
+				},
+			},
+		},
+		"minimum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Minimum: pointer(int64(123)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.AtLeast(123)",
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {

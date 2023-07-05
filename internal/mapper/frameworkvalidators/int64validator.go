@@ -23,6 +23,62 @@ var (
 	Int64ValidatorCodeImport code.Import = CodeImport(Int64ValidatorPackage)
 )
 
+// Int64ValidatorAtLeast returns a custom validator mapped to the
+// int64validator package AtLeast function.
+func Int64ValidatorAtLeast(min int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(Int64ValidatorPackage)
+	schemaDefinition.WriteString(".AtLeast(")
+	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			Int64ValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
+// Int64ValidatorAtMost returns a custom validator mapped to the
+// int64validator package AtMost function.
+func Int64ValidatorAtMost(max int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(Int64ValidatorPackage)
+	schemaDefinition.WriteString(".AtMost(")
+	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			Int64ValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
+// Int64ValidatorBetween returns a custom validator mapped to the
+// int64validator package Between function.
+func Int64ValidatorBetween(min, max int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(Int64ValidatorPackage)
+	schemaDefinition.WriteString(".Between(")
+	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(", ")
+	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			Int64ValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
 // Int64ValidatorOneOf returns a custom validator mapped to the int64validator
 // package OneOf function. If the values are nil or empty, nil is returned.
 func Int64ValidatorOneOf(values []int64) *schema.CustomValidator {

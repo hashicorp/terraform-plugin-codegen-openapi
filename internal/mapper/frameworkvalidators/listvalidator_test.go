@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestInt64ValidatorAtLeast(t *testing.T) {
+func TestListValidatorSizeAtLeast(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
@@ -24,10 +24,10 @@ func TestInt64ValidatorAtLeast(t *testing.T) {
 			expected: &schema.CustomValidator{
 				Imports: []code.Import{
 					{
-						Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+						Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
 					},
 				},
-				SchemaDefinition: "int64validator.AtLeast(123)",
+				SchemaDefinition: "listvalidator.SizeAtLeast(123)",
 			},
 		},
 	}
@@ -38,7 +38,7 @@ func TestInt64ValidatorAtLeast(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := frameworkvalidators.Int64ValidatorAtLeast(testCase.min)
+			got := frameworkvalidators.ListValidatorSizeAtLeast(testCase.min)
 
 			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
@@ -47,7 +47,7 @@ func TestInt64ValidatorAtLeast(t *testing.T) {
 	}
 }
 
-func TestInt64ValidatorAtMost(t *testing.T) {
+func TestListValidatorSizeAtMost(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
@@ -59,10 +59,10 @@ func TestInt64ValidatorAtMost(t *testing.T) {
 			expected: &schema.CustomValidator{
 				Imports: []code.Import{
 					{
-						Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+						Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
 					},
 				},
-				SchemaDefinition: "int64validator.AtMost(123)",
+				SchemaDefinition: "listvalidator.SizeAtMost(123)",
 			},
 		},
 	}
@@ -73,7 +73,7 @@ func TestInt64ValidatorAtMost(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := frameworkvalidators.Int64ValidatorAtMost(testCase.max)
+			got := frameworkvalidators.ListValidatorSizeAtMost(testCase.max)
 
 			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
@@ -82,7 +82,7 @@ func TestInt64ValidatorAtMost(t *testing.T) {
 	}
 }
 
-func TestInt64ValidatorBetween(t *testing.T) {
+func TestListValidatorSizeBetween(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
@@ -96,10 +96,10 @@ func TestInt64ValidatorBetween(t *testing.T) {
 			expected: &schema.CustomValidator{
 				Imports: []code.Import{
 					{
-						Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+						Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
 					},
 				},
-				SchemaDefinition: "int64validator.Between(123, 456)",
+				SchemaDefinition: "listvalidator.SizeBetween(123, 456)",
 			},
 		},
 	}
@@ -110,7 +110,7 @@ func TestInt64ValidatorBetween(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := frameworkvalidators.Int64ValidatorBetween(testCase.min, testCase.max)
+			got := frameworkvalidators.ListValidatorSizeBetween(testCase.min, testCase.max)
 
 			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
@@ -119,41 +119,20 @@ func TestInt64ValidatorBetween(t *testing.T) {
 	}
 }
 
-func TestInt64ValidatorOneOf(t *testing.T) {
+func TestListValidatorUniqueValues(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		values   []int64
 		expected *schema.CustomValidator
 	}{
-		"nil": {
-			values:   nil,
-			expected: nil,
-		},
-		"empty": {
-			values:   []int64{},
-			expected: nil,
-		},
-		"one": {
-			values: []int64{1},
+		"test": {
 			expected: &schema.CustomValidator{
 				Imports: []code.Import{
 					{
-						Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+						Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
 					},
 				},
-				SchemaDefinition: "int64validator.OneOf(\n1,\n)",
-			},
-		},
-		"multiple": {
-			values: []int64{1, 2},
-			expected: &schema.CustomValidator{
-				Imports: []code.Import{
-					{
-						Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
-					},
-				},
-				SchemaDefinition: "int64validator.OneOf(\n1,\n2,\n)",
+				SchemaDefinition: "listvalidator.UniqueValues()",
 			},
 		},
 	}
@@ -164,7 +143,7 @@ func TestInt64ValidatorOneOf(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := frameworkvalidators.Int64ValidatorOneOf(testCase.values)
+			got := frameworkvalidators.ListValidatorUniqueValues()
 
 			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)

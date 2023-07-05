@@ -76,5 +76,30 @@ func (s *OASSchema) GetStringValidators() []schema.StringValidator {
 		}
 	}
 
+	minLength := s.Schema.MinLength
+	maxLength := s.Schema.MaxLength
+
+	if minLength != nil && maxLength != nil {
+		result = append(result, schema.StringValidator{
+			Custom: frameworkvalidators.StringValidatorLengthBetween(*minLength, *maxLength),
+		})
+	} else if minLength != nil {
+		result = append(result, schema.StringValidator{
+			Custom: frameworkvalidators.StringValidatorLengthAtLeast(*minLength),
+		})
+	} else if maxLength != nil {
+		result = append(result, schema.StringValidator{
+			Custom: frameworkvalidators.StringValidatorLengthAtMost(*maxLength),
+		})
+	}
+
+	if s.Schema.Pattern != "" {
+		result = append(result, schema.StringValidator{
+			// Friendly regex message could be added later via configuration or
+			// custom annotation.
+			Custom: frameworkvalidators.StringValidatorRegexMatches(s.Schema.Pattern, ""),
+		})
+	}
+
 	return result
 }
