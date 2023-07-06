@@ -542,7 +542,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -550,7 +562,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a merge commit title.\n\n  - `PR_TITLE` - default to the pull request's title.\n  - `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -1283,7 +1307,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -1291,7 +1327,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -1800,7 +1848,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -1808,7 +1868,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -2298,7 +2370,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -2306,7 +2390,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -2609,7 +2705,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -2617,7 +2725,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -2930,7 +3050,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -2947,7 +3079,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -2964,7 +3108,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -3468,7 +3624,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -3476,7 +3644,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -3985,7 +4165,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -3993,7 +4185,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -4483,7 +4687,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -4491,7 +4707,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -4794,7 +5022,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -4802,7 +5042,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -5030,7 +5282,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -5038,7 +5302,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -5613,7 +5889,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -5621,7 +5909,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -6130,7 +6430,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -6138,7 +6450,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -6628,7 +6952,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -6636,7 +6972,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -6939,7 +7287,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -6947,7 +7307,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -7373,7 +7745,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -7381,7 +7765,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -7404,7 +7800,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -7412,7 +7820,19 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-							"sensitive": false
+							"sensitive": false,
+							"validators": [
+								{
+									"custom": {
+										"imports": [
+											{
+												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+											}
+										],
+										"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+									}
+								}
+							]
 						}
 					},
 					{
@@ -8778,7 +9198,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -8786,7 +9218,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -9113,7 +9557,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -9121,7 +9577,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -9942,7 +10410,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -9950,7 +10430,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -10253,7 +10745,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -10261,7 +10765,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -11025,7 +11541,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -11033,7 +11561,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -11542,7 +12082,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -11550,7 +12102,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -12040,7 +12604,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -12048,7 +12624,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -12351,7 +12939,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -12359,7 +12959,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -12597,7 +13209,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -12614,7 +13238,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -12631,7 +13267,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"enabled\",\n\"disabled\",\n)"
+															}
+														}
+													]
 												}
 											}
 										],
@@ -13128,7 +13776,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -13136,7 +13796,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -13645,7 +14317,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -13653,7 +14337,19 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"sensitive": false
+										"sensitive": false,
+										"validators": [
+											{
+												"custom": {
+													"imports": [
+														{
+															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+														}
+													],
+													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+												}
+											}
+										]
 									}
 								},
 								{
@@ -14143,7 +14839,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -14151,7 +14859,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -14454,7 +15174,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{
@@ -14462,7 +15194,19 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-													"sensitive": false
+													"sensitive": false,
+													"validators": [
+														{
+															"custom": {
+																"imports": [
+																	{
+																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+																	}
+																],
+																"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
+															}
+														}
+													]
 												}
 											},
 											{

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -97,6 +98,39 @@ func TestBuildIntegerResource(t *testing.T) {
 						Description:              pointer("hey there! I'm a list of int64s, required."),
 						ElementType: schema.ElementType{
 							Int64: &schema.Int64Type{},
+						},
+					},
+				},
+			},
+		},
+		"validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"int64_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"int64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"integer"},
+						Enum: []any{int64(1), int64(2)},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "int64_prop",
+					Int64: &resource.Int64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Validators: []schema.Int64Validator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+										},
+									},
+									SchemaDefinition: "int64validator.OneOf(\n1,\n2,\n)",
+								},
+							},
 						},
 					},
 				},
@@ -210,6 +244,39 @@ func TestBuildIntegerDataSource(t *testing.T) {
 				},
 			},
 		},
+		"validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"int64_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"int64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"integer"},
+						Enum: []any{int64(1), int64(2)},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "int64_prop",
+					Int64: &datasource.Int64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Validators: []schema.Int64Validator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+										},
+									},
+									SchemaDefinition: "int64validator.OneOf(\n1,\n2,\n)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -225,6 +292,58 @@ func TestBuildIntegerDataSource(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetIntegerValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.Int64Validator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"integer"},
+				},
+			},
+			expected: nil,
+		},
+		"enum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"integer"},
+					Enum: []any{int64(1), int64(2)},
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.OneOf(\n1,\n2,\n)",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetIntegerValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})

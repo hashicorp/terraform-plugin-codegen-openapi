@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -100,6 +101,40 @@ func TestBuildStringResource(t *testing.T) {
 						Description:              pointer("hey there! I'm a list of strings, required."),
 						ElementType: schema.ElementType{
 							String: &schema.StringType{},
+						},
+					},
+				},
+			},
+		},
+		"validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+						Enum: []any{"one", "two"},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "string_prop",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Sensitive:                pointer(false),
+						Validators: []schema.StringValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+										},
+									},
+									SchemaDefinition: "stringvalidator.OneOf(\n\"one\",\n\"two\",\n)",
+								},
+							},
 						},
 					},
 				},
@@ -216,6 +251,40 @@ func TestBuildStringDataSource(t *testing.T) {
 				},
 			},
 		},
+		"validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+						Enum: []any{"one", "two"},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "string_prop",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Sensitive:                pointer(false),
+						Validators: []schema.StringValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+										},
+									},
+									SchemaDefinition: "stringvalidator.OneOf(\n\"one\",\n\"two\",\n)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -231,6 +300,58 @@ func TestBuildStringDataSource(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetStringValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.StringValidator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"string"},
+				},
+			},
+			expected: nil,
+		},
+		"enum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"string"},
+					Enum: []any{"one", "two"},
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.OneOf(\n\"one\",\n\"two\",\n)",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetStringValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})

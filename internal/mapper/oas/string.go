@@ -4,35 +4,77 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	return &resource.Attribute{
+	result := &resource.Attribute{
 		Name: name,
 		String: &resource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
-	}, nil
+	}
+
+	if computability != schema.Computed {
+		result.String.Validators = s.GetStringValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	return &datasource.Attribute{
+	result := &datasource.Attribute{
 		Name: name,
 		String: &datasource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
-	}, nil
+	}
+
+	if computability != schema.Computed {
+		result.String.Validators = s.GetStringValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildStringElementType() (schema.ElementType, error) {
 	return schema.ElementType{
 		String: &schema.StringType{},
 	}, nil
+}
+
+func (s *OASSchema) GetStringValidators() []schema.StringValidator {
+	var result []schema.StringValidator
+
+	if len(s.Schema.Enum) > 0 {
+		var enum []string
+
+		for _, valueIface := range s.Schema.Enum {
+			value, ok := valueIface.(string)
+
+			if !ok {
+				// could consider error/panic here to notify developers
+				continue
+			}
+
+			enum = append(enum, value)
+		}
+
+		customValidator := frameworkvalidators.StringValidatorOneOf(enum)
+
+		if customValidator != nil {
+			result = append(result, schema.StringValidator{
+				Custom: customValidator,
+			})
+		}
+	}
+
+	return result
 }
