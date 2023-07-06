@@ -166,7 +166,55 @@
 		}
 	],
 	"provider": {
-		"name": "edgecase"
+		"name": "edgecase",
+		"schema": {
+			"attributes": [
+				{
+					"name": "bool_prop",
+					"bool": {
+						"optional_required": "optional",
+						"description": "Bool for the provider"
+					}
+				},
+				{
+					"name": "string_prop",
+					"string": {
+						"optional_required": "required",
+						"description": "String for the provider",
+						"sensitive": false
+					}
+				},
+				{
+					"name": "triple_nested_map",
+					"list": {
+						"optional_required": "required",
+						"element_type": {
+							"set": {
+								"element_type": {
+									"map": {
+										"element_type": {
+											"object": {
+												"attribute_types": [
+													{
+														"name": "bool_prop",
+														"bool": {}
+													},
+													{
+														"name": "string_prop",
+														"string": {}
+													}
+												]
+											}
+										}
+									}
+								}
+							}
+						},
+						"description": "This list has a set of maps nested underneath!"
+					}
+				}
+			]
+		}
 	},
 	"resources": [
 		{

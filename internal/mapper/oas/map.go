@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -99,6 +100,51 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
+		},
+	}, nil
+}
+
+func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
+	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
+	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
+	if !ok {
+		return nil, fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties)
+	}
+
+	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+	if err != nil {
+		return nil, fmt.Errorf("error building map schema proxy - %w", err)
+	}
+
+	if mapSchema.Type == util.OAS_type_object {
+		mapAttributes, err := mapSchema.BuildProviderAttributes()
+		if err != nil {
+			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+		}
+		return &provider.Attribute{
+			Name: name,
+			MapNested: &provider.MapNestedAttribute{
+				NestedObject: provider.NestedAttributeObject{
+					Attributes: *mapAttributes,
+				},
+				OptionalRequired: optionalOrRequired,
+				Description:      s.GetDescription(),
+			},
+		}, nil
+	}
+
+	elemType, err := mapSchema.BuildElementType()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create map elem type - %w", err)
+	}
+
+	return &provider.Attribute{
+		Name: name,
+		Map: &provider.MapAttribute{
+			ElementType:      elemType,
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
 		},
 	}, nil
 }

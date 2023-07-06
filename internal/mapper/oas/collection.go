@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -144,6 +145,74 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
+		},
+	}, nil
+}
+
+func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	if !s.Schema.Items.IsA() {
+		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
+	}
+
+	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
+	}
+
+	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
+	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
+		objectAttributes, err := itemSchema.BuildProviderAttributes()
+		if err != nil {
+			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		}
+
+		if s.Schema.Format == util.TF_format_set {
+			return &provider.Attribute{
+				Name: name,
+				SetNested: &provider.SetNestedAttribute{
+					NestedObject: provider.NestedAttributeObject{
+						Attributes: *objectAttributes,
+					},
+					OptionalRequired: optionalOrRequired,
+					Description:      s.GetDescription(),
+				},
+			}, nil
+		}
+
+		return &provider.Attribute{
+			Name: name,
+			ListNested: &provider.ListNestedAttribute{
+				NestedObject: provider.NestedAttributeObject{
+					Attributes: *objectAttributes,
+				},
+				OptionalRequired: optionalOrRequired,
+				Description:      s.GetDescription(),
+			},
+		}, nil
+	}
+
+	elemType, err := itemSchema.BuildElementType()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	}
+
+	if s.Schema.Format == util.TF_format_set {
+		return &provider.Attribute{
+			Name: name,
+			Set: &provider.SetAttribute{
+				ElementType:      elemType,
+				OptionalRequired: optionalOrRequired,
+				Description:      s.GetDescription(),
+			},
+		}, nil
+	}
+
+	return &provider.Attribute{
+		Name: name,
+		List: &provider.ListAttribute{
+			ElementType:      elemType,
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
 		},
 	}, nil
 }

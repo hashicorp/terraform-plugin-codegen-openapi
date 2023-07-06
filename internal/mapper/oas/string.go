@@ -6,6 +6,7 @@ package oas
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -40,6 +41,21 @@ func (s *OASSchema) BuildStringDataSource(name string, computability schema.Comp
 	if computability != schema.Computed {
 		result.String.Validators = s.GetStringValidators()
 	}
+
+	return result, nil
+}
+
+func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	result := &provider.Attribute{
+		Name: name,
+		String: &provider.StringAttribute{
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
+			Sensitive:        s.IsSensitive(),
+		},
+	}
+
+	result.String.Validators = s.GetStringValidators()
 
 	return result, nil
 }

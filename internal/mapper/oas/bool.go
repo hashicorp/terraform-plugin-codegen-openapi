@@ -5,6 +5,7 @@ package oas
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -25,6 +26,16 @@ func (s *OASSchema) BuildBoolDataSource(name string, computability schema.Comput
 		Bool: &datasource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
+		},
+	}, nil
+}
+
+func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	return &provider.Attribute{
+		Name: name,
+		Bool: &provider.BoolAttribute{
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
 		},
 	}, nil
 }

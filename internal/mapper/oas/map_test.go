@@ -9,6 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -318,6 +319,163 @@ func TestBuildMapDataSource(t *testing.T) {
 
 			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestBuildMapProvider(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema             *base.Schema
+		expectedAttributes *[]provider.Attribute
+	}{
+
+		"map nested attribute with props": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Description: "hey there! I'm a map nested type.",
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_password_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+									Type:        []string{"object"},
+									Required:    []string{"nested_int64_required"},
+									Description: "hey there! I'm a single nested object type.",
+									Properties: map[string]*base.SchemaProxy{
+										"nested_float64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"number"},
+											Format:      "double",
+											Description: "hey there! I'm a nested float64 type.",
+										}),
+										"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"integer"},
+											Format:      "int64",
+											Description: "hey there! I'm a nested int64 type, required.",
+										}),
+									},
+								}),
+								"nested_password_required": base.CreateSchemaProxy(&base.Schema{
+									Type:        []string{"string"},
+									Format:      "password",
+									Description: "hey there! I'm a nested string type, required.",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_map_prop",
+					MapNested: &provider.MapNestedAttribute{
+						NestedObject: provider.NestedAttributeObject{
+							Attributes: []provider.Attribute{
+								{
+									Name: "nested_obj_prop",
+									SingleNested: &provider.SingleNestedAttribute{
+										Attributes: []provider.Attribute{
+											{
+												Name: "nested_float64",
+												Float64: &provider.Float64Attribute{
+													OptionalRequired: schema.Optional,
+													Description:      pointer("hey there! I'm a nested float64 type."),
+												},
+											},
+											{
+												Name: "nested_int64_required",
+												Int64: &provider.Int64Attribute{
+													OptionalRequired: schema.Required,
+													Description:      pointer("hey there! I'm a nested int64 type, required."),
+												},
+											},
+										},
+										OptionalRequired: schema.Optional,
+										Description:      pointer("hey there! I'm a single nested object type."),
+									},
+								},
+								{
+									Name: "nested_password_required",
+									String: &provider.StringAttribute{
+										OptionalRequired: schema.Required,
+										Sensitive:        pointer(true),
+										Description:      pointer("hey there! I'm a nested string type, required."),
+									},
+								},
+							},
+						},
+						OptionalRequired: schema.Optional,
+						Description:      pointer("hey there! I'm a map nested type."),
+					},
+				},
+			},
+		},
+		"map attributes with element types": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"map_with_strings_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Description: "hey there! I'm a map type with floats.",
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:   []string{"number"},
+							Format: "float",
+						}),
+					}),
+					"map_with_strings_required": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Description: "hey there! I'm a map type with strings, required.",
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type: []string{"string"},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "map_with_floats",
+					Map: &provider.MapAttribute{
+						ElementType: schema.ElementType{
+							Float64: &schema.Float64Type{},
+						},
+						OptionalRequired: schema.Optional,
+						Description:      pointer("hey there! I'm a map type with floats."),
+					},
+				},
+				{
+					Name: "map_with_strings_required",
+					Map: &provider.MapAttribute{
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
+						},
+						OptionalRequired: schema.Required,
+						Description:      pointer("hey there! I'm a map type with strings, required."),
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema := oas.OASSchema{Schema: testCase.schema}
+			attributes, err := schema.BuildProviderAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

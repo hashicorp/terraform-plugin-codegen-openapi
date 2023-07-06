@@ -1,8 +1,11 @@
 package mapper
 
 import (
+	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 )
 
@@ -26,7 +29,37 @@ func NewProviderMapper(exploredProvider explorer.Provider, cfg config.Config) Pr
 }
 
 func (m providerMapper) MapToIR() (*provider.Provider, error) {
-	return &provider.Provider{
+	providerIR := provider.Provider{
 		Name: m.provider.Name,
-	}, nil
+	}
+
+	if m.provider.SchemaProxy == nil {
+		return &providerIR, nil
+	}
+
+	providerSchema, err := generateProviderSchema(m.provider)
+	if err != nil {
+		return nil, fmt.Errorf("error mapping provider schema: %w", err)
+	}
+
+	providerIR.Schema = providerSchema
+	return &providerIR, nil
+}
+
+func generateProviderSchema(exploredProvider explorer.Provider) (*provider.Schema, error) {
+	providerSchema := &provider.Schema{}
+
+	s, err := oas.BuildSchema(exploredProvider.SchemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+	if err != nil {
+		return nil, err
+	}
+
+	attributes, err := s.BuildProviderAttributes()
+	if err != nil {
+		return nil, err
+	}
+
+	providerSchema.Attributes = *attributes
+
+	return providerSchema, nil
 }
