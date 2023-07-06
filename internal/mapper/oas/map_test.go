@@ -113,8 +113,8 @@ func TestBuildMapResource(t *testing.T) {
 				Required: []string{"nested_map_prop_required"},
 				Properties: map[string]*base.SchemaProxy{
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
-						Type:     []string{"object"},
-						MinItems: pointer(int64(1)),
+						Type:          []string{"object"},
+						MinProperties: pointer(int64(1)),
 						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
 							Type:     []string{"object"},
 							Required: []string{"nested_int64_required"},
@@ -324,8 +324,8 @@ func TestBuildMapDataSource(t *testing.T) {
 				Required: []string{"nested_map_prop_required"},
 				Properties: map[string]*base.SchemaProxy{
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
-						Type:     []string{"object"},
-						MinItems: pointer(int64(1)),
+						Type:          []string{"object"},
+						MinProperties: pointer(int64(1)),
 						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
 							Type:     []string{"object"},
 							Required: []string{"nested_int64_required"},
@@ -453,11 +453,11 @@ func TestGetMapValidators(t *testing.T) {
 			},
 			expected: nil,
 		},
-		"maxItems": {
+		"maxProperties": {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
-					Type:     []string{"object"},
-					MaxItems: pointer(int64(123)),
+					Type:          []string{"object"},
+					MaxProperties: pointer(int64(123)),
 				},
 			},
 			expected: []schema.MapValidator{
@@ -473,12 +473,12 @@ func TestGetMapValidators(t *testing.T) {
 				},
 			},
 		},
-		"maxItems-and-minItems": {
+		"maxProperties-and-minProperties": {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
-					Type:     []string{"object"},
-					MinItems: pointer(int64(123)),
-					MaxItems: pointer(int64(456)),
+					Type:          []string{"object"},
+					MinProperties: pointer(int64(123)),
+					MaxProperties: pointer(int64(456)),
 				},
 			},
 			expected: []schema.MapValidator{
@@ -494,11 +494,11 @@ func TestGetMapValidators(t *testing.T) {
 				},
 			},
 		},
-		"minItems": {
+		"minProperties": {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
-					Type:     []string{"object"},
-					MinItems: pointer(int64(123)),
+					Type:          []string{"object"},
+					MinProperties: pointer(int64(123)),
 				},
 			},
 			expected: []schema.MapValidator{

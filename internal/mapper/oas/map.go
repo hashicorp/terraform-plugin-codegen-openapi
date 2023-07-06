@@ -152,20 +152,20 @@ func (s *OASSchema) BuildMapElementType() (schema.ElementType, error) {
 func (s *OASSchema) GetMapValidators() []schema.MapValidator {
 	var result []schema.MapValidator
 
-	minItems := s.Schema.MinItems
-	maxItems := s.Schema.MaxItems
+	minProperties := s.Schema.MinProperties
+	maxProperties := s.Schema.MaxProperties
 
-	if minItems != nil && maxItems != nil {
+	if minProperties != nil && maxProperties != nil {
 		result = append(result, schema.MapValidator{
-			Custom: frameworkvalidators.MapValidatorSizeBetween(*minItems, *maxItems),
+			Custom: frameworkvalidators.MapValidatorSizeBetween(*minProperties, *maxProperties),
 		})
-	} else if minItems != nil {
+	} else if minProperties != nil {
 		result = append(result, schema.MapValidator{
-			Custom: frameworkvalidators.MapValidatorSizeAtLeast(*minItems),
+			Custom: frameworkvalidators.MapValidatorSizeAtLeast(*minProperties),
 		})
-	} else if maxItems != nil {
+	} else if maxProperties != nil {
 		result = append(result, schema.MapValidator{
-			Custom: frameworkvalidators.MapValidatorSizeAtMost(*maxItems),
+			Custom: frameworkvalidators.MapValidatorSizeAtMost(*maxProperties),
 		})
 	}
 
