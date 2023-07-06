@@ -4,6 +4,7 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -11,43 +12,55 @@ import (
 )
 
 func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		return &resource.Attribute{
-			Name: name,
-			Float64: &resource.Float64Attribute{
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
-			},
-		}, nil
+	result := &resource.Attribute{
+		Name: name,
 	}
 
-	return &resource.Attribute{
-		Name: name,
-		Number: &resource.NumberAttribute{
+	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
+		result.Float64 = &resource.Float64Attribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
-		},
-	}, nil
+		}
+
+		if computability != schema.Computed {
+			result.Float64.Validators = s.GetFloatValidators()
+		}
+
+		return result, nil
+	}
+
+	result.Number = &resource.NumberAttribute{
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		return &datasource.Attribute{
-			Name: name,
-			Float64: &datasource.Float64Attribute{
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
-			},
-		}, nil
+	result := &datasource.Attribute{
+		Name: name,
 	}
 
-	return &datasource.Attribute{
-		Name: name,
-		Number: &datasource.NumberAttribute{
+	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
+		result.Float64 = &datasource.Float64Attribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
-		},
-	}, nil
+		}
+
+		if computability != schema.Computed {
+			result.Float64.Validators = s.GetFloatValidators()
+		}
+
+		return result, nil
+	}
+
+	result.Number = &datasource.NumberAttribute{
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildNumberElementType() (schema.ElementType, error) {
@@ -60,4 +73,33 @@ func (s *OASSchema) BuildNumberElementType() (schema.ElementType, error) {
 	return schema.ElementType{
 		Number: &schema.NumberType{},
 	}, nil
+}
+
+func (s *OASSchema) GetFloatValidators() []schema.Float64Validator {
+	var result []schema.Float64Validator
+
+	if len(s.Schema.Enum) > 0 {
+		var enum []float64
+
+		for _, valueIface := range s.Schema.Enum {
+			value, ok := valueIface.(float64)
+
+			if !ok {
+				// could consider error/panic here to notify developers
+				continue
+			}
+
+			enum = append(enum, value)
+		}
+
+		customValidator := frameworkvalidators.Float64ValidatorOneOf(enum)
+
+		if customValidator != nil {
+			result = append(result, schema.Float64Validator{
+				Custom: customValidator,
+			})
+		}
+	}
+
+	return result
 }

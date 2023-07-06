@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -76,6 +77,40 @@ func TestBuildNumberResource(t *testing.T) {
 					Float64: &resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a float, required."),
+					},
+				},
+			},
+		},
+		"float64 attribute validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"float64_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:   []string{"number"},
+						Format: "double",
+						Enum:   []any{float64(1.2), float64(2.3)},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "float64_prop",
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Validators: []schema.Float64Validator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/float64validator",
+										},
+									},
+									SchemaDefinition: "float64validator.OneOf(\n1.2,\n2.3,\n)",
+								},
+							},
+						},
 					},
 				},
 			},
@@ -336,6 +371,40 @@ func TestBuildNumberDataSource(t *testing.T) {
 				},
 			},
 		},
+		"float64 attribute validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"float64_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:   []string{"number"},
+						Format: "double",
+						Enum:   []any{float64(1.2), float64(2.3)},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "float64_prop",
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						Validators: []schema.Float64Validator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/float64validator",
+										},
+									},
+									SchemaDefinition: "float64validator.OneOf(\n1.2,\n2.3,\n)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"number attributes": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -521,6 +590,58 @@ func TestBuildNumberDataSource(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetFloatValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.Float64Validator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"integer"},
+				},
+			},
+			expected: nil,
+		},
+		"enum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"integer"},
+					Enum: []any{float64(1.2), float64(2.3)},
+				},
+			},
+			expected: []schema.Float64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/float64validator",
+							},
+						},
+						SchemaDefinition: "float64validator.OneOf(\n1.2,\n2.3,\n)",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetFloatValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
