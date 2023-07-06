@@ -15,7 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
 	"github.com/mitchellh/cli"
@@ -198,10 +197,15 @@ func generateFrameworkIr(dora explorer.Explorer, cfg config.Config) (*spec.Speci
 		return nil, fmt.Errorf("error generating Framework IR for data sources: %w", err)
 	}
 
+	// 6. Use TF info to generate framework IR for provider
+	providerMapper := mapper.NewProviderMapper(explorerProvider, cfg)
+	providerIR, err := providerMapper.MapToIR()
+	if err != nil {
+		return nil, fmt.Errorf("error generating Framework IR for provider: %w", err)
+	}
+
 	return &spec.Specification{
-		Provider: &provider.Provider{
-			Name: explorerProvider.Name,
-		},
+		Provider:    providerIR,
 		Resources:   resourcesIR,
 		DataSources: dataSourcesIR,
 	}, nil
