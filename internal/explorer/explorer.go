@@ -3,7 +3,10 @@
 
 package explorer
 
-import high "github.com/pb33f/libopenapi/datamodel/high/v3"
+import (
+	"github.com/pb33f/libopenapi/datamodel/high/base"
+	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+)
 
 // Implementations of the Explorer interface relate OpenAPIv3 operations to a set of Terraform Provider resource/data source actions (CRUD)
 //   - https://spec.openapis.org/oas/latest.html#operation-object
@@ -25,5 +28,6 @@ type DataSource struct {
 }
 
 type Provider struct {
-	Name string
+	Name        string
+	SchemaProxy *base.SchemaProxy
 }

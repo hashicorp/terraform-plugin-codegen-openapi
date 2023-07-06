@@ -4,12 +4,17 @@
 package explorer
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 
+	highbase "github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	lowmodel "github.com/pb33f/libopenapi/datamodel/low"
+	lowbase "github.com/pb33f/libopenapi/datamodel/low/base"
 	low "github.com/pb33f/libopenapi/datamodel/low/v3"
+	"github.com/pb33f/libopenapi/index"
 )
 
 var _ Explorer = configExplorer{}
@@ -31,9 +36,47 @@ func NewConfigExplorer(spec high.Document, cfg config.Config) Explorer {
 }
 
 func (e configExplorer) FindProvider() (Provider, error) {
-	return Provider{
+	foundProvider := Provider{
 		Name: e.config.Provider.Name,
-	}, nil
+	}
+
+	if e.config.Provider.SchemaRef == "" {
+		return foundProvider, nil
+	}
+
+	schemaProxy, err := extractSchemaProxy(e.spec.Index, e.config.Provider.SchemaRef)
+	if err != nil {
+		return Provider{}, fmt.Errorf("error extracting provider schema from ref: %w", err)
+	}
+	foundProvider.SchemaProxy = schemaProxy
+
+	return foundProvider, nil
+}
+
+func extractSchemaProxy(specIndex *index.SpecIndex, componentRef string) (*highbase.SchemaProxy, error) {
+	indexRef := specIndex.FindComponentInRoot(componentRef)
+	if indexRef == nil {
+		return nil, fmt.Errorf("unable to find reference: %s", componentRef)
+	}
+
+	// build low-level schema
+	var lowSchema lowbase.Schema
+	err := lowmodel.BuildModel(indexRef.Node, &lowSchema)
+	if err != nil {
+		return nil, fmt.Errorf("error building low-level schema: %w", err)
+	}
+
+	// populate low-level schema
+	err = lowSchema.Build(indexRef.Node, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error populating low-level schema: %w", err)
+	}
+
+	// build the high level model
+	highSchema := highbase.NewSchema(&lowSchema)
+
+	// wrap in a schema proxy for mapping
+	return highbase.CreateSchemaProxy(highSchema), nil
 }
 
 func (e configExplorer) FindResources() (map[string]Resource, error) {
