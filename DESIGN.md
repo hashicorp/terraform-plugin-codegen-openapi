@@ -152,12 +152,12 @@ If not required, then the field will be mapped as [Optional](https://developer.h
 #### Resources
 For resources, all fields, in the `Create` operation `requestBody` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
 
-If not required, or if the field is in a different schema than the `Create` operation `requestbody`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
+If not required, or if the field is in a different schema than the `Create` operation `requestbody`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed).
 
 #### Data Sources
 For data sources, all fields, in the `Read` operation `parameters` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
 
-If not required, or if the field is in a different schema than the `Read` operation `parameters`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
+If not required, or if the field is in a different schema than the `Read` operation `parameters`, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed).
 
 ### Other field mapping
 
