@@ -138,21 +138,26 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
 	}
 
+	result := &provider.Attribute{
+		Name: name,
+	}
+
 	if mapSchema.Type == util.OAS_type_object {
 		mapAttributes, err := mapSchema.BuildProviderAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		return &provider.Attribute{
-			Name: name,
-			MapNested: &provider.MapNestedAttribute{
-				NestedObject: provider.NestedAttributeObject{
-					Attributes: *mapAttributes,
-				},
-				OptionalRequired: optionalOrRequired,
-				Description:      s.GetDescription(),
+		result.MapNested = &provider.MapNestedAttribute{
+			NestedObject: provider.NestedAttributeObject{
+				Attributes: *mapAttributes,
 			},
-		}, nil
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
+		}
+
+		result.MapNested.Validators = s.GetMapValidators()
+
+		return result, nil
 	}
 
 	elemType, err := mapSchema.BuildElementType()
@@ -160,14 +165,15 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	return &provider.Attribute{
-		Name: name,
-		Map: &provider.MapAttribute{
-			ElementType:      elemType,
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
-		},
-	}, nil
+	result.Map = &provider.MapAttribute{
+		ElementType:      elemType,
+		OptionalRequired: optionalOrRequired,
+		Description:      s.GetDescription(),
+	}
+
+	result.Map.Validators = s.GetMapValidators()
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildMapElementType() (schema.ElementType, error) {

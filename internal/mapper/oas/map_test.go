@@ -526,6 +526,58 @@ func TestBuildMapProvider(t *testing.T) {
 				},
 			},
 		},
+		"map nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_map_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:          []string{"object"},
+						MinProperties: pointer(int64(1)),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_map_prop_required",
+					MapNested: &provider.MapNestedAttribute{
+						OptionalRequired: schema.Required,
+						NestedObject: provider.NestedAttributeObject{
+							Attributes: []provider.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &provider.Int64Attribute{
+										OptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+						Validators: []schema.MapValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+										},
+									},
+									SchemaDefinition: "mapvalidator.SizeAtLeast(1)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"map attributes with element types": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
