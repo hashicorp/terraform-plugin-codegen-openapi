@@ -119,7 +119,6 @@ func TestBuildIntegerResource(t *testing.T) {
 					Name: "int64_prop",
 					Int64: &resource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Int64Validator{
 							{
 								Custom: &schema.CustomValidator{
@@ -260,7 +259,6 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					Name: "int64_prop",
 					Int64: &datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Int64Validator{
 							{
 								Custom: &schema.CustomValidator{

@@ -501,7 +501,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a nullable string type."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -509,7 +508,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a nullable string type, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 			},
@@ -549,7 +547,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -557,7 +554,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 			},
@@ -597,7 +593,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -605,7 +600,6 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 			},

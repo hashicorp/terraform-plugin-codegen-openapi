@@ -133,14 +133,12 @@ func TestBuildMapResource(t *testing.T) {
 					Name: "nested_map_prop_required",
 					MapNested: &resource.MapNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: resource.NestedAttributeObject{
 							Attributes: []resource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &resource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},
@@ -344,14 +342,12 @@ func TestBuildMapDataSource(t *testing.T) {
 					Name: "nested_map_prop_required",
 					MapNested: &datasource.MapNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: datasource.NestedAttributeObject{
 							Attributes: []datasource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &datasource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},
