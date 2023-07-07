@@ -89,5 +89,22 @@ func (s *OASSchema) GetIntegerValidators() []schema.Int64Validator {
 		}
 	}
 
+	minimum := s.Schema.Minimum
+	maximum := s.Schema.Maximum
+
+	if minimum != nil && maximum != nil {
+		result = append(result, schema.Int64Validator{
+			Custom: frameworkvalidators.Int64ValidatorBetween(*minimum, *maximum),
+		})
+	} else if minimum != nil {
+		result = append(result, schema.Int64Validator{
+			Custom: frameworkvalidators.Int64ValidatorAtLeast(*minimum),
+		})
+	} else if maximum != nil {
+		result = append(result, schema.Int64Validator{
+			Custom: frameworkvalidators.Int64ValidatorAtMost(*maximum),
+		})
+	}
+
 	return result
 }

@@ -52,12 +52,20 @@ func (s *OASSchema) GetDescription() *string {
 		return &s.SchemaOpts.OverrideDescription
 	}
 
+	if s.Schema.Description == "" {
+		return nil
+	}
+
 	// TODO: potentially use original description for nullable types?
 	return &s.Schema.Description
 }
 
 func (s *OASSchema) IsSensitive() *bool {
 	isSensitive := s.Format == util.OAS_format_password
+
+	if !isSensitive {
+		return nil
+	}
 
 	return &isSensitive
 }

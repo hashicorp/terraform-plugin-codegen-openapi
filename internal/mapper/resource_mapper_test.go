@@ -351,7 +351,6 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 													String: &resource.StringAttribute{
 														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a string!"),
-														Sensitive:                pointer(false),
 													},
 												},
 												{

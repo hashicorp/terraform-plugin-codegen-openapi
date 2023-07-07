@@ -23,6 +23,62 @@ var (
 	StringValidatorCodeImport code.Import = CodeImport(StringValidatorPackage)
 )
 
+// StringValidatorLengthAtLeast returns a custom validator mapped to the
+// stringvalidator package LengthAtLeast function.
+func StringValidatorLengthAtLeast(min int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(StringValidatorPackage)
+	schemaDefinition.WriteString(".LengthAtLeast(")
+	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			StringValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
+// StringValidatorLengthAtMost returns a custom validator mapped to the
+// stringvalidator package LengthAtMost function.
+func StringValidatorLengthAtMost(max int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(StringValidatorPackage)
+	schemaDefinition.WriteString(".LengthAtMost(")
+	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			StringValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
+// StringValidatorLengthBetween returns a custom validator mapped to the
+// stringvalidator package LengthBetween function.
+func StringValidatorLengthBetween(min, max int64) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(StringValidatorPackage)
+	schemaDefinition.WriteString(".LengthBetween(")
+	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(", ")
+	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			StringValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
 // StringValidatorOneOf returns a custom validator mapped to the stringvalidator
 // package OneOf function. If the values are nil or empty, nil is returned.
 func StringValidatorOneOf(values []string) *schema.CustomValidator {
@@ -43,6 +99,31 @@ func StringValidatorOneOf(values []string) *schema.CustomValidator {
 
 	return &schema.CustomValidator{
 		Imports: []code.Import{
+			StringValidatorCodeImport,
+		},
+		SchemaDefinition: schemaDefinition.String(),
+	}
+}
+
+// StringValidatorRegexMatches returns a custom validator mapped to the
+// stringvalidator package RegexMatches function.
+func StringValidatorRegexMatches(pattern, message string) *schema.CustomValidator {
+	var schemaDefinition strings.Builder
+
+	schemaDefinition.WriteString(StringValidatorPackage)
+	schemaDefinition.WriteString(".RegexMatches(")
+	schemaDefinition.WriteString("regexp.MustCompile(")
+	schemaDefinition.WriteString(strconv.Quote(pattern))
+	schemaDefinition.WriteString(")")
+	schemaDefinition.WriteString(", ")
+	schemaDefinition.WriteString(strconv.Quote(message))
+	schemaDefinition.WriteString(")")
+
+	return &schema.CustomValidator{
+		Imports: []code.Import{
+			{
+				Path: "regexp",
+			},
 			StringValidatorCodeImport,
 		},
 		SchemaDefinition: schemaDefinition.String(),

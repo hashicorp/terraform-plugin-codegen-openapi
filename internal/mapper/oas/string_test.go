@@ -46,7 +46,6 @@ func TestBuildStringResource(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -123,8 +122,6 @@ func TestBuildStringResource(t *testing.T) {
 					Name: "string_prop",
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
-						Sensitive:                pointer(false),
 						Validators: []schema.StringValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -191,7 +188,6 @@ func TestBuildStringDataSource(t *testing.T) {
 					String: &datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -268,8 +264,6 @@ func TestBuildStringDataSource(t *testing.T) {
 					Name: "string_prop",
 					String: &datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
-						Sensitive:                pointer(false),
 						Validators: []schema.StringValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -483,6 +477,90 @@ func TestGetStringValidators(t *testing.T) {
 							},
 						},
 						SchemaDefinition: "stringvalidator.OneOf(\n\"one\",\n\"two\",\n)",
+					},
+				},
+			},
+		},
+		"maxLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MaxLength: pointer(int64(123)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthAtMost(123)",
+					},
+				},
+			},
+		},
+		"maxLength-and-minLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MinLength: pointer(int64(123)),
+					MaxLength: pointer(int64(456)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthBetween(123, 456)",
+					},
+				},
+			},
+		},
+		"minLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MinLength: pointer(int64(123)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthAtLeast(123)",
+					},
+				},
+			},
+		},
+		"pattern": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"string"},
+					Pattern: "^[a-zA-Z0-9]*$",
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "regexp",
+							},
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.RegexMatches(regexp.MustCompile(\"^[a-zA-Z0-9]*$\"), \"\")",
 					},
 				},
 			},

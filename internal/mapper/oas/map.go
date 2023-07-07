@@ -6,6 +6,7 @@ package oas
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -27,21 +28,28 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
 	}
 
+	result := &resource.Attribute{
+		Name: name,
+	}
+
 	if mapSchema.Type == util.OAS_type_object {
 		mapAttributes, err := mapSchema.BuildResourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		return &resource.Attribute{
-			Name: name,
-			MapNested: &resource.MapNestedAttribute{
-				NestedObject: resource.NestedAttributeObject{
-					Attributes: *mapAttributes,
-				},
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
+		result.MapNested = &resource.MapNestedAttribute{
+			NestedObject: resource.NestedAttributeObject{
+				Attributes: *mapAttributes,
 			},
-		}, nil
+			ComputedOptionalRequired: computability,
+			Description:              s.GetDescription(),
+		}
+
+		if computability != schema.Computed {
+			result.MapNested.Validators = s.GetMapValidators()
+		}
+
+		return result, nil
 	}
 
 	elemType, err := mapSchema.BuildElementType()
@@ -49,14 +57,17 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	return &resource.Attribute{
-		Name: name,
-		Map: &resource.MapAttribute{
-			ElementType:              elemType,
-			ComputedOptionalRequired: computability,
-			Description:              s.GetDescription(),
-		},
-	}, nil
+	result.Map = &resource.MapAttribute{
+		ElementType:              elemType,
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	if computability != schema.Computed {
+		result.Map.Validators = s.GetMapValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
@@ -72,21 +83,28 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
 	}
 
+	result := &datasource.Attribute{
+		Name: name,
+	}
+
 	if mapSchema.Type == util.OAS_type_object {
 		mapAttributes, err := mapSchema.BuildDataSourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		return &datasource.Attribute{
-			Name: name,
-			MapNested: &datasource.MapNestedAttribute{
-				NestedObject: datasource.NestedAttributeObject{
-					Attributes: *mapAttributes,
-				},
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
+		result.MapNested = &datasource.MapNestedAttribute{
+			NestedObject: datasource.NestedAttributeObject{
+				Attributes: *mapAttributes,
 			},
-		}, nil
+			ComputedOptionalRequired: computability,
+			Description:              s.GetDescription(),
+		}
+
+		if computability != schema.Computed {
+			result.MapNested.Validators = s.GetMapValidators()
+		}
+
+		return result, nil
 	}
 
 	elemType, err := mapSchema.BuildElementType()
@@ -94,14 +112,17 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	return &datasource.Attribute{
-		Name: name,
-		Map: &datasource.MapAttribute{
-			ElementType:              elemType,
-			ComputedOptionalRequired: computability,
-			Description:              s.GetDescription(),
-		},
-	}, nil
+	result.Map = &datasource.MapAttribute{
+		ElementType:              elemType,
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	if computability != schema.Computed {
+		result.Map.Validators = s.GetMapValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
@@ -172,4 +193,27 @@ func (s *OASSchema) BuildMapElementType() (schema.ElementType, error) {
 			ElementType: elemType,
 		},
 	}, nil
+}
+
+func (s *OASSchema) GetMapValidators() []schema.MapValidator {
+	var result []schema.MapValidator
+
+	minProperties := s.Schema.MinProperties
+	maxProperties := s.Schema.MaxProperties
+
+	if minProperties != nil && maxProperties != nil {
+		result = append(result, schema.MapValidator{
+			Custom: frameworkvalidators.MapValidatorSizeBetween(*minProperties, *maxProperties),
+		})
+	} else if minProperties != nil {
+		result = append(result, schema.MapValidator{
+			Custom: frameworkvalidators.MapValidatorSizeAtLeast(*minProperties),
+		})
+	} else if maxProperties != nil {
+		result = append(result, schema.MapValidator{
+			Custom: frameworkvalidators.MapValidatorSizeAtMost(*maxProperties),
+		})
+	}
+
+	return result
 }

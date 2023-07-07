@@ -127,6 +127,16 @@ If not required, or if the field is in a different schema than the `Read` operat
 | [description](https://spec.openapis.org/oas/latest.html#rich-text-formatting) | [(Attribute).MarkdownDescription](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#markdowndescription-1) |
 | [enum](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-enum) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 | [format (password)](https://spec.openapis.org/oas/latest.html#data-types)     | [(StringAttribute).Sensitive](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#sensitive)                 |
+| [maximum](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-maximum) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [maxItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-maxItems) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [maxLength](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-maxLength) | [(StringAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [maxProperties](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-maxProperties) | [(MapAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [minimum](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-minimum) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [minItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-minItems) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [minLength](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-minLength) | [(StringAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [minProperties](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-minProperties) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [pattern](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-pattern) | [(StringAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
+| [uniqueItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-uniqueItems) | [(ListAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 
 ## Multi-type Support
 

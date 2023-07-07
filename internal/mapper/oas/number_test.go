@@ -99,7 +99,6 @@ func TestBuildNumberResource(t *testing.T) {
 					Name: "float64_prop",
 					Float64: &resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Float64Validator{
 							{
 								Custom: &schema.CustomValidator{
@@ -389,7 +388,6 @@ func TestBuildNumberDataSource(t *testing.T) {
 					Name: "float64_prop",
 					Float64: &datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Float64Validator{
 							{
 								Custom: &schema.CustomValidator{

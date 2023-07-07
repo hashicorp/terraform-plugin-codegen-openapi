@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -103,6 +104,58 @@ func TestBuildMapResource(t *testing.T) {
 						},
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a map nested type."),
+					},
+				},
+			},
+		},
+		"map nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_map_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:          []string{"object"},
+						MinProperties: pointer(int64(1)),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_map_prop_required",
+					MapNested: &resource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+						Validators: []schema.MapValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+										},
+									},
+									SchemaDefinition: "mapvalidator.SizeAtLeast(1)",
+								},
+							},
+						},
 					},
 				},
 			},
@@ -260,6 +313,58 @@ func TestBuildMapDataSource(t *testing.T) {
 						},
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a map nested type."),
+					},
+				},
+			},
+		},
+		"map nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_map_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:          []string{"object"},
+						MinProperties: pointer(int64(1)),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_map_prop_required",
+					MapNested: &datasource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+						Validators: []schema.MapValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+										},
+									},
+									SchemaDefinition: "mapvalidator.SizeAtLeast(1)",
+								},
+							},
+						},
 					},
 				},
 			},
@@ -481,6 +586,99 @@ func TestBuildMapProvider(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetMapValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.MapValidator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"object"},
+				},
+			},
+			expected: nil,
+		},
+		"maxProperties": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:          []string{"object"},
+					MaxProperties: pointer(int64(123)),
+				},
+			},
+			expected: []schema.MapValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+							},
+						},
+						SchemaDefinition: "mapvalidator.SizeAtMost(123)",
+					},
+				},
+			},
+		},
+		"maxProperties-and-minProperties": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:          []string{"object"},
+					MinProperties: pointer(int64(123)),
+					MaxProperties: pointer(int64(456)),
+				},
+			},
+			expected: []schema.MapValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+							},
+						},
+						SchemaDefinition: "mapvalidator.SizeBetween(123, 456)",
+					},
+				},
+			},
+		},
+		"minProperties": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:          []string{"object"},
+					MinProperties: pointer(int64(123)),
+				},
+			},
+			expected: []schema.MapValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator",
+							},
+						},
+						SchemaDefinition: "mapvalidator.SizeAtLeast(123)",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetMapValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})

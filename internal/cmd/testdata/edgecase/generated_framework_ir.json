@@ -31,8 +31,7 @@
 										"name": "string_prop",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "String inside a map!",
-											"sensitive": false
+											"description": "String inside a map!"
 										}
 									}
 								]
@@ -152,8 +151,7 @@
 										"name": "string_prop",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "String inside a set!",
-											"sensitive": false
+											"description": "String inside a set!"
 										}
 									}
 								]
@@ -248,8 +246,7 @@
 										"name": "string_prop",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "String inside a map!",
-											"sensitive": false
+											"description": "String inside a map!"
 										}
 									}
 								]
@@ -291,8 +288,7 @@
 										"name": "string_prop",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "String inside a set!",
-											"sensitive": false
+											"description": "String inside a set!"
 										}
 									}
 								]

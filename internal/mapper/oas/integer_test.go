@@ -120,7 +120,6 @@ func TestBuildIntegerResource(t *testing.T) {
 					Name: "int64_prop",
 					Int64: &resource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Int64Validator{
 							{
 								Custom: &schema.CustomValidator{
@@ -261,7 +260,6 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					Name: "int64_prop",
 					Int64: &datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						Validators: []schema.Int64Validator{
 							{
 								Custom: &schema.CustomValidator{
@@ -471,6 +469,67 @@ func TestGetIntegerValidators(t *testing.T) {
 							},
 						},
 						SchemaDefinition: "int64validator.OneOf(\n1,\n2,\n)",
+					},
+				},
+			},
+		},
+		"maximum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Maximum: pointer(int64(123)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.AtMost(123)",
+					},
+				},
+			},
+		},
+		"maximum-and-minimum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Minimum: pointer(int64(123)),
+					Maximum: pointer(int64(456)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.Between(123, 456)",
+					},
+				},
+			},
+		},
+		"minimum": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"integer"},
+					Minimum: pointer(int64(123)),
+				},
+			},
+			expected: []schema.Int64Validator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/int64validator",
+							},
+						},
+						SchemaDefinition: "int64validator.AtLeast(123)",
 					},
 				},
 			},
