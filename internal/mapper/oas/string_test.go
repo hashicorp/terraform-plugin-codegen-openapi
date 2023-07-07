@@ -330,7 +330,6 @@ func TestBuildStringProvider(t *testing.T) {
 					String: &provider.StringAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a string type, not sensitive, required."),
-						Sensitive:        pointer(false),
 					},
 				},
 				{
@@ -407,8 +406,6 @@ func TestBuildStringProvider(t *testing.T) {
 					Name: "string_prop",
 					String: &provider.StringAttribute{
 						OptionalRequired: schema.Required,
-						Description:      pointer(""),
-						Sensitive:        pointer(false),
 						Validators: []schema.StringValidator{
 							{
 								Custom: &schema.CustomValidator{

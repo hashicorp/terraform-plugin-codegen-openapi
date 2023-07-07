@@ -178,8 +178,7 @@
 					"name": "string_prop",
 					"string": {
 						"optional_required": "required",
-						"description": "String for the provider",
-						"sensitive": false
+						"description": "String for the provider"
 					}
 				},
 				{

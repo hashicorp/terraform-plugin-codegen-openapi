@@ -677,7 +677,6 @@ func TestBuildNumberProvider(t *testing.T) {
 					Name: "float64_prop",
 					Float64: &provider.Float64Attribute{
 						OptionalRequired: schema.Required,
-						Description:      pointer(""),
 						Validators: []schema.Float64Validator{
 							{
 								Custom: &schema.CustomValidator{

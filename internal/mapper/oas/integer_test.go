@@ -400,7 +400,6 @@ func TestBuildIntegerProvider(t *testing.T) {
 					Name: "int64_prop",
 					Int64: &provider.Int64Attribute{
 						OptionalRequired: schema.Required,
-						Description:      pointer(""),
 						Validators: []schema.Int64Validator{
 							{
 								Custom: &schema.CustomValidator{
