@@ -95,6 +95,26 @@ func TestBuildStringResource(t *testing.T) {
 				},
 			},
 		},
+		"string attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"string"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "string_prop",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with string element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -237,6 +257,26 @@ func TestBuildStringDataSource(t *testing.T) {
 				},
 			},
 		},
+		"string attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"string"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "string_prop",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with string element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -375,6 +415,26 @@ func TestBuildStringProvider(t *testing.T) {
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:        pointer(true),
+					},
+				},
+			},
+		},
+		"string attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"string"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "string_prop",
+					String: &provider.StringAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
 				},
 			},

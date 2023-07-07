@@ -108,6 +108,46 @@ func TestBuildMapResource(t *testing.T) {
 				},
 			},
 		},
+		"map nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_map_prop",
+					MapNested: &resource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"map nested attributes validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -317,6 +357,46 @@ func TestBuildMapDataSource(t *testing.T) {
 				},
 			},
 		},
+		"map nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_map_prop",
+					MapNested: &datasource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"map nested attributes validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -522,6 +602,46 @@ func TestBuildMapProvider(t *testing.T) {
 						},
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a map nested type."),
+					},
+				},
+			},
+		},
+		"map nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type:     []string{"object"},
+							Required: []string{"nested_int64_required"},
+							Properties: map[string]*base.SchemaProxy{
+								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+									Type:   []string{"integer"},
+									Format: "int64",
+								}),
+							},
+						}),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_map_prop",
+					MapNested: &provider.MapNestedAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
+						NestedObject: provider.NestedAttributeObject{
+							Attributes: []provider.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &provider.Int64Attribute{
+										OptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

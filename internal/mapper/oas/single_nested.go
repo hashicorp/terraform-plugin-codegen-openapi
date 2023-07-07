@@ -23,6 +23,7 @@ func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.
 		SingleNested: &resource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		},
 	}, nil
@@ -39,6 +40,7 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schem
 		SingleNested: &datasource.SingleNestedAttribute{
 			Attributes:               *objectAttributes,
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		},
 	}, nil
@@ -53,9 +55,10 @@ func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired sc
 	return &provider.Attribute{
 		Name: name,
 		SingleNested: &provider.SingleNestedAttribute{
-			Attributes:       *objectAttributes,
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			Attributes:         *objectAttributes,
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
 		},
 	}, nil
 }

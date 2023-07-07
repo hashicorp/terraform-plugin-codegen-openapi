@@ -90,6 +90,41 @@ func TestBuildSingleNestedResource(t *testing.T) {
 				},
 			},
 		},
+		"single nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						Required:   []string{"nested_int64_required"},
+						Properties: map[string]*base.SchemaProxy{
+							"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"integer"},
+								Format: "int64",
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_obj_prop",
+					SingleNested: &resource.SingleNestedAttribute{
+						Attributes: []resource.Attribute{
+							{
+								Name: "nested_int64_required",
+								Int64: &resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+								},
+							},
+						},
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -183,6 +218,41 @@ func TestBuildSingleNestedDataSource(t *testing.T) {
 				},
 			},
 		},
+		"single nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						Required:   []string{"nested_int64_required"},
+						Properties: map[string]*base.SchemaProxy{
+							"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"integer"},
+								Format: "int64",
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_obj_prop",
+					SingleNested: &datasource.SingleNestedAttribute{
+						Attributes: []datasource.Attribute{
+							{
+								Name: "nested_int64_required",
+								Int64: &datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+								},
+							},
+						},
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -272,6 +342,41 @@ func TestBuildSingleNestedProvider(t *testing.T) {
 						},
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a single nested object type."),
+					},
+				},
+			},
+		},
+		"single nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"object"},
+						Deprecated: pointer(true),
+						Required:   []string{"nested_int64_required"},
+						Properties: map[string]*base.SchemaProxy{
+							"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"integer"},
+								Format: "int64",
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_obj_prop",
+					SingleNested: &provider.SingleNestedAttribute{
+						Attributes: []provider.Attribute{
+							{
+								Name: "nested_int64_required",
+								Int64: &provider.Int64Attribute{
+									OptionalRequired: schema.Required,
+								},
+							},
+						},
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
 				},
 			},

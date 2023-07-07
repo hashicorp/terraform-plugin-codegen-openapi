@@ -16,6 +16,7 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 		Name: name,
 		String: &resource.StringAttribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
@@ -43,6 +44,7 @@ func (s *OASSchema) BuildStringDataSource(name string, computability schema.Comp
 		Name: name,
 		String: &datasource.StringAttribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 			Sensitive:                s.IsSensitive(),
 		},
@@ -59,13 +61,13 @@ func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.O
 	result := &provider.Attribute{
 		Name: name,
 		String: &provider.StringAttribute{
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
-			Sensitive:        s.IsSensitive(),
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Sensitive:          s.IsSensitive(),
+			Validators:         s.GetStringValidators(),
 		},
 	}
-
-	result.String.Validators = s.GetStringValidators()
 
 	return result, nil
 }

@@ -20,6 +20,7 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result.Float64 = &resource.Float64Attribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -42,6 +43,7 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 
 	result.Number = &resource.NumberAttribute{
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -56,6 +58,7 @@ func (s *OASSchema) BuildNumberDataSource(name string, computability schema.Comp
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result.Float64 = &datasource.Float64Attribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -68,6 +71,7 @@ func (s *OASSchema) BuildNumberDataSource(name string, computability schema.Comp
 
 	result.Number = &datasource.NumberAttribute{
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -81,18 +85,19 @@ func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.O
 
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result.Float64 = &provider.Float64Attribute{
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetFloatValidators(),
 		}
-
-		result.Float64.Validators = s.GetFloatValidators()
 
 		return result, nil
 	}
 
 	result.Number = &provider.NumberAttribute{
-		OptionalRequired: optionalOrRequired,
-		Description:      s.GetDescription(),
+		OptionalRequired:   optionalOrRequired,
+		DeprecationMessage: s.GetDeprecationMessage(),
+		Description:        s.GetDescription(),
 	}
 
 	return result, nil

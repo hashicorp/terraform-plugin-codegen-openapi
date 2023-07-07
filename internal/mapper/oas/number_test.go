@@ -119,6 +119,27 @@ func TestBuildNumberResource(t *testing.T) {
 				},
 			},
 		},
+		"float64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Format:     "double",
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "float64_prop",
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"float64 attribute validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -180,6 +201,26 @@ func TestBuildNumberResource(t *testing.T) {
 					Number: &resource.NumberAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
+					},
+				},
+			},
+		},
+		"number attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"number_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "number_prop",
+					Number: &resource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
 				},
 			},
@@ -408,6 +449,27 @@ func TestBuildNumberDataSource(t *testing.T) {
 				},
 			},
 		},
+		"float64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Format:     "double",
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "float64_prop",
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"float64 attribute validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -469,6 +531,26 @@ func TestBuildNumberDataSource(t *testing.T) {
 					Number: &datasource.NumberAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
+					},
+				},
+			},
+		},
+		"number attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"number_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "number_prop",
+					Number: &datasource.NumberAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
 				},
 			},
@@ -697,6 +779,27 @@ func TestBuildNumberProvider(t *testing.T) {
 				},
 			},
 		},
+		"float64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Format:     "double",
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "float64_prop",
+					Float64: &provider.Float64Attribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"float64 attribute validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -758,6 +861,26 @@ func TestBuildNumberProvider(t *testing.T) {
 					Number: &provider.NumberAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a number type, required."),
+					},
+				},
+			},
+		},
+		"number attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"number_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"number"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "number_prop",
+					Number: &provider.NumberAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
 				},
 			},

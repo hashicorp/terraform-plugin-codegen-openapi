@@ -35,6 +35,12 @@ type GlobalSchemaOpts struct {
 // SchemaOpts is NOT passed recursively through built OASSchema structs, and will only be available to the top level schema. This is used
 // for options that need to control just the top level schema, like overriding descriptions.
 type SchemaOpts struct {
+	// OverrideDeprecationMessage will set the attribute deprecation message to
+	// this field if populated, otherwise the attribute deprecation message will
+	// be set to a default "This attribute is deprecated." message when the
+	// deprecated property is enabled.
+	OverrideDeprecationMessage string
+
 	// OverrideDescription will set the attribute description to this field if populated, otherwise the attribute description
 	// will be set to the description field of the `schema`.
 	OverrideDescription string
@@ -45,6 +51,23 @@ type SchemaOpts struct {
 func (s *OASSchema) IsMap() bool {
 	_, isMap := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	return isMap
+}
+
+// GetDeprecationMessage returns a deprecation message if the deprecated
+// property is enabled. It defaults the message to "This attribute is
+// deprecated" unless the SchemaOpts.OverrideDeprecationMessage is set.
+func (s *OASSchema) GetDeprecationMessage() *string {
+	if s.Schema.Deprecated == nil || !(*s.Schema.Deprecated) {
+		return nil
+	}
+
+	if s.SchemaOpts.OverrideDeprecationMessage != "" {
+		return &s.SchemaOpts.OverrideDeprecationMessage
+	}
+
+	deprecationMessage := "This attribute is deprecated."
+
+	return &deprecationMessage
 }
 
 func (s *OASSchema) GetDescription() *string {
