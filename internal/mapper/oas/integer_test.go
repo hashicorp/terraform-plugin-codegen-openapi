@@ -476,7 +476,7 @@ func TestGetIntegerValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type:    []string{"integer"},
-					Maximum: pointer(int64(123)),
+					Maximum: pointer(float64(123)),
 				},
 			},
 			expected: []schema.Int64Validator{
@@ -496,8 +496,8 @@ func TestGetIntegerValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type:    []string{"integer"},
-					Minimum: pointer(int64(123)),
-					Maximum: pointer(int64(456)),
+					Minimum: pointer(float64(123.2)),
+					Maximum: pointer(float64(456.2)),
 				},
 			},
 			expected: []schema.Int64Validator{
@@ -517,7 +517,7 @@ func TestGetIntegerValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type:    []string{"integer"},
-					Minimum: pointer(int64(123)),
+					Minimum: pointer(float64(123)),
 				},
 			},
 			expected: []schema.Int64Validator{

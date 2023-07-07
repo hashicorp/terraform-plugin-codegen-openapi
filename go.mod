@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230623193314-2a16a9d0b6f3
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mitchellh/cli v1.1.5
-	github.com/pb33f/libopenapi v0.8.5
+	github.com/pb33f/libopenapi v0.9.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
