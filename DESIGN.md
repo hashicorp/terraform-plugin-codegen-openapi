@@ -163,6 +163,7 @@ If not required, or if the field is in a different schema than the `Read` operat
 
 | Field (OAS)                                                                   | Field (Plugin Framework Schema)                                                                                                           |
 |-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| [default](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-default) | [(Attribute).Default](https://developer.hashicorp.com/terraform/plugin/framework/resources/default) (resources only) |
 | [description](https://spec.openapis.org/oas/latest.html#rich-text-formatting) | [(Attribute).MarkdownDescription](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#markdowndescription-1) |
 | [enum](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-enum) | [(Attribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 | [format (password)](https://spec.openapis.org/oas/latest.html#data-types)     | [(StringAttribute).Sensitive](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#sensitive)                 |

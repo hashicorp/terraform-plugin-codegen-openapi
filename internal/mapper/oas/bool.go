@@ -11,23 +11,37 @@ import (
 )
 
 func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	return &resource.Attribute{
+	result := &resource.Attribute{
 		Name: name,
 		Bool: &resource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
-	}, nil
+	}
+
+	if s.Schema.Default != nil {
+		staticDefault, ok := s.Schema.Default.(bool)
+
+		if ok {
+			result.Bool.Default = &schema.BoolDefault{
+				Static: &staticDefault,
+			}
+		}
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	return &datasource.Attribute{
+	result := &datasource.Attribute{
 		Name: name,
 		Bool: &datasource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
 		},
-	}, nil
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {

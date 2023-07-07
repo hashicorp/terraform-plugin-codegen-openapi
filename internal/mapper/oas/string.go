@@ -21,6 +21,16 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 		},
 	}
 
+	if s.Schema.Default != nil {
+		staticDefault, ok := s.Schema.Default.(string)
+
+		if ok {
+			result.String.Default = &schema.StringDefault{
+				Static: &staticDefault,
+			}
+		}
+	}
+
 	if computability != schema.Computed {
 		result.String.Validators = s.GetStringValidators()
 	}

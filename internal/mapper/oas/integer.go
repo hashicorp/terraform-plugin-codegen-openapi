@@ -20,6 +20,16 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 		},
 	}
 
+	if s.Schema.Default != nil {
+		staticDefault, ok := s.Schema.Default.(int64)
+
+		if ok {
+			result.Int64.Default = &schema.Int64Default{
+				Static: &staticDefault,
+			}
+		}
+	}
+
 	if computability != schema.Computed {
 		result.Int64.Validators = s.GetIntegerValidators()
 	}
