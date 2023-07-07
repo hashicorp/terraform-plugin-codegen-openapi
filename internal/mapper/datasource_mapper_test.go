@@ -99,7 +99,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 				{
 					Name: "number_prop",
 					Number: &datasource.NumberAttribute{
-						ComputedOptionalRequired: schema.ComputedOptional,
+						ComputedOptionalRequired: schema.Computed,
 						Description:              pointer("hey this is a number!"),
 					},
 				},
@@ -191,7 +191,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 										{
 											Name: "number_prop",
 											Number: &datasource.NumberAttribute{
-												ComputedOptionalRequired: schema.ComputedOptional,
+												ComputedOptionalRequired: schema.Computed,
 												Description:              pointer("hey this is a number!"),
 											},
 										},
@@ -203,7 +203,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 							{
 								Name: "string_prop",
 								String: &datasource.StringAttribute{
-									ComputedOptionalRequired: schema.ComputedOptional,
+									ComputedOptionalRequired: schema.Computed,
 									Description:              pointer("hey this is a string!"),
 									Sensitive:                pointer(true),
 								},
@@ -339,7 +339,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 												{
 													Name: "super_nested_string",
 													String: &datasource.StringAttribute{
-														ComputedOptionalRequired: schema.ComputedOptional,
+														ComputedOptionalRequired: schema.Computed,
 														Description:              pointer("hey this is a string!"),
 													},
 												},
@@ -357,7 +357,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 								{
 									Name: "float64_prop",
 									Float64: &datasource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
+										ComputedOptionalRequired: schema.Computed,
 										Description:              pointer("hey this is a float64!"),
 									},
 								},

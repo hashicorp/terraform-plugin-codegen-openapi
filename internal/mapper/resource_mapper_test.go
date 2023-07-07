@@ -93,7 +93,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 				{
 					Name: "number_prop",
 					Number: &resource.NumberAttribute{
-						ComputedOptionalRequired: schema.ComputedOptional,
+						ComputedOptionalRequired: schema.Computed,
 						Description:              pointer("hey this is a number!"),
 					},
 				},
@@ -356,21 +356,21 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 												{
 													Name: "super_nested_bool_one",
 													Bool: &resource.BoolAttribute{
-														ComputedOptionalRequired: schema.ComputedOptional,
+														ComputedOptionalRequired: schema.Computed,
 														Description:              pointer("hey this is a boolean!"),
 													},
 												},
 												{
 													Name: "super_nested_bool_two",
 													Bool: &resource.BoolAttribute{
-														ComputedOptionalRequired: schema.ComputedOptional,
+														ComputedOptionalRequired: schema.Computed,
 														Description:              pointer("hey this is a boolean, switched to computed optional!"),
 													},
 												},
 												{
 													Name: "super_nested_int64",
 													Int64: &resource.Int64Attribute{
-														ComputedOptionalRequired: schema.ComputedOptional,
+														ComputedOptionalRequired: schema.Computed,
 														Description:              pointer("hey this is a integer!"),
 													},
 												},
@@ -381,7 +381,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 								{
 									Name: "number_prop",
 									Number: &resource.NumberAttribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
+										ComputedOptionalRequired: schema.Computed,
 										Description:              pointer("hey this is a number!"),
 									},
 								},

@@ -65,7 +65,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	// ********************
 	// READ Response Body (required)
 	// ********************
-	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil {
 		return nil, err
 	}

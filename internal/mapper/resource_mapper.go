@@ -93,7 +93,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// READ Response Body (optional)
 	// *******************
 	readResponseAttributes := &[]resource.Attribute{}
-	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
 	} else if readResponseSchema != nil {
