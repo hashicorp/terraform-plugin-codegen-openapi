@@ -60,7 +60,8 @@ func TestBuildStringResource(t *testing.T) {
 		},
 		"string attributes default": {
 			schema: &base.Schema{
-				Type: []string{"object"},
+				Type:     []string{"object"},
+				Required: []string{"string_prop_required_default_non_empty"},
 				Properties: map[string]*base.SchemaProxy{
 					"string_prop_default_empty": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"string"},
@@ -68,6 +69,11 @@ func TestBuildStringResource(t *testing.T) {
 						Default: "",
 					}),
 					"string_prop_default_non_empty": base.CreateSchemaProxy(&base.Schema{
+						Type:    []string{"string"},
+						Format:  "double",
+						Default: "test value",
+					}),
+					"string_prop_required_default_non_empty": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"string"},
 						Format:  "double",
 						Default: "test value",
@@ -87,6 +93,16 @@ func TestBuildStringResource(t *testing.T) {
 				{
 					Name: "string_prop_default_non_empty",
 					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Default: &schema.StringDefault{
+							Static: pointer("test value"),
+						},
+					},
+				},
+				{
+					Name: "string_prop_required_default_non_empty",
+					String: &resource.StringAttribute{
+						// Intentionally not required due to default
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.StringDefault{
 							Static: pointer("test value"),

@@ -23,6 +23,10 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 		staticDefault, ok := s.Schema.Default.(bool)
 
 		if ok {
+			if computability == schema.Required {
+				result.Bool.ComputedOptionalRequired = schema.ComputedOptional
+			}
+
 			result.Bool.Default = &schema.BoolDefault{
 				Static: &staticDefault,
 			}

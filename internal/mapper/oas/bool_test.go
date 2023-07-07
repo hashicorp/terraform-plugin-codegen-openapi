@@ -57,13 +57,18 @@ func TestBuildBoolResource(t *testing.T) {
 		},
 		"boolean attributes default": {
 			schema: &base.Schema{
-				Type: []string{"object"},
+				Type:     []string{"object"},
+				Required: []string{"bool_prop_required_default_true"},
 				Properties: map[string]*base.SchemaProxy{
 					"bool_prop_default_false": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"boolean"},
 						Default: false,
 					}),
 					"bool_prop_default_true": base.CreateSchemaProxy(&base.Schema{
+						Type:    []string{"boolean"},
+						Default: true,
+					}),
+					"bool_prop_required_default_true": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"boolean"},
 						Default: true,
 					}),
@@ -82,6 +87,16 @@ func TestBuildBoolResource(t *testing.T) {
 				{
 					Name: "bool_prop_default_true",
 					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Default: &schema.BoolDefault{
+							Static: pointer(true),
+						},
+					},
+				},
+				{
+					Name: "bool_prop_required_default_true",
+					Bool: &resource.BoolAttribute{
+						// Intentionally not required due to default
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.BoolDefault{
 							Static: pointer(true),

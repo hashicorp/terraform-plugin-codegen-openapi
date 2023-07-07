@@ -58,7 +58,8 @@ func TestBuildIntegerResource(t *testing.T) {
 		},
 		"int64 attributes default": {
 			schema: &base.Schema{
-				Type: []string{"object"},
+				Type:     []string{"object"},
+				Required: []string{"int64_prop_required_default_non_zero"},
 				Properties: map[string]*base.SchemaProxy{
 					"int64_prop_default_non_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"integer"},
@@ -67,6 +68,10 @@ func TestBuildIntegerResource(t *testing.T) {
 					"int64_prop_default_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"integer"},
 						Default: int64(0),
+					}),
+					"int64_prop_required_default_non_zero": base.CreateSchemaProxy(&base.Schema{
+						Type:    []string{"integer"},
+						Default: int64(123),
 					}),
 				},
 			},
@@ -86,6 +91,16 @@ func TestBuildIntegerResource(t *testing.T) {
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.Int64Default{
 							Static: pointer(int64(0)),
+						},
+					},
+				},
+				{
+					Name: "int64_prop_required_default_non_zero",
+					Int64: &resource.Int64Attribute{
+						// Intentionally not required due to default
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Default: &schema.Int64Default{
+							Static: pointer(int64(123)),
 						},
 					},
 				},

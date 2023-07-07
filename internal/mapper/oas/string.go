@@ -25,6 +25,10 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 		staticDefault, ok := s.Schema.Default.(string)
 
 		if ok {
+			if computability == schema.Required {
+				result.String.ComputedOptionalRequired = schema.ComputedOptional
+			}
+
 			result.String.Default = &schema.StringDefault{
 				Static: &staticDefault,
 			}
