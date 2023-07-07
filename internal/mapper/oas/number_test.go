@@ -82,6 +82,43 @@ func TestBuildNumberResource(t *testing.T) {
 				},
 			},
 		},
+		"float64 attributes default": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"float64_prop_default_non_zero": base.CreateSchemaProxy(&base.Schema{
+						Type:    []string{"number"},
+						Format:  "double",
+						Default: float64(123.45),
+					}),
+					"float64_prop_default_zero": base.CreateSchemaProxy(&base.Schema{
+						Type:    []string{"number"},
+						Format:  "double",
+						Default: float64(0.0),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "float64_prop_default_non_zero",
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Default: &schema.Float64Default{
+							Static: pointer(float64(123.45)),
+						},
+					},
+				},
+				{
+					Name: "float64_prop_default_zero",
+					Float64: &resource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Default: &schema.Float64Default{
+							Static: pointer(float64(0.0)),
+						},
+					},
+				},
+			},
+		},
 		"float64 attribute validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},

@@ -23,6 +23,16 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 			Description:              s.GetDescription(),
 		}
 
+		if s.Schema.Default != nil {
+			staticDefault, ok := s.Schema.Default.(float64)
+
+			if ok {
+				result.Float64.Default = &schema.Float64Default{
+					Static: &staticDefault,
+				}
+			}
+		}
+
 		if computability != schema.Computed {
 			result.Float64.Validators = s.GetFloatValidators()
 		}

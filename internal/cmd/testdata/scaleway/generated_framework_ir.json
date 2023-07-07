@@ -2453,6 +2453,9 @@
 						"name": "arch",
 						"string": {
 							"computed_optional_required": "required",
+							"default": {
+								"static": "x86_64"
+							},
 							"description": "Architecture of the image.",
 							"validators": [
 								{
@@ -2524,6 +2527,9 @@
 												"name": "volume_type",
 												"string": {
 													"computed_optional_required": "computed_optional",
+													"default": {
+														"static": "l_ssd"
+													},
 													"description": "Type of the volume.",
 													"validators": [
 														{
@@ -2600,6 +2606,9 @@
 									"name": "arch",
 									"string": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": "x86_64"
+										},
 										"validators": [
 											{
 												"custom": {
@@ -2630,6 +2639,9 @@
 												"name": "arch",
 												"string": {
 													"computed_optional_required": "computed_optional",
+													"default": {
+														"static": "x86_64"
+													},
 													"description": "The bootscript arch.",
 													"validators": [
 														{
@@ -2816,6 +2828,9 @@
 															"name": "state",
 															"string": {
 																"computed_optional_required": "computed_optional",
+																"default": {
+																	"static": "available"
+																},
 																"description": "The volume state.",
 																"validators": [
 																	{
@@ -2845,6 +2860,9 @@
 															"name": "volume_type",
 															"string": {
 																"computed_optional_required": "computed_optional",
+																"default": {
+																	"static": "l_ssd"
+																},
 																"description": "The volume type.",
 																"validators": [
 																	{
@@ -2944,6 +2962,9 @@
 												"name": "volume_type",
 												"string": {
 													"computed_optional_required": "computed_optional",
+													"default": {
+														"static": "l_ssd"
+													},
 													"validators": [
 														{
 															"custom": {
@@ -2965,6 +2986,9 @@
 									"name": "state",
 									"string": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": "available"
+										},
 										"validators": [
 											{
 												"custom": {

@@ -6184,6 +6184,9 @@
 						"name": "allow_auto_merge",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether to allow Auto-merge to be used on pull requests."
 						}
 					},
@@ -6191,6 +6194,9 @@
 						"name": "allow_merge_commit",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether to allow merge commits for pull requests."
 						}
 					},
@@ -6198,6 +6204,9 @@
 						"name": "allow_rebase_merge",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether to allow rebase merges for pull requests."
 						}
 					},
@@ -6205,6 +6214,9 @@
 						"name": "allow_squash_merge",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether to allow squash merges for pull requests."
 						}
 					},
@@ -6212,6 +6224,9 @@
 						"name": "auto_init",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether the repository is initialized with a minimal README."
 						}
 					},
@@ -6219,6 +6234,9 @@
 						"name": "delete_branch_on_merge",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether to delete head branches when pull requests are merged"
 						}
 					},
@@ -6240,6 +6258,9 @@
 						"name": "has_discussions",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether discussions are enabled."
 						}
 					},
@@ -6247,6 +6268,9 @@
 						"name": "has_downloads",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether downloads are enabled."
 						}
 					},
@@ -6254,6 +6278,9 @@
 						"name": "has_issues",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether issues are enabled."
 						}
 					},
@@ -6261,6 +6288,9 @@
 						"name": "has_projects",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether projects are enabled."
 						}
 					},
@@ -6268,6 +6298,9 @@
 						"name": "has_wiki",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": true
+							},
 							"description": "Whether the wiki is enabled."
 						}
 					},
@@ -6282,6 +6315,9 @@
 						"name": "is_template",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether this repository acts as a template that can be used to generate new repositories."
 						}
 					},
@@ -6341,6 +6377,9 @@
 						"name": "private",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether the repository is private."
 						}
 					},
@@ -6400,6 +6439,9 @@
 						"name": "allow_update_branch",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether or not a pull request head branch that is behind its base branch can always be updated even if it is not required to be up to date before merging."
 						}
 					},
@@ -6420,6 +6462,9 @@
 						"name": "archived",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether the repository is archived."
 						}
 					},
@@ -7912,6 +7957,9 @@
 									"name": "has_discussions",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether discussions are enabled."
 									}
 								},
@@ -8850,6 +8898,9 @@
 									"name": "web_commit_signoff_required",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to require contributors to sign off on web-based commits"
 									}
 								}
@@ -8887,6 +8938,9 @@
 						"name": "use_squash_pr_title_as_default",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 						}
 					},
@@ -8894,6 +8948,9 @@
 						"name": "visibility",
 						"string": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": "public"
+							},
 							"description": "The repository visibility: public, private, or internal."
 						}
 					},
@@ -8913,6 +8970,9 @@
 						"name": "web_commit_signoff_required",
 						"bool": {
 							"computed_optional_required": "computed_optional",
+							"default": {
+								"static": false
+							},
 							"description": "Whether to require contributors to sign off on web-based commits"
 						}
 					},
@@ -8958,6 +9018,9 @@
 									"name": "allow_auto_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to allow Auto-merge to be used on pull requests."
 									}
 								},
@@ -8972,6 +9035,9 @@
 									"name": "allow_merge_commit",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow merge commits for pull requests."
 									}
 								},
@@ -8979,6 +9045,9 @@
 									"name": "allow_rebase_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow rebase merges for pull requests."
 									}
 								},
@@ -8986,6 +9055,9 @@
 									"name": "allow_squash_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow squash merges for pull requests."
 									}
 								},
@@ -8993,6 +9065,9 @@
 									"name": "allow_update_branch",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether or not a pull request head branch that is behind its base branch can always be updated even if it is not required to be up to date before merging."
 									}
 								},
@@ -9013,6 +9088,9 @@
 									"name": "archived",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether the repository is archived."
 									}
 								},
@@ -9093,6 +9171,9 @@
 									"name": "delete_branch_on_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to delete head branches when pull requests are merged"
 									}
 								},
@@ -9185,6 +9266,9 @@
 									"name": "has_discussions",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether discussions are enabled."
 									}
 								},
@@ -9192,6 +9276,9 @@
 									"name": "has_downloads",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether downloads are enabled."
 									}
 								},
@@ -9199,6 +9286,9 @@
 									"name": "has_issues",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether issues are enabled."
 									}
 								},
@@ -9212,6 +9302,9 @@
 									"name": "has_projects",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether projects are enabled."
 									}
 								},
@@ -9219,6 +9312,9 @@
 									"name": "has_wiki",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether the wiki is enabled."
 									}
 								},
@@ -9251,6 +9347,9 @@
 									"name": "is_template",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether this repository acts as a template that can be used to generate new repositories."
 									}
 								},
@@ -9752,6 +9851,9 @@
 									"name": "private",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether the repository is private or public."
 									}
 								},
@@ -10648,6 +10750,9 @@
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -10655,6 +10760,9 @@
 									"name": "visibility",
 									"string": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": "public"
+										},
 										"description": "The repository visibility: public, private, or internal."
 									}
 								},
@@ -10674,6 +10782,9 @@
 									"name": "web_commit_signoff_required",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to require contributors to sign off on web-based commits"
 									}
 								}
@@ -10776,6 +10887,9 @@
 									"name": "allow_auto_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to allow Auto-merge to be used on pull requests."
 									}
 								},
@@ -10790,6 +10904,9 @@
 									"name": "allow_merge_commit",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow merge commits for pull requests."
 									}
 								},
@@ -10797,6 +10914,9 @@
 									"name": "allow_rebase_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow rebase merges for pull requests."
 									}
 								},
@@ -10804,6 +10924,9 @@
 									"name": "allow_squash_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether to allow squash merges for pull requests."
 									}
 								},
@@ -10811,6 +10934,9 @@
 									"name": "allow_update_branch",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether or not a pull request head branch that is behind its base branch can always be updated even if it is not required to be up to date before merging."
 									}
 								},
@@ -10831,6 +10957,9 @@
 									"name": "archived",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether the repository is archived."
 									}
 								},
@@ -10911,6 +11040,9 @@
 									"name": "delete_branch_on_merge",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to delete head branches when pull requests are merged"
 									}
 								},
@@ -11003,6 +11135,9 @@
 									"name": "has_discussions",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether discussions are enabled."
 									}
 								},
@@ -11010,6 +11145,9 @@
 									"name": "has_downloads",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether downloads are enabled."
 									}
 								},
@@ -11017,6 +11155,9 @@
 									"name": "has_issues",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether issues are enabled."
 									}
 								},
@@ -11030,6 +11171,9 @@
 									"name": "has_projects",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether projects are enabled."
 									}
 								},
@@ -11037,6 +11181,9 @@
 									"name": "has_wiki",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": true
+										},
 										"description": "Whether the wiki is enabled."
 									}
 								},
@@ -11069,6 +11216,9 @@
 									"name": "is_template",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether this repository acts as a template that can be used to generate new repositories."
 									}
 								},
@@ -11570,6 +11720,9 @@
 									"name": "private",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether the repository is private or public."
 									}
 								},
@@ -12466,6 +12619,9 @@
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -12473,6 +12629,9 @@
 									"name": "visibility",
 									"string": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": "public"
+										},
 										"description": "The repository visibility: public, private, or internal."
 									}
 								},
@@ -12492,6 +12651,9 @@
 									"name": "web_commit_signoff_required",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"default": {
+											"static": false
+										},
 										"description": "Whether to require contributors to sign off on web-based commits"
 									}
 								}
