@@ -25,6 +25,10 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 		staticDefault, ok := s.Schema.Default.(int64)
 
 		if ok {
+			if computability == schema.Required {
+				result.Int64.ComputedOptionalRequired = schema.ComputedOptional
+			}
+
 			result.Int64.Default = &schema.Int64Default{
 				Static: &staticDefault,
 			}
