@@ -341,6 +341,90 @@ func TestGetStringValidators(t *testing.T) {
 				},
 			},
 		},
+		"maxLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MaxLength: pointer(int64(123)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthAtMost(123)",
+					},
+				},
+			},
+		},
+		"maxLength-and-minLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MinLength: pointer(int64(123)),
+					MaxLength: pointer(int64(456)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthBetween(123, 456)",
+					},
+				},
+			},
+		},
+		"minLength": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:      []string{"string"},
+					MinLength: pointer(int64(123)),
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.LengthAtLeast(123)",
+					},
+				},
+			},
+		},
+		"pattern": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:    []string{"string"},
+					Pattern: "^[a-zA-Z0-9]*$",
+				},
+			},
+			expected: []schema.StringValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "regexp",
+							},
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+							},
+						},
+						SchemaDefinition: "stringvalidator.RegexMatches(regexp.MustCompile(\"^[a-zA-Z0-9]*$\"), \"\")",
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {

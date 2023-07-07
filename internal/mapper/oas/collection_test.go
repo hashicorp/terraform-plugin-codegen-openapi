@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -81,6 +82,62 @@ func TestBuildCollectionResource(t *testing.T) {
 				},
 			},
 		},
+		"list nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_list_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"array"},
+						MinItems: pointer(int64(1)),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_list_prop_required",
+					ListNested: &resource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer(""),
+									},
+								},
+							},
+						},
+						Validators: []schema.ListValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+										},
+									},
+									SchemaDefinition: "listvalidator.SizeAtLeast(1)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"set nested attributes": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -132,6 +189,63 @@ func TestBuildCollectionResource(t *testing.T) {
 										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey there! I'm a nested int64 type, required."),
 									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"set nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_set_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"array"},
+						Format:   "set",
+						MinItems: pointer(int64(1)),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_set_prop_required",
+					SetNested: &resource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer(""),
+									},
+								},
+							},
+						},
+						Validators: []schema.SetValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/setvalidator",
+										},
+									},
+									SchemaDefinition: "setvalidator.SizeAtLeast(1)",
 								},
 							},
 						},
@@ -546,6 +660,62 @@ func TestBuildCollectionDataSource(t *testing.T) {
 				},
 			},
 		},
+		"list nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_list_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"array"},
+						MinItems: pointer(int64(1)),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_list_prop_required",
+					ListNested: &datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer(""),
+									},
+								},
+							},
+						},
+						Validators: []schema.ListValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+										},
+									},
+									SchemaDefinition: "listvalidator.SizeAtLeast(1)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"set nested attributes": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -597,6 +767,63 @@ func TestBuildCollectionDataSource(t *testing.T) {
 										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey there! I'm a nested int64 type, required."),
 									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"set nested attributes validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"nested_set_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"array"},
+						Format:   "set",
+						MinItems: pointer(int64(1)),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_set_prop_required",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer(""),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer(""),
+									},
+								},
+							},
+						},
+						Validators: []schema.SetValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/setvalidator",
+										},
+									},
+									SchemaDefinition: "setvalidator.SizeAtLeast(1)",
 								},
 							},
 						},
@@ -941,6 +1168,216 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetListValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.ListValidator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type: []string{"array"},
+				},
+			},
+			expected: nil,
+		},
+		"maxItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					MaxItems: pointer(int64(123)),
+				},
+			},
+			expected: []schema.ListValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+							},
+						},
+						SchemaDefinition: "listvalidator.SizeAtMost(123)",
+					},
+				},
+			},
+		},
+		"maxItems-and-minItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					MinItems: pointer(int64(123)),
+					MaxItems: pointer(int64(456)),
+				},
+			},
+			expected: []schema.ListValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+							},
+						},
+						SchemaDefinition: "listvalidator.SizeBetween(123, 456)",
+					},
+				},
+			},
+		},
+		"minItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					MinItems: pointer(int64(123)),
+				},
+			},
+			expected: []schema.ListValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+							},
+						},
+						SchemaDefinition: "listvalidator.SizeAtLeast(123)",
+					},
+				},
+			},
+		},
+		"uniqueItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:        []string{"array"},
+					UniqueItems: pointer(true),
+				},
+			},
+			expected: []schema.ListValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator",
+							},
+						},
+						SchemaDefinition: "listvalidator.UniqueValues()",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetListValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetSetValidators(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema   oas.OASSchema
+		expected []schema.SetValidator
+	}{
+		"none": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:   []string{"array"},
+					Format: "set",
+				},
+			},
+			expected: nil,
+		},
+		"maxItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					Format:   "set",
+					MaxItems: pointer(int64(123)),
+				},
+			},
+			expected: []schema.SetValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/setvalidator",
+							},
+						},
+						SchemaDefinition: "setvalidator.SizeAtMost(123)",
+					},
+				},
+			},
+		},
+		"maxItems-and-minItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					Format:   "set",
+					MinItems: pointer(int64(123)),
+					MaxItems: pointer(int64(456)),
+				},
+			},
+			expected: []schema.SetValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/setvalidator",
+							},
+						},
+						SchemaDefinition: "setvalidator.SizeBetween(123, 456)",
+					},
+				},
+			},
+		},
+		"minItems": {
+			schema: oas.OASSchema{
+				Schema: &base.Schema{
+					Type:     []string{"array"},
+					Format:   "set",
+					MinItems: pointer(int64(123)),
+				},
+			},
+			expected: []schema.SetValidator{
+				{
+					Custom: &schema.CustomValidator{
+						Imports: []code.Import{
+							{
+								Path: "github.com/hashicorp/terraform-plugin-framework-validators/setvalidator",
+							},
+						},
+						SchemaDefinition: "setvalidator.SizeAtLeast(123)",
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetSetValidators()
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})

@@ -6,6 +6,7 @@ package oas
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -22,6 +23,10 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
+	result := &resource.Attribute{
+		Name: name,
+	}
+
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildResourceAttributes()
@@ -30,28 +35,34 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			return &resource.Attribute{
-				Name: name,
-				SetNested: &resource.SetNestedAttribute{
-					NestedObject: resource.NestedAttributeObject{
-						Attributes: *objectAttributes,
-					},
-					ComputedOptionalRequired: computability,
-					Description:              s.GetDescription(),
-				},
-			}, nil
-		}
-
-		return &resource.Attribute{
-			Name: name,
-			ListNested: &resource.ListNestedAttribute{
+			result.SetNested = &resource.SetNestedAttribute{
 				NestedObject: resource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
+			}
+
+			if computability != schema.Computed {
+				result.SetNested.Validators = s.GetSetValidators()
+			}
+
+			return result, nil
+		}
+
+		result.ListNested = &resource.ListNestedAttribute{
+			NestedObject: resource.NestedAttributeObject{
+				Attributes: *objectAttributes,
 			},
-		}, nil
+			ComputedOptionalRequired: computability,
+			Description:              s.GetDescription(),
+		}
+
+		if computability != schema.Computed {
+			result.ListNested.Validators = s.GetListValidators()
+		}
+
+		return result, nil
 	}
 
 	elemType, err := itemSchema.BuildElementType()
@@ -60,24 +71,30 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		return &resource.Attribute{
-			Name: name,
-			Set: &resource.SetAttribute{
-				ElementType:              elemType,
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
-			},
-		}, nil
-	}
-
-	return &resource.Attribute{
-		Name: name,
-		List: &resource.ListAttribute{
+		result.Set = &resource.SetAttribute{
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
-		},
-	}, nil
+		}
+
+		if computability != schema.Computed {
+			result.Set.Validators = s.GetSetValidators()
+		}
+
+		return result, nil
+	}
+
+	result.List = &resource.ListAttribute{
+		ElementType:              elemType,
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	if computability != schema.Computed {
+		result.List.Validators = s.GetListValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
@@ -90,6 +107,10 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
+	result := &datasource.Attribute{
+		Name: name,
+	}
+
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildDataSourceAttributes()
@@ -98,28 +119,34 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			return &datasource.Attribute{
-				Name: name,
-				SetNested: &datasource.SetNestedAttribute{
-					NestedObject: datasource.NestedAttributeObject{
-						Attributes: *objectAttributes,
-					},
-					ComputedOptionalRequired: computability,
-					Description:              s.GetDescription(),
-				},
-			}, nil
-		}
-
-		return &datasource.Attribute{
-			Name: name,
-			ListNested: &datasource.ListNestedAttribute{
+			result.SetNested = &datasource.SetNestedAttribute{
 				NestedObject: datasource.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: computability,
 				Description:              s.GetDescription(),
+			}
+
+			if computability != schema.Computed {
+				result.SetNested.Validators = s.GetSetValidators()
+			}
+
+			return result, nil
+		}
+
+		result.ListNested = &datasource.ListNestedAttribute{
+			NestedObject: datasource.NestedAttributeObject{
+				Attributes: *objectAttributes,
 			},
-		}, nil
+			ComputedOptionalRequired: computability,
+			Description:              s.GetDescription(),
+		}
+
+		if computability != schema.Computed {
+			result.ListNested.Validators = s.GetListValidators()
+		}
+
+		return result, nil
 	}
 
 	elemType, err := itemSchema.BuildElementType()
@@ -128,24 +155,30 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		return &datasource.Attribute{
-			Name: name,
-			Set: &datasource.SetAttribute{
-				ElementType:              elemType,
-				ComputedOptionalRequired: computability,
-				Description:              s.GetDescription(),
-			},
-		}, nil
-	}
-
-	return &datasource.Attribute{
-		Name: name,
-		List: &datasource.ListAttribute{
+		result.Set = &datasource.SetAttribute{
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
-		},
-	}, nil
+		}
+
+		if computability != schema.Computed {
+			result.Set.Validators = s.GetSetValidators()
+		}
+
+		return result, nil
+	}
+
+	result.List = &datasource.ListAttribute{
+		ElementType:              elemType,
+		ComputedOptionalRequired: computability,
+		Description:              s.GetDescription(),
+	}
+
+	if computability != schema.Computed {
+		result.List.Validators = s.GetListValidators()
+	}
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, error) {
@@ -175,4 +208,56 @@ func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, error) {
 			ElementType: elemType,
 		},
 	}, nil
+}
+
+func (s *OASSchema) GetListValidators() []schema.ListValidator {
+	var result []schema.ListValidator
+
+	minItems := s.Schema.MinItems
+	maxItems := s.Schema.MaxItems
+
+	if minItems != nil && maxItems != nil {
+		result = append(result, schema.ListValidator{
+			Custom: frameworkvalidators.ListValidatorSizeBetween(*minItems, *maxItems),
+		})
+	} else if minItems != nil {
+		result = append(result, schema.ListValidator{
+			Custom: frameworkvalidators.ListValidatorSizeAtLeast(*minItems),
+		})
+	} else if maxItems != nil {
+		result = append(result, schema.ListValidator{
+			Custom: frameworkvalidators.ListValidatorSizeAtMost(*maxItems),
+		})
+	}
+
+	if s.Schema.UniqueItems != nil && *s.Schema.UniqueItems {
+		result = append(result, schema.ListValidator{
+			Custom: frameworkvalidators.ListValidatorUniqueValues(),
+		})
+	}
+
+	return result
+}
+
+func (s *OASSchema) GetSetValidators() []schema.SetValidator {
+	var result []schema.SetValidator
+
+	minItems := s.Schema.MinItems
+	maxItems := s.Schema.MaxItems
+
+	if minItems != nil && maxItems != nil {
+		result = append(result, schema.SetValidator{
+			Custom: frameworkvalidators.SetValidatorSizeBetween(*minItems, *maxItems),
+		})
+	} else if minItems != nil {
+		result = append(result, schema.SetValidator{
+			Custom: frameworkvalidators.SetValidatorSizeAtLeast(*minItems),
+		})
+	} else if maxItems != nil {
+		result = append(result, schema.SetValidator{
+			Custom: frameworkvalidators.SetValidatorSizeAtMost(*maxItems),
+		})
+	}
+
+	return result
 }
