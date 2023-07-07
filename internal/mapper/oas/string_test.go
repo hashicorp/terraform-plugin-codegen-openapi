@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
@@ -289,6 +290,148 @@ func TestBuildStringDataSource(t *testing.T) {
 
 			schema := oas.OASSchema{Schema: testCase.schema}
 			attributes, err := schema.BuildDataSourceAttributes()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestBuildStringProvider(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema             *base.Schema
+		expectedAttributes *[]provider.Attribute
+	}{
+		"string attributes": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string"},
+						Description: "hey there! I'm a string type, not sensitive, required.",
+					}),
+					"string_sensitive_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string"},
+						Format:      "password",
+						Description: "hey there! I'm a string type, sensitive",
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "string_prop",
+					String: &provider.StringAttribute{
+						OptionalRequired: schema.Required,
+						Description:      pointer("hey there! I'm a string type, not sensitive, required."),
+					},
+				},
+				{
+					Name: "string_sensitive_prop",
+					String: &provider.StringAttribute{
+						OptionalRequired: schema.Optional,
+						Description:      pointer("hey there! I'm a string type, sensitive"),
+						Sensitive:        pointer(true),
+					},
+				},
+			},
+		},
+		"list attributes with string element type": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_list_prop_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Description: "hey there! I'm a list of strings.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						},
+					}),
+					"string_list_prop_required": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Description: "hey there! I'm a list of strings, required.",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "string_list_prop",
+					List: &provider.ListAttribute{
+						OptionalRequired: schema.Optional,
+						Description:      pointer("hey there! I'm a list of strings."),
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
+						},
+					},
+				},
+				{
+					Name: "string_list_prop_required",
+					List: &provider.ListAttribute{
+						OptionalRequired: schema.Required,
+						Description:      pointer("hey there! I'm a list of strings, required."),
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
+						},
+					},
+				},
+			},
+		},
+		"validators": {
+			schema: &base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_prop"},
+				Properties: map[string]*base.SchemaProxy{
+					"string_prop": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+						Enum: []any{"one", "two"},
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "string_prop",
+					String: &provider.StringAttribute{
+						OptionalRequired: schema.Required,
+						Validators: []schema.StringValidator{
+							{
+								Custom: &schema.CustomValidator{
+									Imports: []code.Import{
+										{
+											Path: "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator",
+										},
+									},
+									SchemaDefinition: "stringvalidator.OneOf(\n\"one\",\n\"two\",\n)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema := oas.OASSchema{Schema: testCase.schema}
+			attributes, err := schema.BuildProviderAttributes()
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

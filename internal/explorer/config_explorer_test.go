@@ -4,6 +4,8 @@
 package explorer_test
 
 import (
+	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
@@ -11,6 +13,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/pb33f/libopenapi"
+	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
@@ -229,8 +233,6 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 				t.Fatalf("was not expecting error, got: %s", err)
 			}
 
-			// Unexported high.Operation.low is throwing errors from cmp
-			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
 			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
@@ -345,8 +347,6 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 				t.Fatalf("was not expecting error, got: %s", err)
 			}
 
-			// Unexported high.Operation.low is throwing errors from cmp
-			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
 			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
@@ -358,8 +358,9 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		config config.Config
-		want   explorer.Provider
+		config         config.Config
+		expectedName   string
+		expectedSchema *base.Schema
 	}{
 		"valid provider name from config": {
 			config: config.Config{
@@ -367,8 +368,21 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 					Name: "heres_the_provider_name",
 				},
 			},
-			want: explorer.Provider{
-				Name: "heres_the_provider_name",
+			expectedName: "heres_the_provider_name",
+		},
+		"valid and resolvable schema_ref from config": {
+			config: config.Config{
+				Provider: config.Provider{
+					Name:      "example",
+					SchemaRef: "#/components/schemas/example_provider",
+				},
+			},
+			expectedName: "example",
+			// We only really care that it resolves the right schema for this logic, so just comparing description/type
+			expectedSchema: &base.Schema{
+				Type:        []string{"object"},
+				Description: "This is the provider schema",
+				Extensions:  map[string]any{},
 			},
 		},
 	}
@@ -379,16 +393,72 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			explorer := explorer.NewConfigExplorer(high.Document{}, testCase.config)
+			oasModel, err := buildTestOAS()
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			explorer := explorer.NewConfigExplorer(oasModel, testCase.config)
 			got, err := explorer.FindProvider()
 
 			if err != nil {
 				t.Fatalf("was not expecting error, got: %s", err)
 			}
 
-			if diff := cmp.Diff(got, testCase.want); diff != "" {
-				t.Errorf("unexpected difference: %s", diff)
+			if got.Name != testCase.expectedName {
+				t.Fatalf("expected provider name %s, got: %s", testCase.expectedName, got.Name)
+			}
+
+			if testCase.expectedSchema == nil && got.SchemaProxy != nil {
+				t.Fatal("expected schema proxy to be empty")
+			}
+
+			if testCase.expectedSchema != nil {
+				if got.SchemaProxy == nil {
+					t.Fatal("expected a schema proxy for provider, but didn't return one")
+				}
+
+				gotSchema, err := got.SchemaProxy.BuildSchema()
+				if err != nil {
+					t.Fatalf("error building returned schema proxy: %s", err)
+				}
+
+				if diff := cmp.Diff(gotSchema, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{})); diff != "" {
+					t.Errorf("unexpected difference: %s", diff)
+				}
 			}
 		})
 	}
+}
+
+func buildTestOAS() (high.Document, error) {
+	testOAS := `
+openapi: 3.1.0
+info:
+  title: Example API
+components:
+  schemas:
+    example_provider:
+      description: This is the provider schema
+      type: object
+    not_the_provider:
+      description: Not this one
+      type: object
+`
+
+	doc, err := libopenapi.NewDocument([]byte(testOAS))
+	if err != nil {
+		return high.Document{}, fmt.Errorf("unexpected error parsing test OAS: %w", err)
+	}
+
+	testOASModel, errs := doc.BuildV3Model()
+	if len(errs) > 0 {
+		var errResult error
+		for _, err := range errs {
+			errResult = errors.Join(errResult, err)
+		}
+		return high.Document{}, fmt.Errorf("unexpected error building test OAS: %w", errResult)
+	}
+
+	return testOASModel.Model, nil
 }

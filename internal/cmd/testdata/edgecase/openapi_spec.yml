@@ -100,6 +100,21 @@ paths:
                     type: string
 components:
   schemas:
+    edgecase_provider:
+      description: This is the provider schema
+      type: object
+      required:
+        - string_prop
+        - triple_nested_map
+      properties:
+        string_prop:
+          description: String for the provider
+          type: string
+        bool_prop:
+          description: Bool for the provider
+          type: boolean
+        triple_nested_map:
+          $ref: "#/components/schemas/triple_nested_map_schema"
     double_nested_list_schema:
       description: This list has a list nested underneath!
       type: array

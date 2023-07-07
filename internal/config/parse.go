@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/pb33f/libopenapi/index"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,7 +19,8 @@ type Config struct {
 }
 
 type Provider struct {
-	Name string `yaml:"name"`
+	Name      string `yaml:"name"`
+	SchemaRef string `yaml:"schema_ref"`
 }
 
 type Resource struct {
@@ -88,6 +90,11 @@ func (p Provider) Validate() error {
 	// TODO: Add regex/validation of provider name
 	if p.Name == "" {
 		return errors.New("must have a 'name' property")
+	}
+
+	// All schema refs must be a local, file, or http resolve type
+	if p.SchemaRef != "" && index.DetermineReferenceResolveType(p.SchemaRef) < 0 {
+		return errors.New("'schema_ref' must be a valid JSON schema reference")
 	}
 
 	return nil

@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -39,6 +40,22 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schem
 			Attributes:               *objectAttributes,
 			ComputedOptionalRequired: computability,
 			Description:              s.GetDescription(),
+		},
+	}, nil
+}
+
+func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	objectAttributes, err := s.BuildProviderAttributes()
+	if err != nil {
+		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+	}
+
+	return &provider.Attribute{
+		Name: name,
+		SingleNested: &provider.SingleNestedAttribute{
+			Attributes:       *objectAttributes,
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
 		},
 	}, nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -58,6 +59,30 @@ func (s *OASSchema) BuildNumberDataSource(name string, computability schema.Comp
 	result.Number = &datasource.NumberAttribute{
 		ComputedOptionalRequired: computability,
 		Description:              s.GetDescription(),
+	}
+
+	return result, nil
+}
+
+func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+	result := &provider.Attribute{
+		Name: name,
+	}
+
+	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
+		result.Float64 = &provider.Float64Attribute{
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
+		}
+
+		result.Float64.Validators = s.GetFloatValidators()
+
+		return result, nil
+	}
+
+	result.Number = &provider.NumberAttribute{
+		OptionalRequired: optionalOrRequired,
+		Description:      s.GetDescription(),
 	}
 
 	return result, nil

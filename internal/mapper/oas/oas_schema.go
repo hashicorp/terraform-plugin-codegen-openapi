@@ -70,6 +70,7 @@ func (s *OASSchema) IsSensitive() *bool {
 	return &isSensitive
 }
 
+// TODO: Figure out a better way to handle computability, since it differs with provider vs. datasource/resource
 func (s *OASSchema) GetComputability(name string) schema.ComputedOptionalRequired {
 	if s.GlobalSchemaOpts.OverrideComputability != "" {
 		return s.GlobalSchemaOpts.OverrideComputability
@@ -82,4 +83,14 @@ func (s *OASSchema) GetComputability(name string) schema.ComputedOptionalRequire
 	}
 
 	return schema.ComputedOptional
+}
+
+func (s *OASSchema) GetOptionalOrRequired(name string) schema.OptionalRequired {
+	for _, prop := range s.Schema.Required {
+		if name == prop {
+			return schema.Required
+		}
+	}
+
+	return schema.Optional
 }

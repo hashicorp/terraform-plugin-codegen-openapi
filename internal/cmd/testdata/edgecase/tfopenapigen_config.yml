@@ -1,5 +1,6 @@
 provider:
   name: edgecase
+  schema_ref: '#/components/schemas/edgecase_provider'
 
 resources:
   set_test:
