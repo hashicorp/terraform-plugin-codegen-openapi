@@ -192,6 +192,10 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
 	}
 
+	result := &provider.Attribute{
+		Name: name,
+	}
+
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
 		objectAttributes, err := itemSchema.BuildProviderAttributes()
@@ -200,28 +204,30 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			return &provider.Attribute{
-				Name: name,
-				SetNested: &provider.SetNestedAttribute{
-					NestedObject: provider.NestedAttributeObject{
-						Attributes: *objectAttributes,
-					},
-					OptionalRequired: optionalOrRequired,
-					Description:      s.GetDescription(),
-				},
-			}, nil
-		}
-
-		return &provider.Attribute{
-			Name: name,
-			ListNested: &provider.ListNestedAttribute{
+			result.SetNested = &provider.SetNestedAttribute{
 				NestedObject: provider.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
 				OptionalRequired: optionalOrRequired,
 				Description:      s.GetDescription(),
+			}
+
+			result.SetNested.Validators = s.GetSetValidators()
+
+			return result, nil
+		}
+
+		result.ListNested = &provider.ListNestedAttribute{
+			NestedObject: provider.NestedAttributeObject{
+				Attributes: *objectAttributes,
 			},
-		}, nil
+			OptionalRequired: optionalOrRequired,
+			Description:      s.GetDescription(),
+		}
+
+		result.ListNested.Validators = s.GetListValidators()
+
+		return result, nil
 	}
 
 	elemType, err := itemSchema.BuildElementType()
@@ -230,24 +236,26 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		return &provider.Attribute{
-			Name: name,
-			Set: &provider.SetAttribute{
-				ElementType:      elemType,
-				OptionalRequired: optionalOrRequired,
-				Description:      s.GetDescription(),
-			},
-		}, nil
-	}
-
-	return &provider.Attribute{
-		Name: name,
-		List: &provider.ListAttribute{
+		result.Set = &provider.SetAttribute{
 			ElementType:      elemType,
 			OptionalRequired: optionalOrRequired,
 			Description:      s.GetDescription(),
-		},
-	}, nil
+		}
+
+		result.Set.Validators = s.GetSetValidators()
+
+		return result, nil
+	}
+
+	result.List = &provider.ListAttribute{
+		ElementType:      elemType,
+		OptionalRequired: optionalOrRequired,
+		Description:      s.GetDescription(),
+	}
+
+	result.List.Validators = s.GetListValidators()
+
+	return result, nil
 }
 
 func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, error) {
