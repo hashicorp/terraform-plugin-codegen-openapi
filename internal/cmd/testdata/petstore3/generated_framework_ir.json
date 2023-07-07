@@ -14,37 +14,31 @@
 					{
 						"name": "complete",
 						"bool": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "petId",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "quantity",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "shipDate",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
@@ -52,7 +46,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Order Status",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -89,35 +82,28 @@
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional",
-										"description": ""
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								}
-							],
-							"description": ""
+							]
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
@@ -126,8 +112,7 @@
 							"computed_optional_required": "computed_optional",
 							"element_type": {
 								"string": {}
-							},
-							"description": ""
+							}
 						}
 					},
 					{
@@ -135,7 +120,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "pet status in the store",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -159,21 +143,17 @@
 									{
 										"name": "id",
 										"int64": {
-											"computed_optional_required": "computed_optional",
-											"description": ""
+											"computed_optional_required": "computed_optional"
 										}
 									},
 									{
 										"name": "name",
 										"string": {
-											"computed_optional_required": "computed_optional",
-											"description": "",
-											"sensitive": false
+											"computed_optional_required": "computed_optional"
 										}
 									}
 								]
-							},
-							"description": ""
+							}
 						}
 					}
 				]
@@ -188,7 +168,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Status values that need to be considered for filter",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -218,37 +197,31 @@
 					{
 						"name": "complete",
 						"bool": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "petId",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "quantity",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "shipDate",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
@@ -256,7 +229,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Order Status",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -293,35 +265,28 @@
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional",
-										"description": ""
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								}
-							],
-							"description": ""
+							]
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "required",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "required"
 						}
 					},
 					{
@@ -330,8 +295,7 @@
 							"computed_optional_required": "required",
 							"element_type": {
 								"string": {}
-							},
-							"description": ""
+							}
 						}
 					},
 					{
@@ -339,7 +303,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "pet status in the store",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -363,21 +326,17 @@
 									{
 										"name": "id",
 										"int64": {
-											"computed_optional_required": "required",
-											"description": ""
+											"computed_optional_required": "required"
 										}
 									},
 									{
 										"name": "name",
 										"string": {
-											"computed_optional_required": "computed_optional",
-											"description": "",
-											"sensitive": false
+											"computed_optional_required": "computed_optional"
 										}
 									}
 								]
-							},
-							"description": ""
+							}
 						}
 					},
 					{
@@ -397,48 +356,37 @@
 					{
 						"name": "email",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "firstName",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": ""
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "lastName",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "password",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
 						"name": "phone",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					},
 					{
@@ -451,9 +399,7 @@
 					{
 						"name": "username",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "",
-							"sensitive": false
+							"computed_optional_required": "computed_optional"
 						}
 					}
 				]

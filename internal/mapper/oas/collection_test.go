@@ -110,14 +110,12 @@ func TestBuildCollectionResource(t *testing.T) {
 					Name: "nested_list_prop_required",
 					ListNested: &resource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: resource.NestedAttributeObject{
 							Attributes: []resource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &resource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},
@@ -225,14 +223,12 @@ func TestBuildCollectionResource(t *testing.T) {
 					Name: "nested_set_prop_required",
 					SetNested: &resource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: resource.NestedAttributeObject{
 							Attributes: []resource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &resource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},
@@ -688,14 +684,12 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					Name: "nested_list_prop_required",
 					ListNested: &datasource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: datasource.NestedAttributeObject{
 							Attributes: []datasource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &datasource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},
@@ -803,14 +797,12 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					Name: "nested_set_prop_required",
 					SetNested: &datasource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
 						NestedObject: datasource.NestedAttributeObject{
 							Attributes: []datasource.Attribute{
 								{
 									Name: "nested_int64_required",
 									Int64: &datasource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
-										Description:              pointer(""),
 									},
 								},
 							},

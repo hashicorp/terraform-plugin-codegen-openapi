@@ -45,7 +45,6 @@ func TestBuildStringResource(t *testing.T) {
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -122,8 +121,6 @@ func TestBuildStringResource(t *testing.T) {
 					Name: "string_prop",
 					String: &resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
-						Sensitive:                pointer(false),
 						Validators: []schema.StringValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -190,7 +187,6 @@ func TestBuildStringDataSource(t *testing.T) {
 					String: &datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
-						Sensitive:                pointer(false),
 					},
 				},
 				{
@@ -267,8 +263,6 @@ func TestBuildStringDataSource(t *testing.T) {
 					Name: "string_prop",
 					String: &datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer(""),
-						Sensitive:                pointer(false),
 						Validators: []schema.StringValidator{
 							{
 								Custom: &schema.CustomValidator{

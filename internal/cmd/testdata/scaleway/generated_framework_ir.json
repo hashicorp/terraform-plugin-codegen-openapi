@@ -9,7 +9,6 @@
 						"string": {
 							"computed_optional_required": "required",
 							"description": "The zone you want to target",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -28,8 +27,7 @@
 						"name": "server_id",
 						"string": {
 							"computed_optional_required": "required",
-							"description": "UUID of the server you want to get.",
-							"sensitive": false
+							"description": "UUID of the server you want to get."
 						}
 					},
 					{
@@ -52,7 +50,6 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The server arch.",
-										"sensitive": false,
 										"validators": [
 											{
 												"custom": {
@@ -72,7 +69,6 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The server boot type.",
-										"sensitive": false,
 										"validators": [
 											{
 												"custom": {
@@ -97,7 +93,6 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The bootscript arch.",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -116,8 +111,7 @@
 												"name": "bootcmdargs",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript arguments.",
-													"sensitive": false
+													"description": "The bootscript arguments."
 												}
 											},
 											{
@@ -131,48 +125,42 @@
 												"name": "dtb",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-													"sensitive": false
+													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 												}
 											},
 											{
 												"name": "id",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript ID.",
-													"sensitive": false
+													"description": "The bootscript ID."
 												}
 											},
 											{
 												"name": "initrd",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The initrd (initial ramdisk) configuration.",
-													"sensitive": false
+													"description": "The initrd (initial ramdisk) configuration."
 												}
 											},
 											{
 												"name": "kernel",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The server kernel version.",
-													"sensitive": false
+													"description": "The server kernel version."
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript organization ID.",
-													"sensitive": false
+													"description": "The bootscript organization ID."
 												}
 											},
 											{
 												"name": "project",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript project ID.",
-													"sensitive": false
+													"description": "The bootscript project ID."
 												}
 											},
 											{
@@ -186,16 +174,14 @@
 												"name": "title",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript title.",
-													"sensitive": false
+													"description": "The bootscript title."
 												}
 											},
 											{
 												"name": "zone",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The zone in which is the bootscript.",
-													"sensitive": false
+													"description": "The zone in which is the bootscript."
 												}
 											}
 										],
@@ -206,16 +192,14 @@
 									"name": "commercial_type",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server commercial type (eg. GP1-M).",
-										"sensitive": false
+										"description": "The server commercial type (eg. GP1-M)."
 									}
 								},
 								{
 									"name": "creation_date",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server creation date. (RFC 3339 format)",
-										"sensitive": false
+										"description": "The server creation date. (RFC 3339 format)"
 									}
 								},
 								{
@@ -236,16 +220,14 @@
 									"name": "hostname",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server host name.",
-										"sensitive": false
+										"description": "The server host name."
 									}
 								},
 								{
 									"name": "id",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server unique ID.",
-										"sensitive": false
+										"description": "The server unique ID."
 									}
 								},
 								{
@@ -257,8 +239,6 @@
 												"name": "arch",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -277,8 +257,7 @@
 												"name": "creation_date",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "(RFC 3339 format)",
-													"sensitive": false
+													"description": "(RFC 3339 format)"
 												}
 											},
 											{
@@ -291,7 +270,6 @@
 															"string": {
 																"computed_optional_required": "computed_optional",
 																"description": "The bootscript arch.",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -310,8 +288,7 @@
 															"name": "bootcmdargs",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The bootscript arguments.",
-																"sensitive": false
+																"description": "The bootscript arguments."
 															}
 														},
 														{
@@ -325,48 +302,42 @@
 															"name": "dtb",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-																"sensitive": false
+																"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 															}
 														},
 														{
 															"name": "id",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The bootscript ID.",
-																"sensitive": false
+																"description": "The bootscript ID."
 															}
 														},
 														{
 															"name": "initrd",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The initrd (initial ramdisk) configuration.",
-																"sensitive": false
+																"description": "The initrd (initial ramdisk) configuration."
 															}
 														},
 														{
 															"name": "kernel",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The server kernel version.",
-																"sensitive": false
+																"description": "The server kernel version."
 															}
 														},
 														{
 															"name": "organization",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The bootscript organization ID.",
-																"sensitive": false
+																"description": "The bootscript organization ID."
 															}
 														},
 														{
 															"name": "project",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The bootscript project ID.",
-																"sensitive": false
+																"description": "The bootscript project ID."
 															}
 														},
 														{
@@ -380,20 +351,17 @@
 															"name": "title",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The bootscript title.",
-																"sensitive": false
+																"description": "The bootscript title."
 															}
 														},
 														{
 															"name": "zone",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The zone in which is the bootscript.",
-																"sensitive": false
+																"description": "The zone in which is the bootscript."
 															}
 														}
-													],
-													"description": ""
+													]
 												}
 											},
 											{
@@ -410,56 +378,49 @@
 																		"name": "creation_date",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume creation date. (RFC 3339 format)",
-																			"sensitive": false
+																			"description": "The volume creation date. (RFC 3339 format)"
 																		}
 																	},
 																	{
 																		"name": "export_uri",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "Show the volume NBD export URI.",
-																			"sensitive": false
+																			"description": "Show the volume NBD export URI."
 																		}
 																	},
 																	{
 																		"name": "id",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume unique ID.",
-																			"sensitive": false
+																			"description": "The volume unique ID."
 																		}
 																	},
 																	{
 																		"name": "modification_date",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume modification date. (RFC 3339 format)",
-																			"sensitive": false
+																			"description": "The volume modification date. (RFC 3339 format)"
 																		}
 																	},
 																	{
 																		"name": "name",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume name.",
-																			"sensitive": false
+																			"description": "The volume name."
 																		}
 																	},
 																	{
 																		"name": "organization",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume organization ID.",
-																			"sensitive": false
+																			"description": "The volume organization ID."
 																		}
 																	},
 																	{
 																		"name": "project",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The volume project ID.",
-																			"sensitive": false
+																			"description": "The volume project ID."
 																		}
 																	},
 																	{
@@ -470,17 +431,13 @@
 																				{
 																					"name": "id",
 																					"string": {
-																						"computed_optional_required": "computed_optional",
-																						"description": "",
-																						"sensitive": false
+																						"computed_optional_required": "computed_optional"
 																					}
 																				},
 																				{
 																					"name": "name",
 																					"string": {
-																						"computed_optional_required": "computed_optional",
-																						"description": "",
-																						"sensitive": false
+																						"computed_optional_required": "computed_optional"
 																					}
 																				}
 																			],
@@ -499,7 +456,6 @@
 																		"string": {
 																			"computed_optional_required": "computed_optional",
 																			"description": "The volume state.",
-																			"sensitive": false,
 																			"validators": [
 																				{
 																					"custom": {
@@ -529,7 +485,6 @@
 																		"string": {
 																			"computed_optional_required": "computed_optional",
 																			"description": "The volume type.",
-																			"sensitive": false,
 																			"validators": [
 																				{
 																					"custom": {
@@ -548,71 +503,56 @@
 																		"name": "zone",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
-																			"description": "The zone in which is the volume.",
-																			"sensitive": false
+																			"description": "The zone in which is the volume."
 																		}
 																	}
-																],
-																"description": ""
+																]
 															}
 														}
-													],
-													"description": ""
+													]
 												}
 											},
 											{
 												"name": "from_server",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "modification_date",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "(RFC 3339 format)",
-													"sensitive": false
+													"description": "(RFC 3339 format)"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "project",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "public",
 												"bool": {
-													"computed_optional_required": "computed_optional",
-													"description": ""
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
@@ -623,17 +563,13 @@
 														{
 															"name": "id",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "name",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
@@ -647,8 +583,6 @@
 															"name": "volume_type",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -663,16 +597,13 @@
 																]
 															}
 														}
-													],
-													"description": ""
+													]
 												}
 											},
 											{
 												"name": "state",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -693,16 +624,13 @@
 													"computed_optional_required": "computed_optional",
 													"element_type": {
 														"string": {}
-													},
-													"description": ""
+													}
 												}
 											},
 											{
 												"name": "zone",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											}
 										],
@@ -718,24 +646,21 @@
 												"name": "address",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The server IPv6 IP-Address. (IPv6 address)",
-													"sensitive": false
+													"description": "The server IPv6 IP-Address. (IPv6 address)"
 												}
 											},
 											{
 												"name": "gateway",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The IPv6 IP-addresses gateway. (IPv6 address)",
-													"sensitive": false
+													"description": "The IPv6 IP-addresses gateway. (IPv6 address)"
 												}
 											},
 											{
 												"name": "netmask",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The IPv6 IP-addresses CIDR netmask.",
-													"sensitive": false
+													"description": "The IPv6 IP-addresses CIDR netmask."
 												}
 											}
 										],
@@ -750,41 +675,31 @@
 											{
 												"name": "cluster_id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "hypervisor_id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "node_id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "platform_id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "zone_id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											}
 										],
@@ -800,9 +715,7 @@
 												{
 													"name": "reason",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												}
 											]
@@ -814,24 +727,21 @@
 									"name": "modification_date",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server modification date. (RFC 3339 format)",
-										"sensitive": false
+										"description": "The server modification date. (RFC 3339 format)"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server name.",
-										"sensitive": false
+										"description": "The server name."
 									}
 								},
 								{
 									"name": "organization",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server organization ID.",
-										"sensitive": false
+										"description": "The server organization ID."
 									}
 								},
 								{
@@ -843,24 +753,21 @@
 												"name": "id",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The placement group unique ID.",
-													"sensitive": false
+													"description": "The placement group unique ID."
 												}
 											},
 											{
 												"name": "name",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The placement group name.",
-													"sensitive": false
+													"description": "The placement group name."
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The placement group organization ID.",
-													"sensitive": false
+													"description": "The placement group organization ID."
 												}
 											},
 											{
@@ -868,7 +775,6 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "Select the failling mode when the placement cannot be respected, either optional or enforced.",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -895,7 +801,6 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "Select the behavior of the placement group, either low_latency (group) or max_availability (spread).",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -914,8 +819,7 @@
 												"name": "project",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The placement group project ID.",
-													"sensitive": false
+													"description": "The placement group project ID."
 												}
 											},
 											{
@@ -932,8 +836,7 @@
 												"name": "zone",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The zone in which is the placement group.",
-													"sensitive": false
+													"description": "The zone in which is the placement group."
 												}
 											}
 										],
@@ -944,8 +847,7 @@
 									"name": "private_ip",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server private IP address.",
-										"sensitive": false
+										"description": "The server private IP address."
 									}
 								},
 								{
@@ -958,32 +860,28 @@
 													"name": "id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The private NIC unique ID.",
-														"sensitive": false
+														"description": "The private NIC unique ID."
 													}
 												},
 												{
 													"name": "mac_address",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The private NIC MAC address.",
-														"sensitive": false
+														"description": "The private NIC MAC address."
 													}
 												},
 												{
 													"name": "private_network_id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The private network where the private NIC is attached.",
-														"sensitive": false
+														"description": "The private network where the private NIC is attached."
 													}
 												},
 												{
 													"name": "server_id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The server the private NIC is attached to.",
-														"sensitive": false
+														"description": "The server the private NIC is attached to."
 													}
 												},
 												{
@@ -991,7 +889,6 @@
 													"string": {
 														"computed_optional_required": "computed_optional",
 														"description": "The private NIC state.",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -1025,8 +922,7 @@
 									"name": "project",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server project ID.",
-										"sensitive": false
+										"description": "The server project ID."
 									}
 								},
 								{
@@ -1045,8 +941,7 @@
 												"name": "address",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The server public IPv4 IP-Address. (IPv4 address)",
-													"sensitive": false
+													"description": "The server public IPv4 IP-Address. (IPv4 address)"
 												}
 											},
 											{
@@ -1060,8 +955,7 @@
 												"name": "id",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The unique ID of the IP address.",
-													"sensitive": false
+													"description": "The unique ID of the IP address."
 												}
 											}
 										],
@@ -1076,17 +970,13 @@
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											}
 										],
@@ -1098,7 +988,6 @@
 									"string": {
 										"computed_optional_required": "computed_optional",
 										"description": "The server state.",
-										"sensitive": false,
 										"validators": [
 											{
 												"custom": {
@@ -1117,8 +1006,7 @@
 									"name": "state_detail",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The server state_detail.",
-										"sensitive": false
+										"description": "The server state_detail."
 									}
 								},
 								{
@@ -1144,64 +1032,51 @@
 														{
 															"name": "boot",
 															"bool": {
-																"computed_optional_required": "computed_optional",
-																"description": ""
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "creation_date",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "(RFC 3339 format)",
-																"sensitive": false
+																"description": "(RFC 3339 format)"
 															}
 														},
 														{
 															"name": "export_uri",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "id",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "modification_date",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "(RFC 3339 format)",
-																"sensitive": false
+																"description": "(RFC 3339 format)"
 															}
 														},
 														{
 															"name": "name",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "organization",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
 															"name": "project",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														},
 														{
@@ -1212,21 +1087,16 @@
 																	{
 																		"name": "id",
 																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
+																			"computed_optional_required": "computed_optional"
 																		}
 																	},
 																	{
 																		"name": "name",
 																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
+																			"computed_optional_required": "computed_optional"
 																		}
 																	}
-																],
-																"description": ""
+																]
 															}
 														},
 														{
@@ -1240,8 +1110,6 @@
 															"name": "state",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -1260,8 +1128,6 @@
 															"name": "volume_type",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -1279,13 +1145,10 @@
 														{
 															"name": "zone",
 															"string": {
-																"computed_optional_required": "computed_optional",
-																"description": "",
-																"sensitive": false
+																"computed_optional_required": "computed_optional"
 															}
 														}
-													],
-													"description": ""
+													]
 												}
 											}
 										],
@@ -1296,12 +1159,10 @@
 									"name": "zone",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "The zone in which is the server.",
-										"sensitive": false
+										"description": "The zone in which is the server."
 									}
 								}
-							],
-							"description": ""
+							]
 						}
 					}
 				]
@@ -1316,7 +1177,6 @@
 						"string": {
 							"computed_optional_required": "required",
 							"description": "The zone you want to target",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -1349,32 +1209,28 @@
 						"name": "organization",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List only servers of this organization ID.",
-							"sensitive": false
+							"description": "List only servers of this organization ID."
 						}
 					},
 					{
 						"name": "project",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List only servers of this project ID.",
-							"sensitive": false
+							"description": "List only servers of this project ID."
 						}
 					},
 					{
 						"name": "name",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Filter servers by name (for eg. \"server1\" will return \"server100\" and \"server1\" but not \"foo\").",
-							"sensitive": false
+							"description": "Filter servers by name (for eg. \"server1\" will return \"server100\" and \"server1\" but not \"foo\")."
 						}
 					},
 					{
 						"name": "private_ip",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List servers by private_ip. (IP address)",
-							"sensitive": false
+							"description": "List servers by private_ip. (IP address)"
 						}
 					},
 					{
@@ -1388,8 +1244,7 @@
 						"name": "commercial_type",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List servers of this commercial type.",
-							"sensitive": false
+							"description": "List servers of this commercial type."
 						}
 					},
 					{
@@ -1397,7 +1252,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "List servers in this state.",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -1416,16 +1270,14 @@
 						"name": "tags",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List servers with these exact tags (to filter with several tags, use commas to separate them).",
-							"sensitive": false
+							"description": "List servers with these exact tags (to filter with several tags, use commas to separate them)."
 						}
 					},
 					{
 						"name": "private_network",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "List servers in this Private Network.",
-							"sensitive": false
+							"description": "List servers in this Private Network."
 						}
 					},
 					{
@@ -1433,7 +1285,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "Define the order of the returned servers.",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -1469,7 +1320,6 @@
 										"string": {
 											"computed_optional_required": "computed_optional",
 											"description": "The server arch.",
-											"sensitive": false,
 											"validators": [
 												{
 													"custom": {
@@ -1489,7 +1339,6 @@
 										"string": {
 											"computed_optional_required": "computed_optional",
 											"description": "The server boot type.",
-											"sensitive": false,
 											"validators": [
 												{
 													"custom": {
@@ -1514,7 +1363,6 @@
 													"string": {
 														"computed_optional_required": "computed_optional",
 														"description": "The bootscript arch.",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -1533,8 +1381,7 @@
 													"name": "bootcmdargs",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The bootscript arguments.",
-														"sensitive": false
+														"description": "The bootscript arguments."
 													}
 												},
 												{
@@ -1548,48 +1395,42 @@
 													"name": "dtb",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-														"sensitive": false
+														"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 													}
 												},
 												{
 													"name": "id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The bootscript ID.",
-														"sensitive": false
+														"description": "The bootscript ID."
 													}
 												},
 												{
 													"name": "initrd",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The initrd (initial ramdisk) configuration.",
-														"sensitive": false
+														"description": "The initrd (initial ramdisk) configuration."
 													}
 												},
 												{
 													"name": "kernel",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The server kernel version.",
-														"sensitive": false
+														"description": "The server kernel version."
 													}
 												},
 												{
 													"name": "organization",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The bootscript organization ID.",
-														"sensitive": false
+														"description": "The bootscript organization ID."
 													}
 												},
 												{
 													"name": "project",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The bootscript project ID.",
-														"sensitive": false
+														"description": "The bootscript project ID."
 													}
 												},
 												{
@@ -1603,16 +1444,14 @@
 													"name": "title",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The bootscript title.",
-														"sensitive": false
+														"description": "The bootscript title."
 													}
 												},
 												{
 													"name": "zone",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The zone in which is the bootscript.",
-														"sensitive": false
+														"description": "The zone in which is the bootscript."
 													}
 												}
 											],
@@ -1623,16 +1462,14 @@
 										"name": "commercial_type",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server commercial type (eg. GP1-M).",
-											"sensitive": false
+											"description": "The server commercial type (eg. GP1-M)."
 										}
 									},
 									{
 										"name": "creation_date",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server creation date. (RFC 3339 format)",
-											"sensitive": false
+											"description": "The server creation date. (RFC 3339 format)"
 										}
 									},
 									{
@@ -1653,16 +1490,14 @@
 										"name": "hostname",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server host name.",
-											"sensitive": false
+											"description": "The server host name."
 										}
 									},
 									{
 										"name": "id",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server unique ID.",
-											"sensitive": false
+											"description": "The server unique ID."
 										}
 									},
 									{
@@ -1674,8 +1509,6 @@
 													"name": "arch",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -1694,8 +1527,7 @@
 													"name": "creation_date",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "(RFC 3339 format)",
-														"sensitive": false
+														"description": "(RFC 3339 format)"
 													}
 												},
 												{
@@ -1708,7 +1540,6 @@
 																"string": {
 																	"computed_optional_required": "computed_optional",
 																	"description": "The bootscript arch.",
-																	"sensitive": false,
 																	"validators": [
 																		{
 																			"custom": {
@@ -1727,8 +1558,7 @@
 																"name": "bootcmdargs",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The bootscript arguments.",
-																	"sensitive": false
+																	"description": "The bootscript arguments."
 																}
 															},
 															{
@@ -1742,48 +1572,42 @@
 																"name": "dtb",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-																	"sensitive": false
+																	"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 																}
 															},
 															{
 																"name": "id",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The bootscript ID.",
-																	"sensitive": false
+																	"description": "The bootscript ID."
 																}
 															},
 															{
 																"name": "initrd",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The initrd (initial ramdisk) configuration.",
-																	"sensitive": false
+																	"description": "The initrd (initial ramdisk) configuration."
 																}
 															},
 															{
 																"name": "kernel",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The server kernel version.",
-																	"sensitive": false
+																	"description": "The server kernel version."
 																}
 															},
 															{
 																"name": "organization",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The bootscript organization ID.",
-																	"sensitive": false
+																	"description": "The bootscript organization ID."
 																}
 															},
 															{
 																"name": "project",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The bootscript project ID.",
-																	"sensitive": false
+																	"description": "The bootscript project ID."
 																}
 															},
 															{
@@ -1797,20 +1621,17 @@
 																"name": "title",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The bootscript title.",
-																	"sensitive": false
+																	"description": "The bootscript title."
 																}
 															},
 															{
 																"name": "zone",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "The zone in which is the bootscript.",
-																	"sensitive": false
+																	"description": "The zone in which is the bootscript."
 																}
 															}
-														],
-														"description": ""
+														]
 													}
 												},
 												{
@@ -1827,56 +1648,49 @@
 																			"name": "creation_date",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume creation date. (RFC 3339 format)",
-																				"sensitive": false
+																				"description": "The volume creation date. (RFC 3339 format)"
 																			}
 																		},
 																		{
 																			"name": "export_uri",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "Show the volume NBD export URI.",
-																				"sensitive": false
+																				"description": "Show the volume NBD export URI."
 																			}
 																		},
 																		{
 																			"name": "id",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume unique ID.",
-																				"sensitive": false
+																				"description": "The volume unique ID."
 																			}
 																		},
 																		{
 																			"name": "modification_date",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume modification date. (RFC 3339 format)",
-																				"sensitive": false
+																				"description": "The volume modification date. (RFC 3339 format)"
 																			}
 																		},
 																		{
 																			"name": "name",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume name.",
-																				"sensitive": false
+																				"description": "The volume name."
 																			}
 																		},
 																		{
 																			"name": "organization",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume organization ID.",
-																				"sensitive": false
+																				"description": "The volume organization ID."
 																			}
 																		},
 																		{
 																			"name": "project",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The volume project ID.",
-																				"sensitive": false
+																				"description": "The volume project ID."
 																			}
 																		},
 																		{
@@ -1887,17 +1701,13 @@
 																					{
 																						"name": "id",
 																						"string": {
-																							"computed_optional_required": "computed_optional",
-																							"description": "",
-																							"sensitive": false
+																							"computed_optional_required": "computed_optional"
 																						}
 																					},
 																					{
 																						"name": "name",
 																						"string": {
-																							"computed_optional_required": "computed_optional",
-																							"description": "",
-																							"sensitive": false
+																							"computed_optional_required": "computed_optional"
 																						}
 																					}
 																				],
@@ -1916,7 +1726,6 @@
 																			"string": {
 																				"computed_optional_required": "computed_optional",
 																				"description": "The volume state.",
-																				"sensitive": false,
 																				"validators": [
 																					{
 																						"custom": {
@@ -1946,7 +1755,6 @@
 																			"string": {
 																				"computed_optional_required": "computed_optional",
 																				"description": "The volume type.",
-																				"sensitive": false,
 																				"validators": [
 																					{
 																						"custom": {
@@ -1965,71 +1773,56 @@
 																			"name": "zone",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "The zone in which is the volume.",
-																				"sensitive": false
+																				"description": "The zone in which is the volume."
 																			}
 																		}
-																	],
-																	"description": ""
+																	]
 																}
 															}
-														],
-														"description": ""
+														]
 													}
 												},
 												{
 													"name": "from_server",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "modification_date",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "(RFC 3339 format)",
-														"sensitive": false
+														"description": "(RFC 3339 format)"
 													}
 												},
 												{
 													"name": "name",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "organization",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "project",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "public",
 													"bool": {
-														"computed_optional_required": "computed_optional",
-														"description": ""
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
@@ -2040,17 +1833,13 @@
 															{
 																"name": "id",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "name",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
@@ -2064,8 +1853,6 @@
 																"name": "volume_type",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false,
 																	"validators": [
 																		{
 																			"custom": {
@@ -2080,16 +1867,13 @@
 																	]
 																}
 															}
-														],
-														"description": ""
+														]
 													}
 												},
 												{
 													"name": "state",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -2110,16 +1894,13 @@
 														"computed_optional_required": "computed_optional",
 														"element_type": {
 															"string": {}
-														},
-														"description": ""
+														}
 													}
 												},
 												{
 													"name": "zone",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												}
 											],
@@ -2135,24 +1916,21 @@
 													"name": "address",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The server IPv6 IP-Address. (IPv6 address)",
-														"sensitive": false
+														"description": "The server IPv6 IP-Address. (IPv6 address)"
 													}
 												},
 												{
 													"name": "gateway",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The IPv6 IP-addresses gateway. (IPv6 address)",
-														"sensitive": false
+														"description": "The IPv6 IP-addresses gateway. (IPv6 address)"
 													}
 												},
 												{
 													"name": "netmask",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The IPv6 IP-addresses CIDR netmask.",
-														"sensitive": false
+														"description": "The IPv6 IP-addresses CIDR netmask."
 													}
 												}
 											],
@@ -2167,41 +1945,31 @@
 												{
 													"name": "cluster_id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "hypervisor_id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "node_id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "platform_id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "zone_id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												}
 											],
@@ -2217,9 +1985,7 @@
 													{
 														"name": "reason",
 														"string": {
-															"computed_optional_required": "computed_optional",
-															"description": "",
-															"sensitive": false
+															"computed_optional_required": "computed_optional"
 														}
 													}
 												]
@@ -2231,24 +1997,21 @@
 										"name": "modification_date",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server modification date. (RFC 3339 format)",
-											"sensitive": false
+											"description": "The server modification date. (RFC 3339 format)"
 										}
 									},
 									{
 										"name": "name",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server name.",
-											"sensitive": false
+											"description": "The server name."
 										}
 									},
 									{
 										"name": "organization",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server organization ID.",
-											"sensitive": false
+											"description": "The server organization ID."
 										}
 									},
 									{
@@ -2260,24 +2023,21 @@
 													"name": "id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The placement group unique ID.",
-														"sensitive": false
+														"description": "The placement group unique ID."
 													}
 												},
 												{
 													"name": "name",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The placement group name.",
-														"sensitive": false
+														"description": "The placement group name."
 													}
 												},
 												{
 													"name": "organization",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The placement group organization ID.",
-														"sensitive": false
+														"description": "The placement group organization ID."
 													}
 												},
 												{
@@ -2285,7 +2045,6 @@
 													"string": {
 														"computed_optional_required": "computed_optional",
 														"description": "Select the failling mode when the placement cannot be respected, either optional or enforced.",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -2312,7 +2071,6 @@
 													"string": {
 														"computed_optional_required": "computed_optional",
 														"description": "Select the behavior of the placement group, either low_latency (group) or max_availability (spread).",
-														"sensitive": false,
 														"validators": [
 															{
 																"custom": {
@@ -2331,8 +2089,7 @@
 													"name": "project",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The placement group project ID.",
-														"sensitive": false
+														"description": "The placement group project ID."
 													}
 												},
 												{
@@ -2349,8 +2106,7 @@
 													"name": "zone",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The zone in which is the placement group.",
-														"sensitive": false
+														"description": "The zone in which is the placement group."
 													}
 												}
 											],
@@ -2361,8 +2117,7 @@
 										"name": "private_ip",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server private IP address.",
-											"sensitive": false
+											"description": "The server private IP address."
 										}
 									},
 									{
@@ -2375,32 +2130,28 @@
 														"name": "id",
 														"string": {
 															"computed_optional_required": "computed_optional",
-															"description": "The private NIC unique ID.",
-															"sensitive": false
+															"description": "The private NIC unique ID."
 														}
 													},
 													{
 														"name": "mac_address",
 														"string": {
 															"computed_optional_required": "computed_optional",
-															"description": "The private NIC MAC address.",
-															"sensitive": false
+															"description": "The private NIC MAC address."
 														}
 													},
 													{
 														"name": "private_network_id",
 														"string": {
 															"computed_optional_required": "computed_optional",
-															"description": "The private network where the private NIC is attached.",
-															"sensitive": false
+															"description": "The private network where the private NIC is attached."
 														}
 													},
 													{
 														"name": "server_id",
 														"string": {
 															"computed_optional_required": "computed_optional",
-															"description": "The server the private NIC is attached to.",
-															"sensitive": false
+															"description": "The server the private NIC is attached to."
 														}
 													},
 													{
@@ -2408,7 +2159,6 @@
 														"string": {
 															"computed_optional_required": "computed_optional",
 															"description": "The private NIC state.",
-															"sensitive": false,
 															"validators": [
 																{
 																	"custom": {
@@ -2442,8 +2192,7 @@
 										"name": "project",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server project ID.",
-											"sensitive": false
+											"description": "The server project ID."
 										}
 									},
 									{
@@ -2462,8 +2211,7 @@
 													"name": "address",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The server public IPv4 IP-Address. (IPv4 address)",
-														"sensitive": false
+														"description": "The server public IPv4 IP-Address. (IPv4 address)"
 													}
 												},
 												{
@@ -2477,8 +2225,7 @@
 													"name": "id",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "The unique ID of the IP address.",
-														"sensitive": false
+														"description": "The unique ID of the IP address."
 													}
 												}
 											],
@@ -2493,17 +2240,13 @@
 												{
 													"name": "id",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												},
 												{
 													"name": "name",
 													"string": {
-														"computed_optional_required": "computed_optional",
-														"description": "",
-														"sensitive": false
+														"computed_optional_required": "computed_optional"
 													}
 												}
 											],
@@ -2515,7 +2258,6 @@
 										"string": {
 											"computed_optional_required": "computed_optional",
 											"description": "The server state.",
-											"sensitive": false,
 											"validators": [
 												{
 													"custom": {
@@ -2534,8 +2276,7 @@
 										"name": "state_detail",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The server state_detail.",
-											"sensitive": false
+											"description": "The server state_detail."
 										}
 									},
 									{
@@ -2561,64 +2302,51 @@
 															{
 																"name": "boot",
 																"bool": {
-																	"computed_optional_required": "computed_optional",
-																	"description": ""
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "creation_date",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "(RFC 3339 format)",
-																	"sensitive": false
+																	"description": "(RFC 3339 format)"
 																}
 															},
 															{
 																"name": "export_uri",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "id",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "modification_date",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "(RFC 3339 format)",
-																	"sensitive": false
+																	"description": "(RFC 3339 format)"
 																}
 															},
 															{
 																"name": "name",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "organization",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
 																"name": "project",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															},
 															{
@@ -2629,21 +2357,16 @@
 																		{
 																			"name": "id",
 																			"string": {
-																				"computed_optional_required": "computed_optional",
-																				"description": "",
-																				"sensitive": false
+																				"computed_optional_required": "computed_optional"
 																			}
 																		},
 																		{
 																			"name": "name",
 																			"string": {
-																				"computed_optional_required": "computed_optional",
-																				"description": "",
-																				"sensitive": false
+																				"computed_optional_required": "computed_optional"
 																			}
 																		}
-																	],
-																	"description": ""
+																	]
 																}
 															},
 															{
@@ -2657,8 +2380,6 @@
 																"name": "state",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false,
 																	"validators": [
 																		{
 																			"custom": {
@@ -2677,8 +2398,6 @@
 																"name": "volume_type",
 																"string": {
 																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false,
 																	"validators": [
 																		{
 																			"custom": {
@@ -2696,13 +2415,10 @@
 															{
 																"name": "zone",
 																"string": {
-																	"computed_optional_required": "computed_optional",
-																	"description": "",
-																	"sensitive": false
+																	"computed_optional_required": "computed_optional"
 																}
 															}
-														],
-														"description": ""
+														]
 													}
 												}
 											],
@@ -2713,8 +2429,7 @@
 										"name": "zone",
 										"string": {
 											"computed_optional_required": "computed_optional",
-											"description": "The zone in which is the server.",
-											"sensitive": false
+											"description": "The zone in which is the server."
 										}
 									}
 								]
@@ -2739,7 +2454,6 @@
 						"string": {
 							"computed_optional_required": "required",
 							"description": "Architecture of the image.",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -2758,8 +2472,7 @@
 						"name": "default_bootscript",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Default bootscript of the image.",
-							"sensitive": false
+							"description": "Default bootscript of the image."
 						}
 					},
 					{
@@ -2776,32 +2489,28 @@
 												"name": "id",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "UUID of the volume.",
-													"sensitive": false
+													"description": "UUID of the volume."
 												}
 											},
 											{
 												"name": "name",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "Name of the volume.",
-													"sensitive": false
+													"description": "Name of the volume."
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "Organization ID of the volume.",
-													"sensitive": false
+													"description": "Organization ID of the volume."
 												}
 											},
 											{
 												"name": "project",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "Project ID of the volume.",
-													"sensitive": false
+													"description": "Project ID of the volume."
 												}
 											},
 											{
@@ -2816,7 +2525,6 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "Type of the volume.",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -2831,8 +2539,7 @@
 													]
 												}
 											}
-										],
-										"description": ""
+										]
 									}
 								}
 							],
@@ -2843,24 +2550,21 @@
 						"name": "name",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Name of the image.",
-							"sensitive": false
+							"description": "Name of the image."
 						}
 					},
 					{
 						"name": "organization",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Organization ID of the image.",
-							"sensitive": false
+							"description": "Organization ID of the image."
 						}
 					},
 					{
 						"name": "project",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Project ID of the image.",
-							"sensitive": false
+							"description": "Project ID of the image."
 						}
 					},
 					{
@@ -2874,8 +2578,7 @@
 						"name": "root_volume",
 						"string": {
 							"computed_optional_required": "required",
-							"description": "UUID of the snapshot.",
-							"sensitive": false
+							"description": "UUID of the snapshot."
 						}
 					},
 					{
@@ -2897,8 +2600,6 @@
 									"name": "arch",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false,
 										"validators": [
 											{
 												"custom": {
@@ -2917,8 +2618,7 @@
 									"name": "creation_date",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "(RFC 3339 format)",
-										"sensitive": false
+										"description": "(RFC 3339 format)"
 									}
 								},
 								{
@@ -2931,7 +2631,6 @@
 												"string": {
 													"computed_optional_required": "computed_optional",
 													"description": "The bootscript arch.",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -2950,8 +2649,7 @@
 												"name": "bootcmdargs",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript arguments.",
-													"sensitive": false
+													"description": "The bootscript arguments."
 												}
 											},
 											{
@@ -2965,48 +2663,42 @@
 												"name": "dtb",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers.",
-													"sensitive": false
+													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 												}
 											},
 											{
 												"name": "id",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript ID.",
-													"sensitive": false
+													"description": "The bootscript ID."
 												}
 											},
 											{
 												"name": "initrd",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The initrd (initial ramdisk) configuration.",
-													"sensitive": false
+													"description": "The initrd (initial ramdisk) configuration."
 												}
 											},
 											{
 												"name": "kernel",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The server kernel version.",
-													"sensitive": false
+													"description": "The server kernel version."
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript organization ID.",
-													"sensitive": false
+													"description": "The bootscript organization ID."
 												}
 											},
 											{
 												"name": "project",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript project ID.",
-													"sensitive": false
+													"description": "The bootscript project ID."
 												}
 											},
 											{
@@ -3020,20 +2712,17 @@
 												"name": "title",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The bootscript title.",
-													"sensitive": false
+													"description": "The bootscript title."
 												}
 											},
 											{
 												"name": "zone",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "The zone in which is the bootscript.",
-													"sensitive": false
+													"description": "The zone in which is the bootscript."
 												}
 											}
-										],
-										"description": ""
+										]
 									}
 								},
 								{
@@ -3050,56 +2739,49 @@
 															"name": "creation_date",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume creation date. (RFC 3339 format)",
-																"sensitive": false
+																"description": "The volume creation date. (RFC 3339 format)"
 															}
 														},
 														{
 															"name": "export_uri",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "Show the volume NBD export URI.",
-																"sensitive": false
+																"description": "Show the volume NBD export URI."
 															}
 														},
 														{
 															"name": "id",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume unique ID.",
-																"sensitive": false
+																"description": "The volume unique ID."
 															}
 														},
 														{
 															"name": "modification_date",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume modification date. (RFC 3339 format)",
-																"sensitive": false
+																"description": "The volume modification date. (RFC 3339 format)"
 															}
 														},
 														{
 															"name": "name",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume name.",
-																"sensitive": false
+																"description": "The volume name."
 															}
 														},
 														{
 															"name": "organization",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume organization ID.",
-																"sensitive": false
+																"description": "The volume organization ID."
 															}
 														},
 														{
 															"name": "project",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The volume project ID.",
-																"sensitive": false
+																"description": "The volume project ID."
 															}
 														},
 														{
@@ -3110,17 +2792,13 @@
 																	{
 																		"name": "id",
 																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
+																			"computed_optional_required": "computed_optional"
 																		}
 																	},
 																	{
 																		"name": "name",
 																		"string": {
-																			"computed_optional_required": "computed_optional",
-																			"description": "",
-																			"sensitive": false
+																			"computed_optional_required": "computed_optional"
 																		}
 																	}
 																],
@@ -3139,7 +2817,6 @@
 															"string": {
 																"computed_optional_required": "computed_optional",
 																"description": "The volume state.",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -3169,7 +2846,6 @@
 															"string": {
 																"computed_optional_required": "computed_optional",
 																"description": "The volume type.",
-																"sensitive": false,
 																"validators": [
 																	{
 																		"custom": {
@@ -3188,71 +2864,56 @@
 															"name": "zone",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The zone in which is the volume.",
-																"sensitive": false
+																"description": "The zone in which is the volume."
 															}
 														}
-													],
-													"description": ""
+													]
 												}
 											}
-										],
-										"description": ""
+										]
 									}
 								},
 								{
 									"name": "from_server",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "id",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "modification_date",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "(RFC 3339 format)",
-										"sensitive": false
+										"description": "(RFC 3339 format)"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "organization",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "project",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "public",
 									"bool": {
-										"computed_optional_required": "computed_optional",
-										"description": ""
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
@@ -3263,17 +2924,13 @@
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
@@ -3287,8 +2944,6 @@
 												"name": "volume_type",
 												"string": {
 													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false,
 													"validators": [
 														{
 															"custom": {
@@ -3303,16 +2958,13 @@
 													]
 												}
 											}
-										],
-										"description": ""
+										]
 									}
 								},
 								{
 									"name": "state",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false,
 										"validators": [
 											{
 												"custom": {
@@ -3333,20 +2985,16 @@
 										"computed_optional_required": "computed_optional",
 										"element_type": {
 											"string": {}
-										},
-										"description": ""
+										}
 									}
 								},
 								{
 									"name": "zone",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								}
-							],
-							"description": ""
+							]
 						}
 					},
 					{
@@ -3354,7 +3002,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The zone you want to target",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {
@@ -3373,8 +3020,7 @@
 						"name": "image_id",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "UUID of the image you want to get.",
-							"sensitive": false
+							"description": "UUID of the image you want to get."
 						}
 					}
 				]
@@ -3388,24 +3034,21 @@
 						"name": "organization",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "The organization ID the IP is reserved in.",
-							"sensitive": false
+							"description": "The organization ID the IP is reserved in."
 						}
 					},
 					{
 						"name": "project",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "The project ID the IP is reserved in.",
-							"sensitive": false
+							"description": "The project ID the IP is reserved in."
 						}
 					},
 					{
 						"name": "server",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "UUID of the server you want to attach the IP to.",
-							"sensitive": false
+							"description": "UUID of the server you want to attach the IP to."
 						}
 					},
 					{
@@ -3427,40 +3070,31 @@
 									"name": "address",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "(IPv4 address)",
-										"sensitive": false
+										"description": "(IPv4 address)"
 									}
 								},
 								{
 									"name": "id",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "organization",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "project",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
 									"name": "reverse",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								},
 								{
@@ -3471,21 +3105,16 @@
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional",
-													"description": "",
-													"sensitive": false
+													"computed_optional_required": "computed_optional"
 												}
 											}
-										],
-										"description": ""
+										]
 									}
 								},
 								{
@@ -3494,20 +3123,16 @@
 										"computed_optional_required": "computed_optional",
 										"element_type": {
 											"string": {}
-										},
-										"description": ""
+										}
 									}
 								},
 								{
 									"name": "zone",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "",
-										"sensitive": false
+										"computed_optional_required": "computed_optional"
 									}
 								}
-							],
-							"description": ""
+							]
 						}
 					},
 					{
@@ -3515,7 +3140,6 @@
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "The zone you want to target",
-							"sensitive": false,
 							"validators": [
 								{
 									"custom": {

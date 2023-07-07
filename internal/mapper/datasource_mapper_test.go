@@ -341,7 +341,6 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 													String: &datasource.StringAttribute{
 														ComputedOptionalRequired: schema.ComputedOptional,
 														Description:              pointer("hey this is a string!"),
-														Sensitive:                pointer(false),
 													},
 												},
 											},
