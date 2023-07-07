@@ -52,34 +52,6 @@ func (e configExplorer) FindProvider() (Provider, error) {
 	return foundProvider, nil
 }
 
-// TODO: move to utils and add more tests?
-func extractSchemaProxy(document high.Document, componentRef string) (*highbase.SchemaProxy, error) {
-	// find the reference using the root document.Index
-	indexRef := document.Index.FindComponentInRoot(componentRef)
-	if indexRef == nil {
-		return nil, fmt.Errorf("unable to find reference: %s", componentRef)
-	}
-
-	// build low-level schema using YAML node
-	var lowSchema lowbase.Schema
-	err := lowmodel.BuildModel(indexRef.Node, &lowSchema)
-	if err != nil {
-		return nil, fmt.Errorf("error building low-level schema: %w", err)
-	}
-
-	// populate low-level schema, using root document.Index for resolving
-	err = lowSchema.Build(indexRef.Node, document.Index)
-	if err != nil {
-		return nil, fmt.Errorf("error populating low-level schema: %w", err)
-	}
-
-	// build high-level schema from low-level schema
-	highSchema := highbase.NewSchema(&lowSchema)
-
-	// wrap in a schema proxy for mapping with `oas` package
-	return highbase.CreateSchemaProxy(highSchema), nil
-}
-
 func (e configExplorer) FindResources() (map[string]Resource, error) {
 	resources := map[string]Resource{}
 	for name, opMapping := range e.config.Resources {
@@ -130,4 +102,31 @@ func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) *high
 	default:
 		return nil
 	}
+}
+
+func extractSchemaProxy(document high.Document, componentRef string) (*highbase.SchemaProxy, error) {
+	// find the reference using the root document.Index
+	indexRef := document.Index.FindComponentInRoot(componentRef)
+	if indexRef == nil {
+		return nil, fmt.Errorf("unable to find reference: %s", componentRef)
+	}
+
+	// build low-level schema using YAML node
+	var lowSchema lowbase.Schema
+	err := lowmodel.BuildModel(indexRef.Node, &lowSchema)
+	if err != nil {
+		return nil, fmt.Errorf("error building low-level schema: %w", err)
+	}
+
+	// populate low-level schema, using root document.Index for resolving
+	err = lowSchema.Build(indexRef.Node, document.Index)
+	if err != nil {
+		return nil, fmt.Errorf("error populating low-level schema: %w", err)
+	}
+
+	// build high-level schema from low-level schema
+	highSchema := highbase.NewSchema(&lowSchema)
+
+	// wrap in a schema proxy for mapping with `oas` package
+	return highbase.CreateSchemaProxy(highSchema), nil
 }
