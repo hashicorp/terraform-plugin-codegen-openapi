@@ -28,6 +28,10 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 			staticDefault, ok := s.Schema.Default.(float64)
 
 			if ok {
+				if computability == schema.Required {
+					result.Float64.ComputedOptionalRequired = schema.ComputedOptional
+				}
+
 				result.Float64.Default = &schema.Float64Default{
 					Static: &staticDefault,
 				}

@@ -150,7 +150,7 @@ For the provider, all fields in the provided JSON schema (`provider.schema_ref`)
 If not required, then the field will be mapped as [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
 
 #### Resources
-For resources, all fields, in the `Create` operation `requestBody` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
+For resources, all fields, in the `Create` operation `requestBody` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute. If [default](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-default) is also specified, it will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional) instead.
 
 If not required, then the field will be mapped as [Computed](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#computed) and [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
 
