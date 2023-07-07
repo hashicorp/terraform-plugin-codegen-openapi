@@ -19,11 +19,37 @@ Users of the generator can adjust their OAS to match these assumptions, or sugge
 ## Determining the OAS Schema to map from operations
 
 ### Provider
-<!-- TODO: Update this when we have the provider schema mapping :) -->
-Currently, there is no option in the OpenAPI generator to define the mapping for a provider schema. The `provider.name` property is directly copied to the Framework IR.
+For generating Provider schema code, the [generator config file](./README.md) defines:
+- `provider.name` - required property, which is directly copied to the Framework IR as the name of the Provider.
+- `provider.schema_ref` - optional property, which is a [JSON schema reference](https://json-schema.org/understanding-json-schema/structuring.html#ref) to an existing schema in your OpenAPI spec, typically in the [`components.schema` section](https://spec.openapis.org/oas/v3.1.0#fixed-fields-5). This will be used to [map](#mapping-oas-schema-to-plugin-framework-types) the Provider's schema to Framework IR.
+```yml
+provider:
+  name: fakeprovider
+  # This schema needs to exist in the OpenAPI spec!
+  schema_ref: '#/components/schemas/fake_provider_schema'
+```
 
 ### Resources
 The [generator config file](./README.md) defines the CRUD (`Create`, `Read`, `Update`, `Delete`) operations for a resource in an OAS. In those operations, the generator will search `Create` and `Read` operations for schemas to map to Framework IR. Multiple schemas will be [deep merged](#deep-merge-of-schemas-resources) and the final result will be the Resource schema represented in Framework IR.
+
+```yml
+resources:
+  fake_thing:
+    # Required
+    create:
+      path: /thing
+      method: POST
+    read:
+      path: /thing/{id}
+      method: GET
+    # Optional (currently, no effect)
+    update:
+      path: /thing
+      method: PUT
+    delete:
+      path: /thing/{id}
+      method: DELETE
+```
 
 #### OAS Schema order (resources)
 - `Create` operation [requestBody](https://spec.openapis.org/oas/v3.1.0#requestBodyObject)
@@ -47,6 +73,14 @@ All schemas found will be deep merged together, with the `requestBody` schema fr
 
 ### Data Sources
 The [generator config file](./README.md) defines the `Read` operation for a data source in an OAS. In that operation, the generator will search for a response body schema to map to Framework IR. The response body will be [deep merged](#deep-merge-of-schemas-data-sources) with the query parameters and path parameters of the same `Read` operation and the final result will be the Data Source schema represented in Framework IR.
+
+```yml
+data_sources:
+  fake_thing:
+    read:
+      path: /thing/{id}
+      method: GET
+```
 
 #### OAS Schema order (data sources)
 - `Read` operation [response](https://spec.openapis.org/oas/v3.1.0#responsesObject)
@@ -109,6 +143,11 @@ For attributes that don't have additional schema information (`ListAttribute`, `
 | `object`   | -                   | -                                     | `ObjectType`                    |
 
 ### Required, Computed, and Optional
+
+#### Provider
+For the provider, all fields in the provided JSON schema (`provider.schema_ref`) marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
+
+If not required, then the field will be mapped as [Optional](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#optional).
 
 #### Resources
 For resources, all fields, in the `Create` operation `requestBody` OAS schema, marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as a [Required](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/schemas#required) attribute.
