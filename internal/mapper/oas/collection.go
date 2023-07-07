@@ -41,6 +41,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
 				Description:              s.GetDescription(),
 			}
 
@@ -56,6 +57,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 				Attributes: *objectAttributes,
 			},
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -75,6 +77,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		result.Set = &resource.SetAttribute{
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -88,6 +91,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	result.List = &resource.ListAttribute{
 		ElementType:              elemType,
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -125,6 +129,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 					Attributes: *objectAttributes,
 				},
 				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
 				Description:              s.GetDescription(),
 			}
 
@@ -140,6 +145,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 				Attributes: *objectAttributes,
 			},
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -159,6 +165,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		result.Set = &datasource.SetAttribute{
 			ElementType:              elemType,
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -172,6 +179,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 	result.List = &datasource.ListAttribute{
 		ElementType:              elemType,
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -208,11 +216,11 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 				NestedObject: provider.NestedAttributeObject{
 					Attributes: *objectAttributes,
 				},
-				OptionalRequired: optionalOrRequired,
-				Description:      s.GetDescription(),
+				OptionalRequired:   optionalOrRequired,
+				DeprecationMessage: s.GetDeprecationMessage(),
+				Description:        s.GetDescription(),
+				Validators:         s.GetSetValidators(),
 			}
-
-			result.SetNested.Validators = s.GetSetValidators()
 
 			return result, nil
 		}
@@ -221,11 +229,11 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 			NestedObject: provider.NestedAttributeObject{
 				Attributes: *objectAttributes,
 			},
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetListValidators(),
 		}
-
-		result.ListNested.Validators = s.GetListValidators()
 
 		return result, nil
 	}
@@ -237,23 +245,23 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 
 	if s.Schema.Format == util.TF_format_set {
 		result.Set = &provider.SetAttribute{
-			ElementType:      elemType,
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			ElementType:        elemType,
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetSetValidators(),
 		}
-
-		result.Set.Validators = s.GetSetValidators()
 
 		return result, nil
 	}
 
 	result.List = &provider.ListAttribute{
-		ElementType:      elemType,
-		OptionalRequired: optionalOrRequired,
-		Description:      s.GetDescription(),
+		ElementType:        elemType,
+		OptionalRequired:   optionalOrRequired,
+		DeprecationMessage: s.GetDeprecationMessage(),
+		Description:        s.GetDescription(),
+		Validators:         s.GetListValidators(),
 	}
-
-	result.List.Validators = s.GetListValidators()
 
 	return result, nil
 }

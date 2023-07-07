@@ -91,6 +91,26 @@ func TestBuildIntegerResource(t *testing.T) {
 				},
 			},
 		},
+		"int64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"int64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"integer"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "int64_prop",
+					Int64: &resource.Int64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with int64 element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -231,6 +251,26 @@ func TestBuildIntegerDataSource(t *testing.T) {
 				},
 			},
 		},
+		"int64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"int64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"integer"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "int64_prop",
+					Int64: &datasource.Int64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with int64 element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -367,6 +407,26 @@ func TestBuildIntegerProvider(t *testing.T) {
 					Int64: &provider.Int64Attribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm an int64 type, required."),
+					},
+				},
+			},
+		},
+		"int64 attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"int64_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"integer"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "int64_prop",
+					Int64: &provider.Int64Attribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
 				},
 			},

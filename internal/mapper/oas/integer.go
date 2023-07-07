@@ -16,6 +16,7 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 		Name: name,
 		Int64: &resource.Int64Attribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		},
 	}
@@ -42,6 +43,7 @@ func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.Com
 		Name: name,
 		Int64: &datasource.Int64Attribute{
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		},
 	}
@@ -57,12 +59,12 @@ func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.
 	result := &provider.Attribute{
 		Name: name,
 		Int64: &provider.Int64Attribute{
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetIntegerValidators(),
 		},
 	}
-
-	result.Int64.Validators = s.GetIntegerValidators()
 
 	return result, nil
 }

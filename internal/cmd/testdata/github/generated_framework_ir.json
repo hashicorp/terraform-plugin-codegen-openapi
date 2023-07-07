@@ -2354,6 +2354,7 @@
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -4241,6 +4242,7 @@
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -6077,6 +6079,7 @@
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
 										"computed_optional_required": "computed_optional",
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -8941,6 +8944,7 @@
 							"default": {
 								"static": false
 							},
+							"deprecation_message": "This attribute is deprecated.",
 							"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 						}
 					},
@@ -10753,6 +10757,7 @@
 										"default": {
 											"static": false
 										},
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},
@@ -12622,6 +12627,7 @@
 										"default": {
 											"static": false
 										},
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "Whether a squash merge commit can use the pull request title as default. **This property has been deprecated. Please use `squash_merge_commit_title` instead."
 									}
 								},

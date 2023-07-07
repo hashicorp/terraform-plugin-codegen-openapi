@@ -90,6 +90,26 @@ func TestBuildBoolResource(t *testing.T) {
 				},
 			},
 		},
+		"boolean attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"bool_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"boolean"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "bool_prop",
+					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with bool element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -198,6 +218,26 @@ func TestBuildBoolDataSource(t *testing.T) {
 				},
 			},
 		},
+		"boolean attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"bool_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"boolean"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "bool_prop",
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+					},
+				},
+			},
+		},
 		"list attributes with bool element type": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -302,6 +342,26 @@ func TestBuildBoolProvider(t *testing.T) {
 					Bool: &provider.BoolAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a bool type, required."),
+					},
+				},
+			},
+		},
+		"boolean attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"bool_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"boolean"},
+						Deprecated: pointer(true),
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "bool_prop",
+					Bool: &provider.BoolAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
 				},
 			},

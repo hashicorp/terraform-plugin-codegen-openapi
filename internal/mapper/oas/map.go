@@ -42,6 +42,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 				Attributes: *mapAttributes,
 			},
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -60,6 +61,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 	result.Map = &resource.MapAttribute{
 		ElementType:              elemType,
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -97,6 +99,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 				Attributes: *mapAttributes,
 			},
 			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
 		}
 
@@ -115,6 +118,7 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 	result.Map = &datasource.MapAttribute{
 		ElementType:              elemType,
 		ComputedOptionalRequired: computability,
+		DeprecationMessage:       s.GetDeprecationMessage(),
 		Description:              s.GetDescription(),
 	}
 
@@ -151,11 +155,11 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 			NestedObject: provider.NestedAttributeObject{
 				Attributes: *mapAttributes,
 			},
-			OptionalRequired: optionalOrRequired,
-			Description:      s.GetDescription(),
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetMapValidators(),
 		}
-
-		result.MapNested.Validators = s.GetMapValidators()
 
 		return result, nil
 	}
@@ -166,12 +170,12 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 	}
 
 	result.Map = &provider.MapAttribute{
-		ElementType:      elemType,
-		OptionalRequired: optionalOrRequired,
-		Description:      s.GetDescription(),
+		ElementType:        elemType,
+		OptionalRequired:   optionalOrRequired,
+		DeprecationMessage: s.GetDeprecationMessage(),
+		Description:        s.GetDescription(),
+		Validators:         s.GetMapValidators(),
 	}
-
-	result.Map.Validators = s.GetMapValidators()
 
 	return result, nil
 }

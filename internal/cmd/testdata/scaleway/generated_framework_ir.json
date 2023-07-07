@@ -185,6 +185,7 @@
 												}
 											}
 										],
+										"deprecation_message": "This attribute is deprecated.",
 										"description": "The server bootscript."
 									}
 								},
@@ -385,6 +386,7 @@
 																		"name": "export_uri",
 																		"string": {
 																			"computed_optional_required": "computed_optional",
+																			"deprecation_message": "This attribute is deprecated.",
 																			"description": "Show the volume NBD export URI."
 																		}
 																	},
@@ -1455,6 +1457,7 @@
 													}
 												}
 											],
+											"deprecation_message": "This attribute is deprecated.",
 											"description": "The server bootscript."
 										}
 									},
@@ -1655,6 +1658,7 @@
 																			"name": "export_uri",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
+																				"deprecation_message": "This attribute is deprecated.",
 																				"description": "Show the volume NBD export URI."
 																			}
 																		},
@@ -2475,6 +2479,7 @@
 						"name": "default_bootscript",
 						"string": {
 							"computed_optional_required": "computed_optional",
+							"deprecation_message": "This attribute is deprecated.",
 							"description": "Default bootscript of the image."
 						}
 					},
@@ -2506,6 +2511,7 @@
 												"name": "organization",
 												"string": {
 													"computed_optional_required": "computed_optional",
+													"deprecation_message": "This attribute is deprecated.",
 													"description": "Organization ID of the volume."
 												}
 											},
@@ -2563,6 +2569,7 @@
 						"name": "organization",
 						"string": {
 							"computed_optional_required": "computed_optional",
+							"deprecation_message": "This attribute is deprecated.",
 							"description": "Organization ID of the image."
 						}
 					},
@@ -2758,6 +2765,7 @@
 															"name": "export_uri",
 															"string": {
 																"computed_optional_required": "computed_optional",
+																"deprecation_message": "This attribute is deprecated.",
 																"description": "Show the volume NBD export URI."
 															}
 														},
@@ -3058,6 +3066,7 @@
 						"name": "organization",
 						"string": {
 							"computed_optional_required": "computed_optional",
+							"deprecation_message": "This attribute is deprecated.",
 							"description": "The organization ID the IP is reserved in."
 						}
 					},

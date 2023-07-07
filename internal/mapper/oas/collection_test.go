@@ -83,6 +83,48 @@ func TestBuildCollectionResource(t *testing.T) {
 				},
 			},
 		},
+		"list nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_list_prop",
+					ListNested: &resource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"list nested attributes validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -187,6 +229,49 @@ func TestBuildCollectionResource(t *testing.T) {
 									Int64: &resource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey there! I'm a nested int64 type, required."),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"set nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Format:     "set",
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]resource.Attribute{
+				{
+					Name: "nested_set_prop",
+					SetNested: &resource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: resource.NestedAttributeObject{
+							Attributes: []resource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
 									},
 								},
 							},
@@ -657,6 +742,48 @@ func TestBuildCollectionDataSource(t *testing.T) {
 				},
 			},
 		},
+		"list nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_list_prop",
+					ListNested: &datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"list nested attributes validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -761,6 +888,49 @@ func TestBuildCollectionDataSource(t *testing.T) {
 									Int64: &datasource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
 										Description:              pointer("hey there! I'm a nested int64 type, required."),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"set nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Format:     "set",
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]datasource.Attribute{
+				{
+					Name: "nested_set_prop",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						DeprecationMessage:       pointer("This attribute is deprecated."),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
 									},
 								},
 							},
@@ -1231,6 +1401,48 @@ func TestBuildCollectionProvider(t *testing.T) {
 				},
 			},
 		},
+		"list nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_list_prop",
+					ListNested: &provider.ListNestedAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
+						NestedObject: provider.NestedAttributeObject{
+							Attributes: []provider.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &provider.Int64Attribute{
+										OptionalRequired: schema.Required,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		"list nested attributes validators": {
 			schema: &base.Schema{
 				Type:     []string{"object"},
@@ -1335,6 +1547,49 @@ func TestBuildCollectionProvider(t *testing.T) {
 									Int64: &provider.Int64Attribute{
 										OptionalRequired: schema.Required,
 										Description:      pointer("hey there! I'm a nested int64 type, required."),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"set nested attributes deprecated": {
+			schema: &base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:       []string{"array"},
+						Format:     "set",
+						Deprecated: pointer(true),
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			},
+			expectedAttributes: &[]provider.Attribute{
+				{
+					Name: "nested_set_prop",
+					SetNested: &provider.SetNestedAttribute{
+						OptionalRequired:   schema.Optional,
+						DeprecationMessage: pointer("This attribute is deprecated."),
+						NestedObject: provider.NestedAttributeObject{
+							Attributes: []provider.Attribute{
+								{
+									Name: "nested_int64_required",
+									Int64: &provider.Int64Attribute{
+										OptionalRequired: schema.Required,
 									},
 								},
 							},
