@@ -14,50 +14,38 @@
 					{
 						"name": "complete",
 						"bool": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "petId",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "quantity",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "shipDate",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "status",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Order Status",
-							"validators": [
-								{
-									"custom": {
-										"imports": [
-											{
-												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-											}
-										],
-										"schema_definition": "stringvalidator.OneOf(\n\"placed\",\n\"approved\",\n\"delivered\",\n)"
-									}
-								}
-							]
+							"computed_optional_required": "computed",
+							"description": "Order Status"
 						}
 					}
 				]
@@ -77,18 +65,18 @@
 					{
 						"name": "category",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							]
@@ -97,19 +85,19 @@
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "photoUrls",
 						"list": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"element_type": {
 								"string": {}
 							}
@@ -118,38 +106,26 @@
 					{
 						"name": "status",
 						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "pet status in the store",
-							"validators": [
-								{
-									"custom": {
-										"imports": [
-											{
-												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-											}
-										],
-										"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"pending\",\n\"sold\",\n)"
-									}
-								}
-							]
+							"computed_optional_required": "computed",
+							"description": "pet status in the store"
 						}
 					},
 					{
 						"name": "tags",
 						"list_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"nested_object": {
 								"attributes": [
 									{
 										"name": "id",
 										"int64": {
-											"computed_optional_required": "computed_optional"
+											"computed_optional_required": "computed"
 										}
 									},
 									{
 										"name": "name",
 										"string": {
-											"computed_optional_required": "computed_optional"
+											"computed_optional_required": "computed"
 										}
 									}
 								]

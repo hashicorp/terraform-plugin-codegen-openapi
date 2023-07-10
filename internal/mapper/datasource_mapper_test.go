@@ -99,7 +99,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 				{
 					Name: "number_prop",
 					Number: &datasource.NumberAttribute{
-						ComputedOptionalRequired: schema.ComputedOptional,
+						ComputedOptionalRequired: schema.Computed,
 						Description:              pointer("hey this is a number!"),
 					},
 				},
@@ -191,7 +191,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 										{
 											Name: "number_prop",
 											Number: &datasource.NumberAttribute{
-												ComputedOptionalRequired: schema.ComputedOptional,
+												ComputedOptionalRequired: schema.Computed,
 												Description:              pointer("hey this is a number!"),
 											},
 										},
@@ -203,7 +203,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 							{
 								Name: "string_prop",
 								String: &datasource.StringAttribute{
-									ComputedOptionalRequired: schema.ComputedOptional,
+									ComputedOptionalRequired: schema.Computed,
 									Description:              pointer("hey this is a string!"),
 									Sensitive:                pointer(true),
 								},
@@ -339,7 +339,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 												{
 													Name: "super_nested_string",
 													String: &datasource.StringAttribute{
-														ComputedOptionalRequired: schema.ComputedOptional,
+														ComputedOptionalRequired: schema.Computed,
 														Description:              pointer("hey this is a string!"),
 													},
 												},
@@ -357,7 +357,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 								{
 									Name: "float64_prop",
 									Float64: &datasource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
+										ComputedOptionalRequired: schema.Computed,
 										Description:              pointer("hey this is a float64!"),
 									},
 								},
@@ -503,6 +503,90 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 								},
 							},
 						},
+					},
+				},
+			},
+		},
+		"precedence and configurability": {
+			readParams: []*high.Parameter{
+				{
+					Name:     "read_parameter_optional_read_parameter_only",
+					Required: false,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_parameter_optional_read_response",
+					Required: false,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_parameter_required_read_parameter_only",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_parameter_required_read_response",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			},
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					// Simulate API returning parameter in response
+					"read_parameter_optional_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					// Simulate API returning parameter in response
+					"read_parameter_required_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "read_parameter_optional_read_parameter_only",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "read_parameter_optional_read_response",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "read_parameter_required_read_parameter_only",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "read_parameter_required_read_response",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "read_response",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Computed,
 					},
 				},
 			},
