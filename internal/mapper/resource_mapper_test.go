@@ -566,6 +566,223 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 				},
 			},
 		},
+		"precedence and configurability": {
+			createRequestSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Required: []string{
+					"create_request_required_create_request_only",
+					"create_request_required_create_response",
+					"create_request_required_read_parameter_optional",
+					"create_request_required_read_parameter_required",
+					"create_request_required_read_response",
+				},
+				Properties: map[string]*base.SchemaProxy{
+					"create_request_optional_create_request_only": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_optional_create_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_optional_read_parameter_optional": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_optional_read_parameter_required": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_optional_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_required_create_request_only": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_required_create_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_required_read_parameter_optional": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_required_read_parameter_required": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_request_required_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			createResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					// Simulate API returning parameter in response
+					"create_request_optional_create_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					// Simulate API returning parameter in response
+					"create_request_required_create_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"create_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			readParams: []*high.Parameter{
+				{
+					Name:     "create_request_optional_read_parameter_optional",
+					Required: false,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "create_request_optional_read_parameter_required",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "create_request_required_read_parameter_optional",
+					Required: false,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "create_request_required_read_parameter_required",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				// Edge case where new read request properties do not align with
+				// other request/response properties. Provider developers would
+				// want to configure the converter to remap existing properties
+				// to align with these or risk the converter returning API-level
+				// details to practitioners, which are conventionally hidden.
+				{
+					Name:     "read_parameter_optional",
+					Required: false,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_parameter_required",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			},
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					// Simulate API returning parameter in response
+					"create_request_optional_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					// Simulate API returning parameter in response
+					"create_request_required_read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"read_response": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			want: resource.Attributes{
+				{
+					Name: "create_request_optional_create_request_only",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "create_request_optional_create_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "create_request_optional_read_parameter_optional",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "create_request_optional_read_parameter_required",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "create_request_optional_read_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "create_request_required_create_request_only",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "create_request_required_create_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "create_request_required_read_parameter_optional",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "create_request_required_read_parameter_required",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "create_request_required_read_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "create_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "read_response",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Computed,
+					},
+				},
+				{
+					Name: "read_parameter_optional",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+				{
+					Name: "read_parameter_required",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+			},
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
