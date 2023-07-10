@@ -2247,137 +2247,113 @@
 					{
 						"name": "image",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "arch",
 									"string": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"default": {
 											"static": "x86_64"
-										},
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"x86_64\",\n\"arm\",\n)"
-												}
-											}
-										]
+										}
 									}
 								},
 								{
 									"name": "creation_date",
 									"string": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"description": "(RFC 3339 format)"
 									}
 								},
 								{
 									"name": "default_bootscript",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "arch",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"default": {
 														"static": "x86_64"
 													},
-													"description": "The bootscript arch.",
-													"validators": [
-														{
-															"custom": {
-																"imports": [
-																	{
-																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-																	}
-																],
-																"schema_definition": "stringvalidator.OneOf(\n\"x86_64\",\n\"arm\",\n)"
-															}
-														}
-													]
+													"description": "The bootscript arch."
 												}
 											},
 											{
 												"name": "bootcmdargs",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The bootscript arguments."
 												}
 											},
 											{
 												"name": "default",
 												"bool": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "Dispmay if the bootscript is the default bootscript if no other boot option is configured."
 												}
 											},
 											{
 												"name": "dtb",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "Provide information regarding a Device Tree Binary (dtb) for use with C1 servers."
 												}
 											},
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The bootscript ID."
 												}
 											},
 											{
 												"name": "initrd",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The initrd (initial ramdisk) configuration."
 												}
 											},
 											{
 												"name": "kernel",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The server kernel version."
 												}
 											},
 											{
 												"name": "organization",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The bootscript organization ID."
 												}
 											},
 											{
 												"name": "project",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The bootscript project ID."
 												}
 											},
 											{
 												"name": "public",
 												"bool": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "Provide information if the bootscript is public."
 												}
 											},
 											{
 												"name": "title",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The bootscript title."
 												}
 											},
 											{
 												"name": "zone",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "The zone in which is the bootscript."
 												}
 											}
@@ -2387,24 +2363,24 @@
 								{
 									"name": "extra_volumes",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "\u003cextra_volumeKey\u003e",
 												"single_nested": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"attributes": [
 														{
 															"name": "creation_date",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume creation date. (RFC 3339 format)"
 															}
 														},
 														{
 															"name": "export_uri",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"deprecation_message": "This attribute is deprecated.",
 																"description": "Show the volume NBD export URI."
 															}
@@ -2412,53 +2388,53 @@
 														{
 															"name": "id",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume unique ID."
 															}
 														},
 														{
 															"name": "modification_date",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume modification date. (RFC 3339 format)"
 															}
 														},
 														{
 															"name": "name",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume name."
 															}
 														},
 														{
 															"name": "organization",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume organization ID."
 															}
 														},
 														{
 															"name": "project",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume project ID."
 															}
 														},
 														{
 															"name": "server",
 															"single_nested": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"attributes": [
 																	{
 																		"name": "id",
 																		"string": {
-																			"computed_optional_required": "computed_optional"
+																			"computed_optional_required": "computed"
 																		}
 																	},
 																	{
 																		"name": "name",
 																		"string": {
-																			"computed_optional_required": "computed_optional"
+																			"computed_optional_required": "computed"
 																		}
 																	}
 																],
@@ -2468,36 +2444,24 @@
 														{
 															"name": "size",
 															"int64": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The volume disk size. (in bytes)"
 															}
 														},
 														{
 															"name": "state",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"default": {
 																	"static": "available"
 																},
-																"description": "The volume state.",
-																"validators": [
-																	{
-																		"custom": {
-																			"imports": [
-																				{
-																					"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-																				}
-																			],
-																			"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"snapshotting\",\n\"error\",\n\"fetching\",\n\"resizing\",\n\"saving\",\n\"hotsyncing\",\n)"
-																		}
-																	}
-																]
+																"description": "The volume state."
 															}
 														},
 														{
 															"name": "tags",
 															"list": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"element_type": {
 																	"string": {}
 																},
@@ -2507,29 +2471,17 @@
 														{
 															"name": "volume_type",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"default": {
 																	"static": "l_ssd"
 																},
-																"description": "The volume type.",
-																"validators": [
-																	{
-																		"custom": {
-																			"imports": [
-																				{
-																					"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-																				}
-																			],
-																			"schema_definition": "stringvalidator.OneOf(\n\"l_ssd\",\n\"b_ssd\",\n\"unified\",\n)"
-																		}
-																	}
-																]
+																"description": "The volume type."
 															}
 														},
 														{
 															"name": "zone",
 															"string": {
-																"computed_optional_required": "computed_optional",
+																"computed_optional_required": "computed",
 																"description": "The zone in which is the volume."
 															}
 														}
@@ -2542,89 +2494,77 @@
 								{
 									"name": "from_server",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "modification_date",
 									"string": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"description": "(RFC 3339 format)"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "organization",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "project",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "public",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "root_volume",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "size",
 												"int64": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"description": "(in bytes)"
 												}
 											},
 											{
 												"name": "volume_type",
 												"string": {
-													"computed_optional_required": "computed_optional",
+													"computed_optional_required": "computed",
 													"default": {
 														"static": "l_ssd"
-													},
-													"validators": [
-														{
-															"custom": {
-																"imports": [
-																	{
-																		"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-																	}
-																],
-																"schema_definition": "stringvalidator.OneOf(\n\"l_ssd\",\n\"b_ssd\",\n\"unified\",\n)"
-															}
-														}
-													]
+													}
 												}
 											}
 										]
@@ -2633,28 +2573,16 @@
 								{
 									"name": "state",
 									"string": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"default": {
 											"static": "available"
-										},
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"creating\",\n\"error\",\n)"
-												}
-											}
-										]
+										}
 									}
 								},
 								{
 									"name": "tags",
 									"list": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"element_type": {
 											"string": {}
 										}
@@ -2663,7 +2591,7 @@
 								{
 									"name": "zone",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							]
@@ -2737,54 +2665,54 @@
 					{
 						"name": "ip",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "address",
 									"string": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"description": "(IPv4 address)"
 									}
 								},
 								{
 									"name": "id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "organization",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "project",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "reverse",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "server",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "id",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "name",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											}
 										]
@@ -2793,7 +2721,7 @@
 								{
 									"name": "tags",
 									"list": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"element_type": {
 											"string": {}
 										}
@@ -2802,7 +2730,7 @@
 								{
 									"name": "zone",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							]

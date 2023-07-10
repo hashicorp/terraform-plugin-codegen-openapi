@@ -201,14 +201,14 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 										{
 											Name: "bool_prop",
 											Bool: &resource.BoolAttribute{
-												ComputedOptionalRequired: schema.ComputedOptional,
+												ComputedOptionalRequired: schema.Computed,
 												Description:              pointer("hey this is a bool!"),
 											},
 										},
 										{
 											Name: "number_prop",
 											Number: &resource.NumberAttribute{
-												ComputedOptionalRequired: schema.ComputedOptional,
+												ComputedOptionalRequired: schema.Computed,
 												Description:              pointer("hey this is a number!"),
 											},
 										},
@@ -220,14 +220,14 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 											},
 										},
 									},
-									ComputedOptionalRequired: schema.ComputedOptional,
+									ComputedOptionalRequired: schema.Computed,
 									Description:              pointer("hey this is an object!"),
 								},
 							},
 							{
 								Name: "string_prop",
 								String: &resource.StringAttribute{
-									ComputedOptionalRequired: schema.ComputedOptional,
+									ComputedOptionalRequired: schema.Computed,
 									Description:              pointer("hey this is a string!"),
 									Sensitive:                pointer(true),
 								},
@@ -760,7 +760,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 				{
 					Name: "create_response",
 					String: &resource.StringAttribute{
-						ComputedOptionalRequired: schema.ComputedOptional,
+						ComputedOptionalRequired: schema.Computed,
 					},
 				},
 				{

@@ -6062,14 +6062,14 @@
 					{
 						"name": "allow_forking",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "Whether to allow forking this repo"
 						}
 					},
 					{
 						"name": "allow_update_branch",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"default": {
 								"static": false
 							},
@@ -6079,20 +6079,20 @@
 					{
 						"name": "anonymous_access_enabled",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "Whether anonymous git access is enabled for this repository"
 						}
 					},
 					{
 						"name": "archive_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "archived",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"default": {
 								"static": false
 							},
@@ -6102,261 +6102,261 @@
 					{
 						"name": "assignees_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "blobs_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "branches_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "clone_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "collaborators_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "comments_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "commits_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "compare_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "contents_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "contributors_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "created_at",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "default_branch",
 						"string": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "The default branch of the repository."
 						}
 					},
 					{
 						"name": "deployments_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "disabled",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "Returns whether or not this repository disabled."
 						}
 					},
 					{
 						"name": "downloads_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "events_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "fork",
 						"bool": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "forks",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "forks_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "forks_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "full_name",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "git_commits_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "git_refs_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "git_tags_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "git_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "has_pages",
 						"bool": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "hooks_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "html_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "Unique identifier of the repository"
 						}
 					},
 					{
 						"name": "issue_comment_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "issue_events_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "issues_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "keys_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "labels_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "language",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "languages_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "license",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "html_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "key",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "node_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "spdx_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							],
@@ -6366,186 +6366,186 @@
 					{
 						"name": "master_branch",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "merges_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "milestones_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "mirror_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "network_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "node_id",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "notifications_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "open_issues",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "open_issues_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "organization",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "avatar_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "email",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "followers_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "following_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "gists_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "gravatar_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "html_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "login",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "node_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "organizations_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "received_events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "repos_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "site_admin",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "starred_at",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "starred_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "subscriptions_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "type",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							],
@@ -6555,132 +6555,132 @@
 					{
 						"name": "owner",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "avatar_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "email",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "followers_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "following_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "gists_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "gravatar_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "html_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "login",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "node_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "organizations_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "received_events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "repos_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "site_admin",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "starred_at",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "starred_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "subscriptions_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "type",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							],
@@ -6690,36 +6690,36 @@
 					{
 						"name": "permissions",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "admin",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "maintain",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "pull",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "push",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "triage",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								}
 							]
@@ -6728,602 +6728,578 @@
 					{
 						"name": "pulls_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "pushed_at",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "releases_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "size",
 						"int64": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"description": "The size of the repository. Size is calculated hourly. When a repository is initially created, the size is 0."
 						}
 					},
 					{
 						"name": "ssh_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "stargazers_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "stargazers_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "starred_at",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "statuses_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "subscribers_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "subscribers_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "subscription_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "svn_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "tags_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "teams_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "temp_clone_token",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "template_repository",
 						"single_nested": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"attributes": [
 								{
 									"name": "allow_auto_merge",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "allow_merge_commit",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "allow_rebase_merge",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "allow_squash_merge",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "allow_update_branch",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "archive_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "archived",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "assignees_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "blobs_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "branches_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "clone_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "collaborators_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "comments_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "commits_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "compare_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "contents_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "contributors_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "created_at",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "default_branch",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "delete_branch_on_merge",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "deployments_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "description",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "disabled",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "downloads_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "fork",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "forks_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "forks_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "full_name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "git_commits_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "git_refs_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "git_tags_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "git_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "has_downloads",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "has_issues",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "has_pages",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "has_projects",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "has_wiki",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "homepage",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "hooks_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "html_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "id",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "is_template",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "issue_comment_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "issue_events_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "issues_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "keys_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "labels_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "language",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "languages_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "merge_commit_message",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message.",
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"PR_TITLE\",\n\"BLANK\",\n)"
-												}
-											}
-										]
+										"computed_optional_required": "computed",
+										"description": "The default value for a merge commit message.\n\n- `PR_TITLE` - default to the pull request's title.\n- `PR_BODY` - default to the pull request's body.\n- `BLANK` - default to a blank commit message."
 									}
 								},
 								{
 									"name": "merge_commit_title",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).",
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"MERGE_MESSAGE\",\n)"
-												}
-											}
-										]
+										"computed_optional_required": "computed",
+										"description": "The default value for a merge commit title.\n\n- `PR_TITLE` - default to the pull request's title.\n- `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name)."
 									}
 								},
 								{
 									"name": "merges_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "milestones_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "mirror_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "network_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "node_id",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "notifications_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "open_issues_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "owner",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "avatar_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "events_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "followers_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "following_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "gists_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "gravatar_id",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "html_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "id",
 												"int64": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "login",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "node_id",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "organizations_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "received_events_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "repos_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "site_admin",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "starred_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "subscriptions_url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "type",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "url",
 												"string": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
@@ -7350,36 +7326,36 @@
 								{
 									"name": "permissions",
 									"single_nested": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"attributes": [
 											{
 												"name": "admin",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "maintain",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "pull",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "push",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											},
 											{
 												"name": "triage",
 												"bool": {
-													"computed_optional_required": "computed_optional"
+													"computed_optional_required": "computed"
 												}
 											}
 										]
@@ -7388,141 +7364,117 @@
 								{
 									"name": "private",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "pulls_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "pushed_at",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "releases_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "size",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "squash_merge_commit_message",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message.",
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"PR_BODY\",\n\"COMMIT_MESSAGES\",\n\"BLANK\",\n)"
-												}
-											}
-										]
+										"computed_optional_required": "computed",
+										"description": "The default value for a squash merge commit message:\n\n- `PR_BODY` - default to the pull request's body.\n- `COMMIT_MESSAGES` - default to the branch's commit messages.\n- `BLANK` - default to a blank commit message."
 									}
 								},
 								{
 									"name": "squash_merge_commit_title",
 									"string": {
-										"computed_optional_required": "computed_optional",
-										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).",
-										"validators": [
-											{
-												"custom": {
-													"imports": [
-														{
-															"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-														}
-													],
-													"schema_definition": "stringvalidator.OneOf(\n\"PR_TITLE\",\n\"COMMIT_OR_PR_TITLE\",\n)"
-												}
-											}
-										]
+										"computed_optional_required": "computed",
+										"description": "The default value for a squash merge commit title:\n\n- `PR_TITLE` - default to the pull request's title.\n- `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit)."
 									}
 								},
 								{
 									"name": "ssh_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "stargazers_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "stargazers_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "statuses_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "subscribers_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "subscribers_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "subscription_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "svn_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "tags_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "teams_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "temp_clone_token",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "topics",
 									"list": {
-										"computed_optional_required": "computed_optional",
+										"computed_optional_required": "computed",
 										"element_type": {
 											"string": {}
 										}
@@ -7531,37 +7483,37 @@
 								{
 									"name": "trees_url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "updated_at",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "url",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "use_squash_pr_title_as_default",
 									"bool": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "visibility",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
 									"name": "watchers_count",
 									"int64": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed"
 									}
 								},
 								{
@@ -8493,7 +8445,7 @@
 					{
 						"name": "topics",
 						"list": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"element_type": {
 								"string": {}
 							}
@@ -8502,25 +8454,25 @@
 					{
 						"name": "trees_url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "updated_at",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "url",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "use_squash_pr_title_as_default",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"default": {
 								"static": false
 							},
@@ -8531,7 +8483,7 @@
 					{
 						"name": "visibility",
 						"string": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"default": {
 								"static": "public"
 							},
@@ -8541,19 +8493,19 @@
 					{
 						"name": "watchers",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "watchers_count",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed"
 						}
 					},
 					{
 						"name": "web_commit_signoff_required",
 						"bool": {
-							"computed_optional_required": "computed_optional",
+							"computed_optional_required": "computed",
 							"default": {
 								"static": false
 							},
