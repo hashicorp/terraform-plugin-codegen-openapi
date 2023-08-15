@@ -17,14 +17,16 @@ type Explorer interface {
 }
 
 type Resource struct {
-	CreateOp *high.Operation
-	ReadOp   *high.Operation
-	UpdateOp *high.Operation
-	DeleteOp *high.Operation
+	CreateOp         *high.Operation
+	ReadOp           *high.Operation
+	UpdateOp         *high.Operation
+	DeleteOp         *high.Operation
+	ParameterMatches map[string]string
 }
 
 type DataSource struct {
-	ReadOp *high.Operation
+	ReadOp           *high.Operation
+	ParameterMatches map[string]string
 }
 
 type Provider struct {

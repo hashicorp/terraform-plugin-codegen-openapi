@@ -24,19 +24,25 @@ type Provider struct {
 }
 
 type Resource struct {
-	Create *OpenApiSpecLocation `yaml:"create"`
-	Read   *OpenApiSpecLocation `yaml:"read"`
-	Update *OpenApiSpecLocation `yaml:"update"`
-	Delete *OpenApiSpecLocation `yaml:"delete"`
+	Create       *OpenApiSpecLocation `yaml:"create"`
+	Read         *OpenApiSpecLocation `yaml:"read"`
+	Update       *OpenApiSpecLocation `yaml:"update"`
+	Delete       *OpenApiSpecLocation `yaml:"delete"`
+	MergeOptions MergeOptions         `yaml:"merge_options"`
 }
 
 type DataSource struct {
-	Read *OpenApiSpecLocation `yaml:"read"`
+	Read         *OpenApiSpecLocation `yaml:"read"`
+	MergeOptions MergeOptions         `yaml:"merge_options"`
 }
 
 type OpenApiSpecLocation struct {
 	Path   string `yaml:"path"`
 	Method string `yaml:"method"`
+}
+
+type MergeOptions struct {
+	ParameterMatches map[string]string `yaml:"param_matches"`
 }
 
 // ParseConfig takes in a byte array (of YAML), unmarshal into a Config struct, and validates the result

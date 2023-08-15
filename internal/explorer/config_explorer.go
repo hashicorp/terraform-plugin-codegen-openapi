@@ -54,13 +54,14 @@ func (e configExplorer) FindProvider() (Provider, error) {
 
 func (e configExplorer) FindResources() (map[string]Resource, error) {
 	resources := map[string]Resource{}
-	for name, opMapping := range e.config.Resources {
+	for name, resourceConfig := range e.config.Resources {
 		// TODO: should we throw an error if an invalid or non-existent path/methods are given?
 		resources[name] = Resource{
-			CreateOp: extractOp(e.spec.Paths, opMapping.Create),
-			ReadOp:   extractOp(e.spec.Paths, opMapping.Read),
-			UpdateOp: extractOp(e.spec.Paths, opMapping.Update),
-			DeleteOp: extractOp(e.spec.Paths, opMapping.Delete),
+			CreateOp:         extractOp(e.spec.Paths, resourceConfig.Create),
+			ReadOp:           extractOp(e.spec.Paths, resourceConfig.Read),
+			UpdateOp:         extractOp(e.spec.Paths, resourceConfig.Update),
+			DeleteOp:         extractOp(e.spec.Paths, resourceConfig.Delete),
+			ParameterMatches: resourceConfig.MergeOptions.ParameterMatches,
 		}
 	}
 
@@ -69,9 +70,10 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 
 func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 	dataSources := map[string]DataSource{}
-	for name, opMapping := range e.config.DataSources {
+	for name, dataSourceConfig := range e.config.DataSources {
 		dataSources[name] = DataSource{
-			ReadOp: extractOp(e.spec.Paths, opMapping.Read),
+			ReadOp:           extractOp(e.spec.Paths, dataSourceConfig.Read),
+			ParameterMatches: dataSourceConfig.MergeOptions.ParameterMatches,
 		}
 	}
 	return dataSources, nil

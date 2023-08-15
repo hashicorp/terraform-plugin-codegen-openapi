@@ -5,7 +5,7 @@
 			"schema": {
 				"attributes": [
 					{
-						"name": "orderId",
+						"name": "id",
 						"int64": {
 							"computed_optional_required": "required",
 							"description": "ID of order that needs to be fetched"
@@ -14,12 +14,6 @@
 					{
 						"name": "complete",
 						"bool": {
-							"computed_optional_required": "computed"
-						}
-					},
-					{
-						"name": "id",
-						"int64": {
 							"computed_optional_required": "computed"
 						}
 					},
@@ -56,7 +50,7 @@
 			"schema": {
 				"attributes": [
 					{
-						"name": "petId",
+						"name": "id",
 						"int64": {
 							"computed_optional_required": "required",
 							"description": "ID of pet to return"
@@ -80,12 +74,6 @@
 									}
 								}
 							]
-						}
-					},
-					{
-						"name": "id",
-						"int64": {
-							"computed_optional_required": "computed"
 						}
 					},
 					{
@@ -218,13 +206,6 @@
 								}
 							]
 						}
-					},
-					{
-						"name": "orderId",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": "ID of order that needs to be fetched"
-						}
 					}
 				]
 			}
@@ -313,13 +294,6 @@
 									}
 								]
 							}
-						}
-					},
-					{
-						"name": "petId",
-						"int64": {
-							"computed_optional_required": "computed_optional",
-							"description": "ID of pet to return"
 						}
 					}
 				]

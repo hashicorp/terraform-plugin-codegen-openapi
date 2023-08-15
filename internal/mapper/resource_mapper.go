@@ -106,10 +106,13 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// ****************
 	// READ Parameters (optional)
 	// ****************
+	// TODO: Expand support for "header" and "cookie"?
+	// TODO: support style + explode?
+	//	- https://spec.openapis.org/oas/latest.html#style-values
+	// 	- https://spec.openapis.org/oas/latest.html#style-examples
 	readParameterAttributes := []resource.Attribute{}
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {
-			// TODO: Expand support for "header" and "cookie"?
 			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
 				continue
 			}
@@ -118,15 +121,18 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 				OverrideDescription: param.Description,
 			}
 
-			// TODO: support style + explode?
-			//	- https://spec.openapis.org/oas/latest.html#style-values
-			// 	- https://spec.openapis.org/oas/latest.html#style-examples
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
-			parameterAttribute, err := s.BuildResourceAttribute(param.Name, schema.ComputedOptional)
+			// Check for any paramater name matches and replace the name if found
+			paramName := param.Name
+			if matchedName, ok := explorerResource.ParameterMatches[param.Name]; ok {
+				paramName = matchedName
+			}
+
+			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
 			if err != nil {
 				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
 			}
