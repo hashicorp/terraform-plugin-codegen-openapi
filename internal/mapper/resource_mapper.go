@@ -109,10 +109,18 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	readParameterAttributes := []resource.Attribute{}
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {
+			// TODO: Expand support for "header" and "cookie"?
+			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
+				continue
+			}
+
 			schemaOpts := oas.SchemaOpts{
 				OverrideDescription: param.Description,
 			}
-			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
+
+			// TODO: support style + explode?
+			//	- https://spec.openapis.org/oas/latest.html#style-values
+			// 	- https://spec.openapis.org/oas/latest.html#style-examples
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
