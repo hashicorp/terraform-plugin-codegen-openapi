@@ -183,7 +183,8 @@ If the field is in a different schema than the `Read` operation `parameters`, th
 | [pattern](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-pattern) | [(StringAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 | [uniqueItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-uniqueItems) | [(ListAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 
-## Matching OAS parameters in a schema
+## Remapping OAS parameter naming to attribute naming
+
 In an OpenAPI Specification, it's possible for path or query parameters to have slightly different names then it's associated attribute in a resource/data source schema. For example, `petId` (path parameter) and `id` (defined on Pet schema):
 
 ```json
