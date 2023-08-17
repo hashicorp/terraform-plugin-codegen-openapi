@@ -28,7 +28,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 		createResponseSchema *base.SchemaProxy
 		readResponseSchema   *base.SchemaProxy
 		readParams           []*high.Parameter
-		parameterMatches     map[string]string
+		schemaOptions        explorer.SchemaOptions
 		want                 resource.Attributes
 	}{
 		"merge primitives across all ops": {
@@ -820,9 +820,13 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			parameterMatches: map[string]string{
-				"read_path_parameter":  "attribute_required",
-				"read_query_parameter": "attribute_computed",
+			schemaOptions: explorer.SchemaOptions{
+				AttributeOptions: explorer.AttributeOptions{
+					Aliases: map[string]string{
+						"read_path_parameter":  "attribute_required",
+						"read_query_parameter": "attribute_computed",
+					},
+				},
 			},
 			want: resource.Attributes{
 				{
@@ -847,9 +851,9 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 
 			mapper := mapper.NewResourceMapper(map[string]explorer.Resource{
 				"test_resource": {
-					CreateOp:         createTestCreateOp(testCase.createRequestSchema, testCase.createResponseSchema),
-					ReadOp:           createTestReadOp(testCase.readResponseSchema, testCase.readParams),
-					ParameterMatches: testCase.parameterMatches,
+					CreateOp:      createTestCreateOp(testCase.createRequestSchema, testCase.createResponseSchema),
+					ReadOp:        createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					SchemaOptions: testCase.schemaOptions,
 				},
 			}, config.Config{})
 			got, err := mapper.MapToIR()

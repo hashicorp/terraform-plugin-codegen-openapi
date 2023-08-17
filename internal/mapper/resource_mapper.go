@@ -126,10 +126,10 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
 			}
 
-			// Check for any paramater name matches and replace the name if found
+			// Check for any aliases and replace the paramater name if found
 			paramName := param.Name
-			if matchedName, ok := explorerResource.ParameterMatches[param.Name]; ok {
-				paramName = matchedName
+			if aliasedName, ok := explorerResource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+				paramName = aliasedName
 			}
 
 			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)

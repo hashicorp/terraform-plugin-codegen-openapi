@@ -230,9 +230,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							Path:   "/resources/{resource_id}",
 							Method: "GET",
 						},
-						MergeOptions: config.MergeOptions{
-							ParameterMatches: map[string]string{
-								"otherId": "id",
+						SchemaOptions: config.SchemaOptions{
+							AttributeOptions: config.AttributeOptions{
+								Aliases: map[string]string{
+									"otherId": "id",
+								},
 							},
 						},
 					},
@@ -262,8 +264,12 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					ParameterMatches: map[string]string{
-						"otherId": "id",
+					SchemaOptions: explorer.SchemaOptions{
+						AttributeOptions: explorer.AttributeOptions{
+							Aliases: map[string]string{
+								"otherId": "id",
+							},
+						},
 					},
 				},
 			},
@@ -390,9 +396,11 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 							Path:   "/resources/{resource_id}",
 							Method: "GET",
 						},
-						MergeOptions: config.MergeOptions{
-							ParameterMatches: map[string]string{
-								"otherId": "id",
+						SchemaOptions: config.SchemaOptions{
+							AttributeOptions: config.AttributeOptions{
+								Aliases: map[string]string{
+									"otherId": "id",
+								},
 							},
 						},
 					},
@@ -412,8 +420,12 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					ParameterMatches: map[string]string{
-						"otherId": "id",
+					SchemaOptions: explorer.SchemaOptions{
+						AttributeOptions: explorer.AttributeOptions{
+							Aliases: map[string]string{
+								"otherId": "id",
+							},
+						},
 					},
 				},
 			},

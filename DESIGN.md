@@ -226,10 +226,11 @@ resources:
   pet:
     # create, read, update, delete configuration
     # ...
-    merge_options:
-      param_matches:
-        # Match 'petId' parameter to 'id'
-        petId: id
+    schema:
+      attributes:
+        aliases:
+          # Match 'petId' parameter to 'id'
+          petId: id
 ```
 
 ## Multi-type Support

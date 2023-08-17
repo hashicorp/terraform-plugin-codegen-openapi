@@ -15,9 +15,10 @@ resources:
     delete:
       path: /pet/{petId}
       method: DELETE
-    merge_options:
-      param_matches:
-        petId: id
+    schema:
+      attributes:
+        aliases:
+          petId: id
 
   order:
     create:
@@ -29,9 +30,10 @@ resources:
     delete:
       path: /store/order/{orderId}
       method: DELETE
-    merge_options:
-      param_matches:
-        orderId: id
+    schema:
+      attributes:
+        aliases:
+          orderId: id
 
   user:
     create:
@@ -46,9 +48,10 @@ data_sources:
     read:
       path: /pet/{petId}
       method: GET
-    merge_options:
-      param_matches:
-        petId: id
+    schema:
+      attributes:
+        aliases:
+          petId: id
 
   pets:
     read:
@@ -59,6 +62,7 @@ data_sources:
     read:
       path: /store/order/{orderId}
       method: GET
-    merge_options:
-      param_matches:
-        orderId: id
+    schema:
+      attributes:
+        aliases:
+          orderId: id

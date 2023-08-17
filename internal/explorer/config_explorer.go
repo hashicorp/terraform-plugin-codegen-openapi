@@ -57,11 +57,11 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 	for name, resourceConfig := range e.config.Resources {
 		// TODO: should we throw an error if an invalid or non-existent path/methods are given?
 		resources[name] = Resource{
-			CreateOp:         extractOp(e.spec.Paths, resourceConfig.Create),
-			ReadOp:           extractOp(e.spec.Paths, resourceConfig.Read),
-			UpdateOp:         extractOp(e.spec.Paths, resourceConfig.Update),
-			DeleteOp:         extractOp(e.spec.Paths, resourceConfig.Delete),
-			ParameterMatches: resourceConfig.MergeOptions.ParameterMatches,
+			CreateOp:      extractOp(e.spec.Paths, resourceConfig.Create),
+			ReadOp:        extractOp(e.spec.Paths, resourceConfig.Read),
+			UpdateOp:      extractOp(e.spec.Paths, resourceConfig.Update),
+			DeleteOp:      extractOp(e.spec.Paths, resourceConfig.Delete),
+			SchemaOptions: extractSchemaOptions(resourceConfig.SchemaOptions),
 		}
 	}
 
@@ -72,8 +72,8 @@ func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 	dataSources := map[string]DataSource{}
 	for name, dataSourceConfig := range e.config.DataSources {
 		dataSources[name] = DataSource{
-			ReadOp:           extractOp(e.spec.Paths, dataSourceConfig.Read),
-			ParameterMatches: dataSourceConfig.MergeOptions.ParameterMatches,
+			ReadOp:        extractOp(e.spec.Paths, dataSourceConfig.Read),
+			SchemaOptions: extractSchemaOptions(dataSourceConfig.SchemaOptions),
 		}
 	}
 	return dataSources, nil
@@ -131,4 +131,12 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 
 	// wrap in a schema proxy for mapping with `oas` package
 	return highbase.CreateSchemaProxy(highSchema), nil
+}
+
+func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) SchemaOptions {
+	return SchemaOptions{
+		AttributeOptions: AttributeOptions{
+			Aliases: cfgSchemaOpts.AttributeOptions.Aliases,
+		},
+	}
 }

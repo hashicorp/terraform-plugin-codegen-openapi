@@ -26,7 +26,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 	testCases := map[string]struct {
 		readResponseSchema *base.SchemaProxy
 		readParams         []*high.Parameter
-		parameterMatches   map[string]string
+		schemaOptions      explorer.SchemaOptions
 		want               datasource.Attributes
 	}{
 		"merge primitives across all ops": {
@@ -622,9 +622,13 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				},
 			}),
-			parameterMatches: map[string]string{
-				"read_path_parameter":  "attribute_required",
-				"read_query_parameter": "attribute_computed_optional",
+			schemaOptions: explorer.SchemaOptions{
+				AttributeOptions: explorer.AttributeOptions{
+					Aliases: map[string]string{
+						"read_path_parameter":  "attribute_required",
+						"read_query_parameter": "attribute_computed_optional",
+					},
+				},
 			},
 			want: datasource.Attributes{
 				{
@@ -649,8 +653,8 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 
 			mapper := mapper.NewDataSourceMapper(map[string]explorer.DataSource{
 				"test_datasource": {
-					ReadOp:           createTestReadOp(testCase.readResponseSchema, testCase.readParams),
-					ParameterMatches: testCase.parameterMatches,
+					ReadOp:        createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					SchemaOptions: testCase.schemaOptions,
 				},
 			}, config.Config{})
 			got, err := mapper.MapToIR()

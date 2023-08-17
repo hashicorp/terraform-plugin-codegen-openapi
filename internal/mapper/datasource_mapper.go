@@ -102,9 +102,9 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 				computability = schema.Required
 			}
 
-			// Check for any paramater name matches and replace the name if found
+			// Check for any aliases and replace the paramater name if found
 			paramName := param.Name
-			if matchedName, ok := dataSource.ParameterMatches[param.Name]; ok {
+			if matchedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
 				paramName = matchedName
 			}
 

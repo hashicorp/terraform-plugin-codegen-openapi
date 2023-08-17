@@ -17,15 +17,17 @@ resources:
     delete:
       path: /repos/{owner}/{repo}
       method: DELETE
-    merge_options:
-      param_matches:
-        repo: name
+    schema:
+      attributes:
+        aliases:
+          repo: name
 
 data_sources:
   repository:
     read:
       path: /repos/{owner}/{repo}
       method: GET
-    merge_options:
-      param_matches:
-        repo: name
+    schema:
+      attributes:
+        aliases:
+          repo: name

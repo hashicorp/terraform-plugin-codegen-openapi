@@ -43,9 +43,10 @@ resources:
     read:
       path: /example/path/to/thing/{id}
       method: GET
-    merge_options:
-      param_matches:
-        otherId: id`,
+    schema:
+      attributes:
+        aliases:
+          otherId: id`,
 		},
 		"valid single data source": {
 			input: `
@@ -68,9 +69,10 @@ data_sources:
     read:
       path: /example/path/to/thing/{id}
       method: GET
-    merge_options:
-      param_matches:
-        otherId: id`,
+    schema:
+      attributes:
+        aliases:
+          otherId: id`,
 		},
 		"valid combo of resources and data sources": {
 			input: `
