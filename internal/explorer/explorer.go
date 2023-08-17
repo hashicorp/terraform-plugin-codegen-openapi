@@ -17,17 +17,27 @@ type Explorer interface {
 }
 
 type Resource struct {
-	CreateOp *high.Operation
-	ReadOp   *high.Operation
-	UpdateOp *high.Operation
-	DeleteOp *high.Operation
+	CreateOp      *high.Operation
+	ReadOp        *high.Operation
+	UpdateOp      *high.Operation
+	DeleteOp      *high.Operation
+	SchemaOptions SchemaOptions
 }
 
 type DataSource struct {
-	ReadOp *high.Operation
+	ReadOp        *high.Operation
+	SchemaOptions SchemaOptions
 }
 
 type Provider struct {
 	Name        string
 	SchemaProxy *base.SchemaProxy
+}
+
+type SchemaOptions struct {
+	AttributeOptions AttributeOptions
+}
+
+type AttributeOptions struct {
+	Aliases map[string]string
 }

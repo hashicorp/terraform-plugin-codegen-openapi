@@ -218,6 +218,62 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 				},
 			},
 		},
+		"merge options pass-through": {
+			config: config.Config{
+				Resources: map[string]config.Resource{
+					"test_resource": {
+						Create: &config.OpenApiSpecLocation{
+							Path:   "/resources",
+							Method: "POST",
+						},
+						Read: &config.OpenApiSpecLocation{
+							Path:   "/resources/{resource_id}",
+							Method: "GET",
+						},
+						SchemaOptions: config.SchemaOptions{
+							AttributeOptions: config.AttributeOptions{
+								Aliases: map[string]string{
+									"otherId": "id",
+								},
+							},
+						},
+					},
+				},
+			},
+			pathItems: map[string]*high.PathItem{
+				"/resources": {
+					Post: &high.Operation{
+						Description: "create op here",
+						OperationId: "create_resource",
+					},
+				},
+				"/resources/{resource_id}": {
+					Get: &high.Operation{
+						Description: "read op here",
+						OperationId: "read_resource",
+					},
+				},
+			},
+			want: map[string]explorer.Resource{
+				"test_resource": {
+					CreateOp: &high.Operation{
+						Description: "create op here",
+						OperationId: "create_resource",
+					},
+					ReadOp: &high.Operation{
+						Description: "read op here",
+						OperationId: "read_resource",
+					},
+					SchemaOptions: explorer.SchemaOptions{
+						AttributeOptions: explorer.AttributeOptions{
+							Aliases: map[string]string{
+								"otherId": "id",
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -328,6 +384,48 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					ReadOp: &high.Operation{
 						Description: "read op here",
 						OperationId: "read_resource",
+					},
+				},
+			},
+		},
+		"merge options pass-through": {
+			config: config.Config{
+				DataSources: map[string]config.DataSource{
+					"test_resource": {
+						Read: &config.OpenApiSpecLocation{
+							Path:   "/resources/{resource_id}",
+							Method: "GET",
+						},
+						SchemaOptions: config.SchemaOptions{
+							AttributeOptions: config.AttributeOptions{
+								Aliases: map[string]string{
+									"otherId": "id",
+								},
+							},
+						},
+					},
+				},
+			},
+			pathItems: map[string]*high.PathItem{
+				"/resources/{resource_id}": {
+					Get: &high.Operation{
+						Description: "read op here",
+						OperationId: "read_resource",
+					},
+				},
+			},
+			want: map[string]explorer.DataSource{
+				"test_resource": {
+					ReadOp: &high.Operation{
+						Description: "read op here",
+						OperationId: "read_resource",
+					},
+					SchemaOptions: explorer.SchemaOptions{
+						AttributeOptions: explorer.AttributeOptions{
+							Aliases: map[string]string{
+								"otherId": "id",
+							},
+						},
 					},
 				},
 			},

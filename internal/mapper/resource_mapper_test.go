@@ -28,6 +28,7 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 		createResponseSchema *base.SchemaProxy
 		readResponseSchema   *base.SchemaProxy
 		readParams           []*high.Parameter
+		schemaOptions        explorer.SchemaOptions
 		want                 resource.Attributes
 	}{
 		"merge primitives across all ops": {
@@ -783,6 +784,65 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 				},
 			},
 		},
+		"parameter match for path and query params": {
+			createRequestSchema: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"attribute_required"},
+				Properties: map[string]*base.SchemaProxy{
+					"attribute_required": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			readParams: []*high.Parameter{
+				{
+					Name:     "read_path_parameter",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_query_parameter",
+					Required: false,
+					In:       "query",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"boolean"},
+					}),
+				},
+			},
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"attribute_computed": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"boolean"},
+					}),
+				},
+			}),
+			schemaOptions: explorer.SchemaOptions{
+				AttributeOptions: explorer.AttributeOptions{
+					Aliases: map[string]string{
+						"read_path_parameter":  "attribute_required",
+						"read_query_parameter": "attribute_computed",
+					},
+				},
+			},
+			want: resource.Attributes{
+				{
+					Name: "attribute_required",
+					String: &resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "attribute_computed",
+					Bool: &resource.BoolAttribute{
+						ComputedOptionalRequired: schema.Computed,
+					},
+				},
+			},
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
@@ -791,8 +851,9 @@ func TestResourceMapper_basic_merges(t *testing.T) {
 
 			mapper := mapper.NewResourceMapper(map[string]explorer.Resource{
 				"test_resource": {
-					CreateOp: createTestCreateOp(testCase.createRequestSchema, testCase.createResponseSchema),
-					ReadOp:   createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					CreateOp:      createTestCreateOp(testCase.createRequestSchema, testCase.createResponseSchema),
+					ReadOp:        createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					SchemaOptions: testCase.schemaOptions,
 				},
 			}, config.Config{})
 			got, err := mapper.MapToIR()

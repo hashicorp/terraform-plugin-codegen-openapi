@@ -30,6 +30,24 @@ resources:
       path: /example/path/to/thing/{id}
       method: GET`,
 		},
+		"valid resource with parameter matches": {
+			input: `
+provider:
+  name: example
+
+resources:
+  thing:
+    create:
+      path: /example/path/to/things
+      method: POST
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        aliases:
+          otherId: id`,
+		},
 		"valid single data source": {
 			input: `
 provider:
@@ -40,6 +58,21 @@ data_sources:
     read:
       path: /example/path/to/thing/{id}
       method: GET`,
+		},
+		"valid data source with parameter matches": {
+			input: `
+provider:
+  name: example
+
+data_sources:
+  thing:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        aliases:
+          otherId: id`,
 		},
 		"valid combo of resources and data sources": {
 			input: `

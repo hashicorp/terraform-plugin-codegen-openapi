@@ -12,7 +12,7 @@
 						}
 					},
 					{
-						"name": "repo",
+						"name": "name",
 						"string": {
 							"computed_optional_required": "required",
 							"description": "The name of the repository. The name is not case sensitive."
@@ -456,12 +456,6 @@
 					},
 					{
 						"name": "mirror_url",
-						"string": {
-							"computed_optional_required": "computed"
-						}
-					},
-					{
-						"name": "name",
 						"string": {
 							"computed_optional_required": "computed"
 						}
@@ -11969,13 +11963,6 @@
 								}
 							],
 							"description": "A repository on GitHub."
-						}
-					},
-					{
-						"name": "repo",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The name of the repository. The name is not case sensitive."
 						}
 					}
 				]

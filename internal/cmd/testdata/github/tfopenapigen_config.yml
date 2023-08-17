@@ -17,9 +17,17 @@ resources:
     delete:
       path: /repos/{owner}/{repo}
       method: DELETE
+    schema:
+      attributes:
+        aliases:
+          repo: name
 
 data_sources:
   repository:
     read:
       path: /repos/{owner}/{repo}
       method: GET
+    schema:
+      attributes:
+        aliases:
+          repo: name

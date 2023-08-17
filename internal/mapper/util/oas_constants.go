@@ -21,6 +21,9 @@ const (
 	OAS_format_float    = "float"
 	OAS_format_password = "password"
 
+	OAS_param_path  = "path"
+	OAS_param_query = "query"
+
 	// Custom format for SetNested and Set attributes
 	TF_format_set = "set"
 

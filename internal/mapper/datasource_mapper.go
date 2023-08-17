@@ -77,13 +77,21 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	// ****************
 	// READ Parameters (optional)
 	// ****************
+	// TODO: Expand support for "header" and "cookie"?
+	// TODO: support style + explode?
+	//	- https://spec.openapis.org/oas/latest.html#style-values
+	// 	- https://spec.openapis.org/oas/latest.html#style-examples
 	readParameterAttributes := []datasource.Attribute{}
 	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
 		for _, param := range dataSource.ReadOp.Parameters {
+			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
+				continue
+			}
+
 			schemaOpts := oas.SchemaOpts{
 				OverrideDescription: param.Description,
 			}
-			// TODO: Filter specific "in" values? (query, path, cookies (lol)) - https://spec.openapis.org/oas/latest.html#fixed-fields-9
+
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if err != nil {
 				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
@@ -94,7 +102,13 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 				computability = schema.Required
 			}
 
-			parameterAttribute, err := s.BuildDataSourceAttribute(param.Name, computability)
+			// Check for any aliases and replace the paramater name if found
+			paramName := param.Name
+			if matchedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+				paramName = matchedName
+			}
+
+			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
 			if err != nil {
 				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
 			}

@@ -183,6 +183,57 @@ If the field is in a different schema than the `Read` operation `parameters`, th
 | [pattern](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-pattern) | [(StringAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 | [uniqueItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-uniqueItems) | [(ListAttribute).Validators](https://developer.hashicorp.com/terraform/plugin/framework/validation) |
 
+## Remapping OAS parameter naming to attribute naming
+
+In an OpenAPI Specification, it's possible for path or query parameters to have slightly different names then it's associated attribute in a resource/data source schema. For example, `petId` (path parameter) and `id` (defined on Pet schema):
+
+```json
+    "paths": {
+        "/pet/{petId}": {
+            "get": {
+                "tags": [
+                    "pet"
+                ],
+                "summary": "Find pet by ID",
+                "description": "Returns a single pet",
+                "operationId": "getPetById",
+                "parameters": [
+                    {
+                        "name": "petId",
+                        "in": "path",
+                        "description": "ID of pet to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+...
+    "components": {
+        "schemas": {
+            "Pet": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 10
+                    },
+```
+
+You can merge `petId` with `Pet.id` in the resulting schema by defining the following in the [generator config file](./README.md):
+```yaml
+resources:
+  pet:
+    # create, read, update, delete configuration
+    # ...
+    schema:
+      attributes:
+        aliases:
+          # Match 'petId' parameter to 'id'
+          petId: id
+```
+
 ## Multi-type Support
 
 Generally, [multi-types](https://cswr.github.io/JsonSchema/spec/multiple_types/) are not supported by the generator as the Terraform Plugin Framework does not support multi-types. There is one specific scenario that is supported by the generator and that is any type that is combined with the `null` type, as any Plugin Framework attribute can hold a [null](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/attributes#null) type.

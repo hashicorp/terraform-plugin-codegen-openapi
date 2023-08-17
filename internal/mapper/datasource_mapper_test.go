@@ -26,6 +26,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 	testCases := map[string]struct {
 		readResponseSchema *base.SchemaProxy
 		readParams         []*high.Parameter
+		schemaOptions      explorer.SchemaOptions
 		want               datasource.Attributes
 	}{
 		"merge primitives across all ops": {
@@ -591,6 +592,59 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 				},
 			},
 		},
+		"parameter match for path and query params": {
+			readParams: []*high.Parameter{
+				{
+					Name:     "read_path_parameter",
+					Required: true,
+					In:       "path",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+				{
+					Name:     "read_query_parameter",
+					Required: false,
+					In:       "query",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"boolean"},
+					}),
+				},
+			},
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"attribute_required": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					"attribute_computed_optional": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"boolean"},
+					}),
+				},
+			}),
+			schemaOptions: explorer.SchemaOptions{
+				AttributeOptions: explorer.AttributeOptions{
+					Aliases: map[string]string{
+						"read_path_parameter":  "attribute_required",
+						"read_query_parameter": "attribute_computed_optional",
+					},
+				},
+			},
+			want: datasource.Attributes{
+				{
+					Name: "attribute_required",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+				{
+					Name: "attribute_computed_optional",
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+			},
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
@@ -599,7 +653,8 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 
 			mapper := mapper.NewDataSourceMapper(map[string]explorer.DataSource{
 				"test_datasource": {
-					ReadOp: createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					ReadOp:        createTestReadOp(testCase.readResponseSchema, testCase.readParams),
+					SchemaOptions: testCase.schemaOptions,
 				},
 			}, config.Config{})
 			got, err := mapper.MapToIR()

@@ -15,6 +15,10 @@ resources:
     delete:
       path: /pet/{petId}
       method: DELETE
+    schema:
+      attributes:
+        aliases:
+          petId: id
 
   order:
     create:
@@ -26,6 +30,10 @@ resources:
     delete:
       path: /store/order/{orderId}
       method: DELETE
+    schema:
+      attributes:
+        aliases:
+          orderId: id
 
   user:
     create:
@@ -40,6 +48,10 @@ data_sources:
     read:
       path: /pet/{petId}
       method: GET
+    schema:
+      attributes:
+        aliases:
+          petId: id
 
   pets:
     read:
@@ -50,3 +62,7 @@ data_sources:
     read:
       path: /store/order/{orderId}
       method: GET
+    schema:
+      attributes:
+        aliases:
+          orderId: id
