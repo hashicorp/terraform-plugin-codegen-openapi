@@ -9,6 +9,843 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
+func TestMergeDataSourceAttributes(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		target             []datasource.Attribute
+		mergeSlices        [][]datasource.Attribute
+		expectedAttributes []datasource.Attribute
+	}{
+		"no matches - appends": {
+			target: []datasource.Attribute{},
+			mergeSlices: [][]datasource.Attribute{
+				{
+					{
+						Name: "string_attribute",
+						String: &datasource.StringAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("string!"),
+						},
+					},
+				},
+				{
+					{
+						Name: "bool_attribute",
+						Bool: &datasource.BoolAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							Description:              pointer("bool!"),
+						},
+					},
+				},
+				{
+					{
+						Name: "float64_attribute",
+						Float64: &datasource.Float64Attribute{
+							ComputedOptionalRequired: schema.Required,
+						},
+					},
+				},
+			},
+			expectedAttributes: []datasource.Attribute{
+				{
+					Name: "string_attribute",
+					String: &datasource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("string!"),
+					},
+				},
+				{
+					Name: "bool_attribute",
+					Bool: &datasource.BoolAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("bool!"),
+					},
+				},
+				{
+					Name: "float64_attribute",
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+					},
+				},
+			},
+		},
+		"nested attributes - recursive appends": {
+			target: []datasource.Attribute{
+				{
+					Name: "map_nested_attribute",
+					MapNested: &datasource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("map nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "list_nested_attribute",
+					ListNested: &datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_nested_attribute",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("set nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			mergeSlices: [][]datasource.Attribute{
+				{
+					{
+						Name: "map_nested_attribute",
+						MapNested: &datasource.MapNestedAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("map nested!"),
+							NestedObject: datasource.NestedAttributeObject{
+								Attributes: []datasource.Attribute{
+									{
+										Name: "nested_string",
+										String: &datasource.StringAttribute{
+											ComputedOptionalRequired: schema.ComputedOptional,
+											Description:              pointer("nested string!"),
+										},
+									},
+									{
+										Name: "nested_bool",
+										Bool: &datasource.BoolAttribute{
+											ComputedOptionalRequired: schema.Computed,
+											Description:              pointer("no!"),
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "list_nested_attribute",
+						ListNested: &datasource.ListNestedAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("list nested!"),
+							NestedObject: datasource.NestedAttributeObject{
+								Attributes: []datasource.Attribute{
+									{
+										Name: "nested_string",
+										String: &datasource.StringAttribute{
+											ComputedOptionalRequired: schema.ComputedOptional,
+											Description:              pointer("nested string!"),
+										},
+									},
+									{
+										Name: "nested_bool",
+										Bool: &datasource.BoolAttribute{
+											ComputedOptionalRequired: schema.Computed,
+											Description:              pointer("no!"),
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "set_nested_attribute",
+						SetNested: &datasource.SetNestedAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("set nested!"),
+							NestedObject: datasource.NestedAttributeObject{
+								Attributes: []datasource.Attribute{
+									{
+										Name: "nested_string",
+										String: &datasource.StringAttribute{
+											ComputedOptionalRequired: schema.ComputedOptional,
+											Description:              pointer("nested string!"),
+										},
+									},
+									{
+										Name: "nested_bool",
+										Bool: &datasource.BoolAttribute{
+											ComputedOptionalRequired: schema.Computed,
+											Description:              pointer("no!"),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expectedAttributes: []datasource.Attribute{
+
+				{
+					Name: "map_nested_attribute",
+					MapNested: &datasource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("map nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+								{
+									Name: "nested_string",
+									String: &datasource.StringAttribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
+										Description:              pointer("nested string!"),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "list_nested_attribute",
+					ListNested: &datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+								{
+									Name: "nested_string",
+									String: &datasource.StringAttribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
+										Description:              pointer("nested string!"),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_nested_attribute",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("set nested!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "nested_bool",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("nested bool!"),
+									},
+								},
+								{
+									Name: "nested_string",
+									String: &datasource.StringAttribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
+										Description:              pointer("nested string!"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"collection attributes - recursive appends": {
+			target: []datasource.Attribute{
+				{
+					Name: "list_attribute",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "map_attribute",
+					Map: &datasource.MapAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("map!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_attribute",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("set!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			mergeSlices: [][]datasource.Attribute{
+				{
+					{
+						Name: "list_attribute",
+						List: &datasource.ListAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:   "nested_string",
+											String: &schema.StringType{},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "map_attribute",
+						Map: &datasource.MapAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:   "nested_string",
+											String: &schema.StringType{},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "set_attribute",
+						Set: &datasource.SetAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:   "nested_string",
+											String: &schema.StringType{},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					{
+						Name: "list_attribute",
+						List: &datasource.ListAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:  "nested_int64",
+											Int64: &schema.Int64Type{},
+										},
+										{
+											Name: "nested_bool",
+											Bool: &schema.BoolType{},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "map_attribute",
+						Map: &datasource.MapAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:  "nested_int64",
+											Int64: &schema.Int64Type{},
+										},
+										{
+											Name: "nested_bool",
+											Bool: &schema.BoolType{},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "set_attribute",
+						Set: &datasource.SetAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							ElementType: schema.ElementType{
+								Object: &schema.ObjectType{
+									AttributeTypes: []schema.ObjectAttributeType{
+										{
+											Name:  "nested_int64",
+											Int64: &schema.Int64Type{},
+										},
+										{
+											Name: "nested_bool",
+											Bool: &schema.BoolType{},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expectedAttributes: []datasource.Attribute{
+				{
+					Name: "list_attribute",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+									{
+										Name:   "nested_string",
+										String: &schema.StringType{},
+									},
+									{
+										Name:  "nested_int64",
+										Int64: &schema.Int64Type{},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "map_attribute",
+					Map: &datasource.MapAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("map!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+									{
+										Name:   "nested_string",
+										String: &schema.StringType{},
+									},
+									{
+										Name:  "nested_int64",
+										Int64: &schema.Int64Type{},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_attribute",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("set!"),
+						ElementType: schema.ElementType{
+							Object: &schema.ObjectType{
+								AttributeTypes: []schema.ObjectAttributeType{
+									{
+										Name: "nested_bool",
+										Bool: &schema.BoolType{},
+									},
+									{
+										Name:   "nested_string",
+										String: &schema.StringType{},
+									},
+									{
+										Name:  "nested_int64",
+										Int64: &schema.Int64Type{},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"collection attributes - multi-dimensional recursive appends": {
+			target: []datasource.Attribute{
+				{
+					Name: "list_attribute",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list!"),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "map_attribute",
+					Map: &datasource.MapAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("map!"),
+						ElementType: schema.ElementType{
+							Set: &schema.SetType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_attribute",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("set!"),
+						ElementType: schema.ElementType{
+							List: &schema.ListType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			mergeSlices: [][]datasource.Attribute{
+				{
+					{
+						Name: "list_attribute",
+						List: &datasource.ListAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("list!"),
+							ElementType: schema.ElementType{
+								Map: &schema.MapType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:   "nested_string",
+													String: &schema.StringType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "map_attribute",
+						Map: &datasource.MapAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							Description:              pointer("map!"),
+							ElementType: schema.ElementType{
+								Set: &schema.SetType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:   "nested_string",
+													String: &schema.StringType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "set_attribute",
+						Set: &datasource.SetAttribute{
+							ComputedOptionalRequired: schema.Required,
+							Description:              pointer("set!"),
+							ElementType: schema.ElementType{
+								List: &schema.ListType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:   "nested_string",
+													String: &schema.StringType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					{
+						Name: "list_attribute",
+						List: &datasource.ListAttribute{
+							ComputedOptionalRequired: schema.ComputedOptional,
+							Description:              pointer("list!"),
+							ElementType: schema.ElementType{
+								Map: &schema.MapType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:  "nested_int64",
+													Int64: &schema.Int64Type{},
+												},
+												{
+													Name: "nested_bool",
+													Bool: &schema.BoolType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "map_attribute",
+						Map: &datasource.MapAttribute{
+							ComputedOptionalRequired: schema.Computed,
+							Description:              pointer("map!"),
+							ElementType: schema.ElementType{
+								Set: &schema.SetType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:  "nested_int64",
+													Int64: &schema.Int64Type{},
+												},
+												{
+													Name: "nested_bool",
+													Bool: &schema.BoolType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						Name: "set_attribute",
+						Set: &datasource.SetAttribute{
+							ComputedOptionalRequired: schema.Required,
+							Description:              pointer("set!"),
+							ElementType: schema.ElementType{
+								List: &schema.ListType{
+									ElementType: schema.ElementType{
+										Object: &schema.ObjectType{
+											AttributeTypes: []schema.ObjectAttributeType{
+												{
+													Name:  "nested_int64",
+													Int64: &schema.Int64Type{},
+												},
+												{
+													Name: "nested_bool",
+													Bool: &schema.BoolType{},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expectedAttributes: []datasource.Attribute{
+				{
+					Name: "list_attribute",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("list!"),
+						ElementType: schema.ElementType{
+							Map: &schema.MapType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "nested_string",
+												String: &schema.StringType{},
+											},
+											{
+												Name:  "nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "map_attribute",
+					Map: &datasource.MapAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("map!"),
+						ElementType: schema.ElementType{
+							Set: &schema.SetType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "nested_string",
+												String: &schema.StringType{},
+											},
+											{
+												Name:  "nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "set_attribute",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("set!"),
+						ElementType: schema.ElementType{
+							List: &schema.ListType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name: "nested_bool",
+												Bool: &schema.BoolType{},
+											},
+											{
+												Name:   "nested_string",
+												String: &schema.StringType{},
+											},
+											{
+												Name:  "nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := merge.MergeDataSourceAttributes(testCase.target, testCase.mergeSlices...)
+
+			if diff := cmp.Diff(*got, testCase.expectedAttributes); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
 func TestMergeDataSourceAttributes_DescriptionPriority(t *testing.T) {
 	t.Parallel()
 
