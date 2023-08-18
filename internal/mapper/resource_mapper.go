@@ -10,6 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/merge"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -141,7 +142,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 		}
 	}
 
-	resourceAttributes := mergeResourceAttributes(
+	resourceAttributes := merge.MergeResourceAttributes(
 		*createRequestAttributes,
 		*createResponseAttributes,
 		*readResponseAttributes,
@@ -150,41 +151,4 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 
 	resourceSchema.Attributes = *resourceAttributes
 	return resourceSchema, nil
-}
-
-// mainSlice takes priority in the merge, will have each subsequent mergeAttributeSlice applied in sequence
-// - No re-ordering of the mainSlice is done, so will append new attributes as they are encountered
-func mergeResourceAttributes(mainSlice []resource.Attribute, mergeAttributeSlices ...[]resource.Attribute) *[]resource.Attribute {
-	for _, attributeSlice := range mergeAttributeSlices {
-
-		for _, compareAttribute := range attributeSlice {
-			isNewAttribute := true
-
-			for mainIndex, mainAttribute := range mainSlice {
-				if mainAttribute.Name == compareAttribute.Name {
-					// Handle types that require nested merging
-					if mainAttribute.SingleNested != nil && compareAttribute.SingleNested != nil {
-						mergedAttributes := mergeResourceAttributes(mainAttribute.SingleNested.Attributes, compareAttribute.SingleNested.Attributes)
-						mainSlice[mainIndex].SingleNested.Attributes = *mergedAttributes
-					} else if mainAttribute.ListNested != nil && compareAttribute.ListNested != nil {
-						mergedAttributes := mergeResourceAttributes(mainAttribute.ListNested.NestedObject.Attributes, compareAttribute.ListNested.NestedObject.Attributes)
-						mainSlice[mainIndex].ListNested.NestedObject.Attributes = *mergedAttributes
-					} else if mainAttribute.List != nil && compareAttribute.List != nil {
-						mergedElementType := mergeElementType(mainAttribute.List.ElementType, compareAttribute.List.ElementType)
-						mainSlice[mainIndex].List.ElementType = mergedElementType
-					}
-
-					isNewAttribute = false
-					break
-				}
-			}
-
-			if isNewAttribute {
-				// Add this back to the original slice to avoid adding duplicate attributes from different mergeAttributeSlices
-				mainSlice = append(mainSlice, compareAttribute)
-			}
-		}
-
-	}
-	return &mainSlice
 }
