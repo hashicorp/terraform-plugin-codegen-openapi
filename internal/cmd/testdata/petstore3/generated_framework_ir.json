@@ -167,7 +167,8 @@
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed_optional",
+							"description": "ID of order that needs to be fetched"
 						}
 					},
 					{
@@ -237,7 +238,8 @@
 					{
 						"name": "id",
 						"int64": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed_optional",
+							"description": "ID of pet to return"
 						}
 					},
 					{
@@ -349,7 +351,8 @@
 					{
 						"name": "username",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed_optional",
+							"description": "The name that needs to be fetched. Use user1 for testing. "
 						}
 					}
 				]
