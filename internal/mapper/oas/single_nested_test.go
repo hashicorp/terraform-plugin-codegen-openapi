@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -23,7 +24,7 @@ func TestBuildSingleNestedResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes mapper_resource.MapperAttributes
 	}{
 		"single nested attributes": {
 			schema: &base.Schema{
@@ -55,35 +56,35 @@ func TestBuildSingleNestedResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSingleNestedAttribute{
 					Name: "nested_obj_prop",
-					SingleNested: &resource.SingleNestedAttribute{
-						Attributes: []resource.Attribute{
-							{
-								Name: "nested_obj_prop_required",
-								SingleNested: &resource.SingleNestedAttribute{
-									Attributes: []resource.Attribute{
-										{
-											Name: "nested_float64",
-											Float64: &resource.Float64Attribute{
-												ComputedOptionalRequired: schema.ComputedOptional,
-												Description:              pointer("hey there! I'm a nested float64 type."),
-											},
-										},
-										{
-											Name: "nested_int64_required",
-											Int64: &resource.Int64Attribute{
-												ComputedOptionalRequired: schema.Required,
-												Description:              pointer("hey there! I'm a nested int64 type, required."),
-											},
-										},
+					Attributes: mapper_resource.MapperAttributes{
+						&mapper_resource.MapperSingleNestedAttribute{
+							Name: "nested_obj_prop_required",
+							Attributes: mapper_resource.MapperAttributes{
+								&mapper_resource.MapperFloat64Attribute{
+									Name: "nested_float64",
+									Float64Attribute: resource.Float64Attribute{
+										ComputedOptionalRequired: schema.ComputedOptional,
+										Description:              pointer("hey there! I'm a nested float64 type."),
 									},
-									ComputedOptionalRequired: schema.Required,
-									Description:              pointer("hey there! I'm a single nested object type, required."),
+								},
+								&mapper_resource.MapperInt64Attribute{
+									Name: "nested_int64_required",
+									Int64Attribute: resource.Int64Attribute{
+										ComputedOptionalRequired: schema.Required,
+										Description:              pointer("hey there! I'm a nested int64 type, required."),
+									},
 								},
 							},
+							SingleNestedAttribute: resource.SingleNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("hey there! I'm a single nested object type, required."),
+							},
 						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a single nested object type."),
 					},
@@ -107,18 +108,18 @@ func TestBuildSingleNestedResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSingleNestedAttribute{
 					Name: "nested_obj_prop",
-					SingleNested: &resource.SingleNestedAttribute{
-						Attributes: []resource.Attribute{
-							{
-								Name: "nested_int64_required",
-								Int64: &resource.Int64Attribute{
-									ComputedOptionalRequired: schema.Required,
-								},
+					Attributes: mapper_resource.MapperAttributes{
+						&mapper_resource.MapperInt64Attribute{
+							Name: "nested_int64_required",
+							Int64Attribute: resource.Int64Attribute{
+								ComputedOptionalRequired: schema.Required,
 							},
 						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},

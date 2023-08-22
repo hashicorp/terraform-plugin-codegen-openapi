@@ -1,0 +1,47 @@
+package mapper_resource
+
+import (
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
+
+type MapperAttribute interface {
+	GetName() string
+	Merge(MapperAttribute) MapperAttribute
+	ToSpec() resource.Attribute
+}
+
+type MapperAttributes []MapperAttribute
+
+func (targetSlice MapperAttributes) Merge(mergeSlices ...MapperAttributes) MapperAttributes {
+	for _, mergeSlice := range mergeSlices {
+		for _, mergeAttribute := range mergeSlice {
+			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
+			isNewAttribute := true
+
+			for i, targetAttribute := range targetSlice {
+				if targetAttribute.GetName() == mergeAttribute.GetName() {
+					targetSlice[i] = targetAttribute.Merge(mergeAttribute)
+
+					isNewAttribute = false
+					break
+				}
+			}
+
+			if isNewAttribute {
+				// Add this back to the original slice to avoid adding duplicate attributes from different mergeSlices
+				targetSlice = append(targetSlice, mergeAttribute)
+			}
+		}
+	}
+
+	return targetSlice
+}
+
+func (attributes MapperAttributes) ToSpec() []resource.Attribute {
+	specAttributes := []resource.Attribute{}
+	for _, attribute := range attributes {
+		specAttributes = append(specAttributes, attribute.ToSpec())
+	}
+
+	return specAttributes
+}

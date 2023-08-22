@@ -6,15 +6,15 @@ package oas
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildResourceAttributes() (*[]resource.Attribute, error) {
-	objectAttributes := []resource.Attribute{}
+func (s *OASSchema) BuildResourceAttributes() (mapper_resource.MapperAttributes, error) {
+	objectAttributes := mapper_resource.MapperAttributes{}
 
 	// TODO: throw error if it's not an object?
 
@@ -33,13 +33,13 @@ func (s *OASSchema) BuildResourceAttributes() (*[]resource.Attribute, error) {
 			return nil, fmt.Errorf("failed to create object property '%s' schema - %w", name, err)
 		}
 
-		objectAttributes = append(objectAttributes, *attribute)
+		objectAttributes = append(objectAttributes, attribute)
 	}
 
-	return &objectAttributes, nil
+	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringResource(name, computability)

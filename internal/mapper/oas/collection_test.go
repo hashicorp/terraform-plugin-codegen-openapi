@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -24,7 +25,7 @@ func TestBuildCollectionResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes mapper_resource.MapperAttributes
 	}{
 		"list nested attributes": {
 			schema: &base.Schema{
@@ -55,27 +56,27 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &resource.ListNestedAttribute{
+					ListNestedAttribute: resource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list nested array type, required."),
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &resource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
-										Description:              pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: resource.Float64Attribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
+									Description:              pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-										Description:              pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+									Description:              pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -105,19 +106,19 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListNestedAttribute{
 					Name: "nested_list_prop",
-					ListNested: &resource.ListNestedAttribute{
+					ListNestedAttribute: resource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -148,21 +149,21 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &resource.ListNestedAttribute{
-						ComputedOptionalRequired: schema.Required,
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					ListNestedAttribute: resource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.ListValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -209,27 +210,27 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &resource.SetNestedAttribute{
+					SetNestedAttribute: resource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a set nested array type, required."),
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &resource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
-										Description:              pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: resource.Float64Attribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
+									Description:              pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-										Description:              pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+									Description:              pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -260,19 +261,19 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSetNestedAttribute{
 					Name: "nested_set_prop",
-					SetNested: &resource.SetNestedAttribute{
+					SetNestedAttribute: resource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -304,21 +305,21 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &resource.SetNestedAttribute{
-						ComputedOptionalRequired: schema.Required,
-						NestedObject: resource.NestedAttributeObject{
-							Attributes: []resource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &resource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					NestedObject: mapper_resource.MapperNestedAttributeObject{
+						Attributes: mapper_resource.MapperAttributes{
+							&mapper_resource.MapperInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: resource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					SetNestedAttribute: resource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.SetValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -388,10 +389,10 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListAttribute{
 					Name: "nested_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of lists."),
 						ElementType: schema.ElementType{
@@ -414,9 +415,9 @@ func TestBuildCollectionResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperListAttribute{
 					Name: "nested_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of lists, required."),
 						ElementType: schema.ElementType{
@@ -498,10 +499,10 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperSetAttribute{
 					Name: "nested_set_prop",
-					Set: &resource.SetAttribute{
+					SetAttribute: resource.SetAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a set of sets."),
 						ElementType: schema.ElementType{
@@ -524,9 +525,9 @@ func TestBuildCollectionResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperSetAttribute{
 					Name: "nested_set_prop_required",
-					Set: &resource.SetAttribute{
+					SetAttribute: resource.SetAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a set of sets, required."),
 						ElementType: schema.ElementType{
@@ -604,10 +605,10 @@ func TestBuildCollectionResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListAttribute{
 					Name: "list_with_map",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list with a nested map of objects."),
 						ElementType: schema.ElementType{
@@ -630,9 +631,9 @@ func TestBuildCollectionResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperSetAttribute{
 					Name: "set_with_map",
-					Set: &resource.SetAttribute{
+					SetAttribute: resource.SetAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a set with a nested map of objects."),
 						ElementType: schema.ElementType{

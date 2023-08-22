@@ -5,16 +5,17 @@ package oas
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
+func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+	result := &mapper_resource.MapperStringAttribute{
 		Name: name,
-		String: &resource.StringAttribute{
+		StringAttribute: resource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -27,17 +28,17 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 
 		if ok {
 			if computability == schema.Required {
-				result.String.ComputedOptionalRequired = schema.ComputedOptional
+				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
 
-			result.String.Default = &schema.StringDefault{
+			result.Default = &schema.StringDefault{
 				Static: &staticDefault,
 			}
 		}
 	}
 
 	if computability != schema.Computed {
-		result.String.Validators = s.GetStringValidators()
+		result.Validators = s.GetStringValidators()
 	}
 
 	return result, nil

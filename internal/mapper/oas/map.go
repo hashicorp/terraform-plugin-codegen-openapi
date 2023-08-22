@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -15,7 +16,7 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
-func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
@@ -28,26 +29,25 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
 	}
 
-	result := &resource.Attribute{
-		Name: name,
-	}
-
 	if mapSchema.Type == util.OAS_type_object {
 		mapAttributes, err := mapSchema.BuildResourceAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		result.MapNested = &resource.MapNestedAttribute{
-			NestedObject: resource.NestedAttributeObject{
-				Attributes: *mapAttributes,
+		result := &mapper_resource.MapperMapNestedAttribute{
+			Name: name,
+			NestedObject: mapper_resource.MapperNestedAttributeObject{
+				Attributes: mapAttributes,
 			},
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+			MapNestedAttribute: resource.MapNestedAttribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.MapNested.Validators = s.GetMapValidators()
+			result.Validators = s.GetMapValidators()
 		}
 
 		return result, nil
@@ -58,15 +58,18 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	result.Map = &resource.MapAttribute{
-		ElementType:              elemType,
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
+	result := &mapper_resource.MapperMapAttribute{
+		Name: name,
+		MapAttribute: resource.MapAttribute{
+			ElementType:              elemType,
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
 	}
 
 	if computability != schema.Computed {
-		result.Map.Validators = s.GetMapValidators()
+		result.Validators = s.GetMapValidators()
 	}
 
 	return result, nil

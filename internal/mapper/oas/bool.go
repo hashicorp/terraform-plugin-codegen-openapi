@@ -4,16 +4,17 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
+func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+	result := &mapper_resource.MapperBoolAttribute{
 		Name: name,
-		Bool: &resource.BoolAttribute{
+		BoolAttribute: resource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -25,10 +26,10 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 
 		if ok {
 			if computability == schema.Required {
-				result.Bool.ComputedOptionalRequired = schema.ComputedOptional
+				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
 
-			result.Bool.Default = &schema.BoolDefault{
+			result.Default = &schema.BoolDefault{
 				Static: &staticDefault,
 			}
 		}

@@ -5,6 +5,7 @@ package oas
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -12,16 +13,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
-		Name: name,
-	}
-
+func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		result.Float64 = &resource.Float64Attribute{
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+		result := &mapper_resource.MapperFloat64Attribute{
+			Name: name,
+			Float64Attribute: resource.Float64Attribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if s.Schema.Default != nil {
@@ -29,29 +29,30 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 
 			if ok {
 				if computability == schema.Required {
-					result.Float64.ComputedOptionalRequired = schema.ComputedOptional
+					result.ComputedOptionalRequired = schema.ComputedOptional
 				}
 
-				result.Float64.Default = &schema.Float64Default{
+				result.Default = &schema.Float64Default{
 					Static: &staticDefault,
 				}
 			}
 		}
 
 		if computability != schema.Computed {
-			result.Float64.Validators = s.GetFloatValidators()
+			result.Validators = s.GetFloatValidators()
 		}
 
 		return result, nil
 	}
 
-	result.Number = &resource.NumberAttribute{
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
-	}
-
-	return result, nil
+	return &mapper_resource.MapperNumberAttribute{
+		Name: name,
+		NumberAttribute: resource.NumberAttribute{
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
+	}, nil
 }
 
 func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {

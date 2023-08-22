@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -21,7 +22,7 @@ func TestBuildBoolResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes mapper_resource.MapperAttributes
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -38,17 +39,17 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a bool type."),
 					},
 				},
-				{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop_required",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a bool type, required."),
 					},
@@ -74,28 +75,28 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop_default_false",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.BoolDefault{
 							Static: pointer(false),
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop_default_true",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.BoolDefault{
 							Static: pointer(true),
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop_required_default_true",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						// Intentionally not required due to default
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.BoolDefault{
@@ -115,10 +116,10 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperBoolAttribute{
 					Name: "bool_prop",
-					Bool: &resource.BoolAttribute{
+					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -150,10 +151,10 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: mapper_resource.MapperAttributes{
+				&mapper_resource.MapperListAttribute{
 					Name: "bool_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of bools."),
 						ElementType: schema.ElementType{
@@ -161,9 +162,9 @@ func TestBuildBoolResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mapper_resource.MapperListAttribute{
 					Name: "bool_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of bools, required."),
 						ElementType: schema.ElementType{

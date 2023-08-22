@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -14,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
+func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -22,10 +23,6 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
-	}
-
-	result := &resource.Attribute{
-		Name: name,
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
@@ -36,33 +33,39 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			result.SetNested = &resource.SetNestedAttribute{
-				NestedObject: resource.NestedAttributeObject{
-					Attributes: *objectAttributes,
+			result := &mapper_resource.MapperSetNestedAttribute{
+				Name: name,
+				NestedObject: mapper_resource.MapperNestedAttributeObject{
+					Attributes: objectAttributes,
 				},
-				ComputedOptionalRequired: computability,
-				DeprecationMessage:       s.GetDeprecationMessage(),
-				Description:              s.GetDescription(),
+				SetNestedAttribute: resource.SetNestedAttribute{
+					ComputedOptionalRequired: computability,
+					DeprecationMessage:       s.GetDeprecationMessage(),
+					Description:              s.GetDescription(),
+				},
 			}
 
 			if computability != schema.Computed {
-				result.SetNested.Validators = s.GetSetValidators()
+				result.Validators = s.GetSetValidators()
 			}
 
 			return result, nil
 		}
 
-		result.ListNested = &resource.ListNestedAttribute{
-			NestedObject: resource.NestedAttributeObject{
-				Attributes: *objectAttributes,
+		result := &mapper_resource.MapperListNestedAttribute{
+			Name: name,
+			NestedObject: mapper_resource.MapperNestedAttributeObject{
+				Attributes: objectAttributes,
 			},
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+			ListNestedAttribute: resource.ListNestedAttribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.ListNested.Validators = s.GetListValidators()
+			result.Validators = s.GetListValidators()
 		}
 
 		return result, nil
@@ -74,29 +77,35 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		result.Set = &resource.SetAttribute{
-			ElementType:              elemType,
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+		result := &mapper_resource.MapperSetAttribute{
+			Name: name,
+			SetAttribute: resource.SetAttribute{
+				ElementType:              elemType,
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.Set.Validators = s.GetSetValidators()
+			result.Validators = s.GetSetValidators()
 		}
 
 		return result, nil
 	}
 
-	result.List = &resource.ListAttribute{
-		ElementType:              elemType,
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
+	result := &mapper_resource.MapperListAttribute{
+		Name: name,
+		ListAttribute: resource.ListAttribute{
+			ElementType:              elemType,
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
 	}
 
 	if computability != schema.Computed {
-		result.List.Validators = s.GetListValidators()
+		result.Validators = s.GetListValidators()
 	}
 
 	return result, nil
