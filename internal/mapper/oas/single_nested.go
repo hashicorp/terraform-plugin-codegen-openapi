@@ -6,20 +6,20 @@ package oas
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
 	objectAttributes, err := s.BuildResourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 	}
 
-	return &mapper_resource.MapperSingleNestedAttribute{
+	return &attrmapper.ResourceSingleNestedAttribute{
 		Name:       name,
 		Attributes: objectAttributes,
 		SingleNestedAttribute: resource.SingleNestedAttribute{

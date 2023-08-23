@@ -10,8 +10,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -79,7 +79,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// *********************
 	// Create Response Body (optional)
 	// *********************
-	createResponseAttributes := mapper_resource.MapperAttributes{}
+	createResponseAttributes := attrmapper.ResourceAttributes{}
 	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
@@ -93,7 +93,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// *******************
 	// READ Response Body (optional)
 	// *******************
-	readResponseAttributes := mapper_resource.MapperAttributes{}
+	readResponseAttributes := attrmapper.ResourceAttributes{}
 	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
 		return nil, err
@@ -111,7 +111,7 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 	// TODO: support style + explode?
 	//	- https://spec.openapis.org/oas/latest.html#style-values
 	// 	- https://spec.openapis.org/oas/latest.html#style-examples
-	readParameterAttributes := mapper_resource.MapperAttributes{}
+	readParameterAttributes := attrmapper.ResourceAttributes{}
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {
 			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {

@@ -1,28 +1,28 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource_test
+package attrmapper_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestMapperAttributes_Merge(t *testing.T) {
+func TestResourceAttributes_Merge(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttributes     mapper_resource.MapperAttributes
-		mergeAttributeSlices []mapper_resource.MapperAttributes
-		expectedAttributes   mapper_resource.MapperAttributes
+		targetAttributes     attrmapper.ResourceAttributes
+		mergeAttributeSlices []attrmapper.ResourceAttributes
+		expectedAttributes   attrmapper.ResourceAttributes
 	}{
 		"matches and appends": {
-			targetAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			targetAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_attribute",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -31,9 +31,9 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttributeSlices: []mapper_resource.MapperAttributes{
+			mergeAttributeSlices: []attrmapper.ResourceAttributes{
 				{
-					&mapper_resource.MapperStringAttribute{
+					&attrmapper.ResourceStringAttribute{
 						Name: "string_attribute",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Computed,
@@ -41,7 +41,7 @@ func TestMapperAttributes_Merge(t *testing.T) {
 							Sensitive:                pointer(false),
 						},
 					},
-					&mapper_resource.MapperBoolAttribute{
+					&attrmapper.ResourceBoolAttribute{
 						Name: "bool_attribute",
 						BoolAttribute: resource.BoolAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -50,7 +50,7 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 				{
-					&mapper_resource.MapperFloat64Attribute{
+					&attrmapper.ResourceFloat64Attribute{
 						Name: "float64_attribute",
 						Float64Attribute: resource.Float64Attribute{
 							ComputedOptionalRequired: schema.Required,
@@ -59,8 +59,8 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_attribute",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -68,14 +68,14 @@ func TestMapperAttributes_Merge(t *testing.T) {
 						Sensitive:                pointer(true),
 					},
 				},
-				&mapper_resource.MapperBoolAttribute{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_attribute",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("bool description"),
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_attribute",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
@@ -85,11 +85,11 @@ func TestMapperAttributes_Merge(t *testing.T) {
 			},
 		},
 		"recursive - matches and appends": {
-			targetAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperSingleNestedAttribute{
+			targetAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
 					Name: "single_nested_attribute",
-					Attributes: mapper_resource.MapperAttributes{
-						&mapper_resource.MapperStringAttribute{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceStringAttribute{
 							Name: "string_attribute",
 							StringAttribute: resource.StringAttribute{
 								ComputedOptionalRequired: schema.Required,
@@ -104,12 +104,12 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttributeSlices: []mapper_resource.MapperAttributes{
+			mergeAttributeSlices: []attrmapper.ResourceAttributes{
 				{
-					&mapper_resource.MapperSingleNestedAttribute{
+					&attrmapper.ResourceSingleNestedAttribute{
 						Name: "single_nested_attribute",
-						Attributes: mapper_resource.MapperAttributes{
-							&mapper_resource.MapperStringAttribute{
+						Attributes: attrmapper.ResourceAttributes{
+							&attrmapper.ResourceStringAttribute{
 								Name: "string_attribute",
 								StringAttribute: resource.StringAttribute{
 									ComputedOptionalRequired: schema.Computed,
@@ -117,7 +117,7 @@ func TestMapperAttributes_Merge(t *testing.T) {
 									Sensitive:                pointer(false),
 								},
 							},
-							&mapper_resource.MapperBoolAttribute{
+							&attrmapper.ResourceBoolAttribute{
 								Name: "bool_attribute",
 								BoolAttribute: resource.BoolAttribute{
 									ComputedOptionalRequired: schema.Required,
@@ -132,10 +132,10 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 				{
-					&mapper_resource.MapperSingleNestedAttribute{
+					&attrmapper.ResourceSingleNestedAttribute{
 						Name: "single_nested_attribute",
-						Attributes: mapper_resource.MapperAttributes{
-							&mapper_resource.MapperFloat64Attribute{
+						Attributes: attrmapper.ResourceAttributes{
+							&attrmapper.ResourceFloat64Attribute{
 								Name: "float64_attribute",
 								Float64Attribute: resource.Float64Attribute{
 									ComputedOptionalRequired: schema.Required,
@@ -150,11 +150,11 @@ func TestMapperAttributes_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperSingleNestedAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
 					Name: "single_nested_attribute",
-					Attributes: mapper_resource.MapperAttributes{
-						&mapper_resource.MapperStringAttribute{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceStringAttribute{
 							Name: "string_attribute",
 							StringAttribute: resource.StringAttribute{
 								ComputedOptionalRequired: schema.Required,
@@ -162,14 +162,14 @@ func TestMapperAttributes_Merge(t *testing.T) {
 								Sensitive:                pointer(true),
 							},
 						},
-						&mapper_resource.MapperBoolAttribute{
+						&attrmapper.ResourceBoolAttribute{
 							Name: "bool_attribute",
 							BoolAttribute: resource.BoolAttribute{
 								ComputedOptionalRequired: schema.Required,
 								Description:              pointer("bool description"),
 							},
 						},
-						&mapper_resource.MapperFloat64Attribute{
+						&attrmapper.ResourceFloat64Attribute{
 							Name: "float64_attribute",
 							Float64Attribute: resource.Float64Attribute{
 								ComputedOptionalRequired: schema.Required,

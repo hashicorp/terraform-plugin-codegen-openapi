@@ -4,8 +4,8 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -13,9 +13,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		result := &mapper_resource.MapperFloat64Attribute{
+		result := &attrmapper.ResourceFloat64Attribute{
 			Name: name,
 			Float64Attribute: resource.Float64Attribute{
 				ComputedOptionalRequired: computability,
@@ -45,7 +45,7 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 		return result, nil
 	}
 
-	return &mapper_resource.MapperNumberAttribute{
+	return &attrmapper.ResourceNumberAttribute{
 		Name: name,
 		NumberAttribute: resource.NumberAttribute{
 			ComputedOptionalRequired: computability,

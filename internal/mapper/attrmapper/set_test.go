@@ -1,48 +1,48 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource_test
+package attrmapper_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestMapperMapAttribute_Merge(t *testing.T) {
+func TestResourceSetAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttribute   mapper_resource.MapperMapAttribute
-		mergeAttribute    mapper_resource.MapperAttribute
-		expectedAttribute mapper_resource.MapperAttribute
+		targetAttribute   attrmapper.ResourceSetAttribute
+		mergeAttribute    attrmapper.ResourceAttribute
+		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"mismatch collection type - no merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
-					ComputedOptionalRequired: schema.Required,
-					ElementType: schema.ElementType{
-						String: &schema.StringType{},
-					},
-				},
-			},
-			mergeAttribute: &mapper_resource.MapperSetAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
 				Name: "set_attribute",
 				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
-					Description:              pointer("set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceListAttribute{
+				Name: "list_attribute",
+				ListAttribute: resource.ListAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("list description"),
+					ElementType: schema.ElementType{
+						String: &schema.StringType{},
+					},
+				},
+			},
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
@@ -51,27 +51,27 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"mismatch element type - keep target element type": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Bool: &schema.BoolType{},
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
@@ -80,31 +80,31 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"populated description - no merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
-					Description:              pointer("old map description"),
+					Description:              pointer("old set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
-					Description:              pointer("new map description"),
+					Description:              pointer("new set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
-					Description:              pointer("old map description"),
+					Description:              pointer("old set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
@@ -112,30 +112,30 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nil description - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
-					Description:              pointer("new map description"),
+					Description:              pointer("new set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
-					Description:              pointer("new map description"),
+					Description:              pointer("new set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
@@ -143,9 +143,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"empty description - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer(""),
 					ElementType: schema.ElementType{
@@ -153,21 +153,21 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
-					Description:              pointer("new map description"),
+					Description:              pointer("new set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
-					Description:              pointer("new map description"),
+					Description:              pointer("new set description"),
 					ElementType: schema.ElementType{
 						String: &schema.StringType{},
 					},
@@ -175,9 +175,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nested object - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Object: &schema.ObjectType{
@@ -202,9 +202,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Object: &schema.ObjectType{
@@ -229,9 +229,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Object: &schema.ObjectType{
@@ -266,9 +266,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nested list object - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						List: &schema.ListType{
@@ -286,9 +286,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						List: &schema.ListType{
@@ -306,9 +306,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						List: &schema.ListType{
@@ -332,9 +332,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nested map object - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Map: &schema.MapType{
@@ -352,9 +352,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Map: &schema.MapType{
@@ -372,9 +372,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Map: &schema.MapType{
@@ -398,9 +398,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nested set object - merge": {
-			targetAttribute: mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			targetAttribute: attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Set: &schema.SetType{
@@ -418,9 +418,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			mergeAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Set: &schema.SetType{
@@ -438,9 +438,9 @@ func TestMapperMapAttribute_Merge(t *testing.T) {
 					},
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperMapAttribute{
-				Name: "map_attribute",
-				MapAttribute: resource.MapAttribute{
+			expectedAttribute: &attrmapper.ResourceSetAttribute{
+				Name: "set_attribute",
+				SetAttribute: resource.SetAttribute{
 					ComputedOptionalRequired: schema.Required,
 					ElementType: schema.ElementType{
 						Set: &schema.SetType{

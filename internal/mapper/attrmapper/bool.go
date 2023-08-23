@@ -1,22 +1,22 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 
-type MapperBoolAttribute struct {
+type ResourceBoolAttribute struct {
 	resource.BoolAttribute
 
 	Name string
 }
 
-func (a *MapperBoolAttribute) GetName() string {
+func (a *ResourceBoolAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *MapperBoolAttribute) Merge(mergeAttribute MapperAttribute) MapperAttribute {
-	boolAttribute, ok := mergeAttribute.(*MapperBoolAttribute)
+func (a *ResourceBoolAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+	boolAttribute, ok := mergeAttribute.(*ResourceBoolAttribute)
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = boolAttribute.Description
 	}
@@ -24,7 +24,7 @@ func (a *MapperBoolAttribute) Merge(mergeAttribute MapperAttribute) MapperAttrib
 	return a
 }
 
-func (a *MapperBoolAttribute) ToSpec() resource.Attribute {
+func (a *ResourceBoolAttribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
 		Name: a.Name,
 		Bool: &a.BoolAttribute,

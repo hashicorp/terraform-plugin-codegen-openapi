@@ -6,8 +6,8 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -23,7 +23,7 @@ func TestBuildStringResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -41,15 +41,15 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_sensitive_prop",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -81,8 +81,8 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_default_empty",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -91,7 +91,7 @@ func TestBuildStringResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_default_non_empty",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -100,7 +100,7 @@ func TestBuildStringResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_required_default_non_empty",
 					StringAttribute: resource.StringAttribute{
 						// Intentionally not required due to default
@@ -122,8 +122,8 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -157,8 +157,8 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -168,7 +168,7 @@ func TestBuildStringResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -191,8 +191,8 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,

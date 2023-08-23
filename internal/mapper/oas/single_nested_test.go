@@ -6,8 +6,8 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -24,7 +24,7 @@ func TestBuildSingleNestedResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"single nested attributes": {
 			schema: &base.Schema{
@@ -56,21 +56,21 @@ func TestBuildSingleNestedResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperSingleNestedAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
 					Name: "nested_obj_prop",
-					Attributes: mapper_resource.MapperAttributes{
-						&mapper_resource.MapperSingleNestedAttribute{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceSingleNestedAttribute{
 							Name: "nested_obj_prop_required",
-							Attributes: mapper_resource.MapperAttributes{
-								&mapper_resource.MapperFloat64Attribute{
+							Attributes: attrmapper.ResourceAttributes{
+								&attrmapper.ResourceFloat64Attribute{
 									Name: "nested_float64",
 									Float64Attribute: resource.Float64Attribute{
 										ComputedOptionalRequired: schema.ComputedOptional,
 										Description:              pointer("hey there! I'm a nested float64 type."),
 									},
 								},
-								&mapper_resource.MapperInt64Attribute{
+								&attrmapper.ResourceInt64Attribute{
 									Name: "nested_int64_required",
 									Int64Attribute: resource.Int64Attribute{
 										ComputedOptionalRequired: schema.Required,
@@ -108,11 +108,11 @@ func TestBuildSingleNestedResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperSingleNestedAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
 					Name: "nested_obj_prop",
-					Attributes: mapper_resource.MapperAttributes{
-						&mapper_resource.MapperInt64Attribute{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceInt64Attribute{
 							Name: "nested_int64_required",
 							Int64Attribute: resource.Int64Attribute{
 								ComputedOptionalRequired: schema.Required,

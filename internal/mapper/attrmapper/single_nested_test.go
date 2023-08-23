@@ -1,30 +1,30 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource_test
+package attrmapper_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
+func TestResourceSingleNestedAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttribute   mapper_resource.MapperSingleNestedAttribute
-		mergeAttribute    mapper_resource.MapperAttribute
-		expectedAttribute mapper_resource.MapperAttribute
+		targetAttribute   attrmapper.ResourceSingleNestedAttribute
+		mergeAttribute    attrmapper.ResourceAttribute
+		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"mismatch type - no merge": {
-			targetAttribute: mapper_resource.MapperSingleNestedAttribute{
+			targetAttribute: attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -35,17 +35,17 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperStringAttribute{
+			mergeAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("nested string description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -58,10 +58,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 			},
 		},
 		"populated description - no merge": {
-			targetAttribute: mapper_resource.MapperSingleNestedAttribute{
+			targetAttribute: attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -74,10 +74,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer("old single nested description"),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			mergeAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.ComputedOptional,
@@ -90,10 +90,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer("new single nested description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -108,10 +108,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nil description - merge": {
-			targetAttribute: mapper_resource.MapperSingleNestedAttribute{
+			targetAttribute: attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -122,10 +122,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			mergeAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.ComputedOptional,
@@ -138,10 +138,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer("new single nested description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -156,10 +156,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 			},
 		},
 		"empty description - merge": {
-			targetAttribute: mapper_resource.MapperSingleNestedAttribute{
+			targetAttribute: attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -172,10 +172,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer(""),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			mergeAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.ComputedOptional,
@@ -188,10 +188,10 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer("new single nested description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
@@ -206,20 +206,20 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nested object - merge": {
-			targetAttribute: mapper_resource.MapperSingleNestedAttribute{
+			targetAttribute: attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
 							Description:              pointer("nested string description"),
 						},
 					},
-					&mapper_resource.MapperSingleNestedAttribute{
+					&attrmapper.ResourceSingleNestedAttribute{
 						Name: "nested_object",
-						Attributes: mapper_resource.MapperAttributes{
-							&mapper_resource.MapperStringAttribute{
+						Attributes: attrmapper.ResourceAttributes{
+							&attrmapper.ResourceStringAttribute{
 								Name: "double_nested_string",
 								StringAttribute: resource.StringAttribute{
 									ComputedOptionalRequired: schema.Required,
@@ -232,27 +232,27 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			mergeAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperBoolAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceBoolAttribute{
 						Name: "nested_bool",
 						BoolAttribute: resource.BoolAttribute{
 							ComputedOptionalRequired: schema.ComputedOptional,
 							Description:              pointer("nested bool description"),
 						},
 					},
-					&mapper_resource.MapperSingleNestedAttribute{
+					&attrmapper.ResourceSingleNestedAttribute{
 						Name: "nested_object",
-						Attributes: mapper_resource.MapperAttributes{
-							&mapper_resource.MapperStringAttribute{
+						Attributes: attrmapper.ResourceAttributes{
+							&attrmapper.ResourceStringAttribute{
 								Name: "double_nested_string",
 								StringAttribute: resource.StringAttribute{
 									ComputedOptionalRequired: schema.ComputedOptional,
 									Description:              pointer("double nested string description"),
 								},
 							},
-							&mapper_resource.MapperBoolAttribute{
+							&attrmapper.ResourceBoolAttribute{
 								Name: "double_nested_bool",
 								BoolAttribute: resource.BoolAttribute{
 									ComputedOptionalRequired: schema.ComputedOptional,
@@ -267,27 +267,27 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 					Description:              pointer("single nested description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperSingleNestedAttribute{
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "single_nested_attribute",
-				Attributes: mapper_resource.MapperAttributes{
-					&mapper_resource.MapperStringAttribute{
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
 						Name: "nested_string",
 						StringAttribute: resource.StringAttribute{
 							ComputedOptionalRequired: schema.Required,
 							Description:              pointer("nested string description"),
 						},
 					},
-					&mapper_resource.MapperSingleNestedAttribute{
+					&attrmapper.ResourceSingleNestedAttribute{
 						Name: "nested_object",
-						Attributes: mapper_resource.MapperAttributes{
-							&mapper_resource.MapperStringAttribute{
+						Attributes: attrmapper.ResourceAttributes{
+							&attrmapper.ResourceStringAttribute{
 								Name: "double_nested_string",
 								StringAttribute: resource.StringAttribute{
 									ComputedOptionalRequired: schema.Required,
 									Description:              pointer("double nested string description"),
 								},
 							},
-							&mapper_resource.MapperBoolAttribute{
+							&attrmapper.ResourceBoolAttribute{
 								Name: "double_nested_bool",
 								BoolAttribute: resource.BoolAttribute{
 									ComputedOptionalRequired: schema.ComputedOptional,
@@ -296,7 +296,7 @@ func TestMapperSingleNestedAttribute_Merge(t *testing.T) {
 							},
 						},
 					},
-					&mapper_resource.MapperBoolAttribute{
+					&attrmapper.ResourceBoolAttribute{
 						Name: "nested_bool",
 						BoolAttribute: resource.BoolAttribute{
 							ComputedOptionalRequired: schema.ComputedOptional,

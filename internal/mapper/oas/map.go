@@ -6,8 +6,8 @@ package oas
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -16,7 +16,7 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
-func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
@@ -34,9 +34,9 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		result := &mapper_resource.MapperMapNestedAttribute{
+		result := &attrmapper.ResourceMapNestedAttribute{
 			Name: name,
-			NestedObject: mapper_resource.MapperNestedAttributeObject{
+			NestedObject: attrmapper.ResourceNestedAttributeObject{
 				Attributes: mapAttributes,
 			},
 			MapNestedAttribute: resource.MapNestedAttribute{
@@ -58,7 +58,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	result := &mapper_resource.MapperMapAttribute{
+	result := &attrmapper.ResourceMapAttribute{
 		Name: name,
 		MapAttribute: resource.MapAttribute{
 			ElementType:              elemType,

@@ -1,15 +1,15 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-type MapperNestedAttributeObject struct {
-	Attributes MapperAttributes
+type ResourceNestedAttributeObject struct {
+	Attributes ResourceAttributes
 }
 
 // TODO: refactor this?

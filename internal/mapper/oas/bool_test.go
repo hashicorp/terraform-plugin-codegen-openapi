@@ -6,8 +6,8 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -22,7 +22,7 @@ func TestBuildBoolResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -39,15 +39,15 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperBoolAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a bool type."),
 					},
 				},
-				&mapper_resource.MapperBoolAttribute{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop_required",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -75,8 +75,8 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperBoolAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop_default_false",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -85,7 +85,7 @@ func TestBuildBoolResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperBoolAttribute{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop_default_true",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -94,7 +94,7 @@ func TestBuildBoolResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperBoolAttribute{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop_required_default_true",
 					BoolAttribute: resource.BoolAttribute{
 						// Intentionally not required due to default
@@ -116,8 +116,8 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperBoolAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceBoolAttribute{
 					Name: "bool_prop",
 					BoolAttribute: resource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -151,8 +151,8 @@ func TestBuildBoolResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "bool_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -162,7 +162,7 @@ func TestBuildBoolResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "bool_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,

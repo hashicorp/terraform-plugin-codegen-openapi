@@ -6,8 +6,8 @@ package oas
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -33,9 +33,9 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			result := &mapper_resource.MapperSetNestedAttribute{
+			result := &attrmapper.ResourceSetNestedAttribute{
 				Name: name,
-				NestedObject: mapper_resource.MapperNestedAttributeObject{
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
 					Attributes: objectAttributes,
 				},
 				SetNestedAttribute: resource.SetNestedAttribute{
@@ -52,9 +52,9 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 			return result, nil
 		}
 
-		result := &mapper_resource.MapperListNestedAttribute{
+		result := &attrmapper.ResourceListNestedAttribute{
 			Name: name,
-			NestedObject: mapper_resource.MapperNestedAttributeObject{
+			NestedObject: attrmapper.ResourceNestedAttributeObject{
 				Attributes: objectAttributes,
 			},
 			ListNestedAttribute: resource.ListNestedAttribute{
@@ -77,7 +77,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		result := &mapper_resource.MapperSetAttribute{
+		result := &attrmapper.ResourceSetAttribute{
 			Name: name,
 			SetAttribute: resource.SetAttribute{
 				ElementType:              elemType,
@@ -94,7 +94,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return result, nil
 	}
 
-	result := &mapper_resource.MapperListAttribute{
+	result := &attrmapper.ResourceListAttribute{
 		Name: name,
 		ListAttribute: resource.ListAttribute{
 			ElementType:              elemType,

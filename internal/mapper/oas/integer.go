@@ -4,16 +4,16 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
-	result := &mapper_resource.MapperInt64Attribute{
+func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+	result := &attrmapper.ResourceInt64Attribute{
 		Name: name,
 		Int64Attribute: resource.Int64Attribute{
 			ComputedOptionalRequired: computability,

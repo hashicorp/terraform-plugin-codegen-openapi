@@ -6,8 +6,8 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -23,7 +23,7 @@ func TestBuildIntegerResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"int64 attributes": {
 			schema: &base.Schema{
@@ -40,15 +40,15 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperInt64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm an int64 type."),
 					},
 				},
-				&mapper_resource.MapperInt64Attribute{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop_required",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
@@ -76,8 +76,8 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperInt64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop_default_non_zero",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -86,7 +86,7 @@ func TestBuildIntegerResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperInt64Attribute{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop_default_zero",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -95,7 +95,7 @@ func TestBuildIntegerResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperInt64Attribute{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop_required_default_non_zero",
 					Int64Attribute: resource.Int64Attribute{
 						// Intentionally not required due to default
@@ -117,8 +117,8 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperInt64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -152,8 +152,8 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "int64_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -163,7 +163,7 @@ func TestBuildIntegerResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "int64_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -186,8 +186,8 @@ func TestBuildIntegerResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperInt64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceInt64Attribute{
 					Name: "int64_prop",
 					Int64Attribute: resource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,

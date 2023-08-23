@@ -1,40 +1,40 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource_test
+package attrmapper_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestMapperNumberAttribute_Merge(t *testing.T) {
+func TestResourceNumberAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttribute   mapper_resource.MapperNumberAttribute
-		mergeAttribute    mapper_resource.MapperAttribute
-		expectedAttribute mapper_resource.MapperAttribute
+		targetAttribute   attrmapper.ResourceNumberAttribute
+		mergeAttribute    attrmapper.ResourceAttribute
+		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"mismatch type - no merge": {
-			targetAttribute: mapper_resource.MapperNumberAttribute{
+			targetAttribute: attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperStringAttribute{
+			mergeAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer("string description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+			expectedAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -42,21 +42,21 @@ func TestMapperNumberAttribute_Merge(t *testing.T) {
 			},
 		},
 		"populated description - no merge": {
-			targetAttribute: mapper_resource.MapperNumberAttribute{
+			targetAttribute: attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer("old number description"),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+			mergeAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new number description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+			expectedAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -65,20 +65,20 @@ func TestMapperNumberAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nil description - merge": {
-			targetAttribute: mapper_resource.MapperNumberAttribute{
+			targetAttribute: attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+			mergeAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new number description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+			expectedAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -87,21 +87,21 @@ func TestMapperNumberAttribute_Merge(t *testing.T) {
 			},
 		},
 		"empty description - merge": {
-			targetAttribute: mapper_resource.MapperNumberAttribute{
+			targetAttribute: attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer(""),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+			mergeAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new number description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+			expectedAttribute: &attrmapper.ResourceNumberAttribute{
 				Name: "number_attribute",
 				NumberAttribute: resource.NumberAttribute{
 					ComputedOptionalRequired: schema.Required,

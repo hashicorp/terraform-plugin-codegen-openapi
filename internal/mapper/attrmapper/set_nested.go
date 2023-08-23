@@ -1,23 +1,23 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 
-type MapperSetNestedAttribute struct {
+type ResourceSetNestedAttribute struct {
 	resource.SetNestedAttribute
 
 	Name         string
-	NestedObject MapperNestedAttributeObject
+	NestedObject ResourceNestedAttributeObject
 }
 
-func (a *MapperSetNestedAttribute) GetName() string {
+func (a *ResourceSetNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *MapperSetNestedAttribute) Merge(mergeAttribute MapperAttribute) MapperAttribute {
-	setNestedAttribute, ok := mergeAttribute.(*MapperSetNestedAttribute)
+func (a *ResourceSetNestedAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+	setNestedAttribute, ok := mergeAttribute.(*ResourceSetNestedAttribute)
 	if !ok {
 		return a
 	}
@@ -30,7 +30,7 @@ func (a *MapperSetNestedAttribute) Merge(mergeAttribute MapperAttribute) MapperA
 	return a
 }
 
-func (a *MapperSetNestedAttribute) ToSpec() resource.Attribute {
+func (a *ResourceSetNestedAttribute) ToSpec() resource.Attribute {
 	a.SetNestedAttribute.NestedObject = resource.NestedAttributeObject{
 		Attributes: a.NestedObject.Attributes.ToSpec(),
 	}

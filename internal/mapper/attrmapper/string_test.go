@@ -1,40 +1,40 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource_test
+package attrmapper_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func TestMapperStringAttribute_Merge(t *testing.T) {
+func TestResourceStringAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttribute   mapper_resource.MapperStringAttribute
-		mergeAttribute    mapper_resource.MapperAttribute
-		expectedAttribute mapper_resource.MapperAttribute
+		targetAttribute   attrmapper.ResourceStringAttribute
+		mergeAttribute    attrmapper.ResourceAttribute
+		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"mismatch type - no merge": {
-			targetAttribute: mapper_resource.MapperStringAttribute{
+			targetAttribute: attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperBoolAttribute{
+			mergeAttribute: &attrmapper.ResourceBoolAttribute{
 				Name: "bool_attribute",
 				BoolAttribute: resource.BoolAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer("bool description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperStringAttribute{
+			expectedAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -42,21 +42,21 @@ func TestMapperStringAttribute_Merge(t *testing.T) {
 			},
 		},
 		"populated description - no merge": {
-			targetAttribute: mapper_resource.MapperStringAttribute{
+			targetAttribute: attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer("old string description"),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperStringAttribute{
+			mergeAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new string description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperStringAttribute{
+			expectedAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -65,20 +65,20 @@ func TestMapperStringAttribute_Merge(t *testing.T) {
 			},
 		},
 		"nil description - merge": {
-			targetAttribute: mapper_resource.MapperStringAttribute{
+			targetAttribute: attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperStringAttribute{
+			mergeAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new string description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperStringAttribute{
+			expectedAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
@@ -87,21 +87,21 @@ func TestMapperStringAttribute_Merge(t *testing.T) {
 			},
 		},
 		"empty description - merge": {
-			targetAttribute: mapper_resource.MapperStringAttribute{
+			targetAttribute: attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer(""),
 				},
 			},
-			mergeAttribute: &mapper_resource.MapperStringAttribute{
+			mergeAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.ComputedOptional,
 					Description:              pointer("new string description"),
 				},
 			},
-			expectedAttribute: &mapper_resource.MapperStringAttribute{
+			expectedAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,

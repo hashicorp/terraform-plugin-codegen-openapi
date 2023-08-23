@@ -1,23 +1,23 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 
-type MapperSingleNestedAttribute struct {
+type ResourceSingleNestedAttribute struct {
 	resource.SingleNestedAttribute
 
 	Name       string
-	Attributes MapperAttributes
+	Attributes ResourceAttributes
 }
 
-func (a *MapperSingleNestedAttribute) GetName() string {
+func (a *ResourceSingleNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *MapperSingleNestedAttribute) Merge(mergeAttribute MapperAttribute) MapperAttribute {
-	singleNestedAttribute, ok := mergeAttribute.(*MapperSingleNestedAttribute)
+func (a *ResourceSingleNestedAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+	singleNestedAttribute, ok := mergeAttribute.(*ResourceSingleNestedAttribute)
 	if !ok {
 		return a
 	}
@@ -30,7 +30,7 @@ func (a *MapperSingleNestedAttribute) Merge(mergeAttribute MapperAttribute) Mapp
 	return a
 }
 
-func (a *MapperSingleNestedAttribute) ToSpec() resource.Attribute {
+func (a *ResourceSingleNestedAttribute) ToSpec() resource.Attribute {
 	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
 
 	return resource.Attribute{

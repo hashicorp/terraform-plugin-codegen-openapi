@@ -1,22 +1,22 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 
-type MapperMapAttribute struct {
+type ResourceMapAttribute struct {
 	resource.MapAttribute
 
 	Name string
 }
 
-func (a *MapperMapAttribute) GetName() string {
+func (a *ResourceMapAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *MapperMapAttribute) Merge(mergeAttribute MapperAttribute) MapperAttribute {
-	mapAttribute, ok := mergeAttribute.(*MapperMapAttribute)
+func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+	mapAttribute, ok := mergeAttribute.(*ResourceMapAttribute)
 	if !ok {
 		return a
 	}
@@ -29,7 +29,7 @@ func (a *MapperMapAttribute) Merge(mergeAttribute MapperAttribute) MapperAttribu
 	return a
 }
 
-func (a *MapperMapAttribute) ToSpec() resource.Attribute {
+func (a *ResourceMapAttribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
 		Name: a.Name,
 		Map:  &a.MapAttribute,

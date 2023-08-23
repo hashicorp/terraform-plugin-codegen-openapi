@@ -1,21 +1,21 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
-type MapperAttribute interface {
+type ResourceAttribute interface {
 	GetName() string
-	Merge(MapperAttribute) MapperAttribute
+	Merge(ResourceAttribute) ResourceAttribute
 	ToSpec() resource.Attribute
 }
 
-type MapperAttributes []MapperAttribute
+type ResourceAttributes []ResourceAttribute
 
-func (targetSlice MapperAttributes) Merge(mergeSlices ...MapperAttributes) MapperAttributes {
+func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) ResourceAttributes {
 	for _, mergeSlice := range mergeSlices {
 		for _, mergeAttribute := range mergeSlice {
 			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
@@ -40,7 +40,7 @@ func (targetSlice MapperAttributes) Merge(mergeSlices ...MapperAttributes) Mappe
 	return targetSlice
 }
 
-func (attributes MapperAttributes) ToSpec() []resource.Attribute {
+func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
 	specAttributes := []resource.Attribute{}
 	for _, attribute := range attributes {
 		specAttributes = append(specAttributes, attribute.ToSpec())

@@ -6,15 +6,15 @@ package oas
 import (
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildResourceAttributes() (mapper_resource.MapperAttributes, error) {
-	objectAttributes := mapper_resource.MapperAttributes{}
+func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, error) {
+	objectAttributes := attrmapper.ResourceAttributes{}
 
 	// TODO: throw error if it's not an object?
 
@@ -39,7 +39,7 @@ func (s *OASSchema) BuildResourceAttributes() (mapper_resource.MapperAttributes,
 	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (mapper_resource.MapperAttribute, error) {
+func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringResource(name, computability)

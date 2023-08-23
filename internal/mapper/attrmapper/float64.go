@@ -1,22 +1,22 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package mapper_resource
+package attrmapper
 
 import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 
-type MapperFloat64Attribute struct {
+type ResourceFloat64Attribute struct {
 	resource.Float64Attribute
 
 	Name string
 }
 
-func (a *MapperFloat64Attribute) GetName() string {
+func (a *ResourceFloat64Attribute) GetName() string {
 	return a.Name
 }
 
-func (a *MapperFloat64Attribute) Merge(mergeAttribute MapperAttribute) MapperAttribute {
-	float64Attribute, ok := mergeAttribute.(*MapperFloat64Attribute)
+func (a *ResourceFloat64Attribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+	float64Attribute, ok := mergeAttribute.(*ResourceFloat64Attribute)
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = float64Attribute.Description
 	}
@@ -24,7 +24,7 @@ func (a *MapperFloat64Attribute) Merge(mergeAttribute MapperAttribute) MapperAtt
 	return a
 }
 
-func (a *MapperFloat64Attribute) ToSpec() resource.Attribute {
+func (a *ResourceFloat64Attribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
 		Name:    a.Name,
 		Float64: &a.Float64Attribute,

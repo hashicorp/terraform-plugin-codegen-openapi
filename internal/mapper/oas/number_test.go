@@ -6,8 +6,8 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -23,7 +23,7 @@ func TestBuildNumberResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -52,29 +52,29 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperFloat64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "double_float64_prop",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "double_float64_prop_required",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float_float64_prop",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float_float64_prop_required",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
@@ -105,8 +105,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperFloat64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_default_non_zero",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -115,7 +115,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_default_zero",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -124,7 +124,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperFloat64Attribute{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_required_default_non_zero",
 					Float64Attribute: resource.Float64Attribute{
 						// Intentionally not required due to default
@@ -147,8 +147,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperFloat64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -169,8 +169,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperFloat64Attribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop",
 					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
@@ -205,15 +205,15 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperNumberAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop",
 					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a number type."),
 					},
 				},
-				&mapper_resource.MapperNumberAttribute{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop_required",
 					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -232,8 +232,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperNumberAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop",
 					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -289,8 +289,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "double_float64_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -300,7 +300,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "double_float64_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -310,7 +310,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "float_float64_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -320,7 +320,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "float_float64_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -357,8 +357,8 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "number_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -368,7 +368,7 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "number_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,

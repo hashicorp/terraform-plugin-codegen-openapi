@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
@@ -479,7 +479,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 
 	testCases := map[string]struct {
 		schemaProxy        *base.SchemaProxy
-		expectedAttributes mapper_resource.MapperAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"nullable type - Type array": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
@@ -496,15 +496,15 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a nullable string type."),
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -542,15 +542,15 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -588,15 +588,15 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 					},
 				},
-				&mapper_resource.MapperStringAttribute{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -630,8 +630,8 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -641,7 +641,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -692,8 +692,8 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -703,7 +703,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
@@ -754,8 +754,8 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: mapper_resource.MapperAttributes{
-				&mapper_resource.MapperListAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
@@ -765,7 +765,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				&mapper_resource.MapperListAttribute{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
 					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
