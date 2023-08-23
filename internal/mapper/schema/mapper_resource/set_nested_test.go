@@ -21,7 +21,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			targetAttribute: mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -37,7 +37,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			mergeAttribute: &mapper_resource.MapperListNestedAttribute{
 				Name: "list_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -55,7 +55,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			expectedAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -73,7 +73,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			targetAttribute: mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -91,7 +91,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			mergeAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -109,7 +109,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			expectedAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -129,7 +129,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			targetAttribute: mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -145,7 +145,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			mergeAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -163,7 +163,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			expectedAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -183,7 +183,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			targetAttribute: mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -201,7 +201,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			mergeAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -219,7 +219,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			expectedAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -239,7 +239,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			targetAttribute: mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
@@ -269,7 +269,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			mergeAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperBoolAttribute{
 							Name: "nested_bool",
 							BoolAttribute: resource.BoolAttribute{
@@ -299,7 +299,7 @@ func TestMapperSetNestedAttribute_Merge(t *testing.T) {
 			expectedAttribute: &mapper_resource.MapperSetNestedAttribute{
 				Name: "set_nested_attribute",
 				NestedObject: mapper_resource.MapperNestedAttributeObject{
-					Attributes: []mapper_resource.MapperAttribute{
+					Attributes: mapper_resource.MapperAttributes{
 						&mapper_resource.MapperStringAttribute{
 							Name: "nested_string",
 							StringAttribute: resource.StringAttribute{
