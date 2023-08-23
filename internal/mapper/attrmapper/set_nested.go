@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
@@ -75,6 +76,24 @@ func (a *DataSourceSetNestedAttribute) ToSpec() datasource.Attribute {
 	}
 
 	return datasource.Attribute{
+		Name:      a.Name,
+		SetNested: &a.SetNestedAttribute,
+	}
+}
+
+type ProviderSetNestedAttribute struct {
+	provider.SetNestedAttribute
+
+	Name         string
+	NestedObject ProviderNestedAttributeObject
+}
+
+func (a *ProviderSetNestedAttribute) ToSpec() provider.Attribute {
+	a.SetNestedAttribute.NestedObject = provider.NestedAttributeObject{
+		Attributes: a.NestedObject.Attributes.ToSpec(),
+	}
+
+	return provider.Attribute{
 		Name:      a.Name,
 		SetNested: &a.SetNestedAttribute,
 	}

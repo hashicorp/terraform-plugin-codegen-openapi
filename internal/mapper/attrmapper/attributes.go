@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
@@ -85,6 +86,21 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 
 func (attributes DataSourceAttributes) ToSpec() []datasource.Attribute {
 	specAttributes := []datasource.Attribute{}
+	for _, attribute := range attributes {
+		specAttributes = append(specAttributes, attribute.ToSpec())
+	}
+
+	return specAttributes
+}
+
+type ProviderAttribute interface {
+	ToSpec() provider.Attribute
+}
+
+type ProviderAttributes []ProviderAttribute
+
+func (attributes ProviderAttributes) ToSpec() []provider.Attribute {
+	specAttributes := []provider.Attribute{}
 	for _, attribute := range attributes {
 		specAttributes = append(specAttributes, attribute.ToSpec())
 	}

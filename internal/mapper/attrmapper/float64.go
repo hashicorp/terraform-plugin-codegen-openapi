@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
@@ -55,6 +56,19 @@ func (a *DataSourceFloat64Attribute) Merge(mergeAttribute DataSourceAttribute) D
 
 func (a *DataSourceFloat64Attribute) ToSpec() datasource.Attribute {
 	return datasource.Attribute{
+		Name:    a.Name,
+		Float64: &a.Float64Attribute,
+	}
+}
+
+type ProviderFloat64Attribute struct {
+	provider.Float64Attribute
+
+	Name string
+}
+
+func (a *ProviderFloat64Attribute) ToSpec() provider.Attribute {
+	return provider.Attribute{
 		Name:    a.Name,
 		Float64: &a.Float64Attribute,
 	}

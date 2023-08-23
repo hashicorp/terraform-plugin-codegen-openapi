@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
@@ -71,6 +72,22 @@ func (a *DataSourceSingleNestedAttribute) ToSpec() datasource.Attribute {
 	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
 
 	return datasource.Attribute{
+		Name:         a.Name,
+		SingleNested: &a.SingleNestedAttribute,
+	}
+}
+
+type ProviderSingleNestedAttribute struct {
+	provider.SingleNestedAttribute
+
+	Name       string
+	Attributes ProviderAttributes
+}
+
+func (a *ProviderSingleNestedAttribute) ToSpec() provider.Attribute {
+	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
+
+	return provider.Attribute{
 		Name:         a.Name,
 		SingleNested: &a.SingleNestedAttribute,
 	}

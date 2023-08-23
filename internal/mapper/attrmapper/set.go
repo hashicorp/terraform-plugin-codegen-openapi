@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
@@ -65,6 +66,19 @@ func (a *DataSourceSetAttribute) Merge(mergeAttribute DataSourceAttribute) DataS
 
 func (a *DataSourceSetAttribute) ToSpec() datasource.Attribute {
 	return datasource.Attribute{
+		Name: a.Name,
+		Set:  &a.SetAttribute,
+	}
+}
+
+type ProviderSetAttribute struct {
+	provider.SetAttribute
+
+	Name string
+}
+
+func (a *ProviderSetAttribute) ToSpec() provider.Attribute {
+	return provider.Attribute{
 		Name: a.Name,
 		Set:  &a.SetAttribute,
 	}

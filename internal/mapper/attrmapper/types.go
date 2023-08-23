@@ -16,6 +16,10 @@ type DataSourceNestedAttributeObject struct {
 	Attributes DataSourceAttributes
 }
 
+type ProviderNestedAttributeObject struct {
+	Attributes ProviderAttributes
+}
+
 // TODO: refactor this?
 func mergeElementType(target schema.ElementType, merge schema.ElementType) schema.ElementType {
 	// Handle collection type
