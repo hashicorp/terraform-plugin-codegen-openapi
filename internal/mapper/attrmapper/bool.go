@@ -3,7 +3,10 @@
 
 package attrmapper
 
-import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+import (
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
 
 type ResourceBoolAttribute struct {
 	resource.BoolAttribute
@@ -26,6 +29,32 @@ func (a *ResourceBoolAttribute) Merge(mergeAttribute ResourceAttribute) Resource
 
 func (a *ResourceBoolAttribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
+		Name: a.Name,
+		Bool: &a.BoolAttribute,
+	}
+}
+
+type DataSourceBoolAttribute struct {
+	datasource.BoolAttribute
+
+	Name string
+}
+
+func (a *DataSourceBoolAttribute) GetName() string {
+	return a.Name
+}
+
+func (a *DataSourceBoolAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+	boolAttribute, ok := mergeAttribute.(*DataSourceBoolAttribute)
+	if ok && (a.Description == nil || *a.Description == "") {
+		a.Description = boolAttribute.Description
+	}
+
+	return a
+}
+
+func (a *DataSourceBoolAttribute) ToSpec() datasource.Attribute {
+	return datasource.Attribute{
 		Name: a.Name,
 		Bool: &a.BoolAttribute,
 	}

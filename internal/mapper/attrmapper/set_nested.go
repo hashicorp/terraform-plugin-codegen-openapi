@@ -3,7 +3,10 @@
 
 package attrmapper
 
-import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+import (
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
 
 type ResourceSetNestedAttribute struct {
 	resource.SetNestedAttribute
@@ -36,6 +39,42 @@ func (a *ResourceSetNestedAttribute) ToSpec() resource.Attribute {
 	}
 
 	return resource.Attribute{
+		Name:      a.Name,
+		SetNested: &a.SetNestedAttribute,
+	}
+}
+
+type DataSourceSetNestedAttribute struct {
+	datasource.SetNestedAttribute
+
+	Name         string
+	NestedObject DataSourceNestedAttributeObject
+}
+
+func (a *DataSourceSetNestedAttribute) GetName() string {
+	return a.Name
+}
+
+func (a *DataSourceSetNestedAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+	setNestedAttribute, ok := mergeAttribute.(*DataSourceSetNestedAttribute)
+	if !ok {
+		return a
+	}
+
+	if a.Description == nil || *a.Description == "" {
+		a.Description = setNestedAttribute.Description
+	}
+	a.NestedObject.Attributes = a.NestedObject.Attributes.Merge(setNestedAttribute.NestedObject.Attributes)
+
+	return a
+}
+
+func (a *DataSourceSetNestedAttribute) ToSpec() datasource.Attribute {
+	a.SetNestedAttribute.NestedObject = datasource.NestedAttributeObject{
+		Attributes: a.NestedObject.Attributes.ToSpec(),
+	}
+
+	return datasource.Attribute{
 		Name:      a.Name,
 		SetNested: &a.SetNestedAttribute,
 	}

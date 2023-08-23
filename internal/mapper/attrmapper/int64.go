@@ -3,7 +3,10 @@
 
 package attrmapper
 
-import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+import (
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
 
 type ResourceInt64Attribute struct {
 	resource.Int64Attribute
@@ -26,6 +29,32 @@ func (a *ResourceInt64Attribute) Merge(mergeAttribute ResourceAttribute) Resourc
 
 func (a *ResourceInt64Attribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
+		Name:  a.Name,
+		Int64: &a.Int64Attribute,
+	}
+}
+
+type DataSourceInt64Attribute struct {
+	datasource.Int64Attribute
+
+	Name string
+}
+
+func (a *DataSourceInt64Attribute) GetName() string {
+	return a.Name
+}
+
+func (a *DataSourceInt64Attribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+	int64Attribute, ok := mergeAttribute.(*DataSourceInt64Attribute)
+	if ok && (a.Description == nil || *a.Description == "") {
+		a.Description = int64Attribute.Description
+	}
+
+	return a
+}
+
+func (a *DataSourceInt64Attribute) ToSpec() datasource.Attribute {
+	return datasource.Attribute{
 		Name:  a.Name,
 		Int64: &a.Int64Attribute,
 	}

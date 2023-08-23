@@ -3,7 +3,10 @@
 
 package attrmapper
 
-import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+import (
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
 
 type ResourceMapAttribute struct {
 	resource.MapAttribute
@@ -31,6 +34,37 @@ func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) ResourceA
 
 func (a *ResourceMapAttribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
+		Name: a.Name,
+		Map:  &a.MapAttribute,
+	}
+}
+
+type DataSourceMapAttribute struct {
+	datasource.MapAttribute
+
+	Name string
+}
+
+func (a *DataSourceMapAttribute) GetName() string {
+	return a.Name
+}
+
+func (a *DataSourceMapAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+	mapAttribute, ok := mergeAttribute.(*DataSourceMapAttribute)
+	if !ok {
+		return a
+	}
+
+	if a.Description == nil || *a.Description == "" {
+		a.Description = mapAttribute.Description
+	}
+	a.ElementType = mergeElementType(a.ElementType, mapAttribute.ElementType)
+
+	return a
+}
+
+func (a *DataSourceMapAttribute) ToSpec() datasource.Attribute {
+	return datasource.Attribute{
 		Name: a.Name,
 		Map:  &a.MapAttribute,
 	}
