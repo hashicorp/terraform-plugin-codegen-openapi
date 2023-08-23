@@ -1588,3 +1588,7 @@ func TestMergeDataSourceAttributes_DescriptionPriority(t *testing.T) {
 		})
 	}
 }
+
+func pointer[T any](value T) *T {
+	return &value
+}
