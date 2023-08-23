@@ -351,7 +351,7 @@ func TestResourceMapNestedAttribute_Merge(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+			got, _ := testCase.targetAttribute.Merge(testCase.mergeAttribute)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
@@ -698,7 +698,7 @@ func TestDataSourceMapNestedAttribute_Merge(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+			got, _ := testCase.targetAttribute.Merge(testCase.mergeAttribute)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)

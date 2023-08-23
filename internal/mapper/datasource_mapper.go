@@ -118,7 +118,9 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 		}
 	}
 
-	dataSourceAttributes := readParameterAttributes.Merge(readResponseAttributes)
+	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings
+	// for unexpected scenarios, like type mismatches between attribute schemas
+	dataSourceAttributes, _ := readParameterAttributes.Merge(readResponseAttributes)
 
 	dataSourceSchema.Attributes = dataSourceAttributes.ToSpec()
 	return dataSourceSchema, nil

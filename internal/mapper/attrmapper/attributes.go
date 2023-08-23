@@ -11,13 +11,13 @@ import (
 
 type ResourceAttribute interface {
 	GetName() string
-	Merge(ResourceAttribute) ResourceAttribute
+	Merge(ResourceAttribute) (ResourceAttribute, error)
 	ToSpec() resource.Attribute
 }
 
 type ResourceAttributes []ResourceAttribute
 
-func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) ResourceAttributes {
+func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (ResourceAttributes, error) {
 	for _, mergeSlice := range mergeSlices {
 		for _, mergeAttribute := range mergeSlice {
 			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
@@ -25,7 +25,8 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) R
 
 			for i, targetAttribute := range targetSlice {
 				if targetAttribute.GetName() == mergeAttribute.GetName() {
-					targetSlice[i] = targetAttribute.Merge(mergeAttribute)
+					// TODO: determine how to surface this error
+					targetSlice[i], _ = targetAttribute.Merge(mergeAttribute)
 
 					isNewAttribute = false
 					break
@@ -39,7 +40,7 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) R
 		}
 	}
 
-	return targetSlice
+	return targetSlice, nil
 }
 
 func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
@@ -53,13 +54,13 @@ func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
 
 type DataSourceAttribute interface {
 	GetName() string
-	Merge(DataSourceAttribute) DataSourceAttribute
+	Merge(DataSourceAttribute) (DataSourceAttribute, error)
 	ToSpec() datasource.Attribute
 }
 
 type DataSourceAttributes []DataSourceAttribute
 
-func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttributes) DataSourceAttributes {
+func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttributes) (DataSourceAttributes, error) {
 	for _, mergeSlice := range mergeSlices {
 		for _, mergeAttribute := range mergeSlice {
 			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
@@ -67,7 +68,8 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 
 			for i, targetAttribute := range targetSlice {
 				if targetAttribute.GetName() == mergeAttribute.GetName() {
-					targetSlice[i] = targetAttribute.Merge(mergeAttribute)
+					// TODO: determine how to surface this error
+					targetSlice[i], _ = targetAttribute.Merge(mergeAttribute)
 
 					isNewAttribute = false
 					break
@@ -81,7 +83,7 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 		}
 	}
 
-	return targetSlice
+	return targetSlice, nil
 }
 
 func (attributes DataSourceAttributes) ToSpec() []datasource.Attribute {

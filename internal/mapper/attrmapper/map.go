@@ -19,10 +19,11 @@ func (a *ResourceMapAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	mapAttribute, ok := mergeAttribute.(*ResourceMapAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
@@ -30,7 +31,7 @@ func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) ResourceA
 	}
 	a.ElementType = mergeElementType(a.ElementType, mapAttribute.ElementType)
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceMapAttribute) ToSpec() resource.Attribute {
@@ -50,10 +51,11 @@ func (a *DataSourceMapAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceMapAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceMapAttribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	mapAttribute, ok := mergeAttribute.(*DataSourceMapAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
@@ -61,7 +63,7 @@ func (a *DataSourceMapAttribute) Merge(mergeAttribute DataSourceAttribute) DataS
 	}
 	a.ElementType = mergeElementType(a.ElementType, mapAttribute.ElementType)
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceMapAttribute) ToSpec() datasource.Attribute {

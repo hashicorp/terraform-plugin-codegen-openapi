@@ -20,7 +20,6 @@ type ProviderNestedAttributeObject struct {
 	Attributes ProviderAttributes
 }
 
-// TODO: refactor this?
 func mergeElementType(target schema.ElementType, merge schema.ElementType) schema.ElementType {
 	// Handle collection type
 	// https://developer.hashicorp.com/terraform/plugin/framework/handling-data/types#collection-types

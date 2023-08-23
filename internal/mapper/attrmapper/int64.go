@@ -19,13 +19,14 @@ func (a *ResourceInt64Attribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceInt64Attribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceInt64Attribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	int64Attribute, ok := mergeAttribute.(*ResourceInt64Attribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = int64Attribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceInt64Attribute) ToSpec() resource.Attribute {
@@ -45,13 +46,14 @@ func (a *DataSourceInt64Attribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceInt64Attribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceInt64Attribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	int64Attribute, ok := mergeAttribute.(*DataSourceInt64Attribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = int64Attribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceInt64Attribute) ToSpec() datasource.Attribute {

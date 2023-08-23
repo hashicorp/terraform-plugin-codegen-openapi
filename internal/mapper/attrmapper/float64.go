@@ -19,13 +19,14 @@ func (a *ResourceFloat64Attribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceFloat64Attribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceFloat64Attribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	float64Attribute, ok := mergeAttribute.(*ResourceFloat64Attribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = float64Attribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceFloat64Attribute) ToSpec() resource.Attribute {
@@ -45,13 +46,14 @@ func (a *DataSourceFloat64Attribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceFloat64Attribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceFloat64Attribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	float64Attribute, ok := mergeAttribute.(*DataSourceFloat64Attribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = float64Attribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceFloat64Attribute) ToSpec() datasource.Attribute {

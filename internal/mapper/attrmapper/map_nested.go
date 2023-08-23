@@ -20,18 +20,19 @@ func (a *ResourceMapNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceMapNestedAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceMapNestedAttribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	mapNestedAttribute, ok := mergeAttribute.(*ResourceMapNestedAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
 		a.Description = mapNestedAttribute.Description
 	}
-	a.NestedObject.Attributes = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
+	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceMapNestedAttribute) ToSpec() resource.Attribute {
@@ -56,18 +57,19 @@ func (a *DataSourceMapNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceMapNestedAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceMapNestedAttribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	mapNestedAttribute, ok := mergeAttribute.(*DataSourceMapNestedAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
 		a.Description = mapNestedAttribute.Description
 	}
-	a.NestedObject.Attributes = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
+	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceMapNestedAttribute) ToSpec() datasource.Attribute {

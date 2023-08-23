@@ -20,18 +20,19 @@ func (a *ResourceSetNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceSetNestedAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceSetNestedAttribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	setNestedAttribute, ok := mergeAttribute.(*ResourceSetNestedAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
 		a.Description = setNestedAttribute.Description
 	}
-	a.NestedObject.Attributes = a.NestedObject.Attributes.Merge(setNestedAttribute.NestedObject.Attributes)
+	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(setNestedAttribute.NestedObject.Attributes)
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceSetNestedAttribute) ToSpec() resource.Attribute {
@@ -56,18 +57,19 @@ func (a *DataSourceSetNestedAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceSetNestedAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceSetNestedAttribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	setNestedAttribute, ok := mergeAttribute.(*DataSourceSetNestedAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
 		a.Description = setNestedAttribute.Description
 	}
-	a.NestedObject.Attributes = a.NestedObject.Attributes.Merge(setNestedAttribute.NestedObject.Attributes)
+	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(setNestedAttribute.NestedObject.Attributes)
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceSetNestedAttribute) ToSpec() datasource.Attribute {

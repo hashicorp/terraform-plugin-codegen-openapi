@@ -191,7 +191,7 @@ func TestResourceAttributes_Merge(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
+			got, _ := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
 
 			if diff := cmp.Diff(got, testCase.expectedAttributes); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
@@ -378,7 +378,7 @@ func TestDataSourceAttributes_Merge(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
+			got, _ := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
 
 			if diff := cmp.Diff(got, testCase.expectedAttributes); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)

@@ -19,10 +19,11 @@ func (a *ResourceSetAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceSetAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceSetAttribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	setAttribute, ok := mergeAttribute.(*ResourceSetAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
@@ -30,7 +31,7 @@ func (a *ResourceSetAttribute) Merge(mergeAttribute ResourceAttribute) ResourceA
 	}
 	a.ElementType = mergeElementType(a.ElementType, setAttribute.ElementType)
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceSetAttribute) ToSpec() resource.Attribute {
@@ -50,10 +51,11 @@ func (a *DataSourceSetAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceSetAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceSetAttribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	setAttribute, ok := mergeAttribute.(*DataSourceSetAttribute)
+	// TODO: return error if types don't match?
 	if !ok {
-		return a
+		return a, nil
 	}
 
 	if a.Description == nil || *a.Description == "" {
@@ -61,7 +63,7 @@ func (a *DataSourceSetAttribute) Merge(mergeAttribute DataSourceAttribute) DataS
 	}
 	a.ElementType = mergeElementType(a.ElementType, setAttribute.ElementType)
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceSetAttribute) ToSpec() datasource.Attribute {

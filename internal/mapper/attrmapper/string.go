@@ -19,13 +19,14 @@ func (a *ResourceStringAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *ResourceStringAttribute) Merge(mergeAttribute ResourceAttribute) ResourceAttribute {
+func (a *ResourceStringAttribute) Merge(mergeAttribute ResourceAttribute) (ResourceAttribute, error) {
 	stringAttribute, ok := mergeAttribute.(*ResourceStringAttribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = stringAttribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *ResourceStringAttribute) ToSpec() resource.Attribute {
@@ -45,13 +46,14 @@ func (a *DataSourceStringAttribute) GetName() string {
 	return a.Name
 }
 
-func (a *DataSourceStringAttribute) Merge(mergeAttribute DataSourceAttribute) DataSourceAttribute {
+func (a *DataSourceStringAttribute) Merge(mergeAttribute DataSourceAttribute) (DataSourceAttribute, error) {
 	stringAttribute, ok := mergeAttribute.(*DataSourceStringAttribute)
+	// TODO: return error if types don't match?
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = stringAttribute.Description
 	}
 
-	return a
+	return a, nil
 }
 
 func (a *DataSourceStringAttribute) ToSpec() datasource.Attribute {

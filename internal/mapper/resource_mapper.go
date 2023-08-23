@@ -142,7 +142,9 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 		}
 	}
 
-	resourceAttributes := createRequestAttributes.Merge(createResponseAttributes, readResponseAttributes, readParameterAttributes)
+	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings
+	// for unexpected scenarios, like type mismatches between attribute schemas
+	resourceAttributes, _ := createRequestAttributes.Merge(createResponseAttributes, readResponseAttributes, readParameterAttributes)
 
 	resourceSchema.Attributes = resourceAttributes.ToSpec()
 	return resourceSchema, nil
