@@ -1,0 +1,122 @@
+package mapper_resource_test
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/schema/mapper_resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+)
+
+func TestMapperNumberAttribute_Merge(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		targetAttribute   mapper_resource.MapperNumberAttribute
+		mergeAttribute    mapper_resource.MapperAttribute
+		expectedAttribute mapper_resource.MapperAttribute
+	}{
+		"mismatch type - no merge": {
+			targetAttribute: mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			mergeAttribute: &mapper_resource.MapperStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: resource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("string description"),
+				},
+			},
+			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+		"populated description - no merge": {
+			targetAttribute: mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old number description"),
+				},
+			},
+			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new number description"),
+				},
+			},
+			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old number description"),
+				},
+			},
+		},
+		"nil description - merge": {
+			targetAttribute: mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new number description"),
+				},
+			},
+			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new number description"),
+				},
+			},
+		},
+		"empty description - merge": {
+			targetAttribute: mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer(""),
+				},
+			},
+			mergeAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new number description"),
+				},
+			},
+			expectedAttribute: &mapper_resource.MapperNumberAttribute{
+				Name: "number_attribute",
+				NumberAttribute: resource.NumberAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new number description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
