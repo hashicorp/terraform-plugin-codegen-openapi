@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -104,6 +105,118 @@ func TestResourceStringAttribute_Merge(t *testing.T) {
 			expectedAttribute: &attrmapper.ResourceStringAttribute{
 				Name: "string_attribute",
 				StringAttribute: resource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new string description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestDataSourceStringAttribute_Merge(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		targetAttribute   attrmapper.DataSourceStringAttribute
+		mergeAttribute    attrmapper.DataSourceAttribute
+		expectedAttribute attrmapper.DataSourceAttribute
+	}{
+		"mismatch type - no merge": {
+			targetAttribute: attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			mergeAttribute: &attrmapper.DataSourceBoolAttribute{
+				Name: "bool_attribute",
+				BoolAttribute: datasource.BoolAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("bool description"),
+				},
+			},
+			expectedAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+		"populated description - no merge": {
+			targetAttribute: attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old string description"),
+				},
+			},
+			mergeAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new string description"),
+				},
+			},
+			expectedAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old string description"),
+				},
+			},
+		},
+		"nil description - merge": {
+			targetAttribute: attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			mergeAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new string description"),
+				},
+			},
+			expectedAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new string description"),
+				},
+			},
+		},
+		"empty description - merge": {
+			targetAttribute: attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer(""),
+				},
+			},
+			mergeAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
+					ComputedOptionalRequired: schema.ComputedOptional,
+					Description:              pointer("new string description"),
+				},
+			},
+			expectedAttribute: &attrmapper.DataSourceStringAttribute{
+				Name: "string_attribute",
+				StringAttribute: datasource.StringAttribute{
 					ComputedOptionalRequired: schema.Required,
 					Description:              pointer("new string description"),
 				},
