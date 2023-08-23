@@ -38,10 +38,10 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceBoolAttribute{
 		Name: name,
-		Bool: &datasource.BoolAttribute{
+		BoolAttribute: datasource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -51,10 +51,10 @@ func (s *OASSchema) BuildBoolDataSource(name string, computability schema.Comput
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	return &provider.Attribute{
+func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	return &attrmapper.ProviderBoolAttribute{
 		Name: name,
-		Bool: &provider.BoolAttribute{
+		BoolAttribute: provider.BoolAttribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

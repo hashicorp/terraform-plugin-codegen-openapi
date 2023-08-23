@@ -233,7 +233,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]datasource.Attribute
+		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		"int64 attributes": {
 			schema: &base.Schema{
@@ -250,17 +250,17 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceInt64Attribute{
 					Name: "int64_prop",
-					Int64: &datasource.Int64Attribute{
+					Int64Attribute: datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm an int64 type."),
 					},
 				},
-				{
+				&attrmapper.DataSourceInt64Attribute{
 					Name: "int64_prop_required",
-					Int64: &datasource.Int64Attribute{
+					Int64Attribute: datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm an int64 type, required."),
 					},
@@ -277,10 +277,10 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceInt64Attribute{
 					Name: "int64_prop",
-					Int64: &datasource.Int64Attribute{
+					Int64Attribute: datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -312,10 +312,10 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "int64_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of int64s."),
 						ElementType: schema.ElementType{
@@ -323,9 +323,9 @@ func TestBuildIntegerDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "int64_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of int64s, required."),
 						ElementType: schema.ElementType{
@@ -346,10 +346,10 @@ func TestBuildIntegerDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceInt64Attribute{
 					Name: "int64_prop",
-					Int64: &datasource.Int64Attribute{
+					Int64Attribute: datasource.Int64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.Int64Validator{
 							{
@@ -393,7 +393,7 @@ func TestBuildIntegerProvider(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]provider.Attribute
+		expectedAttributes attrmapper.ProviderAttributes
 	}{
 		"int64 attributes": {
 			schema: &base.Schema{
@@ -410,17 +410,17 @@ func TestBuildIntegerProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderInt64Attribute{
 					Name: "int64_prop",
-					Int64: &provider.Int64Attribute{
+					Int64Attribute: provider.Int64Attribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm an int64 type."),
 					},
 				},
-				{
+				&attrmapper.ProviderInt64Attribute{
 					Name: "int64_prop_required",
-					Int64: &provider.Int64Attribute{
+					Int64Attribute: provider.Int64Attribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm an int64 type, required."),
 					},
@@ -437,10 +437,10 @@ func TestBuildIntegerProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderInt64Attribute{
 					Name: "int64_prop",
-					Int64: &provider.Int64Attribute{
+					Int64Attribute: provider.Int64Attribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
@@ -472,10 +472,10 @@ func TestBuildIntegerProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "int64_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of int64s."),
 						ElementType: schema.ElementType{
@@ -483,9 +483,9 @@ func TestBuildIntegerProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "int64_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of int64s, required."),
 						ElementType: schema.ElementType{
@@ -506,10 +506,10 @@ func TestBuildIntegerProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderInt64Attribute{
 					Name: "int64_prop",
-					Int64: &provider.Int64Attribute{
+					Int64Attribute: provider.Int64Attribute{
 						OptionalRequired: schema.Required,
 						Validators: []schema.Int64Validator{
 							{

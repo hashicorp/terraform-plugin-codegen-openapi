@@ -684,7 +684,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]datasource.Attribute
+		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		"list nested attributes": {
 			schema: &base.Schema{
@@ -715,27 +715,27 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &datasource.ListNestedAttribute{
+					ListNestedAttribute: datasource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list nested array type, required."),
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &datasource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
-										Description:              pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: datasource.Float64Attribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
+									Description:              pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-										Description:              pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+									Description:              pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -765,19 +765,19 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListNestedAttribute{
 					Name: "nested_list_prop",
-					ListNested: &datasource.ListNestedAttribute{
+					ListNestedAttribute: datasource.ListNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -808,21 +808,21 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &datasource.ListNestedAttribute{
-						ComputedOptionalRequired: schema.Required,
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					ListNestedAttribute: datasource.ListNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.ListValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -869,27 +869,27 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &datasource.SetNestedAttribute{
+					SetNestedAttribute: datasource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a set nested array type, required."),
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &datasource.Float64Attribute{
-										ComputedOptionalRequired: schema.ComputedOptional,
-										Description:              pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: datasource.Float64Attribute{
+									ComputedOptionalRequired: schema.ComputedOptional,
+									Description:              pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-										Description:              pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
+									Description:              pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -920,19 +920,19 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceSetNestedAttribute{
 					Name: "nested_set_prop",
-					SetNested: &datasource.SetNestedAttribute{
+					SetNestedAttribute: datasource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -964,21 +964,21 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &datasource.SetNestedAttribute{
-						ComputedOptionalRequired: schema.Required,
-						NestedObject: datasource.NestedAttributeObject{
-							Attributes: []datasource.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &datasource.Int64Attribute{
-										ComputedOptionalRequired: schema.Required,
-									},
+					NestedObject: attrmapper.DataSourceNestedAttributeObject{
+						Attributes: attrmapper.DataSourceAttributes{
+							&attrmapper.DataSourceInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: datasource.Int64Attribute{
+									ComputedOptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					SetNestedAttribute: datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.SetValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -1048,10 +1048,10 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "nested_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of lists."),
 						ElementType: schema.ElementType{
@@ -1074,9 +1074,9 @@ func TestBuildCollectionDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "nested_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of lists, required."),
 						ElementType: schema.ElementType{
@@ -1158,10 +1158,10 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceSetAttribute{
 					Name: "nested_set_prop",
-					Set: &datasource.SetAttribute{
+					SetAttribute: datasource.SetAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a set of sets."),
 						ElementType: schema.ElementType{
@@ -1184,9 +1184,9 @@ func TestBuildCollectionDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceSetAttribute{
 					Name: "nested_set_prop_required",
-					Set: &datasource.SetAttribute{
+					SetAttribute: datasource.SetAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a set of sets, required."),
 						ElementType: schema.ElementType{
@@ -1264,10 +1264,10 @@ func TestBuildCollectionDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "list_with_map",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list with a nested map of objects."),
 						ElementType: schema.ElementType{
@@ -1290,9 +1290,9 @@ func TestBuildCollectionDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceSetAttribute{
 					Name: "set_with_map",
-					Set: &datasource.SetAttribute{
+					SetAttribute: datasource.SetAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a set with a nested map of objects."),
 						ElementType: schema.ElementType{
@@ -1343,7 +1343,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]provider.Attribute
+		expectedAttributes attrmapper.ProviderAttributes
 	}{
 		"list nested attributes": {
 			schema: &base.Schema{
@@ -1374,27 +1374,27 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &provider.ListNestedAttribute{
+					ListNestedAttribute: provider.ListNestedAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list nested array type, required."),
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &provider.Float64Attribute{
-										OptionalRequired: schema.Optional,
-										Description:      pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: provider.Float64Attribute{
+									OptionalRequired: schema.Optional,
+									Description:      pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-										Description:      pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
+									Description:      pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -1424,19 +1424,19 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListNestedAttribute{
 					Name: "nested_list_prop",
-					ListNested: &provider.ListNestedAttribute{
+					ListNestedAttribute: provider.ListNestedAttribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -1467,21 +1467,21 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListNestedAttribute{
 					Name: "nested_list_prop_required",
-					ListNested: &provider.ListNestedAttribute{
-						OptionalRequired: schema.Required,
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-									},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					ListNestedAttribute: provider.ListNestedAttribute{
+						OptionalRequired: schema.Required,
 						Validators: []schema.ListValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -1528,27 +1528,27 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &provider.SetNestedAttribute{
+					SetNestedAttribute: provider.SetNestedAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a set nested array type, required."),
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_float64",
-									Float64: &provider.Float64Attribute{
-										OptionalRequired: schema.Optional,
-										Description:      pointer("hey there! I'm a nested float64 type."),
-									},
+					},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderFloat64Attribute{
+								Name: "nested_float64",
+								Float64Attribute: provider.Float64Attribute{
+									OptionalRequired: schema.Optional,
+									Description:      pointer("hey there! I'm a nested float64 type."),
 								},
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-										Description:      pointer("hey there! I'm a nested int64 type, required."),
-									},
+							},
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
+									Description:      pointer("hey there! I'm a nested int64 type, required."),
 								},
 							},
 						},
@@ -1579,19 +1579,19 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderSetNestedAttribute{
 					Name: "nested_set_prop",
-					SetNested: &provider.SetNestedAttribute{
+					SetNestedAttribute: provider.SetNestedAttribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-									},
+					},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
 								},
 							},
 						},
@@ -1623,21 +1623,21 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderSetNestedAttribute{
 					Name: "nested_set_prop_required",
-					SetNested: &provider.SetNestedAttribute{
-						OptionalRequired: schema.Required,
-						NestedObject: provider.NestedAttributeObject{
-							Attributes: []provider.Attribute{
-								{
-									Name: "nested_int64_required",
-									Int64: &provider.Int64Attribute{
-										OptionalRequired: schema.Required,
-									},
+					NestedObject: attrmapper.ProviderNestedAttributeObject{
+						Attributes: attrmapper.ProviderAttributes{
+							&attrmapper.ProviderInt64Attribute{
+								Name: "nested_int64_required",
+								Int64Attribute: provider.Int64Attribute{
+									OptionalRequired: schema.Required,
 								},
 							},
 						},
+					},
+					SetNestedAttribute: provider.SetNestedAttribute{
+						OptionalRequired: schema.Required,
 						Validators: []schema.SetValidator{
 							{
 								Custom: &schema.CustomValidator{
@@ -1707,10 +1707,10 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "nested_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of lists."),
 						ElementType: schema.ElementType{
@@ -1733,9 +1733,9 @@ func TestBuildCollectionProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "nested_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of lists, required."),
 						ElementType: schema.ElementType{
@@ -1817,10 +1817,10 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderSetAttribute{
 					Name: "nested_set_prop",
-					Set: &provider.SetAttribute{
+					SetAttribute: provider.SetAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a set of sets."),
 						ElementType: schema.ElementType{
@@ -1843,9 +1843,9 @@ func TestBuildCollectionProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderSetAttribute{
 					Name: "nested_set_prop_required",
-					Set: &provider.SetAttribute{
+					SetAttribute: provider.SetAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a set of sets, required."),
 						ElementType: schema.ElementType{
@@ -1923,10 +1923,10 @@ func TestBuildCollectionProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "list_with_map",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list with a nested map of objects."),
 						ElementType: schema.ElementType{
@@ -1949,9 +1949,9 @@ func TestBuildCollectionProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderSetAttribute{
 					Name: "set_with_map",
-					Set: &provider.SetAttribute{
+					SetAttribute: provider.SetAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a set with a nested map of objects."),
 						ElementType: schema.ElementType{

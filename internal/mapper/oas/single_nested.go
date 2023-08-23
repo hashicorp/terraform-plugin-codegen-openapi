@@ -30,16 +30,16 @@ func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
 	objectAttributes, err := s.BuildDataSourceAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 	}
 
-	return &datasource.Attribute{
-		Name: name,
-		SingleNested: &datasource.SingleNestedAttribute{
-			Attributes:               *objectAttributes,
+	return &attrmapper.DataSourceSingleNestedAttribute{
+		Name:       name,
+		Attributes: objectAttributes,
+		SingleNestedAttribute: datasource.SingleNestedAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -47,16 +47,16 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schem
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
 	objectAttributes, err := s.BuildProviderAttributes()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 	}
 
-	return &provider.Attribute{
-		Name: name,
-		SingleNested: &provider.SingleNestedAttribute{
-			Attributes:         *objectAttributes,
+	return &attrmapper.ProviderSingleNestedAttribute{
+		Name:       name,
+		Attributes: objectAttributes,
+		SingleNestedAttribute: provider.SingleNestedAttribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

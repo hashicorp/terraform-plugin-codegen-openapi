@@ -8,8 +8,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
@@ -61,8 +59,8 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 	}
 }
 
-func (s *OASSchema) BuildDataSourceAttributes() (*[]datasource.Attribute, error) {
-	objectAttributes := []datasource.Attribute{}
+func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes, error) {
+	objectAttributes := attrmapper.DataSourceAttributes{}
 
 	// TODO: throw error if it's not an object?
 
@@ -81,13 +79,13 @@ func (s *OASSchema) BuildDataSourceAttributes() (*[]datasource.Attribute, error)
 			return nil, fmt.Errorf("failed to create object property '%s' schema - %w", name, err)
 		}
 
-		objectAttributes = append(objectAttributes, *attribute)
+		objectAttributes = append(objectAttributes, attribute)
 	}
 
-	return &objectAttributes, nil
+	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringDataSource(name, computability)
@@ -109,8 +107,8 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 	}
 }
 
-func (s *OASSchema) BuildProviderAttributes() (*[]provider.Attribute, error) {
-	objectAttributes := []provider.Attribute{}
+func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, error) {
+	objectAttributes := attrmapper.ProviderAttributes{}
 
 	// TODO: throw error if it's not an object?
 
@@ -129,13 +127,13 @@ func (s *OASSchema) BuildProviderAttributes() (*[]provider.Attribute, error) {
 			return nil, fmt.Errorf("failed to create object property '%s' schema - %w", name, err)
 		}
 
-		objectAttributes = append(objectAttributes, *attribute)
+		objectAttributes = append(objectAttributes, attribute)
 	}
 
-	return &objectAttributes, nil
+	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringProvider(name, optionalOrRequired)

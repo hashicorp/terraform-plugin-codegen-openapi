@@ -200,7 +200,7 @@ func TestBuildBoolDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]datasource.Attribute
+		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -217,17 +217,17 @@ func TestBuildBoolDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceBoolAttribute{
 					Name: "bool_prop",
-					Bool: &datasource.BoolAttribute{
+					BoolAttribute: datasource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a bool type."),
 					},
 				},
-				{
+				&attrmapper.DataSourceBoolAttribute{
 					Name: "bool_prop_required",
-					Bool: &datasource.BoolAttribute{
+					BoolAttribute: datasource.BoolAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a bool type, required."),
 					},
@@ -244,10 +244,10 @@ func TestBuildBoolDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceBoolAttribute{
 					Name: "bool_prop",
-					Bool: &datasource.BoolAttribute{
+					BoolAttribute: datasource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -279,10 +279,10 @@ func TestBuildBoolDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "bool_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of bools."),
 						ElementType: schema.ElementType{
@@ -290,9 +290,9 @@ func TestBuildBoolDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "bool_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of bools, required."),
 						ElementType: schema.ElementType{
@@ -328,7 +328,7 @@ func TestBuildBoolProvider(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]provider.Attribute
+		expectedAttributes attrmapper.ProviderAttributes
 	}{
 		"boolean attributes": {
 			schema: &base.Schema{
@@ -345,17 +345,17 @@ func TestBuildBoolProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderBoolAttribute{
 					Name: "bool_prop",
-					Bool: &provider.BoolAttribute{
+					BoolAttribute: provider.BoolAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a bool type."),
 					},
 				},
-				{
+				&attrmapper.ProviderBoolAttribute{
 					Name: "bool_prop_required",
-					Bool: &provider.BoolAttribute{
+					BoolAttribute: provider.BoolAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a bool type, required."),
 					},
@@ -372,10 +372,10 @@ func TestBuildBoolProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderBoolAttribute{
 					Name: "bool_prop",
-					Bool: &provider.BoolAttribute{
+					BoolAttribute: provider.BoolAttribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
@@ -407,10 +407,10 @@ func TestBuildBoolProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "bool_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of bools."),
 						ElementType: schema.ElementType{
@@ -418,9 +418,9 @@ func TestBuildBoolProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "bool_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of bools, required."),
 						ElementType: schema.ElementType{

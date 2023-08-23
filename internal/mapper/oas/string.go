@@ -44,10 +44,10 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceStringAttribute{
 		Name: name,
-		String: &datasource.StringAttribute{
+		StringAttribute: datasource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -56,16 +56,16 @@ func (s *OASSchema) BuildStringDataSource(name string, computability schema.Comp
 	}
 
 	if computability != schema.Computed {
-		result.String.Validators = s.GetStringValidators()
+		result.Validators = s.GetStringValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	result := &provider.Attribute{
+func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	result := &attrmapper.ProviderStringAttribute{
 		Name: name,
-		String: &provider.StringAttribute{
+		StringAttribute: provider.StringAttribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

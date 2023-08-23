@@ -111,7 +111,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	return result, nil
 }
 
-func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -119,10 +119,6 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
-	}
-
-	result := &datasource.Attribute{
-		Name: name,
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
@@ -133,33 +129,40 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			result.SetNested = &datasource.SetNestedAttribute{
-				NestedObject: datasource.NestedAttributeObject{
-					Attributes: *objectAttributes,
+
+			result := &attrmapper.DataSourceSetNestedAttribute{
+				Name: name,
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: objectAttributes,
 				},
-				ComputedOptionalRequired: computability,
-				DeprecationMessage:       s.GetDeprecationMessage(),
-				Description:              s.GetDescription(),
+				SetNestedAttribute: datasource.SetNestedAttribute{
+					ComputedOptionalRequired: computability,
+					DeprecationMessage:       s.GetDeprecationMessage(),
+					Description:              s.GetDescription(),
+				},
 			}
 
 			if computability != schema.Computed {
-				result.SetNested.Validators = s.GetSetValidators()
+				result.Validators = s.GetSetValidators()
 			}
 
 			return result, nil
 		}
 
-		result.ListNested = &datasource.ListNestedAttribute{
-			NestedObject: datasource.NestedAttributeObject{
-				Attributes: *objectAttributes,
+		result := &attrmapper.DataSourceListNestedAttribute{
+			Name: name,
+			NestedObject: attrmapper.DataSourceNestedAttributeObject{
+				Attributes: objectAttributes,
 			},
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+			ListNestedAttribute: datasource.ListNestedAttribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.ListNested.Validators = s.GetListValidators()
+			result.Validators = s.GetListValidators()
 		}
 
 		return result, nil
@@ -171,35 +174,42 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		result.Set = &datasource.SetAttribute{
-			ElementType:              elemType,
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+
+		result := &attrmapper.DataSourceSetAttribute{
+			Name: name,
+			SetAttribute: datasource.SetAttribute{
+				ElementType:              elemType,
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.Set.Validators = s.GetSetValidators()
+			result.Validators = s.GetSetValidators()
 		}
 
 		return result, nil
 	}
 
-	result.List = &datasource.ListAttribute{
-		ElementType:              elemType,
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
+	result := &attrmapper.DataSourceListAttribute{
+		Name: name,
+		ListAttribute: datasource.ListAttribute{
+			ElementType:              elemType,
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
 	}
 
 	if computability != schema.Computed {
-		result.List.Validators = s.GetListValidators()
+		result.Validators = s.GetListValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
 	if !s.Schema.Items.IsA() {
 		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
 	}
@@ -207,10 +217,6 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
-	}
-
-	result := &provider.Attribute{
-		Name: name,
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
@@ -221,27 +227,34 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		}
 
 		if s.Schema.Format == util.TF_format_set {
-			result.SetNested = &provider.SetNestedAttribute{
-				NestedObject: provider.NestedAttributeObject{
-					Attributes: *objectAttributes,
+
+			result := &attrmapper.ProviderSetNestedAttribute{
+				Name: name,
+				NestedObject: attrmapper.ProviderNestedAttributeObject{
+					Attributes: objectAttributes,
 				},
-				OptionalRequired:   optionalOrRequired,
-				DeprecationMessage: s.GetDeprecationMessage(),
-				Description:        s.GetDescription(),
-				Validators:         s.GetSetValidators(),
+				SetNestedAttribute: provider.SetNestedAttribute{
+					OptionalRequired:   optionalOrRequired,
+					DeprecationMessage: s.GetDeprecationMessage(),
+					Description:        s.GetDescription(),
+					Validators:         s.GetSetValidators(),
+				},
 			}
 
 			return result, nil
 		}
 
-		result.ListNested = &provider.ListNestedAttribute{
-			NestedObject: provider.NestedAttributeObject{
-				Attributes: *objectAttributes,
+		result := &attrmapper.ProviderListNestedAttribute{
+			Name: name,
+			NestedObject: attrmapper.ProviderNestedAttributeObject{
+				Attributes: objectAttributes,
 			},
-			OptionalRequired:   optionalOrRequired,
-			DeprecationMessage: s.GetDeprecationMessage(),
-			Description:        s.GetDescription(),
-			Validators:         s.GetListValidators(),
+			ListNestedAttribute: provider.ListNestedAttribute{
+				OptionalRequired:   optionalOrRequired,
+				DeprecationMessage: s.GetDeprecationMessage(),
+				Description:        s.GetDescription(),
+				Validators:         s.GetListValidators(),
+			},
 		}
 
 		return result, nil
@@ -253,23 +266,29 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 	}
 
 	if s.Schema.Format == util.TF_format_set {
-		result.Set = &provider.SetAttribute{
-			ElementType:        elemType,
-			OptionalRequired:   optionalOrRequired,
-			DeprecationMessage: s.GetDeprecationMessage(),
-			Description:        s.GetDescription(),
-			Validators:         s.GetSetValidators(),
+		result := &attrmapper.ProviderSetAttribute{
+			Name: name,
+			SetAttribute: provider.SetAttribute{
+				ElementType:        elemType,
+				OptionalRequired:   optionalOrRequired,
+				DeprecationMessage: s.GetDeprecationMessage(),
+				Description:        s.GetDescription(),
+				Validators:         s.GetSetValidators(),
+			},
 		}
 
 		return result, nil
 	}
 
-	result.List = &provider.ListAttribute{
-		ElementType:        elemType,
-		OptionalRequired:   optionalOrRequired,
-		DeprecationMessage: s.GetDeprecationMessage(),
-		Description:        s.GetDescription(),
-		Validators:         s.GetListValidators(),
+	result := &attrmapper.ProviderListAttribute{
+		Name: name,
+		ListAttribute: provider.ListAttribute{
+			ElementType:        elemType,
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetListValidators(),
+		},
 	}
 
 	return result, nil

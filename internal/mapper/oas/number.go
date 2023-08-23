@@ -55,54 +55,56 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 	}, nil
 }
 
-func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
-		Name: name,
-	}
-
+func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		result.Float64 = &datasource.Float64Attribute{
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+		result := &attrmapper.DataSourceFloat64Attribute{
+			Name: name,
+			Float64Attribute: datasource.Float64Attribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.Float64.Validators = s.GetFloatValidators()
+			result.Validators = s.GetFloatValidators()
 		}
 
 		return result, nil
 	}
-
-	result.Number = &datasource.NumberAttribute{
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
+	result := &attrmapper.DataSourceNumberAttribute{
+		Name: name,
+		NumberAttribute: datasource.NumberAttribute{
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	result := &provider.Attribute{
-		Name: name,
-	}
-
+func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
-		result.Float64 = &provider.Float64Attribute{
-			OptionalRequired:   optionalOrRequired,
-			DeprecationMessage: s.GetDeprecationMessage(),
-			Description:        s.GetDescription(),
-			Validators:         s.GetFloatValidators(),
+		result := &attrmapper.ProviderFloat64Attribute{
+			Name: name,
+			Float64Attribute: provider.Float64Attribute{
+				OptionalRequired:   optionalOrRequired,
+				DeprecationMessage: s.GetDeprecationMessage(),
+				Description:        s.GetDescription(),
+				Validators:         s.GetFloatValidators(),
+			},
 		}
 
 		return result, nil
 	}
-
-	result.Number = &provider.NumberAttribute{
-		OptionalRequired:   optionalOrRequired,
-		DeprecationMessage: s.GetDeprecationMessage(),
-		Description:        s.GetDescription(),
+	result := &attrmapper.ProviderNumberAttribute{
+		Name: name,
+		NumberAttribute: provider.NumberAttribute{
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+		},
 	}
 
 	return result, nil

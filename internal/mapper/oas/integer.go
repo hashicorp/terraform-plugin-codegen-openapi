@@ -43,10 +43,10 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceInt64Attribute{
 		Name: name,
-		Int64: &datasource.Int64Attribute{
+		Int64Attribute: datasource.Int64Attribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -54,16 +54,16 @@ func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.Com
 	}
 
 	if computability != schema.Computed {
-		result.Int64.Validators = s.GetIntegerValidators()
+		result.Validators = s.GetIntegerValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	result := &provider.Attribute{
+func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	result := &attrmapper.ProviderInt64Attribute{
 		Name: name,
-		Int64: &provider.Int64Attribute{
+		Int64Attribute: provider.Int64Attribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

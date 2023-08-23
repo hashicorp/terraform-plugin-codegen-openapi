@@ -75,7 +75,7 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 	return result, nil
 }
 
-func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
+func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
@@ -86,10 +86,6 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
-	}
-
-	result := &datasource.Attribute{
-		Name: name,
 	}
 
 	if mapSchema.Type == util.OAS_type_object {
@@ -97,17 +93,21 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		result.MapNested = &datasource.MapNestedAttribute{
-			NestedObject: datasource.NestedAttributeObject{
-				Attributes: *mapAttributes,
+
+		result := &attrmapper.DataSourceMapNestedAttribute{
+			Name: name,
+			NestedObject: attrmapper.DataSourceNestedAttributeObject{
+				Attributes: mapAttributes,
 			},
-			ComputedOptionalRequired: computability,
-			DeprecationMessage:       s.GetDeprecationMessage(),
-			Description:              s.GetDescription(),
+			MapNestedAttribute: datasource.MapNestedAttribute{
+				ComputedOptionalRequired: computability,
+				DeprecationMessage:       s.GetDeprecationMessage(),
+				Description:              s.GetDescription(),
+			},
 		}
 
 		if computability != schema.Computed {
-			result.MapNested.Validators = s.GetMapValidators()
+			result.Validators = s.GetMapValidators()
 		}
 
 		return result, nil
@@ -118,21 +118,24 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	result.Map = &datasource.MapAttribute{
-		ElementType:              elemType,
-		ComputedOptionalRequired: computability,
-		DeprecationMessage:       s.GetDeprecationMessage(),
-		Description:              s.GetDescription(),
+	result := &attrmapper.DataSourceMapAttribute{
+		Name: name,
+		MapAttribute: datasource.MapAttribute{
+			ElementType:              elemType,
+			ComputedOptionalRequired: computability,
+			DeprecationMessage:       s.GetDeprecationMessage(),
+			Description:              s.GetDescription(),
+		},
 	}
 
 	if computability != schema.Computed {
-		result.Map.Validators = s.GetMapValidators()
+		result.Validators = s.GetMapValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
+func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
@@ -145,23 +148,23 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 		return nil, fmt.Errorf("error building map schema proxy - %w", err)
 	}
 
-	result := &provider.Attribute{
-		Name: name,
-	}
-
 	if mapSchema.Type == util.OAS_type_object {
 		mapAttributes, err := mapSchema.BuildProviderAttributes()
 		if err != nil {
 			return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
 		}
-		result.MapNested = &provider.MapNestedAttribute{
-			NestedObject: provider.NestedAttributeObject{
-				Attributes: *mapAttributes,
+
+		result := &attrmapper.ProviderMapNestedAttribute{
+			Name: name,
+			NestedObject: attrmapper.ProviderNestedAttributeObject{
+				Attributes: mapAttributes,
 			},
-			OptionalRequired:   optionalOrRequired,
-			DeprecationMessage: s.GetDeprecationMessage(),
-			Description:        s.GetDescription(),
-			Validators:         s.GetMapValidators(),
+			MapNestedAttribute: provider.MapNestedAttribute{
+				OptionalRequired:   optionalOrRequired,
+				DeprecationMessage: s.GetDeprecationMessage(),
+				Description:        s.GetDescription(),
+				Validators:         s.GetMapValidators(),
+			},
 		}
 
 		return result, nil
@@ -172,12 +175,15 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 		return nil, fmt.Errorf("failed to create map elem type - %w", err)
 	}
 
-	result.Map = &provider.MapAttribute{
-		ElementType:        elemType,
-		OptionalRequired:   optionalOrRequired,
-		DeprecationMessage: s.GetDeprecationMessage(),
-		Description:        s.GetDescription(),
-		Validators:         s.GetMapValidators(),
+	result := &attrmapper.ProviderMapAttribute{
+		Name: name,
+		MapAttribute: provider.MapAttribute{
+			ElementType:        elemType,
+			OptionalRequired:   optionalOrRequired,
+			DeprecationMessage: s.GetDeprecationMessage(),
+			Description:        s.GetDescription(),
+			Validators:         s.GetMapValidators(),
+		},
 	}
 
 	return result, nil
