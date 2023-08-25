@@ -4,6 +4,8 @@
 package attrmapper
 
 import (
+	"errors"
+
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -44,7 +46,7 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (
 }
 
 func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
-	specAttributes := []resource.Attribute{}
+	specAttributes := make([]resource.Attribute, 0, len(attributes))
 	for _, attribute := range attributes {
 		specAttributes = append(specAttributes, attribute.ToSpec())
 	}
@@ -61,6 +63,8 @@ type DataSourceAttribute interface {
 type DataSourceAttributes []DataSourceAttribute
 
 func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttributes) (DataSourceAttributes, error) {
+	var errResult error
+
 	for _, mergeSlice := range mergeSlices {
 		for _, mergeAttribute := range mergeSlice {
 			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
@@ -68,8 +72,14 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 
 			for i, targetAttribute := range targetSlice {
 				if targetAttribute.GetName() == mergeAttribute.GetName() {
-					// TODO: determine how to surface this error
-					targetSlice[i], _ = targetAttribute.Merge(mergeAttribute)
+					mergedAttribute, err := targetAttribute.Merge(mergeAttribute)
+					if err != nil {
+						// TODO: consider how best to surface this error
+						// Currently, if the merge fails we should just keep the original target attribute for now
+						errResult = errors.Join(errResult, err)
+					} else {
+						targetSlice[i] = mergedAttribute
+					}
 
 					isNewAttribute = false
 					break
@@ -83,11 +93,11 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 		}
 	}
 
-	return targetSlice, nil
+	return targetSlice, errResult
 }
 
 func (attributes DataSourceAttributes) ToSpec() []datasource.Attribute {
-	specAttributes := []datasource.Attribute{}
+	specAttributes := make([]datasource.Attribute, 0, len(attributes))
 	for _, attribute := range attributes {
 		specAttributes = append(specAttributes, attribute.ToSpec())
 	}
@@ -102,7 +112,7 @@ type ProviderAttribute interface {
 type ProviderAttributes []ProviderAttribute
 
 func (attributes ProviderAttributes) ToSpec() []provider.Attribute {
-	specAttributes := []provider.Attribute{}
+	specAttributes := make([]provider.Attribute, 0, len(attributes))
 	for _, attribute := range attributes {
 		specAttributes = append(specAttributes, attribute.ToSpec())
 	}
