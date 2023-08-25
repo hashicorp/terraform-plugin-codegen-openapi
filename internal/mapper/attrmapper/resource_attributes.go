@@ -3,7 +3,11 @@
 
 package attrmapper
 
-import "github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+import (
+	"errors"
+
+	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+)
 
 type ResourceAttribute interface {
 	GetName() string
@@ -14,6 +18,8 @@ type ResourceAttribute interface {
 type ResourceAttributes []ResourceAttribute
 
 func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (ResourceAttributes, error) {
+	var errResult error
+
 	for _, mergeSlice := range mergeSlices {
 		for _, mergeAttribute := range mergeSlice {
 			// As we compare attributes, if we don't find a match, we should add this attribute to the slice after
@@ -21,8 +27,14 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (
 
 			for i, targetAttribute := range targetSlice {
 				if targetAttribute.GetName() == mergeAttribute.GetName() {
-					// TODO: determine how to surface this error
-					targetSlice[i], _ = targetAttribute.Merge(mergeAttribute)
+					mergedAttribute, err := targetAttribute.Merge(mergeAttribute)
+					if err != nil {
+						// TODO: consider how best to surface this error
+						// Currently, if the merge fails we should just keep the original target attribute for now
+						errResult = errors.Join(errResult, err)
+					} else {
+						targetSlice[i] = mergedAttribute
+					}
 
 					isNewAttribute = false
 					break
@@ -36,7 +48,7 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (
 		}
 	}
 
-	return targetSlice, nil
+	return targetSlice, errResult
 }
 
 func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
