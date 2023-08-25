@@ -4,6 +4,7 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -11,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
+func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+	result := &attrmapper.ResourceStringAttribute{
 		Name: name,
-		String: &resource.StringAttribute{
+		StringAttribute: resource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -27,26 +28,26 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 
 		if ok {
 			if computability == schema.Required {
-				result.String.ComputedOptionalRequired = schema.ComputedOptional
+				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
 
-			result.String.Default = &schema.StringDefault{
+			result.Default = &schema.StringDefault{
 				Static: &staticDefault,
 			}
 		}
 	}
 
 	if computability != schema.Computed {
-		result.String.Validators = s.GetStringValidators()
+		result.Validators = s.GetStringValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceStringAttribute{
 		Name: name,
-		String: &datasource.StringAttribute{
+		StringAttribute: datasource.StringAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -55,16 +56,16 @@ func (s *OASSchema) BuildStringDataSource(name string, computability schema.Comp
 	}
 
 	if computability != schema.Computed {
-		result.String.Validators = s.GetStringValidators()
+		result.Validators = s.GetStringValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	result := &provider.Attribute{
+func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	result := &attrmapper.ProviderStringAttribute{
 		Name: name,
-		String: &provider.StringAttribute{
+		StringAttribute: provider.StringAttribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

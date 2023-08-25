@@ -4,16 +4,17 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
+func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+	result := &attrmapper.ResourceBoolAttribute{
 		Name: name,
-		Bool: &resource.BoolAttribute{
+		BoolAttribute: resource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -25,10 +26,10 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 
 		if ok {
 			if computability == schema.Required {
-				result.Bool.ComputedOptionalRequired = schema.ComputedOptional
+				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
 
-			result.Bool.Default = &schema.BoolDefault{
+			result.Default = &schema.BoolDefault{
 				Static: &staticDefault,
 			}
 		}
@@ -37,10 +38,10 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceBoolAttribute{
 		Name: name,
-		Bool: &datasource.BoolAttribute{
+		BoolAttribute: datasource.BoolAttribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -50,10 +51,10 @@ func (s *OASSchema) BuildBoolDataSource(name string, computability schema.Comput
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	return &provider.Attribute{
+func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	return &attrmapper.ProviderBoolAttribute{
 		Name: name,
-		Bool: &provider.BoolAttribute{
+		BoolAttribute: provider.BoolAttribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),

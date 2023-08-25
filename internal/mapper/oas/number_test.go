@@ -6,6 +6,7 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
@@ -22,7 +23,7 @@ func TestBuildNumberResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -51,31 +52,31 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "double_float64_prop",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
-				{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "double_float64_prop_required",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
-				{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float_float64_prop",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
-				{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float_float64_prop_required",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a float, required."),
 					},
@@ -104,28 +105,28 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_default_non_zero",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.Float64Default{
 							Static: pointer(float64(123.45)),
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_default_zero",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.Float64Default{
 							Static: pointer(float64(0.0)),
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop_required_default_non_zero",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						// Intentionally not required due to default
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.Float64Default{
@@ -146,10 +147,10 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -168,10 +169,10 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &resource.Float64Attribute{
+					Float64Attribute: resource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.Float64Validator{
 							{
@@ -204,17 +205,17 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop",
-					Number: &resource.NumberAttribute{
+					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a number type."),
 					},
 				},
-				{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop_required",
-					Number: &resource.NumberAttribute{
+					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
 					},
@@ -231,10 +232,10 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceNumberAttribute{
 					Name: "number_prop",
-					Number: &resource.NumberAttribute{
+					NumberAttribute: resource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -288,10 +289,10 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "double_float64_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -299,9 +300,9 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "double_float64_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -309,9 +310,9 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "float_float64_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -319,9 +320,9 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "float_float64_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -356,10 +357,10 @@ func TestBuildNumberResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "number_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of numbers."),
 						ElementType: schema.ElementType{
@@ -367,9 +368,9 @@ func TestBuildNumberResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "number_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of numbers, required."),
 						ElementType: schema.ElementType{
@@ -405,7 +406,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]datasource.Attribute
+		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -434,31 +435,31 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "double_float64_prop",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
-				{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "double_float64_prop_required",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
-				{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "float_float64_prop",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
-				{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "float_float64_prop_required",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a float64 type, from a float, required."),
 					},
@@ -476,10 +477,10 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -498,10 +499,10 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &datasource.Float64Attribute{
+					Float64Attribute: datasource.Float64Attribute{
 						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.Float64Validator{
 							{
@@ -534,17 +535,17 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceNumberAttribute{
 					Name: "number_prop",
-					Number: &datasource.NumberAttribute{
+					NumberAttribute: datasource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a number type."),
 					},
 				},
-				{
+				&attrmapper.DataSourceNumberAttribute{
 					Name: "number_prop_required",
-					Number: &datasource.NumberAttribute{
+					NumberAttribute: datasource.NumberAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a number type, required."),
 					},
@@ -561,10 +562,10 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceNumberAttribute{
 					Name: "number_prop",
-					Number: &datasource.NumberAttribute{
+					NumberAttribute: datasource.NumberAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -618,10 +619,10 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "double_float64_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -629,9 +630,9 @@ func TestBuildNumberDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "double_float64_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -639,9 +640,9 @@ func TestBuildNumberDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "float_float64_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -649,9 +650,9 @@ func TestBuildNumberDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "float_float64_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -686,10 +687,10 @@ func TestBuildNumberDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "number_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of numbers."),
 						ElementType: schema.ElementType{
@@ -697,9 +698,9 @@ func TestBuildNumberDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "number_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of numbers, required."),
 						ElementType: schema.ElementType{
@@ -735,7 +736,7 @@ func TestBuildNumberProvider(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]provider.Attribute
+		expectedAttributes attrmapper.ProviderAttributes
 	}{
 		"float64 attributes": {
 			schema: &base.Schema{
@@ -764,31 +765,31 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "double_float64_prop",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a float64 type, from a double."),
 					},
 				},
-				{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "double_float64_prop_required",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a float64 type, from a double, required."),
 					},
 				},
-				{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "float_float64_prop",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a float64 type, from a float."),
 					},
 				},
-				{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "float_float64_prop_required",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a float64 type, from a float, required."),
 					},
@@ -806,10 +807,10 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
@@ -828,10 +829,10 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderFloat64Attribute{
 					Name: "float64_prop",
-					Float64: &provider.Float64Attribute{
+					Float64Attribute: provider.Float64Attribute{
 						OptionalRequired: schema.Required,
 						Validators: []schema.Float64Validator{
 							{
@@ -864,17 +865,17 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderNumberAttribute{
 					Name: "number_prop",
-					Number: &provider.NumberAttribute{
+					NumberAttribute: provider.NumberAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a number type."),
 					},
 				},
-				{
+				&attrmapper.ProviderNumberAttribute{
 					Name: "number_prop_required",
-					Number: &provider.NumberAttribute{
+					NumberAttribute: provider.NumberAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a number type, required."),
 					},
@@ -891,10 +892,10 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderNumberAttribute{
 					Name: "number_prop",
-					Number: &provider.NumberAttribute{
+					NumberAttribute: provider.NumberAttribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
@@ -948,10 +949,10 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "double_float64_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -959,9 +960,9 @@ func TestBuildNumberProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "double_float64_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -969,9 +970,9 @@ func TestBuildNumberProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "float_float64_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of float64s."),
 						ElementType: schema.ElementType{
@@ -979,9 +980,9 @@ func TestBuildNumberProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "float_float64_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of float64s, required."),
 						ElementType: schema.ElementType{
@@ -1016,10 +1017,10 @@ func TestBuildNumberProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "number_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of numbers."),
 						ElementType: schema.ElementType{
@@ -1027,9 +1028,9 @@ func TestBuildNumberProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "number_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of numbers, required."),
 						ElementType: schema.ElementType{

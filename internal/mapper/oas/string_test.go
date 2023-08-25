@@ -6,6 +6,7 @@ package oas_test
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
@@ -22,7 +23,7 @@ func TestBuildStringResource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -40,17 +41,17 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_sensitive_prop",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:                pointer(true),
@@ -80,28 +81,28 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_default_empty",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.StringDefault{
 							Static: pointer(""),
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_default_non_empty",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.StringDefault{
 							Static: pointer("test value"),
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop_required_default_non_empty",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						// Intentionally not required due to default
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Default: &schema.StringDefault{
@@ -121,10 +122,10 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -156,10 +157,10 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of strings."),
 						ElementType: schema.ElementType{
@@ -167,9 +168,9 @@ func TestBuildStringResource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of strings, required."),
 						ElementType: schema.ElementType{
@@ -190,10 +191,10 @@ func TestBuildStringResource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_prop",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.StringValidator{
 							{
@@ -237,7 +238,7 @@ func TestBuildStringDataSource(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]datasource.Attribute
+		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -255,17 +256,17 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceStringAttribute{
 					Name: "string_prop",
-					String: &datasource.StringAttribute{
+					StringAttribute: datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, not sensitive, required."),
 					},
 				},
-				{
+				&attrmapper.DataSourceStringAttribute{
 					Name: "string_sensitive_prop",
-					String: &datasource.StringAttribute{
+					StringAttribute: datasource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:                pointer(true),
@@ -283,10 +284,10 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceStringAttribute{
 					Name: "string_prop",
-					String: &datasource.StringAttribute{
+					StringAttribute: datasource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						DeprecationMessage:       pointer("This attribute is deprecated."),
 					},
@@ -318,10 +319,10 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceListAttribute{
 					Name: "string_list_prop",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of strings."),
 						ElementType: schema.ElementType{
@@ -329,9 +330,9 @@ func TestBuildStringDataSource(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.DataSourceListAttribute{
 					Name: "string_list_prop_required",
-					List: &datasource.ListAttribute{
+					ListAttribute: datasource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of strings, required."),
 						ElementType: schema.ElementType{
@@ -352,10 +353,10 @@ func TestBuildStringDataSource(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]datasource.Attribute{
-				{
+			expectedAttributes: attrmapper.DataSourceAttributes{
+				&attrmapper.DataSourceStringAttribute{
 					Name: "string_prop",
-					String: &datasource.StringAttribute{
+					StringAttribute: datasource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Validators: []schema.StringValidator{
 							{
@@ -399,7 +400,7 @@ func TestBuildStringProvider(t *testing.T) {
 
 	testCases := map[string]struct {
 		schema             *base.Schema
-		expectedAttributes *[]provider.Attribute
+		expectedAttributes attrmapper.ProviderAttributes
 	}{
 		"string attributes": {
 			schema: &base.Schema{
@@ -417,17 +418,17 @@ func TestBuildStringProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderStringAttribute{
 					Name: "string_prop",
-					String: &provider.StringAttribute{
+					StringAttribute: provider.StringAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a string type, not sensitive, required."),
 					},
 				},
-				{
+				&attrmapper.ProviderStringAttribute{
 					Name: "string_sensitive_prop",
-					String: &provider.StringAttribute{
+					StringAttribute: provider.StringAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a string type, sensitive"),
 						Sensitive:        pointer(true),
@@ -445,10 +446,10 @@ func TestBuildStringProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderStringAttribute{
 					Name: "string_prop",
-					String: &provider.StringAttribute{
+					StringAttribute: provider.StringAttribute{
 						OptionalRequired:   schema.Optional,
 						DeprecationMessage: pointer("This attribute is deprecated."),
 					},
@@ -480,10 +481,10 @@ func TestBuildStringProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderListAttribute{
 					Name: "string_list_prop",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Optional,
 						Description:      pointer("hey there! I'm a list of strings."),
 						ElementType: schema.ElementType{
@@ -491,9 +492,9 @@ func TestBuildStringProvider(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ProviderListAttribute{
 					Name: "string_list_prop_required",
-					List: &provider.ListAttribute{
+					ListAttribute: provider.ListAttribute{
 						OptionalRequired: schema.Required,
 						Description:      pointer("hey there! I'm a list of strings, required."),
 						ElementType: schema.ElementType{
@@ -514,10 +515,10 @@ func TestBuildStringProvider(t *testing.T) {
 					}),
 				},
 			},
-			expectedAttributes: &[]provider.Attribute{
-				{
+			expectedAttributes: attrmapper.ProviderAttributes{
+				&attrmapper.ProviderStringAttribute{
 					Name: "string_prop",
-					String: &provider.StringAttribute{
+					StringAttribute: provider.StringAttribute{
 						OptionalRequired: schema.Required,
 						Validators: []schema.StringValidator{
 							{

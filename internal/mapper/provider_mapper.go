@@ -62,7 +62,7 @@ func generateProviderSchema(exploredProvider explorer.Provider) (*provider.Schem
 		return nil, err
 	}
 
-	providerSchema.Attributes = *attributes
+	providerSchema.Attributes = attributes.ToSpec()
 
 	return providerSchema, nil
 }

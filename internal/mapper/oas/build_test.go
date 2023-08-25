@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -478,7 +479,7 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 
 	testCases := map[string]struct {
 		schemaProxy        *base.SchemaProxy
-		expectedAttributes *[]resource.Attribute
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
 		"nullable type - Type array": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
@@ -495,17 +496,17 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a nullable string type."),
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a nullable string type, required."),
 					},
@@ -541,17 +542,17 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
 					},
@@ -587,17 +588,17 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_one",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a string type."),
 					},
 				},
-				{
+				&attrmapper.ResourceStringAttribute{
 					Name: "nullable_string_two",
-					String: &resource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
 					},
@@ -629,10 +630,10 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
 						ElementType: schema.ElementType{
@@ -640,9 +641,9 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
 						ElementType: schema.ElementType{
@@ -691,10 +692,10 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
 						ElementType: schema.ElementType{
@@ -702,9 +703,9 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
 						ElementType: schema.ElementType{
@@ -753,10 +754,10 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					}),
 				},
 			}),
-			expectedAttributes: &[]resource.Attribute{
-				{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
 						Description:              pointer("hey there! I'm a list of nullable strings."),
 						ElementType: schema.ElementType{
@@ -764,9 +765,9 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						},
 					},
 				},
-				{
+				&attrmapper.ResourceListAttribute{
 					Name: "string_list_prop_required",
-					List: &resource.ListAttribute{
+					ListAttribute: resource.ListAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a list of nullable strings, required."),
 						ElementType: schema.ElementType{

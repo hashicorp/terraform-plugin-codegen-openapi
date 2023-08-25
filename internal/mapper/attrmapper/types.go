@@ -1,12 +1,24 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-package merge
+package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
+
+type ResourceNestedAttributeObject struct {
+	Attributes ResourceAttributes
+}
+
+type DataSourceNestedAttributeObject struct {
+	Attributes DataSourceAttributes
+}
+
+type ProviderNestedAttributeObject struct {
+	Attributes ProviderAttributes
+}
 
 func mergeElementType(target schema.ElementType, merge schema.ElementType) schema.ElementType {
 	// Handle collection type

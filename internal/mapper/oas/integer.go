@@ -4,6 +4,7 @@
 package oas
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -11,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (*resource.Attribute, error) {
-	result := &resource.Attribute{
+func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+	result := &attrmapper.ResourceInt64Attribute{
 		Name: name,
-		Int64: &resource.Int64Attribute{
+		Int64Attribute: resource.Int64Attribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -26,26 +27,26 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 
 		if ok {
 			if computability == schema.Required {
-				result.Int64.ComputedOptionalRequired = schema.ComputedOptional
+				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
 
-			result.Int64.Default = &schema.Int64Default{
+			result.Default = &schema.Int64Default{
 				Static: &staticDefault,
 			}
 		}
 	}
 
 	if computability != schema.Computed {
-		result.Int64.Validators = s.GetIntegerValidators()
+		result.Validators = s.GetIntegerValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (*datasource.Attribute, error) {
-	result := &datasource.Attribute{
+func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+	result := &attrmapper.DataSourceInt64Attribute{
 		Name: name,
-		Int64: &datasource.Int64Attribute{
+		Int64Attribute: datasource.Int64Attribute{
 			ComputedOptionalRequired: computability,
 			DeprecationMessage:       s.GetDeprecationMessage(),
 			Description:              s.GetDescription(),
@@ -53,16 +54,16 @@ func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.Com
 	}
 
 	if computability != schema.Computed {
-		result.Int64.Validators = s.GetIntegerValidators()
+		result.Validators = s.GetIntegerValidators()
 	}
 
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (*provider.Attribute, error) {
-	result := &provider.Attribute{
+func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+	result := &attrmapper.ProviderInt64Attribute{
 		Name: name,
-		Int64: &provider.Int64Attribute{
+		Int64Attribute: provider.Int64Attribute{
 			OptionalRequired:   optionalOrRequired,
 			DeprecationMessage: s.GetDeprecationMessage(),
 			Description:        s.GetDescription(),
