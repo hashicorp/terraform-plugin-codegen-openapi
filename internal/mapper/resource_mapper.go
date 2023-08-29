@@ -142,9 +142,11 @@ func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schem
 		}
 	}
 
-	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings
-	// for unexpected scenarios, like type mismatches between attribute schemas
+	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
 	resourceAttributes, _ := createRequestAttributes.Merge(createResponseAttributes, readResponseAttributes, readParameterAttributes)
+
+	// TODO: handle error for overrides
+	resourceAttributes, _ = resourceAttributes.ApplyOverrides(explorerResource.SchemaOptions.AttributeOptions.Overrides)
 
 	resourceSchema.Attributes = resourceAttributes.ToSpec()
 	return resourceSchema, nil

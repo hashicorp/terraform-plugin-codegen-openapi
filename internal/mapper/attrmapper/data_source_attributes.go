@@ -5,14 +5,21 @@ package attrmapper
 
 import (
 	"errors"
+	"strings"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 )
 
 type DataSourceAttribute interface {
 	GetName() string
 	Merge(DataSourceAttribute) (DataSourceAttribute, error)
+	ApplyOverride(explorer.Override) (DataSourceAttribute, error)
 	ToSpec() datasource.Attribute
+}
+
+type DataSourceNestedAttribute interface {
+	ApplyNestedOverride([]string, explorer.Override) (DataSourceAttribute, error)
 }
 
 type DataSourceAttributes []DataSourceAttribute
@@ -58,4 +65,53 @@ func (attributes DataSourceAttributes) ToSpec() []datasource.Attribute {
 	}
 
 	return specAttributes
+}
+
+func (attributes DataSourceAttributes) ApplyOverrides(overrideMap map[string]explorer.Override) (DataSourceAttributes, error) {
+	var errResult error
+	for key, override := range overrideMap {
+		var err error
+		attributes, err = attributes.ApplyOverride(strings.Split(key, "."), override)
+		errResult = errors.Join(errResult, err)
+	}
+
+	return attributes, errResult
+}
+
+func (attributes DataSourceAttributes) ApplyOverride(path []string, override explorer.Override) (DataSourceAttributes, error) {
+	var errResult error
+	if len(path) == 0 {
+		return attributes, errResult
+	}
+	for i, attribute := range attributes {
+		if attribute.GetName() == path[0] {
+
+			if len(path) > 1 {
+				nestedAttribute, ok := attribute.(DataSourceNestedAttribute)
+				if !ok {
+					// TODO: throw error! there is a nested override for an attribute that is not a nested type
+					break
+				}
+
+				// The attribute we need to override is deeper nested, move up
+				relativePath := path[1:]
+
+				overriddenAttribute, err := nestedAttribute.ApplyNestedOverride(relativePath, override)
+				errResult = errors.Join(errResult, err)
+
+				attributes[i] = overriddenAttribute
+
+			} else {
+				// This is the right attribute, apply override
+				overriddenAttribute, err := attribute.ApplyOverride(override)
+				errResult = errors.Join(errResult, err)
+
+				attributes[i] = overriddenAttribute
+			}
+
+			break
+		}
+	}
+
+	return attributes, errResult
 }

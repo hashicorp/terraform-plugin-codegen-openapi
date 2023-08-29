@@ -32,14 +32,15 @@
 					{
 						"name": "shipDate",
 						"string": {
-							"computed_optional_required": "computed"
+							"computed_optional_required": "computed",
+							"description": "A field representing the date and time an order will be shipped by"
 						}
 					},
 					{
 						"name": "status",
 						"string": {
 							"computed_optional_required": "computed",
-							"description": "Order Status"
+							"description": "Order status, possible values - 'placed', 'approved', or 'delivered'"
 						}
 					}
 				]
@@ -70,16 +71,19 @@
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed"
+										"computed_optional_required": "computed",
+										"description": "The category name, possible values - 'dog', 'cat', 'bird', or 'other'"
 									}
 								}
-							]
+							],
+							"description": "Category containing classification info about the pet"
 						}
 					},
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "computed"
+							"computed_optional_required": "computed",
+							"description": "The pet's full name"
 						}
 					},
 					{
@@ -186,14 +190,15 @@
 					{
 						"name": "shipDate",
 						"string": {
-							"computed_optional_required": "computed_optional"
+							"computed_optional_required": "computed_optional",
+							"description": "A field representing the date and time an order will be shipped by"
 						}
 					},
 					{
 						"name": "status",
 						"string": {
 							"computed_optional_required": "computed_optional",
-							"description": "Order Status",
+							"description": "Order status, possible values - 'placed', 'approved', or 'delivered'",
 							"validators": [
 								{
 									"custom": {
@@ -229,10 +234,12 @@
 								{
 									"name": "name",
 									"string": {
-										"computed_optional_required": "computed_optional"
+										"computed_optional_required": "computed_optional",
+										"description": "The category name, possible values - 'dog', 'cat', 'bird', or 'other'"
 									}
 								}
-							]
+							],
+							"description": "Category containing classification info about the pet"
 						}
 					},
 					{
@@ -245,7 +252,8 @@
 					{
 						"name": "name",
 						"string": {
-							"computed_optional_required": "required"
+							"computed_optional_required": "required",
+							"description": "The pet's full name"
 						}
 					},
 					{

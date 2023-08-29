@@ -39,5 +39,10 @@ type SchemaOptions struct {
 }
 
 type AttributeOptions struct {
-	Aliases map[string]string
+	Aliases   map[string]string
+	Overrides map[string]Override
+}
+
+type Override struct {
+	Description string
 }

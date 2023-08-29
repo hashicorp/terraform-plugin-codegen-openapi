@@ -5,14 +5,21 @@ package attrmapper
 
 import (
 	"errors"
+	"strings"
 
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
 type ResourceAttribute interface {
 	GetName() string
 	Merge(ResourceAttribute) (ResourceAttribute, error)
+	ApplyOverride(explorer.Override) (ResourceAttribute, error)
 	ToSpec() resource.Attribute
+}
+
+type ResourceNestedAttribute interface {
+	ApplyNestedOverride([]string, explorer.Override) (ResourceAttribute, error)
 }
 
 type ResourceAttributes []ResourceAttribute
@@ -58,4 +65,53 @@ func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
 	}
 
 	return specAttributes
+}
+
+func (attributes ResourceAttributes) ApplyOverrides(overrideMap map[string]explorer.Override) (ResourceAttributes, error) {
+	var errResult error
+	for key, override := range overrideMap {
+		var err error
+		attributes, err = attributes.ApplyOverride(strings.Split(key, "."), override)
+		errResult = errors.Join(errResult, err)
+	}
+
+	return attributes, errResult
+}
+
+func (attributes ResourceAttributes) ApplyOverride(path []string, override explorer.Override) (ResourceAttributes, error) {
+	var errResult error
+	if len(path) == 0 {
+		return attributes, errResult
+	}
+	for i, attribute := range attributes {
+		if attribute.GetName() == path[0] {
+
+			if len(path) > 1 {
+				nestedAttribute, ok := attribute.(ResourceNestedAttribute)
+				if !ok {
+					// TODO: throw error! there is a nested override for an attribute that is not a nested type
+					break
+				}
+
+				// The attribute we need to override is deeper nested, move up
+				relativePath := path[1:]
+
+				overriddenAttribute, err := nestedAttribute.ApplyNestedOverride(relativePath, override)
+				errResult = errors.Join(errResult, err)
+
+				attributes[i] = overriddenAttribute
+
+			} else {
+				// This is the right attribute, apply override
+				overriddenAttribute, err := attribute.ApplyOverride(override)
+				errResult = errors.Join(errResult, err)
+
+				attributes[i] = overriddenAttribute
+			}
+
+			break
+		}
+	}
+
+	return attributes, errResult
 }
