@@ -48,6 +48,27 @@ resources:
         aliases:
           otherId: id`,
 		},
+		"valid resource with overrides": {
+			input: `
+provider:
+  name: example
+
+resources:
+  thing:
+    create:
+      path: /example/path/to/things
+      method: POST
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        overrides:
+          hey:
+            description: Here is a test description for the 'hey' property
+          "hey.there":
+            description: Here is a test description for the 'there' property in 'hey'`,
+		},
 		"valid single data source": {
 			input: `
 provider:
@@ -73,6 +94,24 @@ data_sources:
       attributes:
         aliases:
           otherId: id`,
+		},
+		"valid data source with overrides": {
+			input: `
+provider:
+  name: example
+
+data_sources:
+  thing:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        overrides:
+          hey:
+            description: Here is a test description for the 'hey' property
+          "hey.there":
+            description: Here is a test description for the 'there' property in 'hey'`,
 		},
 		"valid combo of resources and data sources": {
 			input: `
@@ -270,6 +309,26 @@ resources:
       path: /example/path/to/things`,
 			expectedErrRegex: `invalid delete: 'method' property is required`,
 		},
+		"resource - invalid override key": {
+			input: `
+provider:
+  name: example
+
+resources:
+  thing_one:
+    create:
+      path: /example/path/to/things
+      method: POST
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        overrides:
+          ".hey":
+            description: Here is a test description for the 'hey' property`,
+			expectedErrRegex: `invalid key for override: \".hey\"`,
+		},
 		"data source - read required": {
 			input: `
 provider:
@@ -300,6 +359,23 @@ data_sources:
     read:
       path: /example/path/to/thing/{id}`,
 			expectedErrRegex: `invalid read: 'method' property is required`,
+		},
+		"data source - invalid override key": {
+			input: `
+provider:
+  name: example
+
+data_sources:
+  thing_one:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      attributes:
+        overrides:
+          "hey.":
+            description: Here is a test description for the 'hey' property`,
+			expectedErrRegex: `invalid key for override: \"hey.\"`,
 		},
 	}
 	for name, testCase := range testCases {
