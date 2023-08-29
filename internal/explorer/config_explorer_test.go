@@ -233,7 +233,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 				},
 			},
 		},
-		"merge options pass-through": {
+		"schema options pass-through": {
 			config: config.Config{
 				Resources: map[string]config.Resource{
 					"test_resource": {
@@ -249,6 +249,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							AttributeOptions: config.AttributeOptions{
 								Aliases: map[string]string{
 									"otherId": "id",
+								},
+								Overrides: map[string]config.Override{
+									"test": {
+										Description: "test description for override",
+									},
 								},
 							},
 						},
@@ -284,7 +289,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							Aliases: map[string]string{
 								"otherId": "id",
 							},
-							Overrides: map[string]explorer.Override{},
+							Overrides: map[string]explorer.Override{
+								"test": {
+									Description: "test description for override",
+								},
+							},
 						},
 					},
 				},
@@ -419,7 +428,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 				},
 			},
 		},
-		"merge options pass-through": {
+		"schema options pass-through": {
 			config: config.Config{
 				DataSources: map[string]config.DataSource{
 					"test_resource": {
@@ -431,6 +440,11 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 							AttributeOptions: config.AttributeOptions{
 								Aliases: map[string]string{
 									"otherId": "id",
+								},
+								Overrides: map[string]config.Override{
+									"test": {
+										Description: "test description for override",
+									},
 								},
 							},
 						},
@@ -456,7 +470,11 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 							Aliases: map[string]string{
 								"otherId": "id",
 							},
-							Overrides: map[string]explorer.Override{},
+							Overrides: map[string]explorer.Override{
+								"test": {
+									Description: "test description for override",
+								},
+							},
 						},
 					},
 				},
