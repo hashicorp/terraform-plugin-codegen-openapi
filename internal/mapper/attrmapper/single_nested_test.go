@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -326,6 +327,64 @@ func TestResourceSingleNestedAttribute_Merge(t *testing.T) {
 	}
 }
 
+func TestResourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.ResourceSingleNestedAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.ResourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.ResourceSingleNestedAttribute{
+				Name: "test_attribute",
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
+						Name: "nested_string",
+						StringAttribute: resource.StringAttribute{
+							ComputedOptionalRequired: schema.Required,
+						},
+					},
+				},
+				SingleNestedAttribute: resource.SingleNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
+				Name: "test_attribute",
+				Attributes: attrmapper.ResourceAttributes{
+					&attrmapper.ResourceStringAttribute{
+						Name: "nested_string",
+						StringAttribute: resource.StringAttribute{
+							ComputedOptionalRequired: schema.Required,
+						},
+					},
+				},
+				SingleNestedAttribute: resource.SingleNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
 func TestDataSourceSingleNestedAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
@@ -631,6 +690,64 @@ func TestDataSourceSingleNestedAttribute_Merge(t *testing.T) {
 			t.Parallel()
 
 			got, _ := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestDataSourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.DataSourceSingleNestedAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.DataSourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.DataSourceSingleNestedAttribute{
+				Name: "test_attribute",
+				Attributes: attrmapper.DataSourceAttributes{
+					&attrmapper.DataSourceStringAttribute{
+						Name: "nested_string",
+						StringAttribute: datasource.StringAttribute{
+							ComputedOptionalRequired: schema.Required,
+						},
+					},
+				},
+				SingleNestedAttribute: datasource.SingleNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.DataSourceSingleNestedAttribute{
+				Name: "test_attribute",
+				Attributes: attrmapper.DataSourceAttributes{
+					&attrmapper.DataSourceStringAttribute{
+						Name: "nested_string",
+						StringAttribute: datasource.StringAttribute{
+							ComputedOptionalRequired: schema.Required,
+						},
+					},
+				},
+				SingleNestedAttribute: datasource.SingleNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)

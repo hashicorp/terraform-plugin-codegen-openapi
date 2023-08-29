@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -360,6 +361,68 @@ func TestResourceListNestedAttribute_Merge(t *testing.T) {
 	}
 }
 
+func TestResourceListNestedAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.ResourceListNestedAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.ResourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.ResourceListNestedAttribute{
+				Name: "test_attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceStringAttribute{
+							Name: "nested_string",
+							StringAttribute: resource.StringAttribute{
+								ComputedOptionalRequired: schema.Required,
+							},
+						},
+					},
+				},
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.ResourceListNestedAttribute{
+				Name: "test_attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceStringAttribute{
+							Name: "nested_string",
+							StringAttribute: resource.StringAttribute{
+								ComputedOptionalRequired: schema.Required,
+							},
+						},
+					},
+				},
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
 func TestDataSourceListNestedAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
@@ -699,6 +762,68 @@ func TestDataSourceListNestedAttribute_Merge(t *testing.T) {
 			t.Parallel()
 
 			got, _ := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestDataSourceListNestedAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.DataSourceListNestedAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.DataSourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.DataSourceListNestedAttribute{
+				Name: "test_attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceStringAttribute{
+							Name: "nested_string",
+							StringAttribute: datasource.StringAttribute{
+								ComputedOptionalRequired: schema.Required,
+							},
+						},
+					},
+				},
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.DataSourceListNestedAttribute{
+				Name: "test_attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceStringAttribute{
+							Name: "nested_string",
+							StringAttribute: datasource.StringAttribute{
+								ComputedOptionalRequired: schema.Required,
+							},
+						},
+					},
+				},
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
