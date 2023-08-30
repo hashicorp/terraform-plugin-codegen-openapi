@@ -423,6 +423,155 @@ func TestResourceListNestedAttribute_ApplyOverride(t *testing.T) {
 	}
 }
 
+func TestResourceListNestedAttribute_ApplyNestedOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.ResourceListNestedAttribute
+		overridePath      []string
+		override          explorer.Override
+		expectedAttribute attrmapper.ResourceAttribute
+	}{
+		"override nested attribute": {
+			attribute: attrmapper.ResourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								Attributes: attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			overridePath: []string{"nested_attribute"},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.ResourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								Attributes: attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("new description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+		"override double nested attribute": {
+			attribute: attrmapper.ResourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								Attributes: attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			overridePath: []string{"nested_attribute", "double_nested_attribute"},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.ResourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.ResourceNestedAttributeObject{
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								Attributes: attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("new description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: resource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyNestedOverride(testCase.overridePath, testCase.override)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
 func TestDataSourceListNestedAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
@@ -824,6 +973,155 @@ func TestDataSourceListNestedAttribute_ApplyOverride(t *testing.T) {
 			t.Parallel()
 
 			got, _ := testCase.attribute.ApplyOverride(testCase.override)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestDataSourceListNestedAttribute_ApplyNestedOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.DataSourceListNestedAttribute
+		overridePath      []string
+		override          explorer.Override
+		expectedAttribute attrmapper.DataSourceAttribute
+	}{
+		"override nested attribute": {
+			attribute: attrmapper.DataSourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.DataSourceNestedAttributeObject{
+								Attributes: attrmapper.DataSourceAttributes{
+									&attrmapper.DataSourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: datasource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: datasource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			overridePath: []string{"nested_attribute"},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.DataSourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.DataSourceNestedAttributeObject{
+								Attributes: attrmapper.DataSourceAttributes{
+									&attrmapper.DataSourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: datasource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: datasource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("new description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+		"override double nested attribute": {
+			attribute: attrmapper.DataSourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.DataSourceNestedAttributeObject{
+								Attributes: attrmapper.DataSourceAttributes{
+									&attrmapper.DataSourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: datasource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: datasource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+			overridePath: []string{"nested_attribute", "double_nested_attribute"},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.DataSourceListNestedAttribute{
+				Name: "attribute",
+				NestedObject: attrmapper.DataSourceNestedAttributeObject{
+					Attributes: attrmapper.DataSourceAttributes{
+						&attrmapper.DataSourceListNestedAttribute{
+							Name: "nested_attribute",
+							NestedObject: attrmapper.DataSourceNestedAttributeObject{
+								Attributes: attrmapper.DataSourceAttributes{
+									&attrmapper.DataSourceStringAttribute{
+										Name: "double_nested_attribute",
+										StringAttribute: datasource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("new description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: datasource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+				},
+				ListNestedAttribute: datasource.ListNestedAttribute{
+					ComputedOptionalRequired: schema.Required,
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyNestedOverride(testCase.overridePath, testCase.override)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
