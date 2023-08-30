@@ -94,15 +94,15 @@ func (attributes DataSourceAttributes) ApplyOverride(path []string, override exp
 				}
 
 				// The attribute we need to override is deeper nested, move up
-				relativePath := path[1:]
+				nextPath := path[1:]
 
-				overriddenAttribute, err := nestedAttribute.ApplyNestedOverride(relativePath, override)
+				overriddenAttribute, err := nestedAttribute.ApplyNestedOverride(nextPath, override)
 				errResult = errors.Join(errResult, err)
 
 				attributes[i] = overriddenAttribute
 
 			} else {
-				// This is the right attribute, apply override
+				// No more path to traverse, apply override
 				overriddenAttribute, err := attribute.ApplyOverride(override)
 				errResult = errors.Join(errResult, err)
 
