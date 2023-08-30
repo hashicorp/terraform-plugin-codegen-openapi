@@ -143,7 +143,7 @@ func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) SchemaOptions {
 }
 
 func extractOverrides(cfgOverrides map[string]config.Override) map[string]Override {
-	overrides := map[string]Override{}
+	overrides := make(map[string]Override, len(cfgOverrides))
 	for key, cfgOverride := range cfgOverrides {
 		overrides[key] = Override{Description: cfgOverride.Description}
 	}
