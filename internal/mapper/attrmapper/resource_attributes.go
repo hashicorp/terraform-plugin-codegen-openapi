@@ -89,7 +89,7 @@ func (attributes ResourceAttributes) ApplyOverride(path []string, override explo
 			if len(path) > 1 {
 				nestedAttribute, ok := attribute.(ResourceNestedAttribute)
 				if !ok {
-					// TODO: throw error! there is a nested override for an attribute that is not a nested type
+					// TODO: error? there is a nested override for an attribute that is not a nested type
 					break
 				}
 

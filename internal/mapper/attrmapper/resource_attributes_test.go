@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -191,6 +192,174 @@ func TestResourceAttributes_Merge(t *testing.T) {
 			t.Parallel()
 
 			got, _ := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
+
+			if diff := cmp.Diff(got, testCase.expectedAttributes); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestResourceAttributes_ApplyOverrides(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		overrides          map[string]explorer.Override
+		attributes         attrmapper.ResourceAttributes
+		expectedAttributes attrmapper.ResourceAttributes
+	}{
+		// TODO: this may eventually return an error, but for now just returns without modification
+		"no matching overrides": {
+			overrides: map[string]explorer.Override{
+				"": {
+					Description: "new description",
+				},
+				"attribute_that_doesnt_exist": {
+					Description: "new description",
+				},
+				"string_attribute.attribute_that_doesnt_exist": {
+					Description: "new description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("old description"),
+					},
+				},
+			},
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("old description"),
+					},
+				},
+			},
+		},
+		"matching overrides": {
+			overrides: map[string]explorer.Override{
+				"string_attribute": {
+					Description: "new string description",
+				},
+				"float64_attribute": {
+					Description: "new float64 description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("old description"),
+					},
+				},
+				&attrmapper.ResourceFloat64Attribute{
+					Name: "float64_attribute",
+					Float64Attribute: resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("old description"),
+					},
+				},
+			},
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("new string description"),
+					},
+				},
+				&attrmapper.ResourceFloat64Attribute{
+					Name: "float64_attribute",
+					Float64Attribute: resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("new float64 description"),
+					},
+				},
+			},
+		},
+		"matching nested overrides": {
+			overrides: map[string]explorer.Override{
+				"single_nested": {
+					Description: "new description",
+				},
+				"single_nested.list_nested": {
+					Description: "new description",
+				},
+				"single_nested.list_nested.string_attribute": {
+					Description: "new description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "single_nested",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "list_nested",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "string_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Optional,
+								Description:              pointer("old description"),
+							},
+						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Optional,
+						Description:              pointer("old description"),
+					},
+				},
+			},
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "single_nested",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "list_nested",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "string_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("new description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Optional,
+								Description:              pointer("new description"),
+							},
+						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Optional,
+						Description:              pointer("new description"),
+					},
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attributes.ApplyOverrides(testCase.overrides)
 
 			if diff := cmp.Diff(got, testCase.expectedAttributes); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)

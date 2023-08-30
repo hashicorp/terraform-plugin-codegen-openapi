@@ -89,7 +89,7 @@ func (attributes DataSourceAttributes) ApplyOverride(path []string, override exp
 			if len(path) > 1 {
 				nestedAttribute, ok := attribute.(DataSourceNestedAttribute)
 				if !ok {
-					// TODO: throw error! there is a nested override for an attribute that is not a nested type
+					// TODO: error? there is a nested override for an attribute that is not a nested type
 					break
 				}
 
