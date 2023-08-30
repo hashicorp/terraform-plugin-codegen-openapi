@@ -67,7 +67,9 @@ resources:
           hey:
             description: Here is a test description for the 'hey' property
           "hey.there":
-            description: Here is a test description for the 'there' property in 'hey'`,
+            description: Here is a test description for the 'there' property in 'hey'
+          "hey.there.nested.thing":
+            description: Deeply nested property 'thing'`,
 		},
 		"valid single data source": {
 			input: `
@@ -111,7 +113,9 @@ data_sources:
           hey:
             description: Here is a test description for the 'hey' property
           "hey.there":
-            description: Here is a test description for the 'there' property in 'hey'`,
+            description: Here is a test description for the 'there' property in 'hey'
+          "hey.there.nested.thing":
+            description: Deeply nested property 'thing'`,
 		},
 		"valid combo of resources and data sources": {
 			input: `
