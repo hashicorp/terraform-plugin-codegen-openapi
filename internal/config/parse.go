@@ -18,7 +18,7 @@ import (
 //   - category.tags.name = MATCH
 //   - category. = NO MATCH
 //   - .category = NO MATCH
-var attributeLocationRegex = regexp.MustCompile(`^[\w][\w]*(?:\.[\w-]+)*$`)
+var attributeLocationRegex = regexp.MustCompile(`^[\w]+(?:\.[\w]+)*$`)
 
 // Config is tagged with `yaml` struct tags, however YAML is a superset of JSON, so it can also be parsed from JSON
 type Config struct {
