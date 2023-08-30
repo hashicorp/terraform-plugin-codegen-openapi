@@ -4,6 +4,7 @@
 package attrmapper
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -33,6 +34,19 @@ func (a *ResourceMapNestedAttribute) Merge(mergeAttribute ResourceAttribute) (Re
 	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
 
 	return a, nil
+}
+
+func (a *ResourceMapNestedAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
+	a.Description = &override.Description
+
+	return a, nil
+}
+
+func (a *ResourceMapNestedAttribute) ApplyNestedOverride(path []string, override explorer.Override) (ResourceAttribute, error) {
+	var err error
+	a.NestedObject.Attributes, err = a.NestedObject.Attributes.ApplyOverride(path, override)
+
+	return a, err
 }
 
 func (a *ResourceMapNestedAttribute) ToSpec() resource.Attribute {
@@ -70,6 +84,19 @@ func (a *DataSourceMapNestedAttribute) Merge(mergeAttribute DataSourceAttribute)
 	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(mapNestedAttribute.NestedObject.Attributes)
 
 	return a, nil
+}
+
+func (a *DataSourceMapNestedAttribute) ApplyOverride(override explorer.Override) (DataSourceAttribute, error) {
+	a.Description = &override.Description
+
+	return a, nil
+}
+
+func (a *DataSourceMapNestedAttribute) ApplyNestedOverride(path []string, override explorer.Override) (DataSourceAttribute, error) {
+	var err error
+	a.NestedObject.Attributes, err = a.NestedObject.Attributes.ApplyOverride(path, override)
+
+	return a, err
 }
 
 func (a *DataSourceMapNestedAttribute) ToSpec() datasource.Attribute {

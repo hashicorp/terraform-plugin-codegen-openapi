@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -479,6 +480,54 @@ func TestResourceListAttribute_Merge(t *testing.T) {
 	}
 }
 
+func TestResourceListAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.ResourceListAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.ResourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.ResourceListAttribute{
+				Name: "test_attribute",
+				ListAttribute: resource.ListAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+					ElementType: schema.ElementType{
+						String: &schema.StringType{},
+					},
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.ResourceListAttribute{
+				Name: "test_attribute",
+				ListAttribute: resource.ListAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+					ElementType: schema.ElementType{
+						String: &schema.StringType{},
+					},
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
 func TestDataSourceListAttribute_Merge(t *testing.T) {
 	t.Parallel()
 
@@ -937,6 +986,54 @@ func TestDataSourceListAttribute_Merge(t *testing.T) {
 			t.Parallel()
 
 			got, _ := testCase.targetAttribute.Merge(testCase.mergeAttribute)
+
+			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
+				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
+			}
+		})
+	}
+}
+
+func TestDataSourceListAttribute_ApplyOverride(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		attribute         attrmapper.DataSourceListAttribute
+		override          explorer.Override
+		expectedAttribute attrmapper.DataSourceAttribute
+	}{
+		"override description": {
+			attribute: attrmapper.DataSourceListAttribute{
+				Name: "test_attribute",
+				ListAttribute: datasource.ListAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("old description"),
+					ElementType: schema.ElementType{
+						String: &schema.StringType{},
+					},
+				},
+			},
+			override: explorer.Override{
+				Description: "new description",
+			},
+			expectedAttribute: &attrmapper.DataSourceListAttribute{
+				Name: "test_attribute",
+				ListAttribute: datasource.ListAttribute{
+					ComputedOptionalRequired: schema.Required,
+					Description:              pointer("new description"),
+					ElementType: schema.ElementType{
+						String: &schema.StringType{},
+					},
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, _ := testCase.attribute.ApplyOverride(testCase.override)
 
 			if diff := cmp.Diff(got, testCase.expectedAttribute); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)

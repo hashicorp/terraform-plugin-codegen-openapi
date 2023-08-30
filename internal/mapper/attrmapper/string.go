@@ -4,6 +4,7 @@
 package attrmapper
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -25,6 +26,12 @@ func (a *ResourceStringAttribute) Merge(mergeAttribute ResourceAttribute) (Resou
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = stringAttribute.Description
 	}
+
+	return a, nil
+}
+
+func (a *ResourceStringAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
+	a.Description = &override.Description
 
 	return a, nil
 }
@@ -52,6 +59,12 @@ func (a *DataSourceStringAttribute) Merge(mergeAttribute DataSourceAttribute) (D
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = stringAttribute.Description
 	}
+
+	return a, nil
+}
+
+func (a *DataSourceStringAttribute) ApplyOverride(override explorer.Override) (DataSourceAttribute, error) {
+	a.Description = &override.Description
 
 	return a, nil
 }

@@ -17,6 +17,13 @@ resources:
       method: DELETE
     schema:
       attributes:
+        overrides:
+          name:
+            description: The pet's full name
+          category:
+            description: Category containing classification info about the pet 
+          "category.name":
+            description: The category name, possible values - 'dog', 'cat', 'bird', or 'other'
         aliases:
           petId: id
 
@@ -32,6 +39,11 @@ resources:
       method: DELETE
     schema:
       attributes:
+        overrides:
+          status:
+            description: Order status, possible values - 'placed', 'approved', or 'delivered'
+          shipDate:
+            description: A field representing the date and time an order will be shipped by
         aliases:
           orderId: id
 
@@ -50,6 +62,13 @@ data_sources:
       method: GET
     schema:
       attributes:
+        overrides:
+          name:
+            description: The pet's full name
+          category:
+            description: Category containing classification info about the pet 
+          "category.name":
+            description: The category name, possible values - 'dog', 'cat', 'bird', or 'other'
         aliases:
           petId: id
 
@@ -64,5 +83,10 @@ data_sources:
       method: GET
     schema:
       attributes:
+        overrides:
+          status:
+            description: Order status, possible values - 'placed', 'approved', or 'delivered'
+          shipDate:
+            description: A field representing the date and time an order will be shipped by
         aliases:
           orderId: id

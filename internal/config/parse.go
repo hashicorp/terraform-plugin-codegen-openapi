@@ -6,10 +6,19 @@ package config
 import (
 	"errors"
 	"fmt"
+	"regexp"
 
 	"github.com/pb33f/libopenapi/index"
 	"gopkg.in/yaml.v3"
 )
+
+// This regex matches attribute locations, dot-separated, as represented as {attribute_name}.{nested_attribute_name}
+//   - category = MATCH
+//   - category.id = MATCH
+//   - category.tags.name = MATCH
+//   - category. = NO MATCH
+//   - .category = NO MATCH
+var attributeLocationRegex = regexp.MustCompile(`^[\w]+(?:\.[\w]+)*$`)
 
 // Config is tagged with `yaml` struct tags, however YAML is a superset of JSON, so it can also be parsed from JSON
 type Config struct {
@@ -44,7 +53,12 @@ type SchemaOptions struct {
 	AttributeOptions AttributeOptions `yaml:"attributes"`
 }
 type AttributeOptions struct {
-	Aliases map[string]string `yaml:"aliases"`
+	Aliases   map[string]string   `yaml:"aliases"`
+	Overrides map[string]Override `yaml:"overrides"`
+}
+
+type Override struct {
+	Description string `yaml:"description"`
 }
 
 // ParseConfig takes in a byte array (of YAML), unmarshal into a Config struct, and validates the result
@@ -138,6 +152,11 @@ func (r Resource) Validate() error {
 		result = errors.Join(result, fmt.Errorf("invalid delete: %w", err))
 	}
 
+	err = r.SchemaOptions.Validate()
+	if err != nil {
+		result = errors.Join(result, fmt.Errorf("invalid schema: %w", err))
+	}
+
 	return result
 }
 
@@ -151,6 +170,11 @@ func (d DataSource) Validate() error {
 	err := d.Read.Validate()
 	if err != nil {
 		result = errors.Join(result, fmt.Errorf("invalid read: %w", err))
+	}
+
+	err = d.SchemaOptions.Validate()
+	if err != nil {
+		result = errors.Join(result, fmt.Errorf("invalid schema: %w", err))
 	}
 
 	return result
@@ -168,6 +192,29 @@ func (o *OpenApiSpecLocation) Validate() error {
 
 	if o.Method == "" {
 		result = errors.Join(result, errors.New("'method' property is required"))
+	}
+
+	return result
+}
+
+func (s *SchemaOptions) Validate() error {
+	var result error
+
+	err := s.AttributeOptions.Validate()
+	if err != nil {
+		result = errors.Join(result, fmt.Errorf("invalid attributes: %w", err))
+	}
+
+	return result
+}
+
+func (s *AttributeOptions) Validate() error {
+	var result error
+
+	for path := range s.Overrides {
+		if !attributeLocationRegex.MatchString(path) {
+			result = errors.Join(result, fmt.Errorf("invalid key for override: %q - must be dot-separated string", path))
+		}
 	}
 
 	return result

@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
-	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -200,174 +200,155 @@ func TestResourceAttributes_Merge(t *testing.T) {
 	}
 }
 
-func TestDataSourceAttributes_Merge(t *testing.T) {
+func TestResourceAttributes_ApplyOverrides(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		targetAttributes     attrmapper.DataSourceAttributes
-		mergeAttributeSlices []attrmapper.DataSourceAttributes
-		expectedAttributes   attrmapper.DataSourceAttributes
+		overrides          map[string]explorer.Override
+		attributes         attrmapper.ResourceAttributes
+		expectedAttributes attrmapper.ResourceAttributes
 	}{
-		"matches and appends": {
-			targetAttributes: attrmapper.DataSourceAttributes{
-				&attrmapper.DataSourceStringAttribute{
+		// TODO: this may eventually return an error, but for now just returns without modification
+		"no matching overrides": {
+			overrides: map[string]explorer.Override{
+				"": {
+					Description: "new description",
+				},
+				"attribute_that_doesnt_exist": {
+					Description: "new description",
+				},
+				"string_attribute.attribute_that_doesnt_exist": {
+					Description: "new description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_attribute",
-					StringAttribute: datasource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("string description"),
-						Sensitive:                pointer(true),
+						Description:              pointer("old description"),
 					},
 				},
 			},
-			mergeAttributeSlices: []attrmapper.DataSourceAttributes{
-				{
-					&attrmapper.DataSourceStringAttribute{
-						Name: "string_attribute",
-						StringAttribute: datasource.StringAttribute{
-							ComputedOptionalRequired: schema.Computed,
-							Description:              pointer("this will be ignored"),
-							Sensitive:                pointer(false),
-						},
-					},
-					&attrmapper.DataSourceBoolAttribute{
-						Name: "bool_attribute",
-						BoolAttribute: datasource.BoolAttribute{
-							ComputedOptionalRequired: schema.Required,
-							Description:              pointer("bool description"),
-						},
-					},
-				},
-				{
-					&attrmapper.DataSourceFloat64Attribute{
-						Name: "float64_attribute",
-						Float64Attribute: datasource.Float64Attribute{
-							ComputedOptionalRequired: schema.Required,
-							Description:              pointer("float64 description"),
-						},
-					},
-				},
-			},
-			expectedAttributes: attrmapper.DataSourceAttributes{
-				&attrmapper.DataSourceStringAttribute{
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
 					Name: "string_attribute",
-					StringAttribute: datasource.StringAttribute{
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("string description"),
-						Sensitive:                pointer(true),
-					},
-				},
-				&attrmapper.DataSourceBoolAttribute{
-					Name: "bool_attribute",
-					BoolAttribute: datasource.BoolAttribute{
-						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("bool description"),
-					},
-				},
-				&attrmapper.DataSourceFloat64Attribute{
-					Name: "float64_attribute",
-					Float64Attribute: datasource.Float64Attribute{
-						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("float64 description"),
+						Description:              pointer("old description"),
 					},
 				},
 			},
 		},
-		"recursive - matches and appends": {
-			targetAttributes: attrmapper.DataSourceAttributes{
-				&attrmapper.DataSourceSingleNestedAttribute{
-					Name: "single_nested_attribute",
-					Attributes: attrmapper.DataSourceAttributes{
-						&attrmapper.DataSourceStringAttribute{
-							Name: "string_attribute",
-							StringAttribute: datasource.StringAttribute{
-								ComputedOptionalRequired: schema.Required,
-								Description:              pointer("string description"),
-								Sensitive:                pointer(true),
-							},
-						},
-					},
-					SingleNestedAttribute: datasource.SingleNestedAttribute{
+		"matching overrides": {
+			overrides: map[string]explorer.Override{
+				"string_attribute": {
+					Description: "new string description",
+				},
+				"float64_attribute": {
+					Description: "new float64 description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("single nested description"),
+						Description:              pointer("old description"),
+					},
+				},
+				&attrmapper.ResourceFloat64Attribute{
+					Name: "float64_attribute",
+					Float64Attribute: resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("old description"),
 					},
 				},
 			},
-			mergeAttributeSlices: []attrmapper.DataSourceAttributes{
-				{
-					&attrmapper.DataSourceSingleNestedAttribute{
-						Name: "single_nested_attribute",
-						Attributes: attrmapper.DataSourceAttributes{
-							&attrmapper.DataSourceStringAttribute{
-								Name: "string_attribute",
-								StringAttribute: datasource.StringAttribute{
-									ComputedOptionalRequired: schema.Computed,
-									Description:              pointer("this will be ignored"),
-									Sensitive:                pointer(false),
-								},
-							},
-							&attrmapper.DataSourceBoolAttribute{
-								Name: "bool_attribute",
-								BoolAttribute: datasource.BoolAttribute{
-									ComputedOptionalRequired: schema.Required,
-									Description:              pointer("bool description"),
-								},
-							},
-						},
-						SingleNestedAttribute: datasource.SingleNestedAttribute{
-							ComputedOptionalRequired: schema.Required,
-							Description:              pointer("single nested description"),
-						},
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_attribute",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("new string description"),
 					},
 				},
-				{
-					&attrmapper.DataSourceSingleNestedAttribute{
-						Name: "single_nested_attribute",
-						Attributes: attrmapper.DataSourceAttributes{
-							&attrmapper.DataSourceFloat64Attribute{
-								Name: "float64_attribute",
-								Float64Attribute: datasource.Float64Attribute{
-									ComputedOptionalRequired: schema.Required,
-									Description:              pointer("float64 description"),
-								},
-							},
-						},
-						SingleNestedAttribute: datasource.SingleNestedAttribute{
-							ComputedOptionalRequired: schema.Required,
-							Description:              pointer("single nested description"),
-						},
+				&attrmapper.ResourceFloat64Attribute{
+					Name: "float64_attribute",
+					Float64Attribute: resource.Float64Attribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("new float64 description"),
 					},
 				},
 			},
-			expectedAttributes: attrmapper.DataSourceAttributes{
-				&attrmapper.DataSourceSingleNestedAttribute{
-					Name: "single_nested_attribute",
-					Attributes: attrmapper.DataSourceAttributes{
-						&attrmapper.DataSourceStringAttribute{
-							Name: "string_attribute",
-							StringAttribute: datasource.StringAttribute{
-								ComputedOptionalRequired: schema.Required,
-								Description:              pointer("string description"),
-								Sensitive:                pointer(true),
+		},
+		"matching nested overrides": {
+			overrides: map[string]explorer.Override{
+				"single_nested": {
+					Description: "new description",
+				},
+				"single_nested.list_nested": {
+					Description: "new description",
+				},
+				"single_nested.list_nested.string_attribute": {
+					Description: "new description",
+				},
+			},
+			attributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "single_nested",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "list_nested",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "string_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("old description"),
+										},
+									},
+								},
 							},
-						},
-						&attrmapper.DataSourceBoolAttribute{
-							Name: "bool_attribute",
-							BoolAttribute: datasource.BoolAttribute{
-								ComputedOptionalRequired: schema.Required,
-								Description:              pointer("bool description"),
-							},
-						},
-						&attrmapper.DataSourceFloat64Attribute{
-							Name: "float64_attribute",
-							Float64Attribute: datasource.Float64Attribute{
-								ComputedOptionalRequired: schema.Required,
-								Description:              pointer("float64 description"),
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Optional,
+								Description:              pointer("old description"),
 							},
 						},
 					},
-					SingleNestedAttribute: datasource.SingleNestedAttribute{
-						ComputedOptionalRequired: schema.Required,
-						Description:              pointer("single nested description"),
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Optional,
+						Description:              pointer("old description"),
+					},
+				},
+			},
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "single_nested",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceListNestedAttribute{
+							Name: "list_nested",
+							NestedObject: attrmapper.ResourceNestedAttributeObject{
+								attrmapper.ResourceAttributes{
+									&attrmapper.ResourceStringAttribute{
+										Name: "string_attribute",
+										StringAttribute: resource.StringAttribute{
+											ComputedOptionalRequired: schema.Required,
+											Description:              pointer("new description"),
+										},
+									},
+								},
+							},
+							ListNestedAttribute: resource.ListNestedAttribute{
+								ComputedOptionalRequired: schema.Optional,
+								Description:              pointer("new description"),
+							},
+						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Optional,
+						Description:              pointer("new description"),
 					},
 				},
 			},
@@ -378,15 +359,11 @@ func TestDataSourceAttributes_Merge(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			got, _ := testCase.targetAttributes.Merge(testCase.mergeAttributeSlices...)
+			got, _ := testCase.attributes.ApplyOverrides(testCase.overrides)
 
 			if diff := cmp.Diff(got, testCase.expectedAttributes); diff != "" {
 				t.Errorf("Unexpected diagnostics (-got, +expected): %s", diff)
 			}
 		})
 	}
-}
-
-func pointer[T any](value T) *T {
-	return &value
 }
