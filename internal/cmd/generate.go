@@ -49,7 +49,7 @@ func (cmd *GenerateCommand) Help() string {
 		}
 	})
 
-	strBuilder.WriteString("\nUsage: tfopenapigen generate [<args>] </path/to/oas_file.yml>\n\n")
+	strBuilder.WriteString("\nUsage: tfplugingen-openapi generate [<args>] </path/to/oas_file.yml>\n\n")
 	cmd.Flags().VisitAll(func(f *flag.Flag) {
 		if f.DefValue != "" {
 			strBuilder.WriteString(fmt.Sprintf("    --%s <ARG> %s%s%s  (default: %q)\n",
