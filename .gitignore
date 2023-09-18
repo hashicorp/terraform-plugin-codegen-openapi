@@ -5,8 +5,6 @@
 *.so
 *.dylib
 
-./tfplugingen-openapi
-
 # Test binary, built with `go test -c`
 *.test
 
