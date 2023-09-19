@@ -14,8 +14,7 @@ import (
 )
 
 func main() {
-	// TODO: Temporary name for CLI :)
-	name := "terraform-plugin-codegen-openapi"
+	name := "tfplugingen-openapi"
 	version := name + " Version " + version
 	if commit != "" {
 		version += " from commit " + commit
