@@ -138,14 +138,14 @@ For resources, all fields in the `create` operation `requestBody` OAS schema mar
 
 If not required, then the field will be mapped as `computed_optional`.
 
-If the field is only present in a schema other then the `create` operation `requestBody`, then the field will be mapped as `computed`.
+If the field is only present in a schema other than the `create` operation `requestBody`, then the field will be mapped as `computed`.
 
 #### Data Sources - Required, Computed or Optional
 For data sources, all fields in the `read` operation `parameters` OAS schema marked as [required](https://json-schema.org/understanding-json-schema/reference/object.html#required-properties) will be mapped as `required`.
 
 If not required, then the field will be mapped as `computed_optional`.
 
-If the field is only present in a schema other then the `read` operation `parameters`, then the field will be mapped as `computed`.
+If the field is only present in a schema other than the `read` operation `parameters`, then the field will be mapped as `computed`.
 
 #### Other OAS field mappings
 
