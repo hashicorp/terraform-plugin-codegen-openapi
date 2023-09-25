@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -53,7 +54,7 @@ func (a *ResourceSingleNestedAttribute) ToSpec() resource.Attribute {
 	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
 
 	return resource.Attribute{
-		Name:         a.Name,
+		Name:         util.TerraformIdentifier(a.Name),
 		SingleNested: &a.SingleNestedAttribute,
 	}
 }
@@ -101,7 +102,7 @@ func (a *DataSourceSingleNestedAttribute) ToSpec() datasource.Attribute {
 	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
 
 	return datasource.Attribute{
-		Name:         a.Name,
+		Name:         util.TerraformIdentifier(a.Name),
 		SingleNested: &a.SingleNestedAttribute,
 	}
 }
@@ -117,7 +118,7 @@ func (a *ProviderSingleNestedAttribute) ToSpec() provider.Attribute {
 	a.SingleNestedAttribute.Attributes = a.Attributes.ToSpec()
 
 	return provider.Attribute{
-		Name:         a.Name,
+		Name:         util.TerraformIdentifier(a.Name),
 		SingleNested: &a.SingleNestedAttribute,
 	}
 }

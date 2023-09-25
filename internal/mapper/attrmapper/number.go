@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -38,7 +39,7 @@ func (a *ResourceNumberAttribute) ApplyOverride(override explorer.Override) (Res
 
 func (a *ResourceNumberAttribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
-		Name:   a.Name,
+		Name:   util.TerraformIdentifier(a.Name),
 		Number: &a.NumberAttribute,
 	}
 }
@@ -71,7 +72,7 @@ func (a *DataSourceNumberAttribute) ApplyOverride(override explorer.Override) (D
 
 func (a *DataSourceNumberAttribute) ToSpec() datasource.Attribute {
 	return datasource.Attribute{
-		Name:   a.Name,
+		Name:   util.TerraformIdentifier(a.Name),
 		Number: &a.NumberAttribute,
 	}
 }
@@ -84,7 +85,7 @@ type ProviderNumberAttribute struct {
 
 func (a *ProviderNumberAttribute) ToSpec() provider.Attribute {
 	return provider.Attribute{
-		Name:   a.Name,
+		Name:   util.TerraformIdentifier(a.Name),
 		Number: &a.NumberAttribute,
 	}
 }

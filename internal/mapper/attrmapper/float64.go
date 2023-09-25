@@ -5,6 +5,7 @@ package attrmapper
 
 import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -38,7 +39,7 @@ func (a *ResourceFloat64Attribute) ApplyOverride(override explorer.Override) (Re
 
 func (a *ResourceFloat64Attribute) ToSpec() resource.Attribute {
 	return resource.Attribute{
-		Name:    a.Name,
+		Name:    util.TerraformIdentifier(a.Name),
 		Float64: &a.Float64Attribute,
 	}
 }
@@ -71,7 +72,7 @@ func (a *DataSourceFloat64Attribute) ApplyOverride(override explorer.Override) (
 
 func (a *DataSourceFloat64Attribute) ToSpec() datasource.Attribute {
 	return datasource.Attribute{
-		Name:    a.Name,
+		Name:    util.TerraformIdentifier(a.Name),
 		Float64: &a.Float64Attribute,
 	}
 }
@@ -84,7 +85,7 @@ type ProviderFloat64Attribute struct {
 
 func (a *ProviderFloat64Attribute) ToSpec() provider.Attribute {
 	return provider.Attribute{
-		Name:    a.Name,
+		Name:    util.TerraformIdentifier(a.Name),
 		Float64: &a.Float64Attribute,
 	}
 }
