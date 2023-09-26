@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/google/go-cmp v0.5.9
-	github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230804072831-c6dffebf6781
+	github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230918063517-a960457429d5
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mitchellh/cli v1.1.5
 	github.com/pb33f/libopenapi v0.11.0

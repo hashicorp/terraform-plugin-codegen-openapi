@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -102,7 +103,7 @@ func (cmd *GenerateCommand) Run(args []string) int {
 }
 
 func (cmd *GenerateCommand) runInternal() error {
-	// TODO: should we use STDOUT?
+	// TODO: should we use STDERR? Or avoid the STDOUT option
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	// 1. Read and parse generator config file
@@ -128,7 +129,7 @@ func (cmd *GenerateCommand) runInternal() error {
 	// 3. Build out the OpenAPI model, this will recursively load all local + remote references into one cohesive model
 	model, errs := doc.BuildV3Model()
 
-	// 4. Log circular reference errors and fail on any other model building errors
+	// 4. Log circular references as warnings and fail on any other model building errors
 	var errResult error
 	for _, err := range errs {
 		if rslvErr, ok := err.(*resolver.ResolvingError); ok {
@@ -157,7 +158,15 @@ func (cmd *GenerateCommand) runInternal() error {
 		return fmt.Errorf("error marshalling provider code spec to JSON: %w", err)
 	}
 
-	// 7. Output to STDOUT or file
+	// 7. Log a warning if the provider code spec is not valid based on the JSON schema
+	err = spec.Validate(context.Background(), bytes)
+	if err != nil {
+		logger.Warn(
+			"generated provider code spec failed validation",
+			"validation_msg", err)
+	}
+
+	// 8. Output to STDOUT or file
 	if cmd.flagOutputPath == "" {
 		cmd.UI.Output(string(bytes))
 		return nil
