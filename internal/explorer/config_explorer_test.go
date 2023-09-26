@@ -22,9 +22,10 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems map[string]*high.PathItem
-		config    config.Config
-		want      map[string]explorer.Resource
+		pathItems   map[string]*high.PathItem
+		config      config.Config
+		want        map[string]explorer.Resource
+		expectedErr error
 	}{
 		"valid CRUD ops": {
 			config: config.Config{
@@ -170,68 +171,82 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 				},
 			},
 		},
-		"non-existent paths and methods are ignored ": {
+		"non-existent create path throws error": {
 			config: config.Config{
 				Resources: map[string]config.Resource{
 					"test_resource": {
 						Create: &config.OpenApiSpecLocation{
-							Path:   "/resources",
+							Path:   "/fakepath",
 							Method: "POST",
 						},
+					},
+				},
+			},
+			pathItems:   map[string]*high.PathItem{},
+			expectedErr: errors.New(`failed to extract 'test_resource.create': path '/fakepath' not found in OpenAPI spec`),
+		},
+		"non-existent read path throws error": {
+			config: config.Config{
+				Resources: map[string]config.Resource{
+					"test_resource": {
 						Read: &config.OpenApiSpecLocation{
-							Path:   "/resources/{resource_id}",
+							Path:   "/fakepath",
 							Method: "GET",
 						},
+					},
+				},
+			},
+			pathItems:   map[string]*high.PathItem{},
+			expectedErr: errors.New(`failed to extract 'test_resource.read': path '/fakepath' not found in OpenAPI spec`),
+		},
+		"non-existent update path throws error": {
+			config: config.Config{
+				Resources: map[string]config.Resource{
+					"test_resource": {
 						Update: &config.OpenApiSpecLocation{
 							Path:   "/fakepath",
 							Method: "PUT",
 						},
+					},
+				},
+			},
+			pathItems:   map[string]*high.PathItem{},
+			expectedErr: errors.New(`failed to extract 'test_resource.update': path '/fakepath' not found in OpenAPI spec`),
+		},
+		"non-existent delete path throws error": {
+			config: config.Config{
+				Resources: map[string]config.Resource{
+					"test_resource": {
 						Delete: &config.OpenApiSpecLocation{
+							Path:   "/fakepath",
+							Method: "DELETE",
+						},
+					},
+				},
+			},
+			pathItems:   map[string]*high.PathItem{},
+			expectedErr: errors.New(`failed to extract 'test_resource.delete': path '/fakepath' not found in OpenAPI spec`),
+		},
+		"non-existent method throws error": {
+			config: config.Config{
+				Resources: map[string]config.Resource{
+					"test_resource": {
+						Update: &config.OpenApiSpecLocation{
 							Path:   "/resources/{resource_id}",
-							Method: "FAKEMETHOD",
+							Method: "FAKE",
 						},
 					},
 				},
 			},
 			pathItems: map[string]*high.PathItem{
-				"/resources": {
-					Post: &high.Operation{
-						Description: "create op here",
-						OperationId: "create_resource",
-					},
-				},
 				"/resources/{resource_id}": {
-					Get: &high.Operation{
-						Description: "read op here",
-						OperationId: "read_resource",
-					},
 					Put: &high.Operation{
 						Description: "update op here",
 						OperationId: "update_resource",
 					},
-					Delete: &high.Operation{
-						Description: "delete op here",
-						OperationId: "delete_resource",
-					},
 				},
 			},
-			want: map[string]explorer.Resource{
-				"test_resource": {
-					CreateOp: &high.Operation{
-						Description: "create op here",
-						OperationId: "create_resource",
-					},
-					ReadOp: &high.Operation{
-						Description: "read op here",
-						OperationId: "read_resource",
-					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
-						},
-					},
-				},
-			},
+			expectedErr: errors.New(`failed to extract 'test_resource.update': method 'FAKE' not found at OpenAPI path '/resources/{resource_id}'`),
 		},
 		"schema options pass-through": {
 			config: config.Config{
@@ -310,11 +325,19 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 			explorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
 			got, err := explorer.FindResources()
 
-			if err != nil {
-				t.Fatalf("was not expecting error, got: %s", err)
+			if testCase.expectedErr != nil {
+				if err == nil {
+					t.Fatal("expected an error, but got none")
+				}
+
+				if testCase.expectedErr.Error() != err.Error() {
+					t.Fatalf("expected err: %s, got: %s", testCase.expectedErr, err)
+				}
+
+				return
 			}
 
-			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); diff != "" {
+			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); testCase.expectedErr == nil && diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
@@ -325,9 +348,10 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems map[string]*high.PathItem
-		config    config.Config
-		want      map[string]explorer.DataSource
+		pathItems   map[string]*high.PathItem
+		config      config.Config
+		want        map[string]explorer.DataSource
+		expectedErr error
 	}{
 		"valid read op": {
 			config: config.Config{
@@ -395,13 +419,27 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 				},
 			},
 		},
-		"non-existent paths and methods are ignored ": {
+		"non-existent read path throws error": {
+			config: config.Config{
+				DataSources: map[string]config.DataSource{
+					"test_resource": {
+						Read: &config.OpenApiSpecLocation{
+							Path:   "/fakepath",
+							Method: "GET",
+						},
+					},
+				},
+			},
+			pathItems:   map[string]*high.PathItem{},
+			expectedErr: errors.New(`failed to extract 'test_resource.read': path '/fakepath' not found in OpenAPI spec`),
+		},
+		"non-existent method throws error": {
 			config: config.Config{
 				DataSources: map[string]config.DataSource{
 					"test_resource": {
 						Read: &config.OpenApiSpecLocation{
 							Path:   "/resources/{resource_id}",
-							Method: "GET",
+							Method: "FAKE",
 						},
 					},
 				},
@@ -414,19 +452,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			want: map[string]explorer.DataSource{
-				"test_resource": {
-					ReadOp: &high.Operation{
-						Description: "read op here",
-						OperationId: "read_resource",
-					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
-						},
-					},
-				},
-			},
+			expectedErr: errors.New(`failed to extract 'test_resource.read': method 'FAKE' not found at OpenAPI path '/resources/{resource_id}'`),
 		},
 		"schema options pass-through": {
 			config: config.Config{
@@ -491,11 +517,19 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 			explorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
 			got, err := explorer.FindDataSources()
 
-			if err != nil {
-				t.Fatalf("was not expecting error, got: %s", err)
+			if testCase.expectedErr != nil {
+				if err == nil {
+					t.Fatal("expected an error, but got none")
+				}
+
+				if testCase.expectedErr.Error() != err.Error() {
+					t.Fatalf("expected err: %s, got: %s", testCase.expectedErr, err)
+				}
+
+				return
 			}
 
-			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); diff != "" {
+			if diff := cmp.Diff(got, testCase.want, cmpopts.IgnoreUnexported(high.Operation{})); testCase.expectedErr == nil && diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
