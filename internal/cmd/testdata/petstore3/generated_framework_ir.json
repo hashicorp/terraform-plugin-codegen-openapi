@@ -18,7 +18,7 @@
 						}
 					},
 					{
-						"name": "petId",
+						"name": "pet_id",
 						"int64": {
 							"computed_optional_required": "computed"
 						}
@@ -30,7 +30,7 @@
 						}
 					},
 					{
-						"name": "shipDate",
+						"name": "ship_date",
 						"string": {
 							"computed_optional_required": "computed",
 							"description": "A field representing the date and time an order will be shipped by"
@@ -87,7 +87,7 @@
 						}
 					},
 					{
-						"name": "photoUrls",
+						"name": "photo_urls",
 						"list": {
 							"computed_optional_required": "computed",
 							"element_type": {
@@ -176,7 +176,7 @@
 						}
 					},
 					{
-						"name": "petId",
+						"name": "pet_id",
 						"int64": {
 							"computed_optional_required": "computed_optional"
 						}
@@ -188,7 +188,7 @@
 						}
 					},
 					{
-						"name": "shipDate",
+						"name": "ship_date",
 						"string": {
 							"computed_optional_required": "computed_optional",
 							"description": "A field representing the date and time an order will be shipped by"
@@ -257,7 +257,7 @@
 						}
 					},
 					{
-						"name": "photoUrls",
+						"name": "photo_urls",
 						"list": {
 							"computed_optional_required": "required",
 							"element_type": {
@@ -320,7 +320,7 @@
 						}
 					},
 					{
-						"name": "firstName",
+						"name": "first_name",
 						"string": {
 							"computed_optional_required": "computed_optional"
 						}
@@ -332,7 +332,7 @@
 						}
 					},
 					{
-						"name": "lastName",
+						"name": "last_name",
 						"string": {
 							"computed_optional_required": "computed_optional"
 						}
@@ -350,7 +350,7 @@
 						}
 					},
 					{
-						"name": "userStatus",
+						"name": "user_status",
 						"int64": {
 							"computed_optional_required": "computed_optional",
 							"description": "User Status"

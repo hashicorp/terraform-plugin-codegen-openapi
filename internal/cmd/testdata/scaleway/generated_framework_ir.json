@@ -311,7 +311,7 @@
 													"computed_optional_required": "computed",
 													"attributes": [
 														{
-															"name": "\u003cextra_volumeKey\u003e",
+															"name": "extra_volume_key",
 															"single_nested": {
 																"computed_optional_required": "computed",
 																"attributes": [
@@ -871,7 +871,7 @@
 										"computed_optional_required": "computed",
 										"attributes": [
 											{
-												"name": "\u003cvolumeKey\u003e",
+												"name": "volume_key",
 												"single_nested": {
 													"computed_optional_required": "computed",
 													"attributes": [
@@ -1403,7 +1403,7 @@
 														"computed_optional_required": "computed",
 														"attributes": [
 															{
-																"name": "\u003cextra_volumeKey\u003e",
+																"name": "extra_volume_key",
 																"single_nested": {
 																	"computed_optional_required": "computed",
 																	"attributes": [
@@ -1963,7 +1963,7 @@
 											"computed_optional_required": "computed",
 											"attributes": [
 												{
-													"name": "\u003cvolumeKey\u003e",
+													"name": "volume_key",
 													"single_nested": {
 														"computed_optional_required": "computed",
 														"attributes": [
@@ -2129,7 +2129,7 @@
 							"computed_optional_required": "computed_optional",
 							"attributes": [
 								{
-									"name": "\u003cextra_volumeKey\u003e",
+									"name": "extra_volume_key",
 									"single_nested": {
 										"computed_optional_required": "computed_optional",
 										"attributes": [
@@ -2366,7 +2366,7 @@
 										"computed_optional_required": "computed",
 										"attributes": [
 											{
-												"name": "\u003cextra_volumeKey\u003e",
+												"name": "extra_volume_key",
 												"single_nested": {
 													"computed_optional_required": "computed",
 													"attributes": [
