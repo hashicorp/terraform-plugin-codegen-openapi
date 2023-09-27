@@ -6,6 +6,7 @@ package mapper
 import (
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -19,7 +20,7 @@ import (
 var _ DataSourceMapper = dataSourceMapper{}
 
 type DataSourceMapper interface {
-	MapToIR() ([]datasource.DataSource, error)
+	MapToIR(*slog.Logger) ([]datasource.DataSource, error)
 }
 
 type dataSourceMapper struct {
@@ -35,17 +36,18 @@ func NewDataSourceMapper(dataSources map[string]explorer.DataSource, cfg config.
 	}
 }
 
-func (m dataSourceMapper) MapToIR() ([]datasource.DataSource, error) {
+func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource, error) {
 	dataSourceSchemas := []datasource.DataSource{}
 
 	// Guarantee the order of processing
 	dataSourceNames := util.SortedKeys(m.dataSources)
 	for _, name := range dataSourceNames {
 		dataSource := m.dataSources[name]
+		dLogger := logger.With("data_source", name)
 
-		schema, err := generateDataSourceSchema(dataSource)
+		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			log.Printf("[WARN] skipping '%s' data source schema: %s\n", name, err)
+			dLogger.Warn(fmt.Sprintf("skipping data source schema mapping: %s", err))
 			continue
 		}
 
@@ -58,7 +60,7 @@ func (m dataSourceMapper) MapToIR() ([]datasource.DataSource, error) {
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schema, error) {
+func generateDataSourceSchema(_ *slog.Logger, dataSource explorer.DataSource) (*datasource.Schema, error) {
 	dataSourceSchema := &datasource.Schema{
 		Attributes: []datasource.Attribute{},
 	}

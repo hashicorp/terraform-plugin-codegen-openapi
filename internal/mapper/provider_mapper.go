@@ -5,6 +5,7 @@ package mapper
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -15,7 +16,7 @@ import (
 var _ ProviderMapper = providerMapper{}
 
 type ProviderMapper interface {
-	MapToIR() (*provider.Provider, error)
+	MapToIR(*slog.Logger) (*provider.Provider, error)
 }
 
 type providerMapper struct {
@@ -31,7 +32,7 @@ func NewProviderMapper(exploredProvider explorer.Provider, cfg config.Config) Pr
 	}
 }
 
-func (m providerMapper) MapToIR() (*provider.Provider, error) {
+func (m providerMapper) MapToIR(logger *slog.Logger) (*provider.Provider, error) {
 	providerIR := provider.Provider{
 		Name: m.provider.Name,
 	}
@@ -40,7 +41,9 @@ func (m providerMapper) MapToIR() (*provider.Provider, error) {
 		return &providerIR, nil
 	}
 
-	providerSchema, err := generateProviderSchema(m.provider)
+	pLogger := logger.With("provider", providerIR.Name)
+
+	providerSchema, err := generateProviderSchema(pLogger, m.provider)
 	if err != nil {
 		return nil, fmt.Errorf("error mapping provider schema: %w", err)
 	}
@@ -49,7 +52,7 @@ func (m providerMapper) MapToIR() (*provider.Provider, error) {
 	return &providerIR, nil
 }
 
-func generateProviderSchema(exploredProvider explorer.Provider) (*provider.Schema, error) {
+func generateProviderSchema(_ *slog.Logger, exploredProvider explorer.Provider) (*provider.Schema, error) {
 	providerSchema := &provider.Schema{}
 
 	s, err := oas.BuildSchema(exploredProvider.SchemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})

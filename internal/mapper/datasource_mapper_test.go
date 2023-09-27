@@ -4,6 +4,7 @@
 package mapper_test
 
 import (
+	"log/slog"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
@@ -657,7 +658,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					SchemaOptions: testCase.schemaOptions,
 				},
 			}, config.Config{})
-			got, err := mapper.MapToIR()
+			got, err := mapper.MapToIR(slog.Default())
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

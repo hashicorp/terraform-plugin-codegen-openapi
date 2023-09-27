@@ -80,32 +80,31 @@ func (cmd *GenerateCommand) Synopsis() string {
 }
 
 func (cmd *GenerateCommand) Run(args []string) int {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
 	fs := cmd.Flags()
 	err := fs.Parse(args)
 	if err != nil {
-		cmd.UI.Error(fmt.Sprintf("unable to parse flags: %s", err))
+		logger.Error("error parsing flags", "err", err)
 		return 1
 	}
 
 	cmd.oasInputPath = fs.Arg(0)
 	if cmd.oasInputPath == "" {
-		cmd.UI.Error("Error executing command: OpenAPI specification file is required as last argument")
+		logger.Error("error executing command", "err", "OpenAPI specification file is required as last argument")
 		return 1
 	}
 
-	err = cmd.runInternal()
+	err = cmd.runInternal(logger)
 	if err != nil {
-		cmd.UI.Error(fmt.Sprintf("%s\n", err))
+		logger.Error("error executing command", "err", err)
 		return 1
 	}
 
 	return 0
 }
 
-func (cmd *GenerateCommand) runInternal() error {
-	// TODO: should we use STDERR? Or avoid the STDOUT option
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-
+func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	// 1. Read and parse generator config file
 	configBytes, err := os.ReadFile(cmd.flagConfigPath)
 	if err != nil {
@@ -147,7 +146,7 @@ func (cmd *GenerateCommand) runInternal() error {
 
 	// 5. Generate provider code spec w/ config
 	oasExplorer := explorer.NewConfigExplorer(model.Model, *config)
-	providerCodeSpec, err := generateProviderCodeSpec(oasExplorer, *config)
+	providerCodeSpec, err := generateProviderCodeSpec(logger, oasExplorer, *config)
 	if err != nil {
 		return err
 	}
@@ -180,7 +179,7 @@ func (cmd *GenerateCommand) runInternal() error {
 	return nil
 }
 
-func generateProviderCodeSpec(dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
+func generateProviderCodeSpec(logger *slog.Logger, dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
 	// 1. Find TF resources in OAS
 	explorerResources, err := dora.FindResources()
 	if err != nil {
@@ -201,21 +200,21 @@ func generateProviderCodeSpec(dora explorer.Explorer, cfg config.Config) (*spec.
 
 	// 4. Use TF info to generate provider code spec for resources
 	resourceMapper := mapper.NewResourceMapper(explorerResources, cfg)
-	resourcesIR, err := resourceMapper.MapToIR()
+	resourcesIR, err := resourceMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for resources: %w", err)
 	}
 
 	// 5. Use TF info to generate provider code spec for data sources
 	dataSourceMapper := mapper.NewDataSourceMapper(explorerDataSources, cfg)
-	dataSourcesIR, err := dataSourceMapper.MapToIR()
+	dataSourcesIR, err := dataSourceMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for data sources: %w", err)
 	}
 
 	// 6. Use TF info to generate provider code spec for provider
 	providerMapper := mapper.NewProviderMapper(explorerProvider, cfg)
-	providerIR, err := providerMapper.MapToIR()
+	providerIR, err := providerMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for provider: %w", err)
 	}

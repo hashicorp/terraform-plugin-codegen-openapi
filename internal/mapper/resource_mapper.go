@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -20,7 +21,7 @@ import (
 var _ ResourceMapper = resourceMapper{}
 
 type ResourceMapper interface {
-	MapToIR() ([]resource.Resource, error)
+	MapToIR(*slog.Logger) ([]resource.Resource, error)
 }
 
 type resourceMapper struct {
@@ -36,17 +37,18 @@ func NewResourceMapper(resources map[string]explorer.Resource, cfg config.Config
 	}
 }
 
-func (m resourceMapper) MapToIR() ([]resource.Resource, error) {
+func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error) {
 	resourceSchemas := []resource.Resource{}
 
 	// Guarantee the order of processing
 	resourceNames := util.SortedKeys(m.resources)
 	for _, name := range resourceNames {
 		explorerResource := m.resources[name]
+		rLogger := logger.With("resource", name)
 
-		schema, err := generateResourceSchema(explorerResource)
+		schema, err := generateResourceSchema(rLogger, explorerResource)
 		if err != nil {
-			log.Printf("[WARN] skipping '%s' resource schema: %s\n", name, err)
+			rLogger.Warn(fmt.Sprintf("skipping resource schema mapping: %s", err))
 			continue
 		}
 
@@ -59,7 +61,7 @@ func (m resourceMapper) MapToIR() ([]resource.Resource, error) {
 	return resourceSchemas, nil
 }
 
-func generateResourceSchema(explorerResource explorer.Resource) (*resource.Schema, error) {
+func generateResourceSchema(_ *slog.Logger, explorerResource explorer.Resource) (*resource.Schema, error) {
 	resourceSchema := &resource.Schema{
 		Attributes: []resource.Attribute{},
 	}
