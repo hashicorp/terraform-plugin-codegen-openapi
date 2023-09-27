@@ -17,23 +17,23 @@ generate:
 # Regenerate testdata folder
 testdata:
 	go run ./cmd/tfplugingen-openapi generate \
-		--config ./internal/cmd/testdata/petstore3/tfopenapigen_config.yml \
-		./internal/cmd/testdata/petstore3/openapi_spec.json \
-		> ./internal/cmd/testdata/petstore3/generated_framework_ir.json
+		--config ./internal/cmd/testdata/petstore3/generator_config.yml \
+		--output ./internal/cmd/testdata/petstore3/provider_code_spec.json \
+		./internal/cmd/testdata/petstore3/openapi_spec.json
 
 	go run ./cmd/tfplugingen-openapi generate \
-		--config ./internal/cmd/testdata/github/tfopenapigen_config.yml \
-		./internal/cmd/testdata/github/openapi_spec.json \
-		> ./internal/cmd/testdata/github/generated_framework_ir.json
+		--config ./internal/cmd/testdata/github/generator_config.yml \
+		--output ./internal/cmd/testdata/github/provider_code_spec.json \
+		./internal/cmd/testdata/github/openapi_spec.json
 
 	go run ./cmd/tfplugingen-openapi generate \
-		--config ./internal/cmd/testdata/scaleway/tfopenapigen_config.yml \
-		./internal/cmd/testdata/scaleway/openapi_spec.yml \
-		> ./internal/cmd/testdata/scaleway/generated_framework_ir.json
+		--config ./internal/cmd/testdata/scaleway/generator_config.yml \
+		--output ./internal/cmd/testdata/scaleway/provider_code_spec.json \
+		./internal/cmd/testdata/scaleway/openapi_spec.yml
 
 	go run ./cmd/tfplugingen-openapi generate \
-		--config ./internal/cmd/testdata/edgecase/tfopenapigen_config.yml \
-		./internal/cmd/testdata/edgecase/openapi_spec.yml \
-		> ./internal/cmd/testdata/edgecase/generated_framework_ir.json
+		--config ./internal/cmd/testdata/edgecase/generator_config.yml \
+		--output ./internal/cmd/testdata/edgecase/provider_code_spec.json \
+		./internal/cmd/testdata/edgecase/openapi_spec.yml
 
 .PHONY: lint fmt test

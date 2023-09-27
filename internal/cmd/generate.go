@@ -32,8 +32,8 @@ type GenerateCommand struct {
 
 func (cmd *GenerateCommand) Flags() *flag.FlagSet {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
-	fs.StringVar(&cmd.flagConfigPath, "config", "./tfopenapigen_config.yml", "path to config file (YAML)")
-	fs.StringVar(&cmd.flagOutputPath, "output", "", "path to output generated Framework IR file (JSON)")
+	fs.StringVar(&cmd.flagConfigPath, "config", "./generator_config.yml", "path to generator config file (YAML)")
+	fs.StringVar(&cmd.flagOutputPath, "output", "./provider_code_spec.json", "file path to output generated provider code spec to (JSON)")
 	return fs
 }
 
@@ -166,12 +166,7 @@ func (cmd *GenerateCommand) runInternal() error {
 			"validation_msg", err)
 	}
 
-	// 8. Output to STDOUT or file
-	if cmd.flagOutputPath == "" {
-		cmd.UI.Output(string(bytes))
-		return nil
-	}
-
+	// 8. Output to file
 	output, err := os.Create(cmd.flagOutputPath)
 	if err != nil {
 		return fmt.Errorf("error creating output file for provider code spec: %w", err)
