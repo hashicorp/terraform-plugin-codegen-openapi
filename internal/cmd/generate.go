@@ -226,6 +226,7 @@ func generateProviderCodeSpec(dora explorer.Explorer, cfg config.Config) (*spec.
 	}
 
 	return &spec.Specification{
+		Version:     spec.Version0_1,
 		Provider:    providerIR,
 		Resources:   resourcesIR,
 		DataSources: dataSourcesIR,
