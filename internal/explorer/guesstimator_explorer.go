@@ -14,13 +14,15 @@ import (
 
 var _ Explorer = guesstimatorExplorer{}
 
-// This regex is identifies if an API path contains a parameter, indicated by surrounding curly braces
-//   - Example: /users/{username} = MATCH
-var pathParameterRegex = regexp.MustCompile(`{.*}`)
-
+// guesstimatorExplorer is an experimental explorer that reads an OpenAPI specification without any configuration and attempts to
+// discover resources and data sources based on a naming convention. It's not currently in-use in the OpenAPI spec generator.
 type guesstimatorExplorer struct {
 	spec high.Document
 }
+
+// This regex is identifies if an API path contains a parameter, indicated by surrounding curly braces
+//   - Example: /users/{username} = MATCH
+var pathParameterRegex = regexp.MustCompile(`{.*}`)
 
 type resourceOperations struct {
 	// IdentityOps are operations (GET, PUT, POST, DELETE, etc.) on a path that ends with a parameter: /path/{id}
@@ -57,8 +59,6 @@ func NewGuesstimatorExplorer(spec high.Document) Explorer {
 }
 
 func (e guesstimatorExplorer) FindProvider() (Provider, error) {
-	// TODO: not sure the best place to automatically pull the provider name... Info section?
-	// https://spec.openapis.org/oas/latest.html#info-object
 	return Provider{
 		Name: "guesstimator_placeholder",
 	}, nil
@@ -149,9 +149,7 @@ func (e guesstimatorExplorer) groupPathItems() map[string]resourceOperations {
 	return groups
 }
 
-// TODO: Consider moving this functionality into a Go type / methods, OASPath.HasIdentityToken(), OASPath.ResourceName(), etc.
-// convertPathToResourceName takes a given API path, /example/user/{username},
-// and converts it to a valid resource name by combining the paths with underscores, i.e. example_user
+// convertPathToResourceName takes a given API path, /example/user/{username}, and converts it to a valid resource name by combining the paths with underscores, i.e. example_user
 func convertPathToResourceName(urlPath string) (string, bool) {
 	restOfPath, resource := path.Split(urlPath)
 	hasPathParam := pathParameterRegex.Match([]byte(resource))

@@ -8,14 +8,14 @@ import (
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-// Implementations of the Explorer interface relate OpenAPIv3 operations to a set of Terraform Provider resource/data source actions (CRUD)
-//   - https://spec.openapis.org/oas/latest.html#operation-object
+// Explorer implements methods that relate OpenAPI operations to a set of Terraform Provider resource/data source actions (CRUD)
 type Explorer interface {
 	FindProvider() (Provider, error)
 	FindResources() (map[string]Resource, error)
 	FindDataSources() (map[string]DataSource, error)
 }
 
+// Resource contains CRUD operations and schema options for configuration.
 type Resource struct {
 	CreateOp      *high.Operation
 	ReadOp        *high.Operation
@@ -24,11 +24,13 @@ type Resource struct {
 	SchemaOptions SchemaOptions
 }
 
+// DataSource contains a Read operation and schema options for configuration.
 type DataSource struct {
 	ReadOp        *high.Operation
 	SchemaOptions SchemaOptions
 }
 
+// Provider contains a name and a schema.
 type Provider struct {
 	Name        string
 	SchemaProxy *base.SchemaProxy
