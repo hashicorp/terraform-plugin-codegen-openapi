@@ -20,18 +20,20 @@ import (
 //   - .category = NO MATCH
 var attributeLocationRegex = regexp.MustCompile(`^[\w]+(?:\.[\w]+)*$`)
 
-// Config is tagged with `yaml` struct tags, however YAML is a superset of JSON, so it can also be parsed from JSON
+// Config represents a YAML generator config.
 type Config struct {
 	Provider    Provider              `yaml:"provider"`
 	Resources   map[string]Resource   `yaml:"resources"`
 	DataSources map[string]DataSource `yaml:"data_sources"`
 }
 
+// Provider generator config section.
 type Provider struct {
 	Name      string `yaml:"name"`
 	SchemaRef string `yaml:"schema_ref"`
 }
 
+// Resource generator config section.
 type Resource struct {
 	Create        *OpenApiSpecLocation `yaml:"create"`
 	Read          *OpenApiSpecLocation `yaml:"read"`
@@ -39,29 +41,41 @@ type Resource struct {
 	Delete        *OpenApiSpecLocation `yaml:"delete"`
 	SchemaOptions SchemaOptions        `yaml:"schema"`
 }
+
+// DataSource generator config section.
 type DataSource struct {
 	Read          *OpenApiSpecLocation `yaml:"read"`
 	SchemaOptions SchemaOptions        `yaml:"schema"`
 }
 
+// OpenApiSpecLocation defines a location in an OpenAPI spec for an API operation.
 type OpenApiSpecLocation struct {
-	Path   string `yaml:"path"`
+	// Matches the path key for a path item - https://spec.openapis.org/oas/v3.1.0#paths-object
+	Path string `yaml:"path"`
+	// Matches the operation method in a path item (GET, POST, etc.) - https://spec.openapis.org/oas/v3.1.0#pathItemObject
 	Method string `yaml:"method"`
 }
 
+// SchemaOptions generator config section. This section contains options for modifying the output of the generator.
 type SchemaOptions struct {
 	AttributeOptions AttributeOptions `yaml:"attributes"`
 }
+
+// AttributeOptions generator config section. This section is used to modify the output of specific attributes.
 type AttributeOptions struct {
-	Aliases   map[string]string   `yaml:"aliases"`
+	// Aliases are a map, with the key being a parameter name in an OpenAPI operation and the value being the new name (alias).
+	Aliases map[string]string `yaml:"aliases"`
+	// Overrides are a map, with the key being an attribute location (dot-separated for nested attributes) and the value being overrides to apply to the attribute.
 	Overrides map[string]Override `yaml:"overrides"`
 }
 
+// Override generator config section.
 type Override struct {
+	// Description overrides the description that was mapped/merged from the OpenAPI specification.
 	Description string `yaml:"description"`
 }
 
-// ParseConfig takes in a byte array (of YAML), unmarshal into a Config struct, and validates the result
+// ParseConfig takes in a byte array (of YAML), unmarshals into a Config struct, and validates the result
 func ParseConfig(bytes []byte) (*Config, error) {
 	var result Config
 	err := yaml.Unmarshal(bytes, &result)
@@ -109,7 +123,6 @@ func (c Config) Validate() error {
 }
 
 func (p Provider) Validate() error {
-	// TODO: Add regex/validation of provider name
 	if p.Name == "" {
 		return errors.New("must have a 'name' property")
 	}
