@@ -1,0 +1,6 @@
+{
+	"provider": {
+		"name": "kubernetes"
+	},
+	"version": "0.1"
+}
