@@ -4,8 +4,6 @@
 package mapper
 
 import (
-	"fmt"
-	"log"
 	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
@@ -47,7 +45,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 
 		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			dLogger.Warn(fmt.Sprintf("skipping data source schema mapping: %s", err))
+			dLogger.Warn("skipping data source schema mapping", "err", err)
 			continue
 		}
 
@@ -60,7 +58,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(_ *slog.Logger, dataSource explorer.DataSource) (*datasource.Schema, error) {
+func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSource) (*datasource.Schema, error) {
 	dataSourceSchema := &datasource.Schema{
 		Attributes: []datasource.Attribute{},
 	}
@@ -68,6 +66,7 @@ func generateDataSourceSchema(_ *slog.Logger, dataSource explorer.DataSource) (*
 	// ********************
 	// READ Response Body (required)
 	// ********************
+	logger.Debug("searching for read operation response body")
 	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil {
 		return nil, err
@@ -91,13 +90,13 @@ func generateDataSourceSchema(_ *slog.Logger, dataSource explorer.DataSource) (*
 				continue
 			}
 
-			schemaOpts := oas.SchemaOpts{
-				OverrideDescription: param.Description,
-			}
+			pLogger := logger.With("param", param.Name)
+			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if err != nil {
-				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			computability := schema.ComputedOptional
@@ -107,13 +106,15 @@ func generateDataSourceSchema(_ *slog.Logger, dataSource explorer.DataSource) (*
 
 			// Check for any aliases and replace the paramater name if found
 			paramName := param.Name
-			if matchedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
-				paramName = matchedName
+			if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+				pLogger = pLogger.With("param_alias", aliasedName)
+				paramName = aliasedName
 			}
 
 			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
 			if err != nil {
-				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			readParameterAttributes = append(readParameterAttributes, parameterAttribute)

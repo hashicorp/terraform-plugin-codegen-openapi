@@ -5,8 +5,6 @@ package mapper
 
 import (
 	"errors"
-	"fmt"
-	"log"
 	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
@@ -48,7 +46,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 
 		schema, err := generateResourceSchema(rLogger, explorerResource)
 		if err != nil {
-			rLogger.Warn(fmt.Sprintf("skipping resource schema mapping: %s", err))
+			rLogger.Warn("skipping resource schema mapping", "err", err)
 			continue
 		}
 
@@ -61,7 +59,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 	return resourceSchemas, nil
 }
 
-func generateResourceSchema(_ *slog.Logger, explorerResource explorer.Resource) (*resource.Schema, error) {
+func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resource) (*resource.Schema, error) {
 	resourceSchema := &resource.Schema{
 		Attributes: []resource.Attribute{},
 	}
@@ -69,6 +67,7 @@ func generateResourceSchema(_ *slog.Logger, explorerResource explorer.Resource) 
 	// ********************
 	// Create Request Body (required)
 	// ********************
+	logger.Debug("searching for create operation request body")
 	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
 	if err != nil {
 		return nil, err
@@ -81,28 +80,40 @@ func generateResourceSchema(_ *slog.Logger, explorerResource explorer.Resource) 
 	// *********************
 	// Create Response Body (optional)
 	// *********************
+	logger.Debug("searching for create operation response body")
 	createResponseAttributes := attrmapper.ResourceAttributes{}
 	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
-	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
-		return nil, err
-	} else if createResponseSchema != nil {
+	if err != nil {
+		if errors.Is(err, oas.ErrSchemaNotFound) {
+			// Demote log to INFO if there was no schema found
+			logger.Info("skipping mapping of create operation response body", "err", err)
+		} else {
+			logger.Warn("skipping mapping of create operation response body", "err", err)
+		}
+	} else {
 		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
 		if err != nil {
-			return nil, err
+			logger.Warn("skipping mapping of create operation response body", "err", err)
 		}
 	}
 
 	// *******************
 	// READ Response Body (optional)
 	// *******************
+	logger.Debug("searching for read operation response body")
 	readResponseAttributes := attrmapper.ResourceAttributes{}
 	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
-	if err != nil && !errors.Is(err, oas.ErrSchemaNotFound) {
-		return nil, err
-	} else if readResponseSchema != nil {
+	if err != nil {
+		if errors.Is(err, oas.ErrSchemaNotFound) {
+			// Demote log to INFO if there was no schema found
+			logger.Info("skipping mapping of read operation response body", "err", err)
+		} else {
+			logger.Warn("skipping mapping of read operation response body", "err", err)
+		}
+	} else {
 		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
 		if err != nil {
-			return nil, err
+			logger.Warn("skipping mapping of read operation response body", "err", err)
 		}
 	}
 
@@ -120,24 +131,27 @@ func generateResourceSchema(_ *slog.Logger, explorerResource explorer.Resource) 
 				continue
 			}
 
-			schemaOpts := oas.SchemaOpts{
-				OverrideDescription: param.Description,
-			}
+			pLogger := logger.With("param", param.Name)
+			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
+			globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
 
-			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional})
+			s, err := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
 			if err != nil {
-				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			// Check for any aliases and replace the paramater name if found
 			paramName := param.Name
 			if aliasedName, ok := explorerResource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+				pLogger = pLogger.With("param_alias", aliasedName)
 				paramName = aliasedName
 			}
 
 			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
 			if err != nil {
-				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			readParameterAttributes = append(readParameterAttributes, parameterAttribute)

@@ -80,7 +80,10 @@ func (cmd *GenerateCommand) Synopsis() string {
 }
 
 func (cmd *GenerateCommand) Run(args []string) int {
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		// TODO: add log level control via env variable?
+		Level: slog.LevelInfo,
+	}))
 
 	fs := cmd.Flags()
 	err := fs.Parse(args)
