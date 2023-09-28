@@ -63,7 +63,6 @@ func BuildSchemaFromResponse(op *high.Operation, schemaOpts SchemaOpts, globalOp
 }
 
 func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
-	// TODO: we might consider vendored JSON media types and maybe do a "contains" check instead of strict equality
 	jsonMediaType, ok := mediaTypes[util.OAS_mediatype_json]
 	if ok && jsonMediaType.Schema != nil {
 		s, err := BuildSchema(jsonMediaType.Schema, schemaOpts, globalOpts)

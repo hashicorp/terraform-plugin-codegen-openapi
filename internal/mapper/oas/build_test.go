@@ -121,7 +121,6 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
 			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, oas.OASSchema{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
@@ -333,7 +332,6 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			// TODO: this is hacky + not recommended, should see if there is a better comparison method long-term
 			if diff := cmp.Diff(got, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}, oas.OASSchema{})); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
