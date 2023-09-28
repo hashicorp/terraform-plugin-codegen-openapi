@@ -120,10 +120,6 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	// TODO: Expand support for "header" and "cookie"?
-	// TODO: support style + explode?
-	//	- https://spec.openapis.org/oas/latest.html#style-values
-	// 	- https://spec.openapis.org/oas/latest.html#style-examples
 	readParameterAttributes := attrmapper.ResourceAttributes{}
 	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
 		for _, param := range explorerResource.ReadOp.Parameters {

@@ -1,6 +1,6 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-// TODO: add package and exported symbol docs
-// TODO: I should revise the exported symbols on this package, there are only a couple that are needed
+// Package oas contains the logic that determines how to map OpenAPI schemas to the intermediate attrmapper
+// types. OpenAPI 3.1 schemas are compatible with JSON schema, and OpenAPI 3.0 are "mostly" compatible.
 package oas

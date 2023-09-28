@@ -79,10 +79,6 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	// TODO: Expand support for "header" and "cookie"?
-	// TODO: support style + explode?
-	//	- https://spec.openapis.org/oas/latest.html#style-values
-	// 	- https://spec.openapis.org/oas/latest.html#style-examples
 	readParameterAttributes := attrmapper.DataSourceAttributes{}
 	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
 		for _, param := range dataSource.ReadOp.Parameters {
