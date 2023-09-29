@@ -11,7 +11,6 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
-// TODO: holding here for safe-keeping
 func pointer[T any](value T) *T {
 	return &value
 }

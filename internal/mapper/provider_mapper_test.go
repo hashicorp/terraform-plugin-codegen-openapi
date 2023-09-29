@@ -4,6 +4,7 @@
 package mapper_test
 
 import (
+	"log/slog"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -105,7 +106,7 @@ func TestProviderMapper_basic(t *testing.T) {
 			t.Parallel()
 
 			mapper := mapper.NewProviderMapper(testCase.exploredProvider, config.Config{})
-			got, err := mapper.MapToIR()
+			got, err := mapper.MapToIR(slog.Default())
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}

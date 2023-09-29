@@ -5,6 +5,7 @@ package cmd_test
 
 import (
 	"os"
+	"path"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -22,23 +23,23 @@ func TestGenerate_WithConfig(t *testing.T) {
 	}{
 		"GitHub v3 REST API": {
 			oasSpecPath:    "testdata/github/openapi_spec.json",
-			configPath:     "testdata/github/tfopenapigen_config.yml",
-			goldenFilePath: "testdata/github/generated_framework_ir.json",
+			configPath:     "testdata/github/generator_config.yml",
+			goldenFilePath: "testdata/github/provider_code_spec.json",
 		},
 		"Swagger Petstore - OpenAPI 3.0": {
 			oasSpecPath:    "testdata/petstore3/openapi_spec.json",
-			configPath:     "testdata/petstore3/tfopenapigen_config.yml",
-			goldenFilePath: "testdata/petstore3/generated_framework_ir.json",
+			configPath:     "testdata/petstore3/generator_config.yml",
+			goldenFilePath: "testdata/petstore3/provider_code_spec.json",
 		},
 		"Scaleway - Instance API": {
 			oasSpecPath:    "testdata/scaleway/openapi_spec.yml",
-			configPath:     "testdata/scaleway/tfopenapigen_config.yml",
-			goldenFilePath: "testdata/scaleway/generated_framework_ir.json",
+			configPath:     "testdata/scaleway/generator_config.yml",
+			goldenFilePath: "testdata/scaleway/provider_code_spec.json",
 		},
 		"EdgeCase API": {
 			oasSpecPath:    "testdata/edgecase/openapi_spec.yml",
-			configPath:     "testdata/edgecase/tfopenapigen_config.yml",
-			goldenFilePath: "testdata/edgecase/generated_framework_ir.json",
+			configPath:     "testdata/edgecase/generator_config.yml",
+			goldenFilePath: "testdata/edgecase/provider_code_spec.json",
 		},
 	}
 	for name, testCase := range testCases {
@@ -46,10 +47,13 @@ func TestGenerate_WithConfig(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
+			tempProviderSpecPath := path.Join(t.TempDir(), "provider_code_spec.json")
+
 			mockUi := cli.NewMockUi()
 			c := cmd.GenerateCommand{UI: mockUi}
 			args := []string{
 				"--config", testCase.configPath,
+				"--output", tempProviderSpecPath,
 				testCase.oasSpecPath,
 			}
 
@@ -63,7 +67,12 @@ func TestGenerate_WithConfig(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if diff := cmp.Diff(mockUi.OutputWriter.Bytes(), goldenFileBytes); diff != "" {
+			tempProviderSpecBytes, err := os.ReadFile(tempProviderSpecPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if diff := cmp.Diff(tempProviderSpecBytes, goldenFileBytes); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
 			}
 		})

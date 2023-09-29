@@ -1,5 +1,5 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-// TODO: add package and exported symbol docs
+// Package explorer contains the types and methods for relating OpenAPI operations to a set of Terraform Provider resource/data source actions (CRUD)
 package explorer

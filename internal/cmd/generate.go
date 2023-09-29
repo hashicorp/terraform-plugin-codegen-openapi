@@ -4,11 +4,12 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -19,6 +20,7 @@ import (
 
 	"github.com/mitchellh/cli"
 	"github.com/pb33f/libopenapi"
+	"github.com/pb33f/libopenapi/resolver"
 )
 
 type GenerateCommand struct {
@@ -30,8 +32,8 @@ type GenerateCommand struct {
 
 func (cmd *GenerateCommand) Flags() *flag.FlagSet {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
-	fs.StringVar(&cmd.flagConfigPath, "config", "./tfopenapigen_config.yml", "path to config file (YAML)")
-	fs.StringVar(&cmd.flagOutputPath, "output", "", "path to output generated Framework IR file (JSON)")
+	fs.StringVar(&cmd.flagConfigPath, "config", "./generator_config.yml", "path to generator config file (YAML)")
+	fs.StringVar(&cmd.flagOutputPath, "output", "./provider_code_spec.json", "destination file path for generated provider code spec (JSON)")
 	return fs
 }
 
@@ -74,137 +76,153 @@ func (cmd *GenerateCommand) Help() string {
 }
 
 func (cmd *GenerateCommand) Synopsis() string {
-	return "Generates Framework Intermediate Representation (IR) JSON for an OpenAPI spec (JSON or YAML format)"
+	return "Generates Provider Code Specification from an OpenAPI 3.x Specification"
 }
 
 func (cmd *GenerateCommand) Run(args []string) int {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelWarn,
+	}))
+
 	fs := cmd.Flags()
 	err := fs.Parse(args)
 	if err != nil {
-		cmd.UI.Error(fmt.Sprintf("unable to parse flags: %s", err))
+		logger.Error("error parsing flags", "err", err)
 		return 1
 	}
 
 	cmd.oasInputPath = fs.Arg(0)
 	if cmd.oasInputPath == "" {
-		cmd.UI.Error("Error executing command: OpenAPI specification file is required as last argument")
+		logger.Error("error executing command", "err", "OpenAPI specification file is required as last argument")
 		return 1
 	}
 
-	err = cmd.runInternal()
+	err = cmd.runInternal(logger)
 	if err != nil {
-		cmd.UI.Error(fmt.Sprintf("Error executing command: %s\n", err))
+		logger.Error("error executing command", "err", err)
 		return 1
 	}
 
 	return 0
 }
 
-func (cmd *GenerateCommand) runInternal() error {
+func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	// 1. Read and parse generator config file
 	configBytes, err := os.ReadFile(cmd.flagConfigPath)
 	if err != nil {
-		return fmt.Errorf("failed to read generator config file: %w", err)
+		return fmt.Errorf("error reading generator config file: %w", err)
 	}
 	config, err := config.ParseConfig(configBytes)
 	if err != nil {
-		return fmt.Errorf("failed to parse generator config file: %w", err)
+		return fmt.Errorf("error parsing generator config file: %w", err)
 	}
 
 	// 2. Read and parse OpenAPI spec file
 	oasBytes, err := os.ReadFile(cmd.oasInputPath)
 	if err != nil {
-		return fmt.Errorf("failed to read OpenAPI spec file: %w", err)
+		return fmt.Errorf("error reading OpenAPI spec file: %w", err)
 	}
 	doc, err := libopenapi.NewDocument(oasBytes)
 	if err != nil {
-		return fmt.Errorf("failed to parse OpenAPI spec file: %w", err)
+		return fmt.Errorf("error parsing OpenAPI spec file: %w", err)
 	}
 
 	// 3. Build out the OpenAPI model, this will recursively load all local + remote references into one cohesive model
 	model, errs := doc.BuildV3Model()
-	// TODO: Determine how to handle circular ref errors - https://pb33f.io/libopenapi/circular-references/
-	if len(errs) > 0 {
-		var errResult error
-		for _, err := range errs {
-			errResult = errors.Join(errResult, err)
+
+	// 4. Log circular references as warnings and fail on any other model building errors
+	var errResult error
+	for _, err := range errs {
+		if rslvErr, ok := err.(*resolver.ResolvingError); ok {
+			logger.Warn(
+				"circular reference found in OpenAPI spec",
+				"circular_ref", rslvErr.CircularReference.GenerateJourneyPath())
+			continue
 		}
-		log.Printf("[WARN] Potential issues in model spec: %s", errResult)
+
+		errResult = errors.Join(errResult, err)
+	}
+	if errResult != nil {
+		return fmt.Errorf("error building OpenAPI 3.x model: %w", errResult)
 	}
 
-	// 4. Generate framework IR w/ config
+	// 5. Generate provider code spec w/ config
 	oasExplorer := explorer.NewConfigExplorer(model.Model, *config)
-	frameworkIr, err := generateFrameworkIr(oasExplorer, *config)
+	providerCodeSpec, err := generateProviderCodeSpec(logger, oasExplorer, *config)
 	if err != nil {
 		return err
 	}
 
-	// 5. Use framework IR to create JSON
-	bytes, err := json.MarshalIndent(frameworkIr, "", "\t")
+	// 6. Use provider code spec to create JSON
+	bytes, err := json.MarshalIndent(providerCodeSpec, "", "\t")
 	if err != nil {
-		return fmt.Errorf("error marshalling Framework IR to JSON: %w", err)
+		return fmt.Errorf("error marshalling provider code spec to JSON: %w", err)
 	}
 
-	// 6. Output to STDOUT or file
-	if cmd.flagOutputPath == "" {
-		cmd.UI.Output(string(bytes))
-		return nil
+	// 7. Log a warning if the provider code spec is not valid based on the JSON schema
+	err = spec.Validate(context.Background(), bytes)
+	if err != nil {
+		logger.Warn(
+			"generated provider code spec failed validation",
+			"validation_msg", err)
 	}
 
+	// 8. Output to file
 	output, err := os.Create(cmd.flagOutputPath)
 	if err != nil {
-		return fmt.Errorf("error creating output file for Framework IR: %w", err)
+		return fmt.Errorf("error creating output file for provider code spec: %w", err)
 	}
 
 	_, err = output.Write(bytes)
 	if err != nil {
-		return fmt.Errorf("error writing framework IR to output: %w", err)
+		return fmt.Errorf("error writing provider code spec to output: %w", err)
 	}
 
 	return nil
 }
 
-func generateFrameworkIr(dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
-	// 1. Find TF resources
+func generateProviderCodeSpec(logger *slog.Logger, dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
+	// 1. Find TF resources in OAS
 	explorerResources, err := dora.FindResources()
 	if err != nil {
-		return nil, fmt.Errorf("error finding resources: %w", err)
+		return nil, fmt.Errorf("error finding resource(s): %w", err)
 	}
 
-	// 2. Find TF data sources
+	// 2. Find TF data sources in OAS
 	explorerDataSources, err := dora.FindDataSources()
 	if err != nil {
-		return nil, fmt.Errorf("error finding data sources: %w", err)
+		return nil, fmt.Errorf("error finding data source(s): %w", err)
 	}
 
-	// 3. Find TF provider
+	// 3. Find TF provider in OAS
 	explorerProvider, err := dora.FindProvider()
 	if err != nil {
 		return nil, fmt.Errorf("error finding provider: %w", err)
 	}
 
-	// 4. Use TF info to generate framework IR for resources
+	// 4. Use TF info to generate provider code spec for resources
 	resourceMapper := mapper.NewResourceMapper(explorerResources, cfg)
-	resourcesIR, err := resourceMapper.MapToIR()
+	resourcesIR, err := resourceMapper.MapToIR(logger)
 	if err != nil {
-		return nil, fmt.Errorf("error generating Framework IR for resources: %w", err)
+		return nil, fmt.Errorf("error generating provider code spec for resources: %w", err)
 	}
 
-	// 5. Use TF info to generate framework IR for data sources
+	// 5. Use TF info to generate provider code spec for data sources
 	dataSourceMapper := mapper.NewDataSourceMapper(explorerDataSources, cfg)
-	dataSourcesIR, err := dataSourceMapper.MapToIR()
+	dataSourcesIR, err := dataSourceMapper.MapToIR(logger)
 	if err != nil {
-		return nil, fmt.Errorf("error generating Framework IR for data sources: %w", err)
+		return nil, fmt.Errorf("error generating provider code spec for data sources: %w", err)
 	}
 
-	// 6. Use TF info to generate framework IR for provider
+	// 6. Use TF info to generate provider code spec for provider
 	providerMapper := mapper.NewProviderMapper(explorerProvider, cfg)
-	providerIR, err := providerMapper.MapToIR()
+	providerIR, err := providerMapper.MapToIR(logger)
 	if err != nil {
-		return nil, fmt.Errorf("error generating Framework IR for provider: %w", err)
+		return nil, fmt.Errorf("error generating provider code spec for provider: %w", err)
 	}
 
 	return &spec.Specification{
+		Version:     spec.Version0_1,
 		Provider:    providerIR,
 		Resources:   resourcesIR,
 		DataSources: dataSourcesIR,

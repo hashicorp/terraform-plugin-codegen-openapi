@@ -4,8 +4,7 @@
 package mapper
 
 import (
-	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -19,7 +18,7 @@ import (
 var _ DataSourceMapper = dataSourceMapper{}
 
 type DataSourceMapper interface {
-	MapToIR() ([]datasource.DataSource, error)
+	MapToIR(*slog.Logger) ([]datasource.DataSource, error)
 }
 
 type dataSourceMapper struct {
@@ -35,17 +34,18 @@ func NewDataSourceMapper(dataSources map[string]explorer.DataSource, cfg config.
 	}
 }
 
-func (m dataSourceMapper) MapToIR() ([]datasource.DataSource, error) {
+func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource, error) {
 	dataSourceSchemas := []datasource.DataSource{}
 
 	// Guarantee the order of processing
 	dataSourceNames := util.SortedKeys(m.dataSources)
 	for _, name := range dataSourceNames {
 		dataSource := m.dataSources[name]
+		dLogger := logger.With("data_source", name)
 
-		schema, err := generateDataSourceSchema(dataSource)
+		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			log.Printf("[WARN] skipping '%s' data source schema: %s\n", name, err)
+			dLogger.Warn("skipping data source schema mapping", "err", err)
 			continue
 		}
 
@@ -58,7 +58,7 @@ func (m dataSourceMapper) MapToIR() ([]datasource.DataSource, error) {
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schema, error) {
+func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSource) (*datasource.Schema, error) {
 	dataSourceSchema := &datasource.Schema{
 		Attributes: []datasource.Attribute{},
 	}
@@ -66,6 +66,7 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	// ********************
 	// READ Response Body (required)
 	// ********************
+	logger.Debug("searching for read operation response body")
 	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
 	if err != nil {
 		return nil, err
@@ -78,10 +79,6 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	// TODO: Expand support for "header" and "cookie"?
-	// TODO: support style + explode?
-	//	- https://spec.openapis.org/oas/latest.html#style-values
-	// 	- https://spec.openapis.org/oas/latest.html#style-examples
 	readParameterAttributes := attrmapper.DataSourceAttributes{}
 	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
 		for _, param := range dataSource.ReadOp.Parameters {
@@ -89,13 +86,13 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 				continue
 			}
 
-			schemaOpts := oas.SchemaOpts{
-				OverrideDescription: param.Description,
-			}
+			pLogger := logger.With("param", param.Name)
+			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if err != nil {
-				return nil, fmt.Errorf("failed to build param schema for '%s'", param.Name)
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			computability := schema.ComputedOptional
@@ -105,13 +102,15 @@ func generateDataSourceSchema(dataSource explorer.DataSource) (*datasource.Schem
 
 			// Check for any aliases and replace the paramater name if found
 			paramName := param.Name
-			if matchedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
-				paramName = matchedName
+			if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+				pLogger = pLogger.With("param_alias", aliasedName)
+				paramName = aliasedName
 			}
 
 			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
 			if err != nil {
-				log.Printf("[WARN] error mapping param attribute %s - %s", param.Name, err.Error())
+				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				continue
 			}
 
 			readParameterAttributes = append(readParameterAttributes, parameterAttribute)

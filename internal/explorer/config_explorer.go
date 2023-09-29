@@ -4,6 +4,7 @@
 package explorer
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -54,55 +55,89 @@ func (e configExplorer) FindProvider() (Provider, error) {
 
 func (e configExplorer) FindResources() (map[string]Resource, error) {
 	resources := map[string]Resource{}
+	var errResult error
+
 	for name, resourceConfig := range e.config.Resources {
-		// TODO: should we throw an error if an invalid or non-existent path/methods are given?
+		createOp, err := extractOp(e.spec.Paths, resourceConfig.Create)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.create': %w", name, err))
+			continue
+		}
+		readOp, err := extractOp(e.spec.Paths, resourceConfig.Read)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.read': %w", name, err))
+			continue
+		}
+		updateOp, err := extractOp(e.spec.Paths, resourceConfig.Update)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.update': %w", name, err))
+			continue
+		}
+		deleteOp, err := extractOp(e.spec.Paths, resourceConfig.Delete)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.delete': %w", name, err))
+			continue
+		}
+
 		resources[name] = Resource{
-			CreateOp:      extractOp(e.spec.Paths, resourceConfig.Create),
-			ReadOp:        extractOp(e.spec.Paths, resourceConfig.Read),
-			UpdateOp:      extractOp(e.spec.Paths, resourceConfig.Update),
-			DeleteOp:      extractOp(e.spec.Paths, resourceConfig.Delete),
+			CreateOp:      createOp,
+			ReadOp:        readOp,
+			UpdateOp:      updateOp,
+			DeleteOp:      deleteOp,
 			SchemaOptions: extractSchemaOptions(resourceConfig.SchemaOptions),
 		}
 	}
 
-	return resources, nil
+	return resources, errResult
 }
 
 func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 	dataSources := map[string]DataSource{}
+	var errResult error
+
 	for name, dataSourceConfig := range e.config.DataSources {
+		readOp, err := extractOp(e.spec.Paths, dataSourceConfig.Read)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.read': %w", name, err))
+			continue
+		}
 		dataSources[name] = DataSource{
-			ReadOp:        extractOp(e.spec.Paths, dataSourceConfig.Read),
+			ReadOp:        readOp,
 			SchemaOptions: extractSchemaOptions(dataSourceConfig.SchemaOptions),
 		}
 	}
-	return dataSources, nil
+	return dataSources, errResult
 }
 
-func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) *high.Operation {
-	if oasLocation == nil || paths == nil || paths.PathItems == nil || paths.PathItems[oasLocation.Path] == nil {
-		return nil
+func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) (*high.Operation, error) {
+	// No need to search OAS if not defined
+	if oasLocation == nil {
+		return nil, nil
+	}
+
+	if paths == nil || paths.PathItems == nil || paths.PathItems[oasLocation.Path] == nil {
+		return nil, fmt.Errorf("path '%s' not found in OpenAPI spec", oasLocation.Path)
 	}
 
 	switch strings.ToLower(oasLocation.Method) {
 	case low.PostLabel:
-		return paths.PathItems[oasLocation.Path].Post
+		return paths.PathItems[oasLocation.Path].Post, nil
 	case low.GetLabel:
-		return paths.PathItems[oasLocation.Path].Get
+		return paths.PathItems[oasLocation.Path].Get, nil
 	case low.PutLabel:
-		return paths.PathItems[oasLocation.Path].Put
+		return paths.PathItems[oasLocation.Path].Put, nil
 	case low.DeleteLabel:
-		return paths.PathItems[oasLocation.Path].Delete
+		return paths.PathItems[oasLocation.Path].Delete, nil
 	case low.PatchLabel:
-		return paths.PathItems[oasLocation.Path].Patch
+		return paths.PathItems[oasLocation.Path].Patch, nil
 	case low.OptionsLabel:
-		return paths.PathItems[oasLocation.Path].Options
+		return paths.PathItems[oasLocation.Path].Options, nil
 	case low.HeadLabel:
-		return paths.PathItems[oasLocation.Path].Head
+		return paths.PathItems[oasLocation.Path].Head, nil
 	case low.TraceLabel:
-		return paths.PathItems[oasLocation.Path].Trace
+		return paths.PathItems[oasLocation.Path].Trace, nil
 	default:
-		return nil
+		return nil, fmt.Errorf("method '%s' not found at OpenAPI path '%s'", oasLocation.Method, oasLocation.Path)
 	}
 }
 

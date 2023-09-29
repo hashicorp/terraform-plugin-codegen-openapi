@@ -1,5 +1,5 @@
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
-// TODO: add package and exported symbol docs
+// Package config contains the types, parsing, and validation logic for the YAML generator configuration
 package config
