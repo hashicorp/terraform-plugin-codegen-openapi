@@ -50,9 +50,13 @@ type DataSource struct {
 
 // OpenApiSpecLocation defines a location in an OpenAPI spec for an API operation.
 type OpenApiSpecLocation struct {
-	// Matches the path key for a path item - https://spec.openapis.org/oas/v3.1.0#paths-object
+	// Matches the path key for a path item (refer to [OAS Paths Object]).
+	//
+	// [OAS Paths Object]: https://spec.openapis.org/oas/v3.1.0#paths-object
 	Path string `yaml:"path"`
-	// Matches the operation method in a path item (GET, POST, etc.) - https://spec.openapis.org/oas/v3.1.0#pathItemObject
+	// Matches the operation method in a path item: GET, POST, etc (refer to [OAS Path Item Object]).
+	//
+	// [OAS Path Item Object]: https://spec.openapis.org/oas/v3.1.0#pathItemObject
 	Method string `yaml:"method"`
 }
 

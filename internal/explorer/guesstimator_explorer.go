@@ -33,8 +33,7 @@ type resourceOperations struct {
 }
 
 // As the name suggests, the Guesstimator evaluates an OpenAPIv3 spec and will return
-// Resources, DataSources, and their respective names, based on RESTful conventions:
-// https://swagger.io/resources/articles/best-practices-in-api-design/
+// Resources, DataSources, and their respective names, based on [RESTful conventions].
 //
 // FindResources will group API paths together into collection operations and identity operations, then use the HTTP method to
 // determine how to map to a terraform resource. A valid Resource will have a POST collection operation, GET identity operation, and
@@ -52,6 +51,8 @@ type resourceOperations struct {
 // An example of two valid DataSources would be:
 //   - GET /org/{org_id}/users = Read operation for `org_users_collection` data source
 //   - GET /org/{org_id}/users/{id} = Read operation for `org_users` data source
+//
+// [RESTful conventions]: https://swagger.io/resources/articles/best-practices-in-api-design/
 func NewGuesstimatorExplorer(spec high.Document) Explorer {
 	return guesstimatorExplorer{
 		spec: spec,
@@ -64,8 +65,9 @@ func (e guesstimatorExplorer) FindProvider() (Provider, error) {
 	}, nil
 }
 
-// Resource behavior:
-// https://developer.hashicorp.com/terraform/language/resources/behavior#how-terraform-applies-a-configuration
+// Reference - [Terraform Resource Behavior]
+//
+// [Terraform Resource Behavior]: https://developer.hashicorp.com/terraform/language/resources/behavior#how-terraform-applies-a-configuration
 func (e guesstimatorExplorer) FindResources() (map[string]Resource, error) {
 	resourcesMap := map[string]Resource{}
 
@@ -96,8 +98,9 @@ func (e guesstimatorExplorer) FindResources() (map[string]Resource, error) {
 	return resourcesMap, nil
 }
 
-// Data Source behavior:
-// https://developer.hashicorp.com/terraform/language/data-sources#data-resource-behavior
+// Reference - [Terraform Data Source Behavior]
+//
+// [Terraform Data Source Behavior]: https://developer.hashicorp.com/terraform/language/data-sources#data-resource-behavior
 func (e guesstimatorExplorer) FindDataSources() (map[string]DataSource, error) {
 	dataSourcesMap := map[string]DataSource{}
 

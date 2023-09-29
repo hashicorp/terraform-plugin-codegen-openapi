@@ -3,11 +3,16 @@
 
 package util
 
-// JSON schema base types: https://json-schema.org/draft/2020-12/json-schema-core.html#name-instance-data-model
-// JSON schema available format types: https://json-schema.org/draft/2020-12/json-schema-validation.html#name-defined-formats
-// OAS available format types: https://spec.openapis.org/oas/latest.html#data-types
+// Reference links:
+//   - [JSON Schema - types]
+//   - [JSON Schema - format]
+//   - [JSON schema - custom format]
+//   - [OAS - format]
 //
-// JSON schema Custom formats: https://json-schema.org/draft/2020-12/json-schema-validation.html#name-custom-format-attributes
+// [JSON Schema - types]: https://json-schema.org/draft/2020-12/json-schema-core.html#name-instance-data-model
+// [JSON Schema - format]: https://json-schema.org/draft/2020-12/json-schema-validation.html#name-defined-formats
+// [JSON schema - custom format]: https://json-schema.org/draft/2020-12/json-schema-validation.html#name-custom-format-attributes
+// [OAS - format]: https://spec.openapis.org/oas/latest.html#data-types
 const (
 	OAS_type_string  = "string"
 	OAS_type_integer = "integer"
