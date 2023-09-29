@@ -54,7 +54,9 @@ type OpenApiSpecLocation struct {
 	//
 	// [OAS Paths Object]: https://spec.openapis.org/oas/v3.1.0#paths-object
 	Path string `yaml:"path"`
-	// Matches the operation method in a path item (GET, POST, etc.) - https://spec.openapis.org/oas/v3.1.0#pathItemObject
+	// Matches the operation method in a path item: GET, POST, etc (refer to [OAS Path Item Object]).
+	//
+	// [OAS Path Item Object]: https://spec.openapis.org/oas/v3.1.0#pathItemObject
 	Method string `yaml:"method"`
 }
 
