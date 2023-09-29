@@ -45,7 +45,14 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 
 		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			dLogger.Warn("skipping data source schema mapping", "err", err)
+			propErr, ok := err.(*oas.PropertyError)
+			if ok {
+				dLogger.Warn("skipping data source schema mapping", "err", err,
+					"oas_property", propErr.Path(),
+					"oas_line_number", propErr.LineNumber())
+			} else {
+				dLogger.Warn("skipping data source schema mapping", "err", err)
+			}
 			continue
 		}
 
@@ -71,9 +78,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	if err != nil {
 		return nil, err
 	}
-	readResponseAttributes, err := readResponseSchema.BuildDataSourceAttributes()
-	if err != nil {
-		return nil, err
+	readResponseAttributes, propErr := readResponseSchema.BuildDataSourceAttributes()
+	if propErr != nil {
+		return nil, propErr
 	}
 
 	// ****************
@@ -107,9 +114,11 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 				paramName = aliasedName
 			}
 
-			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
-			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+			parameterAttribute, propErr := s.BuildDataSourceAttribute(paramName, computability)
+			if propErr != nil {
+				pLogger.Warn("skipping mapping of read operation parameter", "err", propErr,
+					"oas_property", propErr.Path(),
+					"oas_line_number", propErr.LineNumber())
 				continue
 			}
 

@@ -46,7 +46,14 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 
 		schema, err := generateResourceSchema(rLogger, explorerResource)
 		if err != nil {
-			rLogger.Warn("skipping resource schema mapping", "err", err)
+			propErr, ok := err.(*oas.PropertyError)
+			if ok {
+				rLogger.Warn("skipping resource schema mapping", "err", err,
+					"oas_property", propErr.Path(),
+					"oas_line_number", propErr.LineNumber())
+			} else {
+				rLogger.Warn("skipping resource schema mapping", "err", err)
+			}
 			continue
 		}
 
@@ -72,9 +79,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	if err != nil {
 		return nil, err
 	}
-	createRequestAttributes, err := createRequestSchema.BuildResourceAttributes()
-	if err != nil {
-		return nil, err
+	createRequestAttributes, propErr := createRequestSchema.BuildResourceAttributes()
+	if propErr != nil {
+		return nil, propErr
 	}
 
 	// *********************
@@ -91,9 +98,11 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of create operation response body", "err", err)
 		}
 	} else {
-		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			logger.Warn("skipping mapping of create operation response body", "err", err)
+		createResponseAttributes, propErr = createResponseSchema.BuildResourceAttributes()
+		if propErr != nil {
+			logger.Warn("skipping mapping of create operation response body", "err", propErr,
+				"oas_property", propErr.Path(),
+				"oas_line_number", propErr.LineNumber())
 		}
 	}
 
@@ -111,9 +120,11 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of read operation response body", "err", err)
 		}
 	} else {
-		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			logger.Warn("skipping mapping of read operation response body", "err", err)
+		readResponseAttributes, propErr = readResponseSchema.BuildResourceAttributes()
+		if propErr != nil {
+			logger.Warn("skipping mapping of read operation response body", "err", propErr,
+				"oas_property", propErr.Path(),
+				"oas_line_number", propErr.LineNumber())
 		}
 	}
 
@@ -144,9 +155,11 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 				paramName = aliasedName
 			}
 
-			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
-			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+			parameterAttribute, propErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+			if propErr != nil {
+				pLogger.Warn("skipping mapping of read operation parameter", "err", propErr,
+					"oas_property", propErr.Path(),
+					"oas_line_number", propErr.LineNumber())
 				continue
 			}
 

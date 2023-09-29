@@ -788,8 +788,8 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			attributes, err := schema.BuildResourceAttributes()
-			if err != nil {
+			attributes, propErr := schema.BuildResourceAttributes()
+			if propErr != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 

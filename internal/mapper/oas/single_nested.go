@@ -4,8 +4,6 @@
 package oas
 
 import (
-	"fmt"
-
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
@@ -13,10 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
-	objectAttributes, err := s.BuildResourceAttributes()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+	objectAttributes, propErr := s.BuildResourceAttributes()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	return &attrmapper.ResourceSingleNestedAttribute{
@@ -30,10 +28,10 @@ func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
-	objectAttributes, err := s.BuildDataSourceAttributes()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+	objectAttributes, propErr := s.BuildDataSourceAttributes()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	return &attrmapper.DataSourceSingleNestedAttribute{
@@ -47,10 +45,10 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schem
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
-	objectAttributes, err := s.BuildProviderAttributes()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+	objectAttributes, propErr := s.BuildProviderAttributes()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	return &attrmapper.ProviderSingleNestedAttribute{

@@ -4,6 +4,7 @@
 package oas
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
@@ -15,21 +16,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+func (s *OASSchema) BuildCollectionResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
 	if !s.Schema.Items.IsA() {
-		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
+		return nil, s.NewPropertyError(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
+		return nil, s.NewPropertyError(fmt.Errorf("failed to build array items schema: %w", err), name)
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
-		objectAttributes, err := itemSchema.BuildResourceAttributes()
-		if err != nil {
-			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		objectAttributes, propErr := itemSchema.BuildResourceAttributes()
+		if propErr != nil {
+			return nil, s.NestPropertyError(propErr, name)
 		}
 
 		if s.Schema.Format == util.TF_format_set {
@@ -71,9 +72,9 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return result, nil
 	}
 
-	elemType, err := itemSchema.BuildElementType()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	elemType, propErr := itemSchema.BuildElementType()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	if s.Schema.Format == util.TF_format_set {
@@ -111,21 +112,21 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 	return result, nil
 }
 
-func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
 	if !s.Schema.Items.IsA() {
-		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
+		return nil, s.NewPropertyError(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
+		return nil, s.NewPropertyError(fmt.Errorf("failed to build array items schema: %w", err), name)
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
-		objectAttributes, err := itemSchema.BuildDataSourceAttributes()
-		if err != nil {
-			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		objectAttributes, propErr := itemSchema.BuildDataSourceAttributes()
+		if propErr != nil {
+			return nil, s.NestPropertyError(propErr, name)
 		}
 
 		if s.Schema.Format == util.TF_format_set {
@@ -168,9 +169,9 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return result, nil
 	}
 
-	elemType, err := itemSchema.BuildElementType()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	elemType, propErr := itemSchema.BuildElementType()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	if s.Schema.Format == util.TF_format_set {
@@ -209,21 +210,21 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 	return result, nil
 }
 
-func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
 	if !s.Schema.Items.IsA() {
-		return nil, fmt.Errorf("invalid array type for '%s', doesn't have a schema", name)
+		return nil, s.NewPropertyError(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build array items schema for '%s'", name)
+		return nil, s.NewPropertyError(fmt.Errorf("failed to build array items schema: %w", err), name)
 	}
 
 	// If the items schema is a map (i.e. additionalProperties set to a schema), it cannot be a NestedAttribute
 	if itemSchema.Type == util.OAS_type_object && !itemSchema.IsMap() {
-		objectAttributes, err := itemSchema.BuildProviderAttributes()
-		if err != nil {
-			return nil, fmt.Errorf("failed to map nested object schema proxy - %w", err)
+		objectAttributes, propErr := itemSchema.BuildProviderAttributes()
+		if propErr != nil {
+			return nil, s.NestPropertyError(propErr, name)
 		}
 
 		if s.Schema.Format == util.TF_format_set {
@@ -260,9 +261,9 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		return result, nil
 	}
 
-	elemType, err := itemSchema.BuildElementType()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create collection elem type - %w", err)
+	elemType, propErr := itemSchema.BuildElementType()
+	if propErr != nil {
+		return nil, s.NestPropertyError(propErr, name)
 	}
 
 	if s.Schema.Format == util.TF_format_set {
@@ -294,18 +295,18 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 	return result, nil
 }
 
-func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, error) {
+func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, *PropertyError) {
 	if !s.Schema.Items.IsA() {
-		return schema.ElementType{}, fmt.Errorf("invalid array type for nested elem array, doesn't have a schema")
+		return schema.ElementType{}, EmptyPropertyError(errors.New("invalid array type for nested elem array, doesn't have a schema"))
 	}
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return schema.ElementType{}, fmt.Errorf("failed to build nested array items schema")
+		return schema.ElementType{}, EmptyPropertyError(errors.New("failed to build nested array items schema"))
 	}
 
-	elemType, err := itemSchema.BuildElementType()
-	if err != nil {
-		return schema.ElementType{}, err
+	elemType, propErr := itemSchema.BuildElementType()
+	if propErr != nil {
+		return schema.ElementType{}, propErr
 	}
 
 	if s.Schema.Format == util.TF_format_set {

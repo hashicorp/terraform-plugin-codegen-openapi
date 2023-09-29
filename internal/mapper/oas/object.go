@@ -4,13 +4,11 @@
 package oas
 
 import (
-	"fmt"
-
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildObjectElementType() (schema.ElementType, error) {
+func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *PropertyError) {
 	objectElemTypes := []schema.ObjectAttributeType{}
 
 	// Guarantee the order of processing
@@ -20,12 +18,12 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, error) {
 
 		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
-			return schema.ElementType{}, fmt.Errorf("failed to build nested object schema proxy - %w", err)
+			return schema.ElementType{}, s.NewPropertyError(err, name)
 		}
 
-		elemType, err := pSchema.BuildElementType()
-		if err != nil {
-			return schema.ElementType{}, fmt.Errorf("failed to create object property '%s' schema proxy - %w", name, err)
+		elemType, propErr := pSchema.BuildElementType()
+		if propErr != nil {
+			return schema.ElementType{}, s.NestPropertyError(propErr, name)
 		}
 
 		objectElemTypes = append(objectElemTypes, util.CreateObjectAttributeType(name, elemType))

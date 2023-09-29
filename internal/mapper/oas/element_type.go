@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
+func (s *OASSchema) BuildElementType() (schema.ElementType, *PropertyError) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringElementType()
@@ -29,6 +29,6 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, error) {
 		return s.BuildObjectElementType()
 
 	default:
-		return schema.ElementType{}, fmt.Errorf("invalid schema type '%s'", s.Type)
+		return schema.ElementType{}, EmptyPropertyError(fmt.Errorf("invalid schema type '%s'", s.Type))
 	}
 }
