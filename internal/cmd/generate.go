@@ -33,7 +33,7 @@ type GenerateCommand struct {
 func (cmd *GenerateCommand) Flags() *flag.FlagSet {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
 	fs.StringVar(&cmd.flagConfigPath, "config", "./generator_config.yml", "path to generator config file (YAML)")
-	fs.StringVar(&cmd.flagOutputPath, "output", "./provider_code_spec.json", "file path to output generated provider code spec to (JSON)")
+	fs.StringVar(&cmd.flagOutputPath, "output", "./provider_code_spec.json", "destination file path for generated provider code spec (JSON)")
 	return fs
 }
 
