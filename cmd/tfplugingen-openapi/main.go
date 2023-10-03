@@ -5,29 +5,26 @@ package main
 
 import (
 	"io"
-	"os"
+	"runtime/debug"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
 	"github.com/mitchellh/cli"
 
-	"github.com/mattn/go-colorable"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
 )
 
 func main() {
 	name := "tfplugingen-openapi"
-	version := name + " Version " + version
-	if commit != "" {
-		version += " from commit " + commit
-	}
-
-	os.Exit(runCLI(
-		name,
-		version,
-		os.Args[1:],
-		os.Stdin,
-		colorable.NewColorableStdout(),
-		colorable.NewColorableStderr(),
-	))
+	version := name + " version: " + version
+	version += " commit: " + func() string {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			for _, setting := range info.Settings {
+				if setting.Key == "vcs.revision" {
+					return setting.Value
+				}
+			}
+		}
+		return ""
+	}()
 }
 
 func initCommands(ui cli.Ui) map[string]cli.CommandFactory {
