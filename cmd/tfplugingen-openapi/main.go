@@ -25,7 +25,10 @@ func main() {
 					return setting.Value
 				}
 			}
+
+			return info.Main.Version
 		}
+
 		return "local"
 	}()
 
