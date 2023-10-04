@@ -4,6 +4,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"runtime/debug"
@@ -18,18 +19,18 @@ import (
 // https://goreleaser.com/cookbooks/using-main.version/
 func main() {
 	name := "tfplugingen-openapi"
-	version := name + " commit: " + func() string {
+	version := name + func() string {
 		if info, ok := debug.ReadBuildInfo(); ok {
 			for _, setting := range info.Settings {
 				if setting.Key == "vcs.revision" {
-					return setting.Value
+					return fmt.Sprintf(" commit: %s", setting.Value)
 				}
 			}
 
-			return info.Main.Version
+			return fmt.Sprintf(" module: %s", info.Main.Version)
 		}
 
-		return "local"
+		return " local"
 	}()
 
 	os.Exit(runCLI(
