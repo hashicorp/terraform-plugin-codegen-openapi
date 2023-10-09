@@ -12,6 +12,8 @@ A Provider Code Specification can be used to generate [Terraform Provider](https
 
 Full usage info, examples, and config file documentation live on the HashiCorp developer site: https://developer.hashicorp.com/terraform/plugin/code-generation/openapi-generator
 
+For more in-depth details about the design and internals of the OpenAPI Provider Spec Generator, see [`DESIGN.md`](./DESIGN.md).
+
 ## Usage
 
 ### Installation
