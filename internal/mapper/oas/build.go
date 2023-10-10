@@ -118,35 +118,25 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 			}
 
 			resp.Schema = schema
-		} else {
-			return nil, fmt.Errorf("found %d allOf subschema(s), schema composition is currently not supported", len(resp.Schema.AllOf))
 		}
 	}
 
-	if len(resp.Schema.AnyOf) > 0 {
-		if len(resp.Schema.AnyOf) == 2 {
-			schema, err := getMultiTypeSchema(resp.Schema.AnyOf[0], resp.Schema.AnyOf[1])
-			if err != nil {
-				return nil, err
-			}
-
-			resp.Schema = schema
-		} else {
-			return nil, fmt.Errorf("found %d anyOf subschema(s), schema composition is currently not supported", len(resp.Schema.AnyOf))
+	if len(resp.Schema.AnyOf) == 2 {
+		schema, err := getMultiTypeSchema(resp.Schema.AnyOf[0], resp.Schema.AnyOf[1])
+		if err != nil {
+			return nil, err
 		}
+
+		resp.Schema = schema
 	}
 
-	if len(resp.Schema.OneOf) > 0 {
-		if len(resp.Schema.OneOf) == 2 {
-			schema, err := getMultiTypeSchema(resp.Schema.OneOf[0], resp.Schema.OneOf[1])
-			if err != nil {
-				return nil, err
-			}
-
-			resp.Schema = schema
-		} else {
-			return nil, fmt.Errorf("found %d oneOf subschema(s), schema composition is currently not supported", len(resp.Schema.OneOf))
+	if len(resp.Schema.OneOf) == 2 {
+		schema, err := getMultiTypeSchema(resp.Schema.OneOf[0], resp.Schema.OneOf[1])
+		if err != nil {
+			return nil, err
 		}
+
+		resp.Schema = schema
 	}
 
 	oasType, err := retrieveType(resp.Schema)
@@ -164,7 +154,7 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 func retrieveType(schema *base.Schema) (string, error) {
 	switch len(schema.Type) {
 	case 0:
-		return "", errors.New("property does not have a 'type' - attribute cannot be created")
+		return "", errors.New("property does not have a 'type' or supported allOf, oneOf, anyOf constraint - attribute cannot be created")
 	case 1:
 		return schema.Type[0], nil
 	case 2:
