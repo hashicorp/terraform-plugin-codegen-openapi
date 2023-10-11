@@ -67,16 +67,20 @@ func (s *OASSchema) NestPropertyError(propErr *PropertyError, propName string) *
 
 // getPropertyLineNumber looks in the low-level schema instance for line information. Returns 0 if not found.
 func (s *OASSchema) getPropertyLineNumber(propName string) int {
-	lineNumber := 0
+	// Check properties first
 	low := s.Schema.GoLow()
 	for k, v := range low.Properties.Value {
 		if k.Value == propName {
-			lineNumber = v.NodeLineNumber()
-			break
+			return v.NodeLineNumber()
 		}
 	}
 
-	return lineNumber
+	// If it's not found in properties, it could be the top level of an empty schema, grab the parent node line number
+	if low.ParentProxy != nil && low.ParentProxy.GetValueNode() != nil {
+		return low.ParentProxy.GetValueNode().Line
+	}
+
+	return 0
 }
 
 // GetDeprecationMessage returns a deprecation message if the deprecated
