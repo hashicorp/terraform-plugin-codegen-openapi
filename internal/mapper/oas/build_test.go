@@ -472,7 +472,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 
 }
 
-func TestBuildSchema_NullableMultiTypes(t *testing.T) {
+func TestBuildSchema_MultiTypes(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
@@ -507,6 +507,49 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a nullable string type, required."),
+					},
+				},
+			},
+		},
+		"stringable types - Type array": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"stringable_number", "stringable_bool"},
+				Properties: map[string]*base.SchemaProxy{
+					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string", "boolean"},
+						Description: "hey there! I'm a stringable bool type, required.",
+					}),
+					"stringable_integer": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"integer", "string"},
+						Description: "hey there! I'm a stringable integer type.",
+					}),
+					"stringable_number": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string", "number"},
+						Description: "hey there! I'm a stringable number type, required.",
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_bool",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable bool type, required."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_integer",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a stringable integer type."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_number",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable number type, required."),
 					},
 				},
 			},
@@ -557,6 +600,70 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 				},
 			},
 		},
+		"stringable types - anyOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"stringable_number", "stringable_bool"},
+				Properties: map[string]*base.SchemaProxy{
+					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
+						AnyOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"boolean"},
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable bool type, required.",
+							}),
+						},
+					}),
+					"stringable_integer": base.CreateSchemaProxy(&base.Schema{
+						AnyOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable integer type.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"integer"},
+							}),
+						},
+					}),
+					"stringable_number": base.CreateSchemaProxy(&base.Schema{
+						AnyOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable number type, required.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"number"},
+							}),
+						},
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_bool",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable bool type, required."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_integer",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a stringable integer type."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_number",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable number type, required."),
+					},
+				},
+			},
+		},
 		"nullable type - oneOf": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
@@ -599,6 +706,70 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 					StringAttribute: resource.StringAttribute{
 						ComputedOptionalRequired: schema.Required,
 						Description:              pointer("hey there! I'm a string type, required."),
+					},
+				},
+			},
+		},
+		"stringable types - oneOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"stringable_number", "stringable_bool"},
+				Properties: map[string]*base.SchemaProxy{
+					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
+						OneOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"boolean"},
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable bool type, required.",
+							}),
+						},
+					}),
+					"stringable_integer": base.CreateSchemaProxy(&base.Schema{
+						OneOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable integer type.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"integer"},
+							}),
+						},
+					}),
+					"stringable_number": base.CreateSchemaProxy(&base.Schema{
+						OneOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a stringable number type, required.",
+							}),
+							base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"number"},
+							}),
+						},
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_bool",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable bool type, required."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_integer",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm a stringable integer type."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "stringable_number",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a stringable number type, required."),
 					},
 				},
 			},
@@ -771,6 +942,131 @@ func TestBuildSchema_NullableMultiTypes(t *testing.T) {
 						ElementType: schema.ElementType{
 							String: &schema.StringType{},
 						},
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema, err := oas.BuildSchema(testCase.schemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			attributes, propErr := schema.BuildResourceAttributes()
+			if propErr != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schemaProxy        *base.SchemaProxy
+		expectedAttributes attrmapper.ResourceAttributes
+	}{
+		"allOf with one element - use subschema": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				AllOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+						Properties: map[string]*base.SchemaProxy{
+							"nested_object": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"object"},
+								Required:    []string{"string"},
+								Description: "hey there! I'm an object type.",
+								Properties: map[string]*base.SchemaProxy{
+									"bool": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"boolean"},
+										Description: "hey there! I'm a bool type.",
+									}),
+									"string": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"string"},
+										Description: "hey there! I'm a string type, required.",
+									}),
+								},
+							}),
+						},
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "nested_object",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceBoolAttribute{
+							Name: "bool",
+							BoolAttribute: resource.BoolAttribute{
+								ComputedOptionalRequired: schema.ComputedOptional,
+								Description:              pointer("hey there! I'm a bool type."),
+							},
+						},
+						&attrmapper.ResourceStringAttribute{
+							Name: "string",
+							StringAttribute: resource.StringAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("hey there! I'm a string type, required."),
+							},
+						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey there! I'm an object type."),
+					},
+				},
+			},
+		},
+		"allOf with one element - use subschema and override description": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{"object"},
+				Required: []string{"string_allof_override"},
+				Properties: map[string]*base.SchemaProxy{
+					"bool_allof_override": base.CreateSchemaProxy(&base.Schema{
+						Description: "Override the bool's description",
+						AllOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"boolean"},
+								Description: "hey there! I'm a bool type.",
+							}),
+						},
+					}),
+					"string_allof_override": base.CreateSchemaProxy(&base.Schema{
+						Description: "Override the string's description",
+						AllOf: []*base.SchemaProxy{
+							base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey there! I'm a string type.",
+							}),
+						},
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceBoolAttribute{
+					Name: "bool_allof_override",
+					BoolAttribute: resource.BoolAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("Override the bool's description"),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "string_allof_override",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("Override the string's description"),
 					},
 				},
 			},

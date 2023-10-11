@@ -218,8 +218,6 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 
 func isStringableType(t string) bool {
 	switch t {
-	case util.OAS_type_string:
-		return true
 	case util.OAS_type_integer:
 		return true
 	case util.OAS_type_number:
