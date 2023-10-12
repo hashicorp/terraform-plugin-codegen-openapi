@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
@@ -45,7 +46,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 
 		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			dLogger.Warn("skipping data source schema mapping", "err", err)
+			log.WarnLogOnError(dLogger, err, "skipping data source schema mapping")
 			continue
 		}
 
@@ -71,9 +72,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	if err != nil {
 		return nil, err
 	}
-	readResponseAttributes, err := readResponseSchema.BuildDataSourceAttributes()
-	if err != nil {
-		return nil, err
+	readResponseAttributes, propErr := readResponseSchema.BuildDataSourceAttributes()
+	if propErr != nil {
+		return nil, propErr
 	}
 
 	// ****************
@@ -91,7 +92,7 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -107,9 +108,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 				paramName = aliasedName
 			}
 
-			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
-			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+			parameterAttribute, propErr := s.BuildDataSourceAttribute(paramName, computability)
+			if propErr != nil {
+				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
 				continue
 			}
 

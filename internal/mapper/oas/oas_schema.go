@@ -55,6 +55,34 @@ func (s *OASSchema) IsMap() bool {
 	return isMap
 }
 
+// NewPropertyError is a helper function for creating an PropertyError struct for a property.
+func (s *OASSchema) NewPropertyError(err error, propName string) *PropertyError {
+	return NewPropertyError(err, propName, s.getPropertyLineNumber(propName))
+}
+
+// NestPropertyError is a helper function for creating a nested PropertyError struct for a property.
+func (s *OASSchema) NestPropertyError(propErr *PropertyError, propName string) *PropertyError {
+	return propErr.NestedPropertyError(propName, s.getPropertyLineNumber(propName))
+}
+
+// getPropertyLineNumber looks in the low-level schema instance for line information. Returns 0 if not found.
+func (s *OASSchema) getPropertyLineNumber(propName string) int {
+	// Check properties first
+	low := s.Schema.GoLow()
+	for k, v := range low.Properties.Value {
+		if k.Value == propName {
+			return v.NodeLineNumber()
+		}
+	}
+
+	// If it's not found in properties, it could be the top level of an empty schema, grab the parent node line number
+	if low.ParentProxy != nil && low.ParentProxy.GetValueNode() != nil {
+		return low.ParentProxy.GetValueNode().Line
+	}
+
+	return 0
+}
+
 // GetDeprecationMessage returns a deprecation message if the deprecated
 // property is enabled. It defaults the message to "This attribute is
 // deprecated" unless the SchemaOpts.OverrideDeprecationMessage is set.
@@ -81,7 +109,6 @@ func (s *OASSchema) GetDescription() *string {
 		return nil
 	}
 
-	// TODO: potentially use original description for nullable types?
 	return &s.Schema.Description
 }
 
