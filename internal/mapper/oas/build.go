@@ -14,7 +14,7 @@ import (
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-var ErrMultiTypeSchema = errors.New("unsupported multi-type schema, attribute cannot be created")
+var ErrMultiTypeSchema = errors.New("unsupported multi-type, attribute cannot be created")
 var ErrSchemaNotFound = errors.New("no compatible schema found")
 
 // BuildSchemaFromRequest will extract and build the schema from the request body of an operation
@@ -93,7 +93,7 @@ func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, schemaOpts Sc
 func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
 	resp := OASSchema{}
 
-	schema, err := proxy.BuildSchema()
+	s, err := proxy.BuildSchema()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
 	}
@@ -101,11 +101,28 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 	resp.SchemaOpts = schemaOpts
 	resp.GlobalSchemaOpts = globalOpts
 
-	resp.original = schema
-	resp.Schema = schema
+	resp.original = s
+	resp.Schema = s
 
-	if len(schema.AnyOf) == 2 {
-		schema, err := getNullableSchema(schema.AnyOf[0], schema.AnyOf[1])
+	if len(resp.Schema.AllOf) > 0 {
+		// If there is just one allOf, we can use it as the schema
+		if len(resp.Schema.AllOf) == 1 {
+			schema, err := resp.Schema.AllOf[0].BuildSchema()
+			if err != nil {
+				return nil, fmt.Errorf("failed to build allOf[0] schema proxy - %w", err)
+			}
+
+			// Override the description w/ the parent if populated
+			if resp.Schema.Description != "" {
+				schema.Description = resp.Schema.Description
+			}
+
+			resp.Schema = schema
+		}
+	}
+
+	if len(resp.Schema.AnyOf) == 2 {
+		schema, err := getMultiTypeSchema(resp.Schema.AnyOf[0], resp.Schema.AnyOf[1])
 		if err != nil {
 			return nil, err
 		}
@@ -113,8 +130,8 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 		resp.Schema = schema
 	}
 
-	if len(schema.OneOf) == 2 {
-		schema, err := getNullableSchema(schema.OneOf[0], schema.OneOf[1])
+	if len(resp.Schema.OneOf) == 2 {
+		schema, err := getMultiTypeSchema(resp.Schema.OneOf[0], resp.Schema.OneOf[1])
 		if err != nil {
 			return nil, err
 		}
@@ -137,23 +154,31 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 func retrieveType(schema *base.Schema) (string, error) {
 	switch len(schema.Type) {
 	case 0:
-		return "", errors.New("property does not have a type, attribute cannot be created")
+		return "", errors.New("property does not have a 'type' or supported allOf, oneOf, anyOf constraint - attribute cannot be created")
 	case 1:
 		return schema.Type[0], nil
 	case 2:
+		// Check for null type, if found, return the other type
 		if schema.Type[0] == util.OAS_type_null {
 			return schema.Type[1], nil
 		} else if schema.Type[1] == util.OAS_type_null {
 			return schema.Type[0], nil
 		}
+
+		// Check for string type, if the other type can be represented as a string, return the string type
+		if schema.Type[0] == util.OAS_type_string && isStringableType(schema.Type[1]) {
+			return schema.Type[0], nil
+		} else if schema.Type[1] == util.OAS_type_string && isStringableType(schema.Type[0]) {
+			return schema.Type[1], nil
+		}
 	}
 
-	return "", fmt.Errorf("%w - %v", ErrMultiTypeSchema, schema.Type)
+	return "", fmt.Errorf("%v - %w", schema.Type, ErrMultiTypeSchema)
 }
 
-// getNullableSchema will check the types of both schemas provided and will return the non-null schema. If a null schema type is not
+// getMultiTypeSchema will check the types of both schemas provided and will return the non-null schema. If a null schema type is not
 // detected, an error will be returned as multi-types are not supported
-func getNullableSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) (*base.Schema, error) {
+func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) (*base.Schema, error) {
 	firstSchema, err := proxyOne.BuildSchema()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
@@ -174,11 +199,32 @@ func getNullableSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) (
 		return nil, fmt.Errorf("failed to retrieve schema type - %w", err)
 	}
 
+	// Check for null type, if found, return the other type
 	if firstType == util.OAS_type_null {
 		return secondSchema, nil
 	} else if secondType == util.OAS_type_null {
 		return firstSchema, nil
 	}
 
-	return nil, fmt.Errorf("%w - %s %s", ErrMultiTypeSchema, firstType, secondType)
+	// Check for string type, if the other type can be represented as a string, return the string type
+	if firstType == util.OAS_type_string && isStringableType(secondType) {
+		return firstSchema, nil
+	} else if secondType == util.OAS_type_string && isStringableType(firstType) {
+		return secondSchema, nil
+	}
+
+	return nil, fmt.Errorf("[%s, %s] - %w", firstType, secondType, ErrMultiTypeSchema)
+}
+
+func isStringableType(t string) bool {
+	switch t {
+	case util.OAS_type_integer:
+		return true
+	case util.OAS_type_number:
+		return true
+	case util.OAS_type_boolean:
+		return true
+	default:
+		return false
+	}
 }

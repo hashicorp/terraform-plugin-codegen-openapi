@@ -36,4 +36,9 @@ testdata:
 		--output ./internal/cmd/testdata/edgecase/provider_code_spec.json \
 		./internal/cmd/testdata/edgecase/openapi_spec.yml
 
+	go run ./cmd/tfplugingen-openapi generate \
+		--config ./internal/cmd/testdata/kubernetes/generator_config.yml \
+		--output ./internal/cmd/testdata/kubernetes/provider_code_spec.json \
+		./internal/cmd/testdata/kubernetes/openapi_spec.json
+
 .PHONY: lint fmt test

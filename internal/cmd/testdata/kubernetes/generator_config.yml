@@ -1,0 +1,18 @@
+# Ref: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment_v1
+provider:
+  name: kubernetes
+
+resources:
+  deployment_v1:
+    create:
+      path: /apis/apps/v1/namespaces/{namespace}/deployments
+      method: POST
+    read:
+      path: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: GET
+    update:
+      path: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: PUT
+    delete:
+      path: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: DELETE

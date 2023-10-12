@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
@@ -46,7 +47,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 
 		schema, err := generateResourceSchema(rLogger, explorerResource)
 		if err != nil {
-			rLogger.Warn("skipping resource schema mapping", "err", err)
+			log.WarnLogOnError(rLogger, err, "skipping resource schema mapping")
 			continue
 		}
 
@@ -72,9 +73,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	if err != nil {
 		return nil, err
 	}
-	createRequestAttributes, err := createRequestSchema.BuildResourceAttributes()
-	if err != nil {
-		return nil, err
+	createRequestAttributes, propErr := createRequestSchema.BuildResourceAttributes()
+	if propErr != nil {
+		return nil, propErr
 	}
 
 	// *********************
@@ -91,9 +92,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of create operation response body", "err", err)
 		}
 	} else {
-		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			logger.Warn("skipping mapping of create operation response body", "err", err)
+		createResponseAttributes, propErr = createResponseSchema.BuildResourceAttributes()
+		if propErr != nil {
+			log.WarnLogOnError(logger, propErr, "skipping mapping of create operation response body")
 		}
 	}
 
@@ -111,9 +112,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of read operation response body", "err", err)
 		}
 	} else {
-		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			logger.Warn("skipping mapping of read operation response body", "err", err)
+		readResponseAttributes, propErr = readResponseSchema.BuildResourceAttributes()
+		if propErr != nil {
+			log.WarnLogOnError(logger, propErr, "skipping mapping of read operation response body")
 		}
 	}
 
@@ -133,7 +134,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
 			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -144,9 +145,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 				paramName = aliasedName
 			}
 
-			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
-			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+			parameterAttribute, propErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+			if propErr != nil {
+				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
 				continue
 			}
 

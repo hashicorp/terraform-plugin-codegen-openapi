@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, error) {
+func (s *OASSchema) BuildIntegerResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
 	result := &attrmapper.ResourceInt64Attribute{
 		Name: name,
 		Int64Attribute: resource.Int64Attribute{
@@ -43,7 +43,7 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, error) {
+func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
 	result := &attrmapper.DataSourceInt64Attribute{
 		Name: name,
 		Int64Attribute: datasource.Int64Attribute{
@@ -60,7 +60,7 @@ func (s *OASSchema) BuildIntegerDataSource(name string, computability schema.Com
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, error) {
+func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
 	result := &attrmapper.ProviderInt64Attribute{
 		Name: name,
 		Int64Attribute: provider.Int64Attribute{
@@ -74,7 +74,7 @@ func (s *OASSchema) BuildIntegerProvider(name string, optionalOrRequired schema.
 	return result, nil
 }
 
-func (s *OASSchema) BuildIntegerElementType() (schema.ElementType, error) {
+func (s *OASSchema) BuildIntegerElementType() (schema.ElementType, *PropertyError) {
 	return schema.ElementType{
 		Int64: &schema.Int64Type{},
 	}, nil

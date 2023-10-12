@@ -185,14 +185,15 @@ As OpenAPI is designed to describe HTTP APIs in general, it doesn't always fully
 
 ### Multi-type Support
 
-Generally, [multi-types](https://cswr.github.io/JsonSchema/spec/multiple_types/) are not supported by the generator as the Terraform Plugin Framework does not support multi-types. There is one specific scenario that is supported by the generator and that is any type that is combined with the `null` OAS type, as any Terraform data type can hold a [null](https://developer.hashicorp.com/terraform/plugin/framework/handling-data/terraform-concepts#null-values) value.
+Generally, [multi-types](https://cswr.github.io/JsonSchema/spec/multiple_types/) are not supported by the generator as the Terraform Plugin Framework does not support multi-types. There are two specific scenarios that are supported by the generator. 
+
+> **Note:** with multi-type support described below, the `description` will be populated from the root-level schema, see examples. 
 
 ### Nullable Multi-type support
-> **Note:** with nullable multi-types, the `description` will be populated from the root-level schema, as shown below. 
 
-In an OAS schema, the following keywords defining nullable multi-types are supported (nullable types will follow the same mapping rules [defined above](#oas-types-to-provider-attributes) for the type that is not the `null` type):
+If a multi-type is detected where one of the types is `null`, the other type will be used for schema mapping using the same rules [defined above](#oas-types-to-provider-attributes).
 
-#### OAS `type` keyword array
+#### Examples with `type` array
 ```json
 // Maps to StringAttribute
 {
@@ -217,7 +218,7 @@ In an OAS schema, the following keywords defining nullable multi-types are suppo
 }
 ```
 
-#### OAS `anyOf` and `oneOf` keywords
+#### Examples with `anyOf` and `oneOf`
 ```json
 // Maps to SingleNestedAttribute
 {
@@ -244,6 +245,60 @@ In an OAS schema, the following keywords defining nullable multi-types are suppo
       },
       {
         "type": "null"
+      }
+    ]
+  }
+}
+```
+
+### String-able Multi-type support
+
+If a multi-type is detected where one of the types is a `string` and the other type is a `primitive`, then the resulting attribute will be a `StringAttribute`.
+
+Supported `primitive` types that can be represented as `string`:
+- `number`
+- `integer`
+- `boolean`
+
+
+#### Examples with `type` array, `oneOf`, and `anyOf`
+```json
+// Maps to StringAttribute
+{
+  "stringable_number_example": {
+    "description": "this is the description that's used!",
+    "type": [
+      "string",
+      "number"
+    ]
+  }
+}
+
+// Maps to StringAttribute
+{
+  "stringable_integer_example": {
+    "description": "this is the description that's used!",
+    "anyOf": [
+      {
+        "type": "integer"
+      },
+      {
+        "type": "string"
+      }
+    ]
+  }
+}
+
+// Maps to StringAttribute
+{
+  "stringable_boolean_example": {
+    "description": "this is the description that's used!",
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "boolean"
       }
     ]
   }
