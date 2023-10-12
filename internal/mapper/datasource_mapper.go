@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
@@ -45,14 +46,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 
 		schema, err := generateDataSourceSchema(dLogger, dataSource)
 		if err != nil {
-			propErr, ok := err.(*oas.PropertyError)
-			if ok {
-				dLogger.Warn("skipping data source schema mapping", "err", err,
-					"oas_property", propErr.Path(),
-					"oas_line_number", propErr.LineNumber())
-			} else {
-				dLogger.Warn("skipping data source schema mapping", "err", err)
-			}
+			log.WarnLogOnError(dLogger, err, "skipping data source schema mapping")
 			continue
 		}
 
@@ -98,7 +92,7 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -116,9 +110,7 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 
 			parameterAttribute, propErr := s.BuildDataSourceAttribute(paramName, computability)
 			if propErr != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", propErr,
-					"oas_property", propErr.Path(),
-					"oas_line_number", propErr.LineNumber())
+				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
 				continue
 			}
 

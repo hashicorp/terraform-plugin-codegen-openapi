@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
@@ -46,14 +47,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 
 		schema, err := generateResourceSchema(rLogger, explorerResource)
 		if err != nil {
-			propErr, ok := err.(*oas.PropertyError)
-			if ok {
-				rLogger.Warn("skipping resource schema mapping", "err", err,
-					"oas_property", propErr.Path(),
-					"oas_line_number", propErr.LineNumber())
-			} else {
-				rLogger.Warn("skipping resource schema mapping", "err", err)
-			}
+			log.WarnLogOnError(rLogger, err, "skipping resource schema mapping")
 			continue
 		}
 
@@ -100,9 +94,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	} else {
 		createResponseAttributes, propErr = createResponseSchema.BuildResourceAttributes()
 		if propErr != nil {
-			logger.Warn("skipping mapping of create operation response body", "err", propErr,
-				"oas_property", propErr.Path(),
-				"oas_line_number", propErr.LineNumber())
+			log.WarnLogOnError(logger, propErr, "skipping mapping of create operation response body")
 		}
 	}
 
@@ -122,9 +114,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	} else {
 		readResponseAttributes, propErr = readResponseSchema.BuildResourceAttributes()
 		if propErr != nil {
-			logger.Warn("skipping mapping of read operation response body", "err", propErr,
-				"oas_property", propErr.Path(),
-				"oas_line_number", propErr.LineNumber())
+			log.WarnLogOnError(logger, propErr, "skipping mapping of read operation response body")
 		}
 	}
 
@@ -144,7 +134,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 
 			s, err := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
 			if err != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", err)
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -157,9 +147,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 
 			parameterAttribute, propErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
 			if propErr != nil {
-				pLogger.Warn("skipping mapping of read operation parameter", "err", propErr,
-					"oas_property", propErr.Path(),
-					"oas_line_number", propErr.LineNumber())
+				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
 				continue
 			}
 

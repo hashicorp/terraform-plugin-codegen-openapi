@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 )
@@ -62,9 +63,7 @@ func generateProviderSchema(logger *slog.Logger, exploredProvider explorer.Provi
 
 	attributes, propErr := s.BuildProviderAttributes()
 	if propErr != nil {
-		logger.Error("error mapping provider schema", "err", propErr,
-			"oas_property", propErr.Path(),
-			"oas_line_number", propErr.LineNumber())
+		log.WarnLogOnError(logger, propErr, "error mapping provider schema")
 
 		return nil, fmt.Errorf("error mapping provider schema: %w", propErr)
 	}
