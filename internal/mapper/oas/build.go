@@ -217,7 +217,7 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 		return secondSchema, nil
 	}
 
-	return nil, SchemaErrorFromNode(fmt.Errorf("[%s, %s] - %w", firstType, secondType, ErrMultiTypeSchema), firstSchema, Type)
+	return nil, SchemaErrorFromNode(fmt.Errorf("[%s %s] - %w", firstType, secondType, ErrMultiTypeSchema), firstSchema, Type)
 }
 
 // retrieveType will return the JSON schema type. Support for multi-types is restricted to combinations of "null" and another type, i.e. ["null", "string"]

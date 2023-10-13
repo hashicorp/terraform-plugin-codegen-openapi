@@ -51,11 +51,11 @@ func (e *SchemaError) LineNumber() int {
 	return e.lineNumber
 }
 
-// SchemaErrorFromProperty returns a new SchemaError error struct
-func SchemaErrorFromProperty(err error, name string, lineNumber int) *SchemaError {
+// NewSchemaError returns a new SchemaError error struct
+func NewSchemaError(err error, lineNumber int, path ...string) *SchemaError {
 	return &SchemaError{
 		err:        err,
-		path:       []string{name},
+		path:       path,
 		lineNumber: lineNumber,
 	}
 }
@@ -111,19 +111,18 @@ func SchemaErrorFromNode(err error, schema *base.Schema, nodeType NodeType) *Sch
 // SchemaErrorFromProxy returns a new SchemaError error struct that has no path information, using a schema proxy to get the line number.
 func SchemaErrorFromProxy(err error, proxy *base.SchemaProxy) *SchemaError {
 	// If there is no low information, then we can't retrieve any line numbers
-	lowProxy := proxy.GoLow()
-	if lowProxy == nil || lowProxy.GetValueNode() == nil {
+	if proxy == nil || proxy.GoLow() == nil || proxy.GoLow().GetValueNode() == nil {
 		return emptySchemaError(err)
 	}
 
 	return &SchemaError{
 		err:        err,
 		path:       make([]string, 0),
-		lineNumber: lowProxy.GetValueNode().Line,
+		lineNumber: proxy.GoLow().GetValueNode().Line,
 	}
 }
 
-// emptySchemaError will return a simple SchemaError struct that contains no additional OAS information about the error
+// emptySchemaError will return a simple SchemaError struct that contains no additional OAS information
 func emptySchemaError(err error) *SchemaError {
 	return &SchemaError{
 		err:  err,

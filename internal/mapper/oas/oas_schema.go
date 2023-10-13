@@ -54,7 +54,7 @@ func (s *OASSchema) IsMap() bool {
 
 // SchemaErrorFromProperty is a helper function for creating an SchemaError struct for a property.
 func (s *OASSchema) SchemaErrorFromProperty(err error, propName string) *SchemaError {
-	return SchemaErrorFromProperty(err, propName, s.getPropertyLineNumber(propName))
+	return NewSchemaError(err, s.getPropertyLineNumber(propName), propName)
 }
 
 // NestSchemaError is a helper function for creating a nested SchemaError struct for a property.
