@@ -73,9 +73,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	if err != nil {
 		return nil, err
 	}
-	createRequestAttributes, err := createRequestSchema.BuildResourceAttributes()
-	if err != nil {
-		return nil, err
+	createRequestAttributes, schemaErr := createRequestSchema.BuildResourceAttributes()
+	if schemaErr != nil {
+		return nil, schemaErr
 	}
 
 	// *********************
@@ -92,9 +92,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of create operation response body", "err", err)
 		}
 	} else {
-		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			log.WarnLogOnError(logger, err, "skipping mapping of create operation response body")
+		createResponseAttributes, schemaErr = createResponseSchema.BuildResourceAttributes()
+		if schemaErr != nil {
+			log.WarnLogOnError(logger, schemaErr, "skipping mapping of create operation response body")
 		}
 	}
 
@@ -112,9 +112,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of read operation response body", "err", err)
 		}
 	} else {
-		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
-		if err != nil {
-			log.WarnLogOnError(logger, err, "skipping mapping of read operation response body")
+		readResponseAttributes, schemaErr = readResponseSchema.BuildResourceAttributes()
+		if schemaErr != nil {
+			log.WarnLogOnError(logger, schemaErr, "skipping mapping of read operation response body")
 		}
 	}
 
@@ -132,9 +132,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
 			globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
 
-			s, err := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
-			if err != nil {
-				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
+			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
+			if schemaErr != nil {
+				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -145,9 +145,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 				paramName = aliasedName
 			}
 
-			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
-			if err != nil {
-				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
+			parameterAttribute, schemaErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+			if schemaErr != nil {
+				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 				continue
 			}
 
