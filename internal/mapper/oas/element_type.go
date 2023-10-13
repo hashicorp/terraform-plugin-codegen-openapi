@@ -29,6 +29,6 @@ func (s *OASSchema) BuildElementType() (schema.ElementType, *SchemaError) {
 		return s.BuildObjectElementType()
 
 	default:
-		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid schema type '%s'", s.Type), s.Schema.GoLow().Type)
+		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid schema type '%s'", s.Type), s.Schema, Type)
 	}
 }

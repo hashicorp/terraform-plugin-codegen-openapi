@@ -194,7 +194,7 @@ func (s *OASSchema) BuildMapElementType() (schema.ElementType, *SchemaError) {
 	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
-		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), s.Schema.GoLow().AdditionalProperties)
+		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), s.Schema, AdditionalProperties)
 	}
 
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)

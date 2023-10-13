@@ -143,7 +143,7 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 		}
 
 		// Dynamic type currently not supported
-		return nil, SchemaErrorFromNode(fmt.Errorf("found %d anyOf subschema(s), schema composition is currently not supported", len(s.AnyOf)), s.GoLow().AnyOf)
+		return nil, SchemaErrorFromNode(fmt.Errorf("found %d anyOf subschema(s), schema composition is currently not supported", len(s.AnyOf)), s, AnyOf)
 	}
 
 	if len(s.OneOf) > 0 {
@@ -157,7 +157,7 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 		}
 
 		// Dynamic type currently not supported
-		return nil, SchemaErrorFromNode(fmt.Errorf("found %d oneOf subschema(s), schema composition is currently not supported", len(s.OneOf)), s.GoLow().OneOf)
+		return nil, SchemaErrorFromNode(fmt.Errorf("found %d oneOf subschema(s), schema composition is currently not supported", len(s.OneOf)), s, OneOf)
 	}
 
 	// If there is just one allOf, we can use it as the schema
@@ -177,7 +177,7 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 
 	// Combining multiple allOf schemas and their properties is possible here, but currently not supported
 	// See: https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/56
-	return nil, SchemaErrorFromNode(fmt.Errorf("found %d allOf subschema(s), schema composition is currently not supported", len(s.AllOf)), s.GoLow().AllOf)
+	return nil, SchemaErrorFromNode(fmt.Errorf("found %d allOf subschema(s), schema composition is currently not supported", len(s.AllOf)), s, AllOf)
 }
 
 // getMultiTypeSchema will check the types of both schemas provided and will return the non-null schema. If a null schema type is not
@@ -217,7 +217,7 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 		return secondSchema, nil
 	}
 
-	return nil, SchemaErrorFromNode(fmt.Errorf("[%s, %s] - %w", firstType, secondType, ErrMultiTypeSchema), firstSchema.GoLow().Type)
+	return nil, SchemaErrorFromNode(fmt.Errorf("[%s, %s] - %w", firstType, secondType, ErrMultiTypeSchema), firstSchema, Type)
 }
 
 // retrieveType will return the JSON schema type. Support for multi-types is restricted to combinations of "null" and another type, i.e. ["null", "string"]
@@ -243,7 +243,7 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 		}
 	}
 
-	return "", SchemaErrorFromNode(fmt.Errorf("%v - %w", schema.Type, ErrMultiTypeSchema), schema.GoLow().Type)
+	return "", SchemaErrorFromNode(fmt.Errorf("%v - %w", schema.Type, ErrMultiTypeSchema), schema, Type)
 }
 
 func isStringableType(t string) bool {

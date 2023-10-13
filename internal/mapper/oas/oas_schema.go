@@ -64,8 +64,12 @@ func (s *OASSchema) NestSchemaError(err *SchemaError, propName string) *SchemaEr
 
 // getPropertyLineNumber looks in the low-level schema instance for line information. Returns 0 if not found.
 func (s *OASSchema) getPropertyLineNumber(propName string) int {
-	// Check property nodes first for a line number
 	low := s.Schema.GoLow()
+	if low == nil {
+		return 0
+	}
+
+	// Check property nodes first for a line number
 	for k, v := range low.Properties.Value {
 		if k.Value == propName {
 			return v.NodeLineNumber()

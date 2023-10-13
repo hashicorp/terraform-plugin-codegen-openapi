@@ -296,7 +296,7 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 
 func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, *SchemaError) {
 	if !s.Schema.Items.IsA() {
-		return schema.ElementType{}, SchemaErrorFromNode(errors.New("invalid array type for nested elem array, doesn't have a schema"), s.Schema.GoLow().Items)
+		return schema.ElementType{}, SchemaErrorFromNode(errors.New("invalid array type for nested elem array, doesn't have a schema"), s.Schema, Items)
 	}
 	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
