@@ -38,6 +38,10 @@ func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *S
 }
 
 func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
+	if util.TerraformIdentifier(name) == "" {
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("'%s' cannot be converted to a valid Terraform identifier", name), name)
+	}
+
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringResource(name, computability)
@@ -86,6 +90,10 @@ func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes
 }
 
 func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
+	if util.TerraformIdentifier(name) == "" {
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("'%s' cannot be converted to a valid Terraform identifier", name), name)
+	}
+
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringDataSource(name, computability)
@@ -134,6 +142,10 @@ func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *S
 }
 
 func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
+	if util.TerraformIdentifier(name) == "" {
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("'%s' cannot be converted to a valid Terraform identifier", name), name)
+	}
+
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringProvider(name, optionalOrRequired)
