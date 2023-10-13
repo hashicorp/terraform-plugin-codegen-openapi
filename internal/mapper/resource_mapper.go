@@ -73,9 +73,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	if err != nil {
 		return nil, err
 	}
-	createRequestAttributes, propErr := createRequestSchema.BuildResourceAttributes()
-	if propErr != nil {
-		return nil, propErr
+	createRequestAttributes, err := createRequestSchema.BuildResourceAttributes()
+	if err != nil {
+		return nil, err
 	}
 
 	// *********************
@@ -92,9 +92,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of create operation response body", "err", err)
 		}
 	} else {
-		createResponseAttributes, propErr = createResponseSchema.BuildResourceAttributes()
-		if propErr != nil {
-			log.WarnLogOnError(logger, propErr, "skipping mapping of create operation response body")
+		createResponseAttributes, err = createResponseSchema.BuildResourceAttributes()
+		if err != nil {
+			log.WarnLogOnError(logger, err, "skipping mapping of create operation response body")
 		}
 	}
 
@@ -112,9 +112,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			logger.Warn("skipping mapping of read operation response body", "err", err)
 		}
 	} else {
-		readResponseAttributes, propErr = readResponseSchema.BuildResourceAttributes()
-		if propErr != nil {
-			log.WarnLogOnError(logger, propErr, "skipping mapping of read operation response body")
+		readResponseAttributes, err = readResponseSchema.BuildResourceAttributes()
+		if err != nil {
+			log.WarnLogOnError(logger, err, "skipping mapping of read operation response body")
 		}
 	}
 
@@ -145,9 +145,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 				paramName = aliasedName
 			}
 
-			parameterAttribute, propErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
-			if propErr != nil {
-				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
+			parameterAttribute, err := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+			if err != nil {
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 

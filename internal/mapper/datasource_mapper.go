@@ -72,9 +72,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	if err != nil {
 		return nil, err
 	}
-	readResponseAttributes, propErr := readResponseSchema.BuildDataSourceAttributes()
-	if propErr != nil {
-		return nil, propErr
+	readResponseAttributes, err := readResponseSchema.BuildDataSourceAttributes()
+	if err != nil {
+		return nil, err
 	}
 
 	// ****************
@@ -108,9 +108,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 				paramName = aliasedName
 			}
 
-			parameterAttribute, propErr := s.BuildDataSourceAttribute(paramName, computability)
-			if propErr != nil {
-				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
+			parameterAttribute, err := s.BuildDataSourceAttribute(paramName, computability)
+			if err != nil {
+				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
 				continue
 			}
 

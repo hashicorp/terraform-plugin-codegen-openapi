@@ -959,8 +959,8 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			attributes, propErr := schema.BuildResourceAttributes()
-			if propErr != nil {
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
@@ -1084,8 +1084,8 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			attributes, propErr := schema.BuildResourceAttributes()
-			if propErr != nil {
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 

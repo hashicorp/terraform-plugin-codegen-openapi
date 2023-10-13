@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildStringResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	result := &attrmapper.ResourceStringAttribute{
 		Name: name,
 		StringAttribute: resource.StringAttribute{
@@ -44,7 +44,7 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildStringDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	result := &attrmapper.DataSourceStringAttribute{
 		Name: name,
 		StringAttribute: datasource.StringAttribute{
@@ -62,7 +62,7 @@ func (s *OASSchema) BuildStringDataSource(name string, computability schema.Comp
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	result := &attrmapper.ProviderStringAttribute{
 		Name: name,
 		StringAttribute: provider.StringAttribute{
@@ -77,7 +77,7 @@ func (s *OASSchema) BuildStringProvider(name string, optionalOrRequired schema.O
 	return result, nil
 }
 
-func (s *OASSchema) BuildStringElementType() (schema.ElementType, *PropertyError) {
+func (s *OASSchema) BuildStringElementType() (schema.ElementType, *SchemaError) {
 	return schema.ElementType{
 		String: &schema.StringType{},
 	}, nil

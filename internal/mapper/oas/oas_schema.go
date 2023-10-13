@@ -17,9 +17,6 @@ type OASSchema struct {
 
 	GlobalSchemaOpts GlobalSchemaOpts
 	SchemaOpts       SchemaOpts
-
-	// TODO: Should we export the original schema? In the case of nullable schemas, we may want to consider using the original schema's description/annotations/etc.
-	original *base.Schema
 }
 
 // GlobalSchemaOpts is passed recursively through built OASSchema structs. This is used for options that need to control
@@ -55,19 +52,19 @@ func (s *OASSchema) IsMap() bool {
 	return isMap
 }
 
-// NewPropertyError is a helper function for creating an PropertyError struct for a property.
-func (s *OASSchema) NewPropertyError(err error, propName string) *PropertyError {
-	return NewPropertyError(err, propName, s.getPropertyLineNumber(propName))
+// SchemaErrorFromProperty is a helper function for creating an SchemaError struct for a property.
+func (s *OASSchema) SchemaErrorFromProperty(err error, propName string) *SchemaError {
+	return SchemaErrorFromProperty(err, propName, s.getPropertyLineNumber(propName))
 }
 
-// NestPropertyError is a helper function for creating a nested PropertyError struct for a property.
-func (s *OASSchema) NestPropertyError(propErr *PropertyError, propName string) *PropertyError {
-	return propErr.NestedPropertyError(propName, s.getPropertyLineNumber(propName))
+// NestSchemaError is a helper function for creating a nested SchemaError struct for a property.
+func (s *OASSchema) NestSchemaError(err *SchemaError, propName string) *SchemaError {
+	return err.NestedSchemaError(propName, s.getPropertyLineNumber(propName))
 }
 
 // getPropertyLineNumber looks in the low-level schema instance for line information. Returns 0 if not found.
 func (s *OASSchema) getPropertyLineNumber(propName string) int {
-	// Check properties first
+	// Check property nodes first for a line number
 	low := s.Schema.GoLow()
 	for k, v := range low.Properties.Value {
 		if k.Value == propName {
@@ -75,7 +72,7 @@ func (s *OASSchema) getPropertyLineNumber(propName string) int {
 		}
 	}
 
-	// If it's not found in properties, it could be the top level of an empty schema, grab the parent node line number
+	// If it's not found in properties, default to the line number from the parent node
 	if low.ParentProxy != nil && low.ParentProxy.GetValueNode() != nil {
 		return low.ParentProxy.GetValueNode().Line
 	}

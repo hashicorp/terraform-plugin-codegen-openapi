@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *PropertyError) {
+func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *SchemaError) {
 	objectAttributes := attrmapper.ResourceAttributes{}
 
 	// TODO: throw error if it's not an object?
@@ -23,12 +23,12 @@ func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *P
 		pProxy := s.Schema.Properties[name]
 		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
-			return nil, s.NewPropertyError(err, name)
+			return nil, s.NestSchemaError(err, name)
 		}
 
-		attribute, propErr := pSchema.BuildResourceAttribute(name, s.GetComputability(name))
-		if propErr != nil {
-			return nil, propErr
+		attribute, err := pSchema.BuildResourceAttribute(name, s.GetComputability(name))
+		if err != nil {
+			return nil, err
 		}
 
 		objectAttributes = append(objectAttributes, attribute)
@@ -37,7 +37,7 @@ func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *P
 	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildResourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringResource(name, computability)
@@ -55,11 +55,11 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 		}
 		return s.BuildSingleNestedResource(name, computability)
 	default:
-		return nil, s.NewPropertyError(fmt.Errorf("invalid schema type '%s'", s.Type), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid schema type '%s'", s.Type), name)
 	}
 }
 
-func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes, *PropertyError) {
+func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes, *SchemaError) {
 	objectAttributes := attrmapper.DataSourceAttributes{}
 
 	// TODO: throw error if it's not an object?
@@ -71,12 +71,12 @@ func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes
 		pProxy := s.Schema.Properties[name]
 		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
-			return nil, s.NewPropertyError(err, name)
+			return nil, s.NestSchemaError(err, name)
 		}
 
-		attribute, propErr := pSchema.BuildDataSourceAttribute(name, s.GetComputability(name))
+		attribute, err := pSchema.BuildDataSourceAttribute(name, s.GetComputability(name))
 		if err != nil {
-			return nil, propErr
+			return nil, err
 		}
 
 		objectAttributes = append(objectAttributes, attribute)
@@ -85,7 +85,7 @@ func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes
 	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringDataSource(name, computability)
@@ -103,11 +103,11 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 		}
 		return s.BuildSingleNestedDataSource(name, computability)
 	default:
-		return nil, s.NewPropertyError(fmt.Errorf("invalid schema type '%s'", s.Type), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid schema type '%s'", s.Type), name)
 	}
 }
 
-func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *PropertyError) {
+func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *SchemaError) {
 	objectAttributes := attrmapper.ProviderAttributes{}
 
 	// TODO: throw error if it's not an object?
@@ -119,12 +119,12 @@ func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *P
 		pProxy := s.Schema.Properties[name]
 		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
-			return nil, s.NewPropertyError(err, name)
+			return nil, s.NestSchemaError(err, name)
 		}
 
-		attribute, propErr := pSchema.BuildProviderAttribute(name, s.GetOptionalOrRequired(name))
+		attribute, err := pSchema.BuildProviderAttribute(name, s.GetOptionalOrRequired(name))
 		if err != nil {
-			return nil, propErr
+			return nil, err
 		}
 
 		objectAttributes = append(objectAttributes, attribute)
@@ -133,7 +133,7 @@ func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *P
 	return objectAttributes, nil
 }
 
-func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	switch s.Type {
 	case util.OAS_type_string:
 		return s.BuildStringProvider(name, optionalOrRequired)
@@ -151,6 +151,6 @@ func (s *OASSchema) BuildProviderAttribute(name string, optionalOrRequired schem
 		}
 		return s.BuildSingleNestedProvider(name, optionalOrRequired)
 	default:
-		return nil, s.NewPropertyError(fmt.Errorf("invalid schema type '%s'", s.Type), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid schema type '%s'", s.Type), name)
 	}
 }
