@@ -3,8 +3,8 @@ module github.com/hashicorp/terraform-plugin-codegen-openapi
 go 1.21
 
 require (
-	github.com/google/go-cmp v0.5.9
-	github.com/hashicorp/terraform-plugin-codegen-spec v0.0.0-20230927170433-b779baa44f04
+	github.com/google/go-cmp v0.6.0
+	github.com/hashicorp/terraform-plugin-codegen-spec v0.1.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mitchellh/cli v1.1.5
 	github.com/pb33f/libopenapi v0.11.0
