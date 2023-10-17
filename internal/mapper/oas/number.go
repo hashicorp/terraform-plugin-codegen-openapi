@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildNumberResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result := &attrmapper.ResourceFloat64Attribute{
 			Name: name,
@@ -55,7 +55,7 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 	}, nil
 }
 
-func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildNumberDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result := &attrmapper.DataSourceFloat64Attribute{
 			Name: name,
@@ -84,7 +84,7 @@ func (s *OASSchema) BuildNumberDataSource(name string, computability schema.Comp
 	return result, nil
 }
 
-func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		result := &attrmapper.ProviderFloat64Attribute{
 			Name: name,
@@ -110,7 +110,7 @@ func (s *OASSchema) BuildNumberProvider(name string, optionalOrRequired schema.O
 	return result, nil
 }
 
-func (s *OASSchema) BuildNumberElementType() (schema.ElementType, *PropertyError) {
+func (s *OASSchema) BuildNumberElementType() (schema.ElementType, *SchemaError) {
 	if s.Format == util.OAS_format_double || s.Format == util.OAS_format_float {
 		return schema.ElementType{
 			Float64: &schema.Float64Type{},

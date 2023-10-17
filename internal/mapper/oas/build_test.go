@@ -959,8 +959,8 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			attributes, propErr := schema.BuildResourceAttributes()
-			if propErr != nil {
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
@@ -1084,13 +1084,127 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
-			attributes, propErr := schema.BuildResourceAttributes()
-			if propErr != nil {
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 
 			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
 				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestBuildSchema_Errors(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schemaProxy      *base.SchemaProxy
+		expectedErrRegex string
+	}{
+		"no type or schema composition": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{},
+			}),
+			expectedErrRegex: `no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created`,
+		},
+		"unsupported multi-type array": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"string", "object"},
+			}),
+			expectedErrRegex: `\[string object\] - unsupported multi-type, attribute cannot be created`,
+		},
+		"unsupported multi-type oneOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				OneOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+					}),
+				},
+			}),
+			expectedErrRegex: `\[string object\] - unsupported multi-type, attribute cannot be created`,
+		},
+		"unsupported multi-type anyOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				OneOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			expectedErrRegex: `\[object string\] - unsupported multi-type, attribute cannot be created`,
+		},
+		"too many allOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				AllOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"null"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			expectedErrRegex: `found 2 allOf subschema\(s\), schema composition is currently not supported`,
+		},
+		"too many anyOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				AnyOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"null"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"integer"},
+					}),
+				},
+			}),
+			expectedErrRegex: `found 3 anyOf subschema\(s\), schema composition is currently not supported`,
+		},
+		"too many oneOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				OneOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"null"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"integer"},
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"number"},
+					}),
+				},
+			}),
+			expectedErrRegex: `found 4 oneOf subschema\(s\), schema composition is currently not supported`,
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		errRegex := regexp.MustCompile(testCase.expectedErrRegex)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			_, err := oas.BuildSchema(testCase.schemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+			if err == nil {
+				t.Fatalf("Expected err to match %q, got nil", testCase.expectedErrRegex)
+			}
+
+			if !errRegex.Match([]byte(err.Error())) {
+				t.Errorf("Expected error to match %q, got %q", testCase.expectedErrRegex, err.Error())
 			}
 		})
 	}

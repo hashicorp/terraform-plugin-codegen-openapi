@@ -16,23 +16,23 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
-func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
-		return nil, s.NewPropertyError(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
 	}
 
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, s.NewPropertyError(fmt.Errorf("failed to map schema: %w", err), name)
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	if mapSchema.Type == util.OAS_type_object {
-		mapAttributes, propErr := mapSchema.BuildResourceAttributes()
-		if propErr != nil {
-			return nil, s.NestPropertyError(propErr, name)
+		mapAttributes, err := mapSchema.BuildResourceAttributes()
+		if err != nil {
+			return nil, s.NestSchemaError(err, name)
 		}
 		result := &attrmapper.ResourceMapNestedAttribute{
 			Name: name,
@@ -53,9 +53,9 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 		return result, nil
 	}
 
-	elemType, propErr := mapSchema.BuildElementType()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+	elemType, err := mapSchema.BuildElementType()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	result := &attrmapper.ResourceMapAttribute{
@@ -75,23 +75,23 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 	return result, nil
 }
 
-func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
-		return nil, s.NewPropertyError(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
 	}
 
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, s.NewPropertyError(fmt.Errorf("failed to map schema: %w", err), name)
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	if mapSchema.Type == util.OAS_type_object {
-		mapAttributes, propErr := mapSchema.BuildDataSourceAttributes()
-		if propErr != nil {
-			return nil, s.NestPropertyError(propErr, name)
+		mapAttributes, err := mapSchema.BuildDataSourceAttributes()
+		if err != nil {
+			return nil, s.NestSchemaError(err, name)
 		}
 
 		result := &attrmapper.DataSourceMapNestedAttribute{
@@ -113,9 +113,9 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		return result, nil
 	}
 
-	elemType, propErr := mapSchema.BuildElementType()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+	elemType, err := mapSchema.BuildElementType()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	result := &attrmapper.DataSourceMapAttribute{
@@ -135,23 +135,23 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 	return result, nil
 }
 
-func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
-		return nil, s.NewPropertyError(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
 	}
 
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return nil, s.NewPropertyError(fmt.Errorf("failed to map schema: %w", err), name)
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	if mapSchema.Type == util.OAS_type_object {
-		mapAttributes, propErr := mapSchema.BuildProviderAttributes()
-		if propErr != nil {
-			return nil, s.NestPropertyError(propErr, name)
+		mapAttributes, err := mapSchema.BuildProviderAttributes()
+		if err != nil {
+			return nil, s.NestSchemaError(err, name)
 		}
 
 		result := &attrmapper.ProviderMapNestedAttribute{
@@ -170,9 +170,9 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 		return result, nil
 	}
 
-	elemType, propErr := mapSchema.BuildElementType()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+	elemType, err := mapSchema.BuildElementType()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	result := &attrmapper.ProviderMapAttribute{
@@ -189,22 +189,22 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 	return result, nil
 }
 
-func (s *OASSchema) BuildMapElementType() (schema.ElementType, *PropertyError) {
+func (s *OASSchema) BuildMapElementType() (schema.ElementType, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should call s.IsMap() first.
 	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
 	if !ok {
-		return schema.ElementType{}, EmptyPropertyError(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties))
+		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), s.Schema, AdditionalProperties)
 	}
 
 	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 	if err != nil {
-		return schema.ElementType{}, EmptyPropertyError(fmt.Errorf("error building map schema proxy - %w", err))
+		return schema.ElementType{}, err
 	}
 
-	elemType, propErr := mapSchema.BuildElementType()
-	if propErr != nil {
-		return schema.ElementType{}, propErr
+	elemType, err := mapSchema.BuildElementType()
+	if err != nil {
+		return schema.ElementType{}, err
 	}
 
 	return schema.ElementType{

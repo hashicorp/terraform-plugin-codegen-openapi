@@ -61,11 +61,11 @@ func generateProviderSchema(logger *slog.Logger, exploredProvider explorer.Provi
 		return nil, err
 	}
 
-	attributes, propErr := s.BuildProviderAttributes()
-	if propErr != nil {
-		log.WarnLogOnError(logger, propErr, "error mapping provider schema")
+	attributes, err := s.BuildProviderAttributes()
+	if err != nil {
+		log.WarnLogOnError(logger, err, "error mapping provider schema")
 
-		return nil, fmt.Errorf("error mapping provider schema: %w", propErr)
+		return nil, fmt.Errorf("error mapping provider schema: %w", err)
 	}
 
 	providerSchema.Attributes = attributes.ToSpec()

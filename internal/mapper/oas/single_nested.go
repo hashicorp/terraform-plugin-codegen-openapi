@@ -11,10 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
-	objectAttributes, propErr := s.BuildResourceAttributes()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
+	objectAttributes, err := s.BuildResourceAttributes()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	return &attrmapper.ResourceSingleNestedAttribute{
@@ -28,10 +28,10 @@ func (s *OASSchema) BuildSingleNestedResource(name string, computability schema.
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
-	objectAttributes, propErr := s.BuildDataSourceAttributes()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
+	objectAttributes, err := s.BuildDataSourceAttributes()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	return &attrmapper.DataSourceSingleNestedAttribute{
@@ -45,10 +45,10 @@ func (s *OASSchema) BuildSingleNestedDataSource(name string, computability schem
 	}, nil
 }
 
-func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
-	objectAttributes, propErr := s.BuildProviderAttributes()
-	if propErr != nil {
-		return nil, s.NestPropertyError(propErr, name)
+func (s *OASSchema) BuildSingleNestedProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
+	objectAttributes, err := s.BuildProviderAttributes()
+	if err != nil {
+		return nil, s.NestSchemaError(err, name)
 	}
 
 	return &attrmapper.ProviderSingleNestedAttribute{

@@ -90,54 +90,17 @@ func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, schemaOpts Sc
 
 // BuildSchema will build a schema from a schema proxy. It can also handle nullable schemas/types,
 // implemented with oneOf/anyOf OAS keywords or an array on the "type" property
-func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
+func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, *SchemaError) {
 	resp := OASSchema{}
 
-	s, err := proxy.BuildSchema()
+	s, err := buildSchemaProxy(proxy)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
+		return nil, err
 	}
 
 	resp.SchemaOpts = schemaOpts
 	resp.GlobalSchemaOpts = globalOpts
-
-	resp.original = s
 	resp.Schema = s
-
-	if len(resp.Schema.AllOf) > 0 {
-		// If there is just one allOf, we can use it as the schema
-		if len(resp.Schema.AllOf) == 1 {
-			schema, err := resp.Schema.AllOf[0].BuildSchema()
-			if err != nil {
-				return nil, fmt.Errorf("failed to build allOf[0] schema proxy - %w", err)
-			}
-
-			// Override the description w/ the parent if populated
-			if resp.Schema.Description != "" {
-				schema.Description = resp.Schema.Description
-			}
-
-			resp.Schema = schema
-		}
-	}
-
-	if len(resp.Schema.AnyOf) == 2 {
-		schema, err := getMultiTypeSchema(resp.Schema.AnyOf[0], resp.Schema.AnyOf[1])
-		if err != nil {
-			return nil, err
-		}
-
-		resp.Schema = schema
-	}
-
-	if len(resp.Schema.OneOf) == 2 {
-		schema, err := getMultiTypeSchema(resp.Schema.OneOf[0], resp.Schema.OneOf[1])
-		if err != nil {
-			return nil, err
-		}
-
-		resp.Schema = schema
-	}
 
 	oasType, err := retrieveType(resp.Schema)
 	if err != nil {
@@ -150,11 +113,118 @@ func BuildSchema(proxy *base.SchemaProxy, schemaOpts SchemaOpts, globalOpts Glob
 	return &resp, nil
 }
 
+// buildSchemaProxy is a helper function that builds a schema proxy. If needed, it will recursively resolve a specific set of [schema composition] keywords:
+//   - allOf: If len == 1, will resolve with that one item.
+//   - anyOf: If len == 2, will resolve nullable or stringable types
+//   - oneOf: If len == 2, will resolve nullable or stringable types
+//
+// # Any other combinations of allOf, anyOf, or oneOf will return a SchemaError
+//
+// [schema composition]: https://json-schema.org/understanding-json-schema/reference/combining
+func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
+	s, err := proxy.BuildSchema()
+	if err != nil {
+		return nil, SchemaErrorFromProxy(fmt.Errorf("failed to build schema proxy - %w", err), proxy)
+	}
+
+	// If there are no schema composition keywords, return the schema
+	if len(s.AllOf) == 0 && len(s.AnyOf) == 0 && len(s.OneOf) == 0 {
+		return s, nil
+	}
+
+	if len(s.AnyOf) > 0 {
+		if len(s.AnyOf) == 2 {
+			schema, err := getMultiTypeSchema(s.AnyOf[0], s.AnyOf[1])
+			if err != nil {
+				return nil, err
+			}
+
+			return schema, nil
+		}
+
+		// Dynamic type currently not supported
+		return nil, SchemaErrorFromNode(fmt.Errorf("found %d anyOf subschema(s), schema composition is currently not supported", len(s.AnyOf)), s, AnyOf)
+	}
+
+	if len(s.OneOf) > 0 {
+		if len(s.OneOf) == 2 {
+			schema, err := getMultiTypeSchema(s.OneOf[0], s.OneOf[1])
+			if err != nil {
+				return nil, err
+			}
+
+			return schema, nil
+		}
+
+		// Dynamic type currently not supported
+		return nil, SchemaErrorFromNode(fmt.Errorf("found %d oneOf subschema(s), schema composition is currently not supported", len(s.OneOf)), s, OneOf)
+	}
+
+	// If there is just one allOf, we can use it as the schema
+	if len(s.AllOf) == 1 {
+		allOfSchema, err := buildSchemaProxy(s.AllOf[0])
+		if err != nil {
+			return nil, err
+		}
+
+		// Override the description w/ the parent if populated
+		if s.Description != "" {
+			allOfSchema.Description = s.Description
+		}
+
+		return allOfSchema, nil
+	}
+
+	// Combining multiple allOf schemas and their properties is possible here, but currently not supported
+	// See: https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/56
+	return nil, SchemaErrorFromNode(fmt.Errorf("found %d allOf subschema(s), schema composition is currently not supported", len(s.AllOf)), s, AllOf)
+}
+
+// getMultiTypeSchema will check the types of both schemas provided and will return the non-null schema. If a null schema type is not
+// detected, an error will be returned as multi-types are not supported
+func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) (*base.Schema, *SchemaError) {
+	firstSchema, err := buildSchemaProxy(proxyOne)
+	if err != nil {
+		return nil, err
+	}
+
+	secondSchema, err := buildSchemaProxy(proxyTwo)
+	if err != nil {
+		return nil, err
+	}
+
+	firstType, err := retrieveType(firstSchema)
+	if err != nil {
+		return nil, err
+	}
+
+	secondType, err := retrieveType(secondSchema)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check for null type, if found, return the other type
+	if firstType == util.OAS_type_null {
+		return secondSchema, nil
+	} else if secondType == util.OAS_type_null {
+		return firstSchema, nil
+	}
+
+	// Check for string type, if the other type can be represented as a string, return the string type
+	if firstType == util.OAS_type_string && isStringableType(secondType) {
+		return firstSchema, nil
+	} else if secondType == util.OAS_type_string && isStringableType(firstType) {
+		return secondSchema, nil
+	}
+
+	return nil, SchemaErrorFromNode(fmt.Errorf("[%s %s] - %w", firstType, secondType, ErrMultiTypeSchema), firstSchema, Type)
+}
+
 // retrieveType will return the JSON schema type. Support for multi-types is restricted to combinations of "null" and another type, i.e. ["null", "string"]
-func retrieveType(schema *base.Schema) (string, error) {
+func retrieveType(schema *base.Schema) (string, *SchemaError) {
 	switch len(schema.Type) {
 	case 0:
-		return "", errors.New("property does not have a 'type' or supported allOf, oneOf, anyOf constraint - attribute cannot be created")
+		return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
 	case 1:
 		return schema.Type[0], nil
 	case 2:
@@ -173,47 +243,7 @@ func retrieveType(schema *base.Schema) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("%v - %w", schema.Type, ErrMultiTypeSchema)
-}
-
-// getMultiTypeSchema will check the types of both schemas provided and will return the non-null schema. If a null schema type is not
-// detected, an error will be returned as multi-types are not supported
-func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) (*base.Schema, error) {
-	firstSchema, err := proxyOne.BuildSchema()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
-	}
-
-	secondSchema, err := proxyTwo.BuildSchema()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build schema proxy - %w", err)
-	}
-
-	firstType, err := retrieveType(firstSchema)
-	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve schema type - %w", err)
-	}
-
-	secondType, err := retrieveType(secondSchema)
-	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve schema type - %w", err)
-	}
-
-	// Check for null type, if found, return the other type
-	if firstType == util.OAS_type_null {
-		return secondSchema, nil
-	} else if secondType == util.OAS_type_null {
-		return firstSchema, nil
-	}
-
-	// Check for string type, if the other type can be represented as a string, return the string type
-	if firstType == util.OAS_type_string && isStringableType(secondType) {
-		return firstSchema, nil
-	} else if secondType == util.OAS_type_string && isStringableType(firstType) {
-		return secondSchema, nil
-	}
-
-	return nil, fmt.Errorf("[%s, %s] - %w", firstType, secondType, ErrMultiTypeSchema)
+	return "", SchemaErrorFromNode(fmt.Errorf("%v - %w", schema.Type, ErrMultiTypeSchema), schema, Type)
 }
 
 func isStringableType(t string) bool {

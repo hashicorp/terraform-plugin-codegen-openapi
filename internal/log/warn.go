@@ -16,17 +16,14 @@ func WarnLogOnError(logger *slog.Logger, err error, message string) {
 		return
 	}
 
-	var propErr *oas.PropertyError
-
-	if errors.As(err, &propErr) {
-		logger.Warn(
-			message,
-			"err", err,
-			"oas_property", propErr.Path(),
-			"oas_line_number", propErr.LineNumber(),
-		)
-
-		return
+	var schemaErr *oas.SchemaError
+	if errors.As(err, &schemaErr) {
+		if schemaErr.Path() != "" {
+			logger = logger.With("oas_path", schemaErr.Path())
+		}
+		if schemaErr.LineNumber() != 0 {
+			logger = logger.With("oas_line_number", schemaErr.LineNumber())
+		}
 	}
 
 	logger.Warn(message, "err", err)

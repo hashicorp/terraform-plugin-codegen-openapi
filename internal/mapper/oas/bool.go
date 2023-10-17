@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildBoolResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	result := &attrmapper.ResourceBoolAttribute{
 		Name: name,
 		BoolAttribute: resource.BoolAttribute{
@@ -38,7 +38,7 @@ func (s *OASSchema) BuildBoolResource(name string, computability schema.Computed
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *PropertyError) {
+func (s *OASSchema) BuildBoolDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	result := &attrmapper.DataSourceBoolAttribute{
 		Name: name,
 		BoolAttribute: datasource.BoolAttribute{
@@ -51,7 +51,7 @@ func (s *OASSchema) BuildBoolDataSource(name string, computability schema.Comput
 	return result, nil
 }
 
-func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *PropertyError) {
+func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	return &attrmapper.ProviderBoolAttribute{
 		Name: name,
 		BoolAttribute: provider.BoolAttribute{
@@ -62,7 +62,7 @@ func (s *OASSchema) BuildBoolProvider(name string, optionalOrRequired schema.Opt
 	}, nil
 }
 
-func (s *OASSchema) BuildBoolElementType() (schema.ElementType, *PropertyError) {
+func (s *OASSchema) BuildBoolElementType() (schema.ElementType, *SchemaError) {
 	return schema.ElementType{
 		Bool: &schema.BoolType{},
 	}, nil

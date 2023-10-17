@@ -72,9 +72,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	if err != nil {
 		return nil, err
 	}
-	readResponseAttributes, propErr := readResponseSchema.BuildDataSourceAttributes()
-	if propErr != nil {
-		return nil, propErr
+	readResponseAttributes, schemaErr := readResponseSchema.BuildDataSourceAttributes()
+	if schemaErr != nil {
+		return nil, schemaErr
 	}
 
 	// ****************
@@ -90,9 +90,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 			pLogger := logger.With("param", param.Name)
 			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
 
-			s, err := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
-			if err != nil {
-				log.WarnLogOnError(pLogger, err, "skipping mapping of read operation parameter")
+			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
+			if schemaErr != nil {
+				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 				continue
 			}
 
@@ -108,9 +108,9 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 				paramName = aliasedName
 			}
 
-			parameterAttribute, propErr := s.BuildDataSourceAttribute(paramName, computability)
-			if propErr != nil {
-				log.WarnLogOnError(pLogger, propErr, "skipping mapping of read operation parameter")
+			parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramName, computability)
+			if schemaErr != nil {
+				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 				continue
 			}
 

@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
-func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *PropertyError) {
+func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) {
 	objectElemTypes := []schema.ObjectAttributeType{}
 
 	// Guarantee the order of processing
@@ -18,12 +18,12 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *PropertyError
 
 		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
 		if err != nil {
-			return schema.ElementType{}, s.NewPropertyError(err, name)
+			return schema.ElementType{}, s.NestSchemaError(err, name)
 		}
 
-		elemType, propErr := pSchema.BuildElementType()
-		if propErr != nil {
-			return schema.ElementType{}, s.NestPropertyError(propErr, name)
+		elemType, err := pSchema.BuildElementType()
+		if err != nil {
+			return schema.ElementType{}, s.NestSchemaError(err, name)
 		}
 
 		objectElemTypes = append(objectElemTypes, util.CreateObjectAttributeType(name, elemType))
