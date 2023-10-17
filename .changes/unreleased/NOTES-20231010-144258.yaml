@@ -1,6 +1,0 @@
-kind: NOTES
-body: Initial release of `tfplugingen-openapi` CLI for Terraform Provider Code Generation
-  tech preview
-time: 2023-10-10T14:42:58.532948-04:00
-custom:
-  Issue: "68"
