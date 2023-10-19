@@ -1,0 +1,5 @@
+kind: ENHANCEMENTS
+body: Added data source support for response body arrays
+time: 2023-10-19T12:06:11.101382-04:00
+custom:
+  Issue: "16"
