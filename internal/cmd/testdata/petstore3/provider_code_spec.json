@@ -149,6 +149,86 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "pets",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "category",
+										"single_nested": {
+											"computed_optional_required": "computed",
+											"attributes": [
+												{
+													"name": "id",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "id",
+										"int64": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "name",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "photo_urls",
+										"list": {
+											"computed_optional_required": "computed",
+											"element_type": {
+												"string": {}
+											}
+										}
+									},
+									{
+										"name": "status",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "pet status in the store"
+										}
+									},
+									{
+										"name": "tags",
+										"list_nested": {
+											"computed_optional_required": "computed",
+											"nested_object": {
+												"attributes": [
+													{
+														"name": "id",
+														"int64": {
+															"computed_optional_required": "computed"
+														}
+													},
+													{
+														"name": "name",
+														"string": {
+															"computed_optional_required": "computed"
+														}
+													}
+												]
+											}
+										}
+									}
+								]
+							}
+						}
 					}
 				]
 			}

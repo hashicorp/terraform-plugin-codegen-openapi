@@ -4,6 +4,7 @@
 package mapper
 
 import (
+	"fmt"
 	"log/slog"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
@@ -44,7 +45,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 		dataSource := m.dataSources[name]
 		dLogger := logger.With("data_source", name)
 
-		schema, err := generateDataSourceSchema(dLogger, dataSource)
+		schema, err := generateDataSourceSchema(dLogger, name, dataSource)
 		if err != nil {
 			log.WarnLogOnError(dLogger, err, "skipping data source schema mapping")
 			continue
@@ -59,7 +60,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSource) (*datasource.Schema, error) {
+func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explorer.DataSource) (*datasource.Schema, error) {
 	dataSourceSchema := &datasource.Schema{
 		Attributes: []datasource.Attribute{},
 	}
@@ -72,9 +73,24 @@ func generateDataSourceSchema(logger *slog.Logger, dataSource explorer.DataSourc
 	if err != nil {
 		return nil, err
 	}
-	readResponseAttributes, schemaErr := readResponseSchema.BuildDataSourceAttributes()
-	if schemaErr != nil {
-		return nil, schemaErr
+
+	readResponseAttributes := attrmapper.DataSourceAttributes{}
+	if readResponseSchema.Type == util.OAS_type_array {
+		logger.Debug(fmt.Sprintf("response body is an array, building '%s' collection attribute", name))
+
+		collectionAttribute, schemaErr := readResponseSchema.BuildDataSourceAttribute(name, schema.Computed)
+		if schemaErr != nil {
+			return nil, schemaErr
+		}
+
+		readResponseAttributes = append(readResponseAttributes, collectionAttribute)
+	} else {
+		attributes, schemaErr := readResponseSchema.BuildDataSourceAttributes()
+		if schemaErr != nil {
+			return nil, schemaErr
+		}
+
+		readResponseAttributes = attributes
 	}
 
 	// ****************
