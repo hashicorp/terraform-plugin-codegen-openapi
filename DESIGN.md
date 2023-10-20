@@ -126,7 +126,7 @@ data_sources:
 ```
 
 ##### Provider Code Spec output
-```json
+```jsonc
 {
   "datasources": [
     {
