@@ -121,6 +121,35 @@
 			}
 		},
 		{
+			"name": "obj_no_type",
+			"schema": {
+				"attributes": [
+					{
+						"name": "nested_obj",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "bool_prop",
+									"bool": {
+										"computed_optional_required": "computed",
+										"description": "Bool inside a nested object!"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "string_prop",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "String inside an object!"
+						}
+					}
+				]
+			}
+		},
+		{
 			"name": "set_test",
 			"schema": {
 				"attributes": [
