@@ -31,3 +31,7 @@ data_sources:
     read:
       path: /map_test
       method: GET
+  obj_no_type:
+    read:
+      path: /obj_no_type
+      method: GET
