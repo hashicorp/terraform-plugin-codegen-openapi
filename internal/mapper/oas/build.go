@@ -224,6 +224,12 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 func retrieveType(schema *base.Schema) (string, *SchemaError) {
 	switch len(schema.Type) {
 	case 0:
+		// Properties are only valid applying to objects, it's possible tools might omit the type
+		// https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/79
+		if len(schema.Properties) > 0 {
+			return util.OAS_type_object, nil
+		}
+
 		return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
 	case 1:
 		return schema.Type[0], nil

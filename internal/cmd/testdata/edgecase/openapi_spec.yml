@@ -4,6 +4,24 @@ info:
   description: This is a fake API spec that was built to test some of the less common API schema structures and their mapping in the OpenAPI to Framework code generator
   version: 1.0.0
 paths:
+  /obj_no_type:
+    get:
+      summary: Test for objects that have no types!
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  string_prop:
+                    description: String inside an object!
+                    type: string
+                  nested_obj:
+                    properties:
+                      bool_prop:
+                        description: Bool inside a nested object!
+                        type: boolean
   /nested_collections:
     get:
       summary: Test for nested collections (list within a list, set within a list, map within a list)

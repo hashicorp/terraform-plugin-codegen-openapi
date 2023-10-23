@@ -18,8 +18,6 @@ import (
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-// TODO: write tests for error paths (nullable types + build schema functions)
-
 func TestBuildSchemaFromRequest(t *testing.T) {
 	t.Parallel()
 
@@ -126,7 +124,6 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func TestBuildSchemaFromRequest_Errors(t *testing.T) {
@@ -337,7 +334,6 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func TestBuildSchemaFromResponse_Errors(t *testing.T) {
@@ -469,7 +465,6 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func TestBuildSchema_MultiTypes(t *testing.T) {
@@ -1205,6 +1200,86 @@ func TestBuildSchema_Errors(t *testing.T) {
 
 			if !errRegex.Match([]byte(err.Error())) {
 				t.Errorf("Expected error to match %q, got %q", testCase.expectedErrRegex, err.Error())
+			}
+		})
+	}
+}
+
+func TestBuildSchema_EdgeCases(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schemaProxy        *base.SchemaProxy
+		expectedAttributes attrmapper.ResourceAttributes
+	}{
+		"no type with properties - defaults to object": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type:     []string{},
+				Required: []string{"string", "object"},
+				Properties: map[string]*base.SchemaProxy{
+					"string": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"string"},
+						Description: "hey there! I'm a string type, required.",
+					}),
+					"object": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{},
+						Required:    []string{"bool"},
+						Description: "hey there! I'm an object type, required.",
+						Properties: map[string]*base.SchemaProxy{
+							"bool": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"boolean"},
+								Description: "hey there! I'm a bool type, required.",
+							}),
+						},
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceSingleNestedAttribute{
+					Name: "object",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceBoolAttribute{
+							Name: "bool",
+							BoolAttribute: resource.BoolAttribute{
+								ComputedOptionalRequired: schema.Required,
+								Description:              pointer("hey there! I'm a bool type, required."),
+							},
+						},
+					},
+					SingleNestedAttribute: resource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm an object type, required."),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "string",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.Required,
+						Description:              pointer("hey there! I'm a string type, required."),
+					},
+				},
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			schema, err := oas.BuildSchema(testCase.schemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			attributes, err := schema.BuildResourceAttributes()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(attributes, testCase.expectedAttributes); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
 			}
 		})
 	}
