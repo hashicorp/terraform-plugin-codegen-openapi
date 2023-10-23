@@ -152,7 +152,7 @@
 					},
 					{
 						"name": "pets",
-						"list_nested": {
+						"set_nested": {
 							"computed_optional_required": "computed",
 							"nested_object": {
 								"attributes": [

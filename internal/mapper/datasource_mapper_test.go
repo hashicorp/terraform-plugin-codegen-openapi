@@ -681,7 +681,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 		readResponseSchema *base.SchemaProxy
 		want               datasource.Attributes
 	}{
-		"data source collection - list nested": {
+		"data source collection - forced set nested": {
 			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
 				Type: []string{"array"},
 				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
@@ -703,7 +703,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 			want: datasource.Attributes{
 				{
 					Name: "test_datasources",
-					ListNested: &datasource.ListNestedAttribute{
+					SetNested: &datasource.SetNestedAttribute{
 						ComputedOptionalRequired: schema.Computed,
 						NestedObject: datasource.NestedAttributeObject{
 							Attributes: []datasource.Attribute{
@@ -727,7 +727,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 				},
 			},
 		},
-		"data source collection - set nested": {
+		"data source collection - explicit set nested": {
 			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
 				Type:   []string{"array"},
 				Format: "set",
@@ -774,7 +774,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 				},
 			},
 		},
-		"data source collection - list with elements": {
+		"data source collection - forced set with elements": {
 			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
 				Type: []string{"array"},
 				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
@@ -786,7 +786,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 			want: datasource.Attributes{
 				{
 					Name: "test_datasources",
-					List: &datasource.ListAttribute{
+					Set: &datasource.SetAttribute{
 						ComputedOptionalRequired: schema.Computed,
 						ElementType: schema.ElementType{
 							Number: &schema.NumberType{},
@@ -795,7 +795,7 @@ func TestDataSourceMapper_collections(t *testing.T) {
 				},
 			},
 		},
-		"data source collection - set with elements": {
+		"data source collection - explicit set with elements": {
 			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
 				Type:   []string{"array"},
 				Format: "set",

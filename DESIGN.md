@@ -85,7 +85,7 @@ The response body schema found will be deep merged with the query/path `paramete
 
 #### Collection Data Sources
 
-If the response body schema for a data source is of type `array`, the schema in `items` will be mapped to a collection attribute (`ListNested`, `SetNested`, `List`, `Set`) at the root of the mapped data source. The name of the attribute will be the same as the data source name from the generator config. All [mapping rules](#oas-types-to-provider-attributes) will be followed for nested attributes.
+If the response body schema for a data source is of type `array`, the schema in `items` will be mapped to a set collection attribute (`SetNested` or `Set`) at the root of the mapped data source. The name of the attribute will be the same as the data source name from the generator config. All [mapping rules](#oas-types-to-provider-attributes) will be followed for nested attributes.
 
 ##### Generator Config
 ```yaml
@@ -135,7 +135,7 @@ data_sources:
         "attributes": [
           {
             "name": "pets",
-            "list_nested": {
+            "set_nested": {
               "computed_optional_required": "computed",
               "nested_object": {
                 "attributes": [

@@ -32,7 +32,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 			return nil, s.NestSchemaError(err, name)
 		}
 
-		if s.Schema.Format == util.TF_format_set {
+		if s.Format == util.TF_format_set {
 			result := &attrmapper.ResourceSetNestedAttribute{
 				Name: name,
 				NestedObject: attrmapper.ResourceNestedAttributeObject{
@@ -76,7 +76,7 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, s.NestSchemaError(err, name)
 	}
 
-	if s.Schema.Format == util.TF_format_set {
+	if s.Format == util.TF_format_set {
 		result := &attrmapper.ResourceSetAttribute{
 			Name: name,
 			SetAttribute: resource.SetAttribute{
@@ -128,7 +128,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 			return nil, s.NestSchemaError(err, name)
 		}
 
-		if s.Schema.Format == util.TF_format_set {
+		if s.Format == util.TF_format_set {
 
 			result := &attrmapper.DataSourceSetNestedAttribute{
 				Name: name,
@@ -173,7 +173,7 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, s.NestSchemaError(err, name)
 	}
 
-	if s.Schema.Format == util.TF_format_set {
+	if s.Format == util.TF_format_set {
 
 		result := &attrmapper.DataSourceSetAttribute{
 			Name: name,
@@ -226,7 +226,7 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 			return nil, s.NestSchemaError(err, name)
 		}
 
-		if s.Schema.Format == util.TF_format_set {
+		if s.Format == util.TF_format_set {
 
 			result := &attrmapper.ProviderSetNestedAttribute{
 				Name: name,
@@ -265,7 +265,7 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		return nil, s.NestSchemaError(err, name)
 	}
 
-	if s.Schema.Format == util.TF_format_set {
+	if s.Format == util.TF_format_set {
 		result := &attrmapper.ProviderSetAttribute{
 			Name: name,
 			SetAttribute: provider.SetAttribute{
@@ -308,7 +308,7 @@ func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, *SchemaErr
 		return schema.ElementType{}, err
 	}
 
-	if s.Schema.Format == util.TF_format_set {
+	if s.Format == util.TF_format_set {
 		return schema.ElementType{
 			Set: &schema.SetType{
 				ElementType: elemType,

@@ -76,7 +76,10 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 
 	readResponseAttributes := attrmapper.DataSourceAttributes{}
 	if readResponseSchema.Type == util.OAS_type_array {
-		logger.Debug(fmt.Sprintf("response body is an array, building '%s' collection attribute", name))
+		logger.Debug(fmt.Sprintf("response body is an array, building '%s' set attribute", name))
+
+		// API's generally don't guarantee ordering of results for collection/query responses, default mapping to set
+		readResponseSchema.Format = util.TF_format_set
 
 		collectionAttribute, schemaErr := readResponseSchema.BuildDataSourceAttribute(name, schema.Computed)
 		if schemaErr != nil {
