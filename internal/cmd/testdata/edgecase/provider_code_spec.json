@@ -104,17 +104,9 @@
 															"bool": {}
 														},
 														{
-															"name": "ignore_me_1",
-															"string": {}
-														},
-														{
 															"name": "obj_prop",
 															"object": {
 																"attribute_types": [
-																	{
-																		"name": "ignore_me_2",
-																		"string": {}
-																	},
 																	{
 																		"name": "number_prop",
 																		"number": {}
