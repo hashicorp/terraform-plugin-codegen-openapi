@@ -170,6 +170,7 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 
 func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) SchemaOptions {
 	return SchemaOptions{
+		Ignores: cfgSchemaOpts.Ignores,
 		AttributeOptions: AttributeOptions{
 			Aliases:   cfgSchemaOpts.AttributeOptions.Aliases,
 			Overrides: extractOverrides(cfgSchemaOpts.AttributeOptions.Overrides),

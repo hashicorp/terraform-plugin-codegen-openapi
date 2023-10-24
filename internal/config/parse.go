@@ -62,6 +62,8 @@ type OpenApiSpecLocation struct {
 
 // SchemaOptions generator config section. This section contains options for modifying the output of the generator.
 type SchemaOptions struct {
+	// Ignores are a slice of strings, representing an attribute location to ignore during mapping (dot-separated for nested attributes).
+	Ignores          []string         `yaml:"ignores"`
 	AttributeOptions AttributeOptions `yaml:"attributes"`
 }
 

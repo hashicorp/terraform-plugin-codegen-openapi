@@ -37,6 +37,7 @@ type Provider struct {
 }
 
 type SchemaOptions struct {
+	Ignores          []string
 	AttributeOptions AttributeOptions
 }
 
