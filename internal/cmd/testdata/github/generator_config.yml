@@ -27,6 +27,10 @@ data_sources:
     read:
       path: /gists/{gist_id}
       method: GET
+    schema:
+      ignores:
+        - fork_of.forks
+        - fork_of.history
 
   repository:
     read:

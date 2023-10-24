@@ -1,6 +1,1206 @@
 {
 	"datasources": [
 		{
+			"name": "gists",
+			"schema": {
+				"attributes": [
+					{
+						"name": "gist_id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "The unique identifier of the gist."
+						}
+					},
+					{
+						"name": "comments",
+						"int64": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "comments_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "commits_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "files",
+						"map_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "content",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "filename",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "language",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "raw_url",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "size",
+										"int64": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "truncated",
+										"bool": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "type",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "fork_of",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "comments",
+									"int64": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "comments_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "commits_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "created_at",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "description",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "files",
+									"map_nested": {
+										"computed_optional_required": "computed",
+										"nested_object": {
+											"attributes": [
+												{
+													"name": "filename",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "language",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "raw_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "size",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "type",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												}
+											]
+										}
+									}
+								},
+								{
+									"name": "forks_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "git_pull_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "git_push_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "html_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "node_id",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "owner",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "avatar_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "email",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "events_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "followers_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "following_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "gists_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "gravatar_id",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "html_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "id",
+												"int64": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "login",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "node_id",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "organizations_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "received_events_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "repos_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "site_admin",
+												"bool": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "starred_at",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "starred_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "subscriptions_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "type",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											}
+										],
+										"description": "A GitHub user."
+									}
+								},
+								{
+									"name": "public",
+									"bool": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "truncated",
+									"bool": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "updated_at",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "user",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "avatar_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "email",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "events_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "followers_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "following_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "gists_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "gravatar_id",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "html_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "id",
+												"int64": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "login",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "name",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "node_id",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "organizations_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "received_events_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "repos_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "site_admin",
+												"bool": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "starred_at",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "starred_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "subscriptions_url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "type",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											},
+											{
+												"name": "url",
+												"string": {
+													"computed_optional_required": "computed"
+												}
+											}
+										],
+										"description": "A GitHub user."
+									}
+								}
+							],
+							"description": "Gist"
+						}
+					},
+					{
+						"name": "forks",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "created_at",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "updated_at",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "url",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "user",
+										"single_nested": {
+											"computed_optional_required": "computed",
+											"attributes": [
+												{
+													"name": "avatar_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "bio",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "blog",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "collaborators",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "company",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "created_at",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "disk_usage",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "email",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "events_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "followers",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "followers_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "following",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "following_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "gists_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "gravatar_id",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "hireable",
+													"bool": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "html_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "id",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "location",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "login",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "node_id",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "organizations_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "owned_private_repos",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "plan",
+													"single_nested": {
+														"computed_optional_required": "computed",
+														"attributes": [
+															{
+																"name": "collaborators",
+																"int64": {
+																	"computed_optional_required": "computed"
+																}
+															},
+															{
+																"name": "name",
+																"string": {
+																	"computed_optional_required": "computed"
+																}
+															},
+															{
+																"name": "private_repos",
+																"int64": {
+																	"computed_optional_required": "computed"
+																}
+															},
+															{
+																"name": "space",
+																"int64": {
+																	"computed_optional_required": "computed"
+																}
+															}
+														]
+													}
+												},
+												{
+													"name": "private_gists",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "public_gists",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "public_repos",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "received_events_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "repos_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "site_admin",
+													"bool": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "starred_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "subscriptions_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "suspended_at",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "total_private_repos",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "twitter_username",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "type",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "updated_at",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												}
+											],
+											"description": "Public User"
+										}
+									}
+								]
+							},
+							"deprecation_message": "This attribute is deprecated."
+						}
+					},
+					{
+						"name": "forks_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "git_pull_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "git_push_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "history",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "change_status",
+										"single_nested": {
+											"computed_optional_required": "computed",
+											"attributes": [
+												{
+													"name": "additions",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "deletions",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "total",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "committed_at",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "url",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									},
+									{
+										"name": "user",
+										"single_nested": {
+											"computed_optional_required": "computed",
+											"attributes": [
+												{
+													"name": "avatar_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "email",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "events_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "followers_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "following_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "gists_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "gravatar_id",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "html_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "id",
+													"int64": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "login",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "name",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "node_id",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "organizations_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "received_events_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "repos_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "site_admin",
+													"bool": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "starred_at",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "starred_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "subscriptions_url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "type",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												},
+												{
+													"name": "url",
+													"string": {
+														"computed_optional_required": "computed"
+													}
+												}
+											],
+											"description": "A GitHub user."
+										}
+									},
+									{
+										"name": "version",
+										"string": {
+											"computed_optional_required": "computed"
+										}
+									}
+								]
+							},
+							"deprecation_message": "This attribute is deprecated."
+						}
+					},
+					{
+						"name": "html_url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "node_id",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "owner",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "avatar_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "email",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "events_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "followers_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "following_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "gists_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "gravatar_id",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "html_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "id",
+									"int64": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "login",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "name",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "node_id",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "organizations_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "received_events_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "repos_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "site_admin",
+									"bool": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "starred_at",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "starred_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "subscriptions_url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "type",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								},
+								{
+									"name": "url",
+									"string": {
+										"computed_optional_required": "computed"
+									}
+								}
+							],
+							"description": "A GitHub user."
+						}
+					},
+					{
+						"name": "public",
+						"bool": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "truncated",
+						"bool": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "url",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					},
+					{
+						"name": "user",
+						"string": {
+							"computed_optional_required": "computed"
+						}
+					}
+				]
+			}
+		},
+		{
 			"name": "repository",
 			"schema": {
 				"attributes": [
