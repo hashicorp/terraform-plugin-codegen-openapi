@@ -23,6 +23,11 @@ resources:
           repo: name
 
 data_sources:
+  gists:
+    read:
+      path: /gists/{gist_id}
+      method: GET
+
   repository:
     read:
       path: /repos/{owner}/{repo}
