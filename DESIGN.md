@@ -83,6 +83,79 @@ The response body schema found will be deep merged with the query/path `paramete
   - Names are strictly compared, so `id` and `user_id` would be two separate attributes in a schema.
 - Arrays and Objects will have their child attributes merged, so `example_object.string_field` and `example_object.bool_field` will be merged into the same `SingleNestedAttribute` schema.
 
+#### Collection Data Sources
+
+If the response body schema for a data source is of type `array`, the schema in `items` will be mapped to a set collection attribute (`SetNested` or `Set`) at the root of the mapped data source. The name of the attribute will be the same as the data source name from the generator config. All [mapping rules](#oas-types-to-provider-attributes) will be followed for nested attributes.
+
+##### Generator Config
+```yaml
+provider:
+  name: petstore
+
+data_sources:
+  pets:
+    read:
+      path: /pet/findByStatus
+      method: GET
+```
+
+##### OpenAPI Spec
+```jsonc
+{
+  // ... Rest of OAS
+  "/pet/findByStatus": {
+    "get": {
+      "responses": {
+        "200": {
+          "description": "successful operation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+##### Provider Code Spec output
+```jsonc
+{
+  "datasources": [
+    {
+      "name": "pets",
+      "schema": {
+        "attributes": [
+          {
+            "name": "pets",
+            "set_nested": {
+              "computed_optional_required": "computed",
+              "nested_object": {
+                "attributes": [
+                  // ... mapping of #/components/schemas/Pet
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "provider": {
+    "name": "petstore"
+  }
+}
+```
+
+
+
 ### OAS Types to Provider Attributes
 
 For a given OAS [`type`](https://spec.openapis.org/oas/v3.1.0#data-types) and `format` combination, the following rules will be applied for mapping to the provider code specification. Not all Provider attributes are represented natively with OAS, those types are noted below in [Unsupported Attributes](#unsupported-attributes).

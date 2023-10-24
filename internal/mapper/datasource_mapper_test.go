@@ -673,3 +673,173 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 		})
 	}
 }
+
+func TestDataSourceMapper_collections(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		readResponseSchema *base.SchemaProxy
+		want               datasource.Attributes
+	}{
+		"data source collection - forced set nested": {
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"array"},
+				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+					A: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+						Properties: map[string]*base.SchemaProxy{
+							"bool_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"boolean"},
+								Description: "hey this is a bool!",
+							}),
+							"number_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"number"},
+								Description: "hey this is a number!",
+							}),
+						},
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "test_datasources",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "bool_prop",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Computed,
+										Description:              pointer("hey this is a bool!"),
+									},
+								},
+								{
+									Name: "number_prop",
+									Number: &datasource.NumberAttribute{
+										ComputedOptionalRequired: schema.Computed,
+										Description:              pointer("hey this is a number!"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"data source collection - explicit set nested": {
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type:   []string{"array"},
+				Format: "set",
+				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+					A: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+						Properties: map[string]*base.SchemaProxy{
+							"bool_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"boolean"},
+								Description: "hey this is a bool!",
+							}),
+							"number_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"number"},
+								Description: "hey this is a number!",
+							}),
+						},
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "test_datasources",
+					SetNested: &datasource.SetNestedAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "bool_prop",
+									Bool: &datasource.BoolAttribute{
+										ComputedOptionalRequired: schema.Computed,
+										Description:              pointer("hey this is a bool!"),
+									},
+								},
+								{
+									Name: "number_prop",
+									Number: &datasource.NumberAttribute{
+										ComputedOptionalRequired: schema.Computed,
+										Description:              pointer("hey this is a number!"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"data source collection - forced set with elements": {
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"array"},
+				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+					A: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"number"},
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "test_datasources",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						ElementType: schema.ElementType{
+							Number: &schema.NumberType{},
+						},
+					},
+				},
+			},
+		},
+		"data source collection - explicit set with elements": {
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type:   []string{"array"},
+				Format: "set",
+				Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+					A: base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"string"},
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "test_datasources",
+					Set: &datasource.SetAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						ElementType: schema.ElementType{
+							String: &schema.StringType{},
+						},
+					},
+				},
+			},
+		},
+	}
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			mapper := mapper.NewDataSourceMapper(map[string]explorer.DataSource{
+				"test_datasources": {
+					ReadOp: createTestReadOp(testCase.readResponseSchema, nil),
+				},
+			}, config.Config{})
+			got, err := mapper.MapToIR(slog.Default())
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if len(got) != 1 {
+				t.Fatalf("expected only one DataSource, got: %d", len(got))
+			}
+
+			if diff := cmp.Diff(got[0].Schema.Attributes, testCase.want); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
