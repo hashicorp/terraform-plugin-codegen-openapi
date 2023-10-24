@@ -83,7 +83,10 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
 	}
 
-	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -197,7 +200,10 @@ func (s *OASSchema) BuildMapElementType() (schema.ElementType, *SchemaError) {
 		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), s.Schema, AdditionalProperties)
 	}
 
-	mapSchema, err := BuildSchema(mapSchemaProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return schema.ElementType{}, err
 	}

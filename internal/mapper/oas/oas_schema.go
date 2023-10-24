@@ -4,6 +4,8 @@
 package oas
 
 import (
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
@@ -32,6 +34,9 @@ type GlobalSchemaOpts struct {
 // SchemaOpts is NOT passed recursively through built OASSchema structs, and will only be available to the top level schema. This is used
 // for options that need to control just the top level schema, like overriding descriptions.
 type SchemaOpts struct {
+	// Ignores contains all potentially relevant ignores for a schema and it's potential nested schemas
+	Ignores []string
+
 	// OverrideDeprecationMessage will set the attribute deprecation message to
 	// this field if populated, otherwise the attribute deprecation message will
 	// be set to a default "This attribute is deprecated." message when the
@@ -146,4 +151,34 @@ func (s *OASSchema) GetOptionalOrRequired(name string) schema.OptionalRequired {
 	}
 
 	return schema.Optional
+}
+
+// IsPropertyIgnored checks if a property should be ignored
+func (s *OASSchema) IsPropertyIgnored(name string) bool {
+	for _, ignore := range s.SchemaOpts.Ignores {
+		if name == ignore {
+			return true
+		}
+	}
+	return false
+}
+
+// GetIgnoresForNested is a helper function that will return all nested ignores for a property. If no ignores
+// or nested ignores are found, returns an empty string slice.
+func (s *OASSchema) GetIgnoresForNested(name string) []string {
+	newIgnores := make([]string, 0)
+
+	for _, ignore := range s.SchemaOpts.Ignores {
+		ignoreParts := strings.Split(ignore, ".")
+
+		if len(ignoreParts) > 1 && name == ignoreParts[0] {
+			newIgnore := strings.Join(ignoreParts[1:], ".")
+
+			if newIgnore != "" {
+				newIgnores = append(newIgnores, newIgnore)
+			}
+		}
+	}
+
+	return newIgnores
 }

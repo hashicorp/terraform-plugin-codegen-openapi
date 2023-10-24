@@ -14,9 +14,17 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) 
 	// Guarantee the order of processing
 	propertyNames := util.SortedKeys(s.Schema.Properties)
 	for _, name := range propertyNames {
-		pProxy := s.Schema.Properties[name]
+		if s.IsPropertyIgnored(name) {
+			// TODO: produce a log?
+			continue
+		}
 
-		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+		pProxy := s.Schema.Properties[name]
+		schemaOpts := SchemaOpts{
+			Ignores: s.GetIgnoresForNested(name),
+		}
+
+		pSchema, err := BuildSchema(pProxy, schemaOpts, s.GlobalSchemaOpts)
 		if err != nil {
 			return schema.ElementType{}, s.NestSchemaError(err, name)
 		}

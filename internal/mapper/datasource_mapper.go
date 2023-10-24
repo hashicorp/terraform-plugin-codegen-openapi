@@ -69,7 +69,14 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 	// READ Response Body (required)
 	// ********************
 	logger.Debug("searching for read operation response body")
-	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
+
+	schemaOpts := oas.SchemaOpts{
+		Ignores: dataSource.SchemaOptions.Ignores,
+	}
+	globalSchemaOpts := oas.GlobalSchemaOpts{
+		OverrideComputability: schema.Computed,
+	}
+	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +114,10 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			}
 
 			pLogger := logger.With("param", param.Name)
-			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
+			schemaOpts := oas.SchemaOpts{
+				Ignores:             dataSource.SchemaOptions.Ignores,
+				OverrideDescription: param.Description,
+			}
 
 			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
 			if schemaErr != nil {
@@ -125,6 +135,11 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
 				pLogger = pLogger.With("param_alias", aliasedName)
 				paramName = aliasedName
+			}
+
+			if s.IsPropertyIgnored(paramName) {
+				// TODO: produce a log?
+				continue
 			}
 
 			parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramName, computability)

@@ -116,7 +116,10 @@ func (s *OASSchema) BuildCollectionDataSource(name string, computability schema.
 		return nil, s.SchemaErrorFromProperty(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	itemSchema, err := BuildSchema(s.Schema.Items.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -298,7 +301,11 @@ func (s *OASSchema) BuildCollectionElementType() (schema.ElementType, *SchemaErr
 	if !s.Schema.Items.IsA() {
 		return schema.ElementType{}, SchemaErrorFromNode(errors.New("invalid array type for nested elem array, doesn't have a schema"), s.Schema, Items)
 	}
-	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
+
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	itemSchema, err := BuildSchema(s.Schema.Items.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return schema.ElementType{}, err
 	}

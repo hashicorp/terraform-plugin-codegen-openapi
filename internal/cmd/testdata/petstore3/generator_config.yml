@@ -76,6 +76,9 @@ data_sources:
     read:
       path: /pet/findByStatus
       method: GET
+    schema:
+      ignores:
+        - status
 
   order:
     read:
