@@ -104,6 +104,25 @@
 															"bool": {}
 														},
 														{
+															"name": "ignore_me_1",
+															"string": {}
+														},
+														{
+															"name": "obj_prop",
+															"object": {
+																"attribute_types": [
+																	{
+																		"name": "ignore_me_2",
+																		"string": {}
+																	},
+																	{
+																		"name": "number_prop",
+																		"number": {}
+																	}
+																]
+															}
+														},
+														{
 															"name": "string_prop",
 															"string": {}
 														}
@@ -224,6 +243,25 @@
 													{
 														"name": "bool_prop",
 														"bool": {}
+													},
+													{
+														"name": "ignore_me_1",
+														"string": {}
+													},
+													{
+														"name": "obj_prop",
+														"object": {
+															"attribute_types": [
+																{
+																	"name": "ignore_me_2",
+																	"string": {}
+																},
+																{
+																	"name": "number_prop",
+																	"number": {}
+																}
+															]
+														}
 													},
 													{
 														"name": "string_prop",

@@ -175,6 +175,19 @@ components:
               bool_prop:
                 description: Bool inside a map!
                 type: boolean
+              ignore_me_1:
+                description: This property will be ignored!
+                type: string
+              obj_prop:
+                description: Object inside a map!
+                type: object
+                properties:
+                  number_prop:
+                    description: Number inside a map!
+                    type: number
+                  ignore_me_2:
+                    description: This property will be ignored!
+                    type: string
     setnested_schema:
       description: This is a set with a nested object
       type: array
