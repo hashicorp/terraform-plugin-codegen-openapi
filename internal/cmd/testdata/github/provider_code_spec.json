@@ -141,12 +141,6 @@
 													}
 												},
 												{
-													"name": "language",
-													"string": {
-														"computed_optional_required": "computed"
-													}
-												},
-												{
 													"name": "raw_url",
 													"string": {
 														"computed_optional_required": "computed"
@@ -686,12 +680,6 @@
 													"single_nested": {
 														"computed_optional_required": "computed",
 														"attributes": [
-															{
-																"name": "collaborators",
-																"int64": {
-																	"computed_optional_required": "computed"
-																}
-															},
 															{
 																"name": "name",
 																"string": {

@@ -31,6 +31,8 @@ data_sources:
       ignores:
         - fork_of.forks
         - fork_of.history
+        - fork_of.files.language
+        - forks.user.plan.collaborators
 
   repository:
     read:
