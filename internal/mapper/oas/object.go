@@ -16,7 +16,6 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) 
 	for _, name := range propertyNames {
 
 		if s.IsPropertyIgnored(name) {
-			// TODO: produce a log?
 			continue
 		}
 

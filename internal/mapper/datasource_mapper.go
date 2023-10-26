@@ -138,7 +138,6 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			}
 
 			if s.IsPropertyIgnored(paramName) {
-				// TODO: produce a log?
 				continue
 			}
 

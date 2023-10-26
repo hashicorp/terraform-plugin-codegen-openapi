@@ -168,7 +168,6 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			}
 
 			if s.IsPropertyIgnored(paramName) {
-				// TODO: produce a log?
 				continue
 			}
 

@@ -19,7 +19,6 @@ func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *S
 	for _, name := range propertyNames {
 
 		if s.IsPropertyIgnored(name) {
-			// TODO: produce a log?
 			continue
 		}
 
@@ -78,7 +77,6 @@ func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes
 	for _, name := range propertyNames {
 
 		if s.IsPropertyIgnored(name) {
-			// TODO: produce a log?
 			continue
 		}
 
@@ -137,7 +135,6 @@ func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *S
 	for _, name := range propertyNames {
 
 		if s.IsPropertyIgnored(name) {
-			// TODO: produce a log?
 			continue
 		}
 
