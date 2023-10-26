@@ -54,6 +54,9 @@ resources:
     read:
       path: /user/{username}
       method: GET
+    schema:
+      ignores:
+        - username
 
 data_sources:
   pet:

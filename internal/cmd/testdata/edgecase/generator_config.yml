@@ -1,6 +1,9 @@
 provider:
   name: edgecase
   schema_ref: '#/components/schemas/edgecase_provider'
+  ignores:
+    - triple_nested_map.ignore_me_1
+    - triple_nested_map.obj_prop.ignore_me_2
 
 resources:
   set_test:

@@ -34,6 +34,7 @@ type DataSource struct {
 type Provider struct {
 	Name        string
 	SchemaProxy *base.SchemaProxy
+	Ignores     []string
 }
 
 type SchemaOptions struct {

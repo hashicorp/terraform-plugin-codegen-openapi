@@ -31,6 +31,10 @@ type Config struct {
 type Provider struct {
 	Name      string `yaml:"name"`
 	SchemaRef string `yaml:"schema_ref"`
+
+	// TODO: At some point, this should probably be refactored to work with the SchemaOptions struct
+	// Ignores are a slice of strings, representing an attribute location to ignore during mapping (dot-separated for nested attributes).
+	Ignores []string `yaml:"ignores"`
 }
 
 // Resource generator config section.

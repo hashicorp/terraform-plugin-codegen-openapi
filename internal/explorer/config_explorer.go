@@ -49,6 +49,7 @@ func (e configExplorer) FindProvider() (Provider, error) {
 		return Provider{}, fmt.Errorf("error extracting provider schema from ref: %w", err)
 	}
 	foundProvider.SchemaProxy = schemaProxy
+	foundProvider.Ignores = e.config.Provider.Ignores
 
 	return foundProvider, nil
 }
