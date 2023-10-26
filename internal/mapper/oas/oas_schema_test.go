@@ -127,3 +127,125 @@ func TestGetDescription_Override(t *testing.T) {
 		})
 	}
 }
+
+func TestIsPropertyIgnored(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema       oas.OASSchema
+		propertyName string
+		want         bool
+	}{
+		"propery is ignored": {
+			propertyName: "ignored_prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: []string{
+						"ignored_prop",
+					},
+				},
+			},
+			want: true,
+		},
+		"propery not ignored": {
+			propertyName: "prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: []string{
+						"ignored_prop",
+					},
+				},
+			},
+			want: false,
+		},
+		"nested propery is not ignored": {
+			propertyName: "prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: []string{
+						"prop.ignored_prop",
+					},
+				},
+			},
+			want: false,
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.IsPropertyIgnored(testCase.propertyName)
+			if got != testCase.want {
+				t.Fatalf("unexpected difference, got: %t, wanted: %t", got, testCase.want)
+			}
+		})
+	}
+}
+
+func TestGetIgnoresForNested(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		schema       oas.OASSchema
+		propertyName string
+		want         []string
+	}{
+		"ignores are empty": {
+			propertyName: "prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: make([]string, 0),
+				},
+			},
+			want: make([]string, 0),
+		},
+		"ignores are invalid": {
+			propertyName: "prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: []string{
+						".prop",
+						"prop.",
+						".",
+						"",
+					},
+				},
+			},
+			want: make([]string, 0),
+		},
+		"nested ignores exist": {
+			propertyName: "prop",
+			schema: oas.OASSchema{
+				SchemaOpts: oas.SchemaOpts{
+					Ignores: []string{
+						"prop.ignore_me_1",
+						"not_me.prop",
+						"prop.nested.ignore_me_2",
+						"prop.ignore_me_3",
+					},
+				},
+			},
+			want: []string{
+				"ignore_me_1",
+				"nested.ignore_me_2",
+				"ignore_me_3",
+			},
+		},
+	}
+
+	for name, testCase := range testCases {
+		name, testCase := name, testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.schema.GetIgnoresForNested(testCase.propertyName)
+			if diff := cmp.Diff(got, testCase.want); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
