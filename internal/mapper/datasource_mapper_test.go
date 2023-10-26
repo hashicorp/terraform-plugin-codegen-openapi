@@ -19,8 +19,6 @@ import (
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-// TODO: add tests for error handling/skipping bad data sources
-
 func TestDataSourceMapper_basic_merges(t *testing.T) {
 	t.Parallel()
 
@@ -642,6 +640,170 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					Name: "attribute_computed_optional",
 					Bool: &datasource.BoolAttribute{
 						ComputedOptionalRequired: schema.ComputedOptional,
+					},
+				},
+			},
+		},
+		"ignore bool prop across all ops": {
+			schemaOptions: explorer.SchemaOptions{
+				Ignores: []string{
+					"bool_prop",
+					"nested_obj.bool_prop",
+					"nested_array.deep_nested_bool",
+					"nested_map.deep_nested_bool",
+				},
+			},
+			readParams: []*high.Parameter{
+				{
+					Name:     "bool_prop",
+					Required: true,
+					In:       "query",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"boolean"},
+						Description: "This boolean is going to be ignored!",
+					}),
+				},
+				{
+					Name: "float64_prop",
+					In:   "query",
+					Schema: base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"number"},
+						Format:      "float",
+						Description: "hey this is a float64!",
+					}),
+				},
+			},
+			readResponseSchema: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				Properties: map[string]*base.SchemaProxy{
+					"bool_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"boolean"},
+						Description: "This boolean is going to be ignored!",
+					}),
+					"number_prop": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"number"},
+						Description: "hey this is a number!",
+					}),
+					"nested_obj": base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+						Properties: map[string]*base.SchemaProxy{
+							"bool_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"boolean"},
+								Description: "This boolean is going to be ignored!",
+							}),
+							"string_prop": base.CreateSchemaProxy(&base.Schema{
+								Type:        []string{"string"},
+								Description: "hey this is a string!",
+							}),
+						},
+					}),
+					"nested_array": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"array"},
+						Description: "hey this is an array!",
+						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"array"},
+								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
+												Type: []string{"boolean"},
+											}),
+											"deep_nested_int64": base.CreateSchemaProxy(&base.Schema{
+												Type: []string{"integer"},
+											}),
+										},
+									}),
+								},
+							}),
+						},
+					}),
+					"nested_map": base.CreateSchemaProxy(&base.Schema{
+						Type:        []string{"object"},
+						Description: "hey this is a map!",
+						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
+							Type: []string{"object"},
+							Properties: map[string]*base.SchemaProxy{
+								"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"boolean"},
+								}),
+								"deep_nested_int64": base.CreateSchemaProxy(&base.Schema{
+									Type:        []string{"integer"},
+									Description: "hey this is an int64!",
+								}),
+							},
+						}),
+					}),
+				},
+			}),
+			want: datasource.Attributes{
+				{
+					Name: "float64_prop",
+					Float64: &datasource.Float64Attribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("hey this is a float64!"),
+					},
+				},
+				{
+					Name: "nested_array",
+					List: &datasource.ListAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("hey this is an array!"),
+						ElementType: schema.ElementType{
+							List: &schema.ListType{
+								ElementType: schema.ElementType{
+									Object: &schema.ObjectType{
+										AttributeTypes: []schema.ObjectAttributeType{
+											{
+												Name:  "deep_nested_int64",
+												Int64: &schema.Int64Type{},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "nested_map",
+					MapNested: &datasource.MapNestedAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("hey this is a map!"),
+						NestedObject: datasource.NestedAttributeObject{
+							Attributes: []datasource.Attribute{
+								{
+									Name: "deep_nested_int64",
+									Int64: &datasource.Int64Attribute{
+										ComputedOptionalRequired: schema.Computed,
+										Description:              pointer("hey this is an int64!"),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "nested_obj",
+					SingleNested: &datasource.SingleNestedAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Attributes: []datasource.Attribute{
+							{
+								Name: "string_prop",
+								String: &datasource.StringAttribute{
+									ComputedOptionalRequired: schema.Computed,
+									Description:              pointer("hey this is a string!"),
+								},
+							},
+						},
+					},
+				},
+				{
+					Name: "number_prop",
+					Number: &datasource.NumberAttribute{
+						ComputedOptionalRequired: schema.Computed,
+						Description:              pointer("hey this is a number!"),
 					},
 				},
 			},
