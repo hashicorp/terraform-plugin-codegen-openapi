@@ -20,7 +20,10 @@ func (s *OASSchema) BuildCollectionResource(name string, computability schema.Co
 		return nil, s.SchemaErrorFromProperty(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	itemSchema, err := BuildSchema(s.Schema.Items.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -217,7 +220,10 @@ func (s *OASSchema) BuildCollectionProvider(name string, optionalOrRequired sche
 		return nil, s.SchemaErrorFromProperty(errors.New("invalid array items property, doesn't have a schema"), name)
 	}
 
-	itemSchema, err := BuildSchema(s.Schema.Items.A, SchemaOpts{}, s.GlobalSchemaOpts)
+	schemaOpts := SchemaOpts{
+		Ignores: s.SchemaOpts.Ignores,
+	}
+	itemSchema, err := BuildSchema(s.Schema.Items.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}

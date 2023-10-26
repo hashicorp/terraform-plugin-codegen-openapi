@@ -409,13 +409,6 @@
 							"computed_optional_required": "computed_optional",
 							"description": "User Status"
 						}
-					},
-					{
-						"name": "username",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The name that needs to be fetched. Use user1 for testing. "
-						}
 					}
 				]
 			}

@@ -237,17 +237,9 @@
 														"bool": {}
 													},
 													{
-														"name": "ignore_me_1",
-														"string": {}
-													},
-													{
 														"name": "obj_prop",
 														"object": {
 															"attribute_types": [
-																{
-																	"name": "ignore_me_2",
-																	"string": {}
-																},
 																{
 																	"name": "number_prop",
 																	"number": {}
@@ -340,13 +332,6 @@
 										"bool": {
 											"computed_optional_required": "computed_optional",
 											"description": "Bool inside a set!"
-										}
-									},
-									{
-										"name": "string_prop",
-										"string": {
-											"computed_optional_required": "computed_optional",
-											"description": "String inside a set!"
 										}
 									}
 								]

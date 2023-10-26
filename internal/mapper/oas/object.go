@@ -14,6 +14,7 @@ func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) 
 	// Guarantee the order of processing
 	propertyNames := util.SortedKeys(s.Schema.Properties)
 	for _, name := range propertyNames {
+
 		if s.IsPropertyIgnored(name) {
 			// TODO: produce a log?
 			continue

@@ -13,6 +13,10 @@ resources:
     read:
       path: /set_test
       method: GET
+    schema:
+      ignores:
+        - setnested_prop.string_prop
+
   map_test:
     create:
       path: /map_test
@@ -30,6 +34,7 @@ data_sources:
       ignores:
         - triple_nested_map.ignore_me_1
         - triple_nested_map.obj_prop.ignore_me_2
+
   set_test:
     read:
       path: /set_test
