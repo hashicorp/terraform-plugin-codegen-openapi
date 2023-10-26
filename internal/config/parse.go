@@ -133,16 +133,24 @@ func (c Config) Validate() error {
 }
 
 func (p Provider) Validate() error {
+	var result error
+
 	if p.Name == "" {
-		return errors.New("must have a 'name' property")
+		result = errors.Join(result, errors.New("must have a 'name' property"))
 	}
 
 	// All schema refs must be a local, file, or http resolve type
 	if p.SchemaRef != "" && index.DetermineReferenceResolveType(p.SchemaRef) < 0 {
-		return errors.New("'schema_ref' must be a valid JSON schema reference")
+		result = errors.Join(result, errors.New("'schema_ref' must be a valid JSON schema reference"))
 	}
 
-	return nil
+	for _, ignore := range p.Ignores {
+		if !attributeLocationRegex.MatchString(ignore) {
+			result = errors.Join(result, fmt.Errorf("invalid item for ignores: %q - must be dot-separated string", ignore))
+		}
+	}
+
+	return result
 }
 
 func (r Resource) Validate() error {
@@ -226,6 +234,12 @@ func (s *SchemaOptions) Validate() error {
 	err := s.AttributeOptions.Validate()
 	if err != nil {
 		result = errors.Join(result, fmt.Errorf("invalid attributes: %w", err))
+	}
+
+	for _, ignore := range s.Ignores {
+		if !attributeLocationRegex.MatchString(ignore) {
+			result = errors.Join(result, fmt.Errorf("invalid item for ignores: %q - must be dot-separated string", ignore))
+		}
 	}
 
 	return result

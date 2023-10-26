@@ -71,6 +71,23 @@ resources:
           "hey.there.nested.thing":
             description: Deeply nested property 'thing'`,
 		},
+		"valid resource with ignores": {
+			input: `
+provider:
+  name: example
+
+resources:
+  thing:
+    create:
+      path: /example/path/to/things
+      method: POST
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      ignores:
+        - valid.ignore.combo`,
+		},
 		"valid single data source": {
 			input: `
 provider:
@@ -116,6 +133,20 @@ data_sources:
             description: Here is a test description for the 'there' property in 'hey'
           "hey.there.nested.thing":
             description: Deeply nested property 'thing'`,
+		},
+		"valid data source with ignores": {
+			input: `
+provider:
+  name: example
+
+data_sources:
+  thing:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      ignores:
+        - valid.ignore.combo`,
 		},
 		"valid combo of resources and data sources": {
 			input: `
@@ -194,6 +225,20 @@ data_sources:
       path: /example/path/to/thing/{id}
       method: GET`,
 			expectedErrRegex: `provider 'schema_ref' must be a valid JSON schema reference`,
+		},
+		"provider - invalid ignore item": {
+			input: `
+provider:
+  name: example
+  ignores:
+    - .invalid.ignore.
+
+data_sources:
+  thing_one:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET`,
+			expectedErrRegex: `invalid item for ignores: \".invalid.ignore.\"`,
 		},
 		"at least one resource or data source required": {
 			input: `
@@ -333,6 +378,24 @@ resources:
             description: Here is a test description for the 'hey' property`,
 			expectedErrRegex: `invalid key for override: \".hey\"`,
 		},
+		"resource - invalid ignore item": {
+			input: `
+provider:
+  name: example
+
+resources:
+  thing_one:
+    create:
+      path: /example/path/to/things
+      method: POST
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      ignores:
+        - .invalid.ignore.`,
+			expectedErrRegex: `invalid item for ignores: \".invalid.ignore.\"`,
+		},
 		"data source - read required": {
 			input: `
 provider:
@@ -380,6 +443,21 @@ data_sources:
           "hey.":
             description: Here is a test description for the 'hey' property`,
 			expectedErrRegex: `invalid key for override: \"hey.\"`,
+		},
+		"data source - invalid ignore item": {
+			input: `
+provider:
+  name: example
+
+data_sources:
+  thing_one:
+    read:
+      path: /example/path/to/thing/{id}
+      method: GET
+    schema:
+      ignores:
+        - .invalid.ignore.`,
+			expectedErrRegex: `invalid item for ignores: \".invalid.ignore.\"`,
 		},
 	}
 	for name, testCase := range testCases {
