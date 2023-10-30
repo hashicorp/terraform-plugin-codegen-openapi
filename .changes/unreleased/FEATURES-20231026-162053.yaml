@@ -1,6 +1,0 @@
-kind: FEATURES
-body: Added schema.ignores option to generator config for resources, data sources,
-  and providers. Allows excluding attributes from OAS mapping
-time: 2023-10-26T16:20:53.404821-04:00
-custom:
-  Issue: "81"

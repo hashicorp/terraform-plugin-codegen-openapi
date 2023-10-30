@@ -1,6 +1,0 @@
-kind: ENHANCEMENTS
-body: Schemas that have the `properties` keyword defined with no type will now default
-  to `object`
-time: 2023-10-20T17:02:09.205328-04:00
-custom:
-  Issue: "79"
