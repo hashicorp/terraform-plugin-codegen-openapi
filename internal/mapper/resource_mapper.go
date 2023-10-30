@@ -69,7 +69,11 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// Create Request Body (required)
 	// ********************
 	logger.Debug("searching for create operation request body")
-	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+
+	schemaOpts := oas.SchemaOpts{
+		Ignores: explorerResource.SchemaOptions.Ignores,
+	}
+	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, schemaOpts, oas.GlobalSchemaOpts{})
 	if err != nil {
 		return nil, err
 	}
@@ -82,8 +86,15 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// Create Response Body (optional)
 	// *********************
 	logger.Debug("searching for create operation response body")
+
 	createResponseAttributes := attrmapper.ResourceAttributes{}
-	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
+	schemaOpts = oas.SchemaOpts{
+		Ignores: explorerResource.SchemaOptions.Ignores,
+	}
+	globalSchemaOpts := oas.GlobalSchemaOpts{
+		OverrideComputability: schema.Computed,
+	}
+	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
 		if errors.Is(err, oas.ErrSchemaNotFound) {
 			// Demote log to INFO if there was no schema found
@@ -102,8 +113,16 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// READ Response Body (optional)
 	// *******************
 	logger.Debug("searching for read operation response body")
+
 	readResponseAttributes := attrmapper.ResourceAttributes{}
-	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, oas.SchemaOpts{}, oas.GlobalSchemaOpts{OverrideComputability: schema.Computed})
+
+	schemaOpts = oas.SchemaOpts{
+		Ignores: explorerResource.SchemaOptions.Ignores,
+	}
+	globalSchemaOpts = oas.GlobalSchemaOpts{
+		OverrideComputability: schema.Computed,
+	}
+	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
 		if errors.Is(err, oas.ErrSchemaNotFound) {
 			// Demote log to INFO if there was no schema found
@@ -129,7 +148,10 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			}
 
 			pLogger := logger.With("param", param.Name)
-			schemaOpts := oas.SchemaOpts{OverrideDescription: param.Description}
+			schemaOpts := oas.SchemaOpts{
+				Ignores:             explorerResource.SchemaOptions.Ignores,
+				OverrideDescription: param.Description,
+			}
 			globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
 
 			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
@@ -143,6 +165,10 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			if aliasedName, ok := explorerResource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
 				pLogger = pLogger.With("param_alias", aliasedName)
 				paramName = aliasedName
+			}
+
+			if s.IsPropertyIgnored(paramName) {
+				continue
 			}
 
 			parameterAttribute, schemaErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)

@@ -56,7 +56,10 @@ func (m providerMapper) MapToIR(logger *slog.Logger) (*provider.Provider, error)
 func generateProviderSchema(logger *slog.Logger, exploredProvider explorer.Provider) (*provider.Schema, error) {
 	providerSchema := &provider.Schema{}
 
-	s, err := oas.BuildSchema(exploredProvider.SchemaProxy, oas.SchemaOpts{}, oas.GlobalSchemaOpts{})
+	schemaOpts := oas.SchemaOpts{
+		Ignores: exploredProvider.Ignores,
+	}
+	s, err := oas.BuildSchema(exploredProvider.SchemaProxy, schemaOpts, oas.GlobalSchemaOpts{})
 	if err != nil {
 		return nil, err
 	}

@@ -49,6 +49,7 @@ func (e configExplorer) FindProvider() (Provider, error) {
 		return Provider{}, fmt.Errorf("error extracting provider schema from ref: %w", err)
 	}
 	foundProvider.SchemaProxy = schemaProxy
+	foundProvider.Ignores = e.config.Provider.Ignores
 
 	return foundProvider, nil
 }
@@ -170,6 +171,7 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 
 func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) SchemaOptions {
 	return SchemaOptions{
+		Ignores: cfgSchemaOpts.Ignores,
 		AttributeOptions: AttributeOptions{
 			Aliases:   cfgSchemaOpts.AttributeOptions.Aliases,
 			Overrides: extractOverrides(cfgSchemaOpts.AttributeOptions.Overrides),

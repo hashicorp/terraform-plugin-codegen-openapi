@@ -23,6 +23,17 @@ resources:
           repo: name
 
 data_sources:
+  gists:
+    read:
+      path: /gists/{gist_id}
+      method: GET
+    schema:
+      ignores:
+        - fork_of.forks
+        - fork_of.history
+        - fork_of.files.language
+        - forks.user.plan.collaborators
+
   repository:
     read:
       path: /repos/{owner}/{repo}

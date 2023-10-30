@@ -54,6 +54,9 @@ resources:
     read:
       path: /user/{username}
       method: GET
+    schema:
+      ignores:
+        - username
 
 data_sources:
   pet:
@@ -76,6 +79,9 @@ data_sources:
     read:
       path: /pet/findByStatus
       method: GET
+    schema:
+      ignores:
+        - status
 
   order:
     read:

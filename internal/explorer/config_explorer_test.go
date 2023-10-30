@@ -261,6 +261,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							Method: "GET",
 						},
 						SchemaOptions: config.SchemaOptions{
+							Ignores: []string{"ignore1.abc", "ignore2.def"},
 							AttributeOptions: config.AttributeOptions{
 								Aliases: map[string]string{
 									"otherId": "id",
@@ -300,6 +301,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						OperationId: "read_resource",
 					},
 					SchemaOptions: explorer.SchemaOptions{
+						Ignores: []string{"ignore1.abc", "ignore2.def"},
 						AttributeOptions: explorer.AttributeOptions{
 							Aliases: map[string]string{
 								"otherId": "id",
@@ -463,6 +465,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 							Method: "GET",
 						},
 						SchemaOptions: config.SchemaOptions{
+							Ignores: []string{"ignore1.abc", "ignore2.def"},
 							AttributeOptions: config.AttributeOptions{
 								Aliases: map[string]string{
 									"otherId": "id",
@@ -492,6 +495,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 						OperationId: "read_resource",
 					},
 					SchemaOptions: explorer.SchemaOptions{
+						Ignores: []string{"ignore1.abc", "ignore2.def"},
 						AttributeOptions: explorer.AttributeOptions{
 							Aliases: map[string]string{
 								"otherId": "id",

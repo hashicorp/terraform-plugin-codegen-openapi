@@ -132,25 +132,6 @@
 			"schema": {
 				"attributes": [
 					{
-						"name": "status",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "Status values that need to be considered for filter",
-							"validators": [
-								{
-									"custom": {
-										"imports": [
-											{
-												"path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-											}
-										],
-										"schema_definition": "stringvalidator.OneOf(\n\"available\",\n\"pending\",\n\"sold\",\n)"
-									}
-								}
-							]
-						}
-					},
-					{
 						"name": "pets",
 						"set_nested": {
 							"computed_optional_required": "computed",
@@ -195,13 +176,6 @@
 											"element_type": {
 												"string": {}
 											}
-										}
-									},
-									{
-										"name": "status",
-										"string": {
-											"computed_optional_required": "computed",
-											"description": "pet status in the store"
 										}
 									},
 									{
@@ -434,13 +408,6 @@
 						"int64": {
 							"computed_optional_required": "computed_optional",
 							"description": "User Status"
-						}
-					},
-					{
-						"name": "username",
-						"string": {
-							"computed_optional_required": "computed_optional",
-							"description": "The name that needs to be fetched. Use user1 for testing. "
 						}
 					}
 				]

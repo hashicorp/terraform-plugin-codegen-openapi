@@ -14,14 +14,20 @@ import (
 func (s *OASSchema) BuildResourceAttributes() (attrmapper.ResourceAttributes, *SchemaError) {
 	objectAttributes := attrmapper.ResourceAttributes{}
 
-	// TODO: throw error if it's not an object?
-
 	// Guarantee the order of processing
 	propertyNames := util.SortedKeys(s.Schema.Properties)
 	for _, name := range propertyNames {
 
+		if s.IsPropertyIgnored(name) {
+			continue
+		}
+
 		pProxy := s.Schema.Properties[name]
-		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+		schemaOpts := SchemaOpts{
+			Ignores: s.GetIgnoresForNested(name),
+		}
+
+		pSchema, err := BuildSchema(pProxy, schemaOpts, s.GlobalSchemaOpts)
 		if err != nil {
 			return nil, s.NestSchemaError(err, name)
 		}
@@ -66,14 +72,20 @@ func (s *OASSchema) BuildResourceAttribute(name string, computability schema.Com
 func (s *OASSchema) BuildDataSourceAttributes() (attrmapper.DataSourceAttributes, *SchemaError) {
 	objectAttributes := attrmapper.DataSourceAttributes{}
 
-	// TODO: throw error if it's not an object?
-
 	// Guarantee the order of processing
 	propertyNames := util.SortedKeys(s.Schema.Properties)
 	for _, name := range propertyNames {
 
+		if s.IsPropertyIgnored(name) {
+			continue
+		}
+
 		pProxy := s.Schema.Properties[name]
-		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+		schemaOpts := SchemaOpts{
+			Ignores: s.GetIgnoresForNested(name),
+		}
+
+		pSchema, err := BuildSchema(pProxy, schemaOpts, s.GlobalSchemaOpts)
 		if err != nil {
 			return nil, s.NestSchemaError(err, name)
 		}
@@ -118,14 +130,20 @@ func (s *OASSchema) BuildDataSourceAttribute(name string, computability schema.C
 func (s *OASSchema) BuildProviderAttributes() (attrmapper.ProviderAttributes, *SchemaError) {
 	objectAttributes := attrmapper.ProviderAttributes{}
 
-	// TODO: throw error if it's not an object?
-
 	// Guarantee the order of processing
 	propertyNames := util.SortedKeys(s.Schema.Properties)
 	for _, name := range propertyNames {
 
+		if s.IsPropertyIgnored(name) {
+			continue
+		}
+
 		pProxy := s.Schema.Properties[name]
-		pSchema, err := BuildSchema(pProxy, SchemaOpts{}, s.GlobalSchemaOpts)
+		schemaOpts := SchemaOpts{
+			Ignores: s.GetIgnoresForNested(name),
+		}
+
+		pSchema, err := BuildSchema(pProxy, schemaOpts, s.GlobalSchemaOpts)
 		if err != nil {
 			return nil, s.NestSchemaError(err, name)
 		}

@@ -104,6 +104,17 @@
 															"bool": {}
 														},
 														{
+															"name": "obj_prop",
+															"object": {
+																"attribute_types": [
+																	{
+																		"name": "number_prop",
+																		"number": {}
+																	}
+																]
+															}
+														},
+														{
 															"name": "string_prop",
 															"string": {}
 														}
@@ -226,6 +237,17 @@
 														"bool": {}
 													},
 													{
+														"name": "obj_prop",
+														"object": {
+															"attribute_types": [
+																{
+																	"name": "number_prop",
+																	"number": {}
+																}
+															]
+														}
+													},
+													{
 														"name": "string_prop",
 														"string": {}
 													}
@@ -310,13 +332,6 @@
 										"bool": {
 											"computed_optional_required": "computed_optional",
 											"description": "Bool inside a set!"
-										}
-									},
-									{
-										"name": "string_prop",
-										"string": {
-											"computed_optional_required": "computed_optional",
-											"description": "String inside a set!"
 										}
 									}
 								]
