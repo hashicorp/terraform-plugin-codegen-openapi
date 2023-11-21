@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Code Generation Feedback
+    url: https://discuss.hashicorp.com/c/terraform-providers/tf-plugin-sdk
+    about: Please share any overall feedback relating to provider code generation by creating a new topic in the Plugin Development Community Forum.
+  - name: ❓ Code Generation Questions
+    url: https://discuss.hashicorp.com/c/terraform-providers/tf-plugin-sdk
+    about: Please ask any general questions about provider code generation by creating a new topic in the Plugin Development Community Forum.
