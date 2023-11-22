@@ -1,0 +1,41 @@
+name: Feature Request
+description: Something is missing or could be improved.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this feature request! Please note that this issue tracker is only used for bug reports and feature requests. Other issues will be closed.
+
+        If you have a question or want to provide general feedback about code generation, please go back to the issue chooser and select one of the discuss board links.
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Cases or Problem Statement
+      description: What use cases or problems are you trying to solve?
+      placeholder: Description of use cases or problems.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What solutions would you prefer?
+      placeholder: Description of proposed solutions.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Are there any additional details about your environment, workflow, or recent changes that might be relevant? Have you discovered a workaround? Are there links to other related issues?
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Community Guidelines](https://www.hashicorp.com/community-guidelines).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
