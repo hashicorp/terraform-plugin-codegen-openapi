@@ -1,0 +1,65 @@
+name: Bug Report
+description: Let us know about an unexpected error, a crash, or an incorrect behavior.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report! Please note that this issue tracker is only used for bug reports and feature requests. Other issues will be closed.
+
+        If you have a question or want to provide general feedback about code generation, please go back to the issue chooser and select one of the discuss board links.
+  - type: textarea
+    id: version
+    attributes:
+      label: tfplugingen-openapi CLI version
+      description: What is the version of the OpenAPI Provider Spec Generator CLI?
+      placeholder: Output of `tfplugingen-openapi --version`
+    validations:
+      required: true
+  - type: textarea
+    id: openapi-spec
+    attributes:
+      label: OpenAPI Spec File
+      description: Please copy and paste any relevant content of the OpenAPI specification used
+      render: YAML
+    validations:
+      required: true
+  - type: textarea
+    id: generator-config
+    attributes:
+      label: Generator Config
+      description: Please copy and paste the content of the generator config used
+      render: YAML
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Description of what should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Description of what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Are there any additional details about your environment, workflow, or recent changes that might be relevant? Have you discovered a workaround? Are there links to other related issues?
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Community Guidelines](https://www.hashicorp.com/community-guidelines).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

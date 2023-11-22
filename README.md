@@ -1,6 +1,6 @@
 # OpenAPI Provider Spec Generator
 
-> _[Terraform Provider Code Generation](https://developer.hashicorp.com/terraform/plugin/code-generation) is currently in tech preview._
+> _[Terraform Provider Code Generation](https://developer.hashicorp.com/terraform/plugin/code-generation) is currently in tech preview. If you have general questions or feedback about provider code generation, please create a new topic in the [Plugin Development Community Forum](https://discuss.hashicorp.com/c/terraform-providers/tf-plugin-sdk)._
 
 ## Overview
 
