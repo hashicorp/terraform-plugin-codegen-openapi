@@ -280,6 +280,13 @@
 						}
 					},
 					{
+						"name": "map_stringified",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "This is a map with a stringifed value"
+						}
+					},
+					{
 						"name": "mapnested_prop",
 						"map_nested": {
 							"computed_optional_required": "required",

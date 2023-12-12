@@ -78,6 +78,9 @@ paths:
                   type: object
                   additionalProperties:
                     type: string
+                map_stringified:
+                  $ref: "#/components/schemas/map_allof_oneof_stringified"
+
   /set_test:
     get:
       summary: Test for SetNested attributes and Set attributes in a data source
@@ -213,3 +216,13 @@ components:
           bool_prop:
             description: Bool inside a map!
             type: boolean
+    map_allof_oneof_stringified:
+      description: This is a map with a stringifed value
+      type: object
+      additionalProperties:
+        allOf:
+        - $ref: "#/components/schemas/stringable_number"
+    stringable_number:
+      oneOf:
+      - type: string
+      - type: number
