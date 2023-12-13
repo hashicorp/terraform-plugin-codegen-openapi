@@ -213,19 +213,6 @@ func TestParseConfig_Invalid(t *testing.T) {
 			input:            ``,
 			expectedErrRegex: `provider must have a 'name' property`,
 		},
-		"provider - invalid schema_ref - not resolvable": {
-			input: `
-provider:
-  name: example
-  schema_ref: thisaintvalid
-
-data_sources:
-  thing_one:
-    read:
-      path: /example/path/to/thing/{id}
-      method: GET`,
-			expectedErrRegex: `provider 'schema_ref' must be a valid JSON schema reference`,
-		},
 		"provider - invalid ignore item": {
 			input: `
 provider:

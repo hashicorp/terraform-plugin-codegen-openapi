@@ -280,6 +280,41 @@
 						}
 					},
 					{
+						"name": "map_stringified",
+						"map": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "This is a map with a stringifed value"
+						}
+					},
+					{
+						"name": "mapnested_nullable",
+						"map_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "bool_prop",
+										"bool": {
+											"computed_optional_required": "required",
+											"description": "Bool inside a map!"
+										}
+									},
+									{
+										"name": "string_prop",
+										"string": {
+											"computed_optional_required": "required",
+											"description": "String inside a map!"
+										}
+									}
+								]
+							},
+							"description": "This is a map with a nullable object"
+						}
+					},
+					{
 						"name": "mapnested_prop",
 						"map_nested": {
 							"computed_optional_required": "required",

@@ -20,7 +20,7 @@ import (
 
 	"github.com/mitchellh/cli"
 	"github.com/pb33f/libopenapi"
-	"github.com/pb33f/libopenapi/resolver"
+	"github.com/pb33f/libopenapi/index"
 )
 
 type GenerateCommand struct {
@@ -133,7 +133,7 @@ func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	// 4. Log circular references as warnings and fail on any other model building errors
 	var errResult error
 	for _, err := range errs {
-		if rslvErr, ok := err.(*resolver.ResolvingError); ok {
+		if rslvErr, ok := err.(*index.ResolvingError); ok {
 			logger.Warn(
 				"circular reference found in OpenAPI spec",
 				"circular_ref", rslvErr.CircularReference.GenerateJourneyPath())

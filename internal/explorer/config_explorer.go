@@ -4,6 +4,7 @@
 package explorer
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -157,7 +158,7 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 	}
 
 	// populate low-level schema, using root document.Index for resolving
-	err = lowSchema.Build(indexRef.Node, document.Index)
+	err = lowSchema.Build(context.Background(), indexRef.Node, document.Index)
 	if err != nil {
 		return nil, fmt.Errorf("error populating low-level schema: %w", err)
 	}

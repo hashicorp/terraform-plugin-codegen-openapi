@@ -4,7 +4,7 @@
 package oas
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
@@ -13,21 +13,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
-	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
 
 func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedOptionalRequired) (attrmapper.ResourceAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
-	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-	if !ok {
-		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+	if !s.IsMap() {
+		return nil, s.SchemaErrorFromProperty(errors.New("invalid map, additionalProperties doesn't have a valid schema"), name)
 	}
 
 	schemaOpts := SchemaOpts{
 		Ignores: s.SchemaOpts.Ignores,
 	}
-	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
+	mapSchema, err := BuildSchema(s.Schema.AdditionalProperties.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -81,15 +79,14 @@ func (s *OASSchema) BuildMapResource(name string, computability schema.ComputedO
 func (s *OASSchema) BuildMapDataSource(name string, computability schema.ComputedOptionalRequired) (attrmapper.DataSourceAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
-	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-	if !ok {
-		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+	if !s.IsMap() {
+		return nil, s.SchemaErrorFromProperty(errors.New("invalid map, additionalProperties doesn't have a valid schema"), name)
 	}
 
 	schemaOpts := SchemaOpts{
 		Ignores: s.SchemaOpts.Ignores,
 	}
-	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
+	mapSchema, err := BuildSchema(s.Schema.AdditionalProperties.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -144,15 +141,14 @@ func (s *OASSchema) BuildMapDataSource(name string, computability schema.Compute
 func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.OptionalRequired) (attrmapper.ProviderAttribute, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an SingleNestedAttribute), so calling functions should call s.IsMap() first.
-	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-	if !ok {
-		return nil, s.SchemaErrorFromProperty(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), name)
+	if !s.IsMap() {
+		return nil, s.SchemaErrorFromProperty(errors.New("invalid map, additionalProperties doesn't have a valid schema"), name)
 	}
 
 	schemaOpts := SchemaOpts{
 		Ignores: s.SchemaOpts.Ignores,
 	}
-	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
+	mapSchema, err := BuildSchema(s.Schema.AdditionalProperties.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return nil, s.NestSchemaError(err, name)
 	}
@@ -201,15 +197,14 @@ func (s *OASSchema) BuildMapProvider(name string, optionalOrRequired schema.Opti
 func (s *OASSchema) BuildMapElementType() (schema.ElementType, *SchemaError) {
 	// Maps are detected as `type: object`, with an `additionalProperties` field that is a schema. `additionalProperties` can
 	// also be a boolean (which we should ignore and map to an ObjectType), so calling functions should call s.IsMap() first.
-	mapSchemaProxy, ok := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-	if !ok {
-		return schema.ElementType{}, SchemaErrorFromNode(fmt.Errorf("invalid map schema, expected type *base.SchemaProxy, got: %T", s.Schema.AdditionalProperties), s.Schema, AdditionalProperties)
+	if !s.IsMap() {
+		return schema.ElementType{}, SchemaErrorFromNode(errors.New("invalid map, additionalProperties doesn't have a valid schema"), s.Schema, AdditionalProperties)
 	}
 
 	schemaOpts := SchemaOpts{
 		Ignores: s.SchemaOpts.Ignores,
 	}
-	mapSchema, err := BuildSchema(mapSchemaProxy, schemaOpts, s.GlobalSchemaOpts)
+	mapSchema, err := BuildSchema(s.Schema.AdditionalProperties.A, schemaOpts, s.GlobalSchemaOpts)
 	if err != nil {
 		return schema.ElementType{}, err
 	}

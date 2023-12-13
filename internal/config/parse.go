@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/pb33f/libopenapi/index"
 	"gopkg.in/yaml.v3"
 )
 
@@ -137,11 +136,6 @@ func (p Provider) Validate() error {
 
 	if p.Name == "" {
 		result = errors.Join(result, errors.New("must have a 'name' property"))
-	}
-
-	// All schema refs must be a local, file, or http resolve type
-	if p.SchemaRef != "" && index.DetermineReferenceResolveType(p.SchemaRef) < 0 {
-		result = errors.Join(result, errors.New("'schema_ref' must be a valid JSON schema reference"))
 	}
 
 	for _, ignore := range p.Ignores {
