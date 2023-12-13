@@ -73,6 +73,8 @@ paths:
               properties:
                 mapnested_prop:
                   $ref: "#/components/schemas/mapnested_schema"
+                mapnested_nullable:
+                  $ref: "#/components/schemas/mapnested_allof_oneof_nullable"
                 map_prop:
                   description: This is a map of strings
                   type: object
@@ -216,6 +218,12 @@ components:
           bool_prop:
             description: Bool inside a map!
             type: boolean
+    mapnested_allof_oneof_nullable:
+      description: This is a map with a nullable object
+      type: object
+      additionalProperties:
+        allOf:
+        - $ref: "#/components/schemas/nullable_object"
     map_allof_oneof_stringified:
       description: This is a map with a stringifed value
       type: object
@@ -226,3 +234,17 @@ components:
       oneOf:
       - type: string
       - type: number
+    nullable_object:
+      oneOf:
+      - type: object
+        required:
+        - string_prop
+        - bool_prop
+        properties:
+          string_prop:
+            description: String inside a map!
+            type: string
+          bool_prop:
+            description: Bool inside a map!
+            type: boolean
+      - type: "null"
