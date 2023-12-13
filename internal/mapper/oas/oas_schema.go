@@ -48,8 +48,7 @@ type SchemaOpts struct {
 	OverrideDescription string
 }
 
-// IsMap will perform a type assertion on the `additionalProperties` field to determine if a map type
-// is appropriate (refer to [JSON Schema - additionalProperties]).
+// IsMap checks the `additionalProperties` field to determine if a map type is appropriate (refer to [JSON Schema - additionalProperties]).
 //
 // [JSON Schema - additionalProperties]: https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties
 func (s *OASSchema) IsMap() bool {
