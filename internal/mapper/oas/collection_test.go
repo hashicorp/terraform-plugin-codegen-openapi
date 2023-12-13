@@ -562,19 +562,21 @@ func TestBuildCollectionResource(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_boolean": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"boolean"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_string": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"string"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"boolean"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_string": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"string"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),
@@ -585,21 +587,23 @@ func TestBuildCollectionResource(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_int64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_int64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),
@@ -1221,19 +1225,21 @@ func TestBuildCollectionDataSource(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_boolean": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"boolean"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_string": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"string"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"boolean"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_string": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"string"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),
@@ -1244,21 +1250,23 @@ func TestBuildCollectionDataSource(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_int64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_int64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),
@@ -1880,19 +1888,21 @@ func TestBuildCollectionProvider(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_boolean": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"boolean"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_string": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"string"},
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"boolean"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_string": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"string"},
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),
@@ -1903,21 +1913,23 @@ func TestBuildCollectionProvider(t *testing.T) {
 						Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type: []string{"object"},
-								AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "this won't be added, since it will map to element type",
-										}),
-										"nested_int64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "this won't be added, since it will map to element type",
-										}),
-									},
-								}),
+								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+									A: base.CreateSchemaProxy(&base.Schema{
+										Type: []string{"object"},
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "this won't be added, since it will map to element type",
+											}),
+											"nested_int64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "this won't be added, since it will map to element type",
+											}),
+										},
+									}),
+								},
 							}),
 						},
 					}),

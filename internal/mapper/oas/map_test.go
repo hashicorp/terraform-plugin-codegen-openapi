@@ -33,34 +33,36 @@ func TestBuildMapResource(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_password_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"object"},
-									Required:    []string{"nested_int64_required"},
-									Description: "hey there! I'm a single nested object type.",
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "hey there! I'm a nested float64 type.",
-										}),
-										"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "hey there! I'm a nested int64 type, required.",
-										}),
-									},
-								}),
-								"nested_password_required": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"string"},
-									Format:      "password",
-									Description: "hey there! I'm a nested string type, required.",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_password_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"object"},
+										Required:    []string{"nested_int64_required"},
+										Description: "hey there! I'm a single nested object type.",
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "hey there! I'm a nested float64 type.",
+											}),
+											"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "hey there! I'm a nested int64 type, required.",
+											}),
+										},
+									}),
+									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"string"},
+										Format:      "password",
+										Description: "hey there! I'm a nested string type, required.",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -116,16 +118,18 @@ func TestBuildMapResource(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -157,16 +161,18 @@ func TestBuildMapResource(t *testing.T) {
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -209,17 +215,21 @@ func TestBuildMapResource(t *testing.T) {
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:   []string{"number"},
-							Format: "float",
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"number"},
+								Format: "float",
+							}),
+						},
 					}),
 					"map_with_strings_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with strings, required.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type: []string{"string"},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						},
 					}),
 				},
 			},
@@ -282,34 +292,36 @@ func TestBuildMapDataSource(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_password_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"object"},
-									Required:    []string{"nested_int64_required"},
-									Description: "hey there! I'm a single nested object type.",
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "hey there! I'm a nested float64 type.",
-										}),
-										"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "hey there! I'm a nested int64 type, required.",
-										}),
-									},
-								}),
-								"nested_password_required": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"string"},
-									Format:      "password",
-									Description: "hey there! I'm a nested string type, required.",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_password_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"object"},
+										Required:    []string{"nested_int64_required"},
+										Description: "hey there! I'm a single nested object type.",
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "hey there! I'm a nested float64 type.",
+											}),
+											"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "hey there! I'm a nested int64 type, required.",
+											}),
+										},
+									}),
+									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"string"},
+										Format:      "password",
+										Description: "hey there! I'm a nested string type, required.",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -365,16 +377,18 @@ func TestBuildMapDataSource(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -406,16 +420,18 @@ func TestBuildMapDataSource(t *testing.T) {
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -458,17 +474,21 @@ func TestBuildMapDataSource(t *testing.T) {
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:   []string{"number"},
-							Format: "float",
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"number"},
+								Format: "float",
+							}),
+						},
 					}),
 					"map_with_strings_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with strings, required.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type: []string{"string"},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						},
 					}),
 				},
 			},
@@ -531,34 +551,36 @@ func TestBuildMapProvider(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_password_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"object"},
-									Required:    []string{"nested_int64_required"},
-									Description: "hey there! I'm a single nested object type.",
-									Properties: map[string]*base.SchemaProxy{
-										"nested_float64": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"number"},
-											Format:      "double",
-											Description: "hey there! I'm a nested float64 type.",
-										}),
-										"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-											Type:        []string{"integer"},
-											Format:      "int64",
-											Description: "hey there! I'm a nested int64 type, required.",
-										}),
-									},
-								}),
-								"nested_password_required": base.CreateSchemaProxy(&base.Schema{
-									Type:        []string{"string"},
-									Format:      "password",
-									Description: "hey there! I'm a nested string type, required.",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_password_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"object"},
+										Required:    []string{"nested_int64_required"},
+										Description: "hey there! I'm a single nested object type.",
+										Properties: map[string]*base.SchemaProxy{
+											"nested_float64": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"number"},
+												Format:      "double",
+												Description: "hey there! I'm a nested float64 type.",
+											}),
+											"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+												Type:        []string{"integer"},
+												Format:      "int64",
+												Description: "hey there! I'm a nested int64 type, required.",
+											}),
+										},
+									}),
+									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
+										Type:        []string{"string"},
+										Format:      "password",
+										Description: "hey there! I'm a nested string type, required.",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -614,16 +636,18 @@ func TestBuildMapProvider(t *testing.T) {
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -655,16 +679,18 @@ func TestBuildMapProvider(t *testing.T) {
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:     []string{"object"},
-							Required: []string{"nested_int64_required"},
-							Properties: map[string]*base.SchemaProxy{
-								"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
-									Type:   []string{"integer"},
-									Format: "int64",
-								}),
-							},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:     []string{"object"},
+								Required: []string{"nested_int64_required"},
+								Properties: map[string]*base.SchemaProxy{
+									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
+										Type:   []string{"integer"},
+										Format: "int64",
+									}),
+								},
+							}),
+						},
 					}),
 				},
 			},
@@ -707,17 +733,21 @@ func TestBuildMapProvider(t *testing.T) {
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type:   []string{"number"},
-							Format: "float",
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type:   []string{"number"},
+								Format: "float",
+							}),
+						},
 					}),
 					"map_with_strings_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with strings, required.",
-						AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-							Type: []string{"string"},
-						}),
+						AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+							A: base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						},
 					}),
 				},
 			},

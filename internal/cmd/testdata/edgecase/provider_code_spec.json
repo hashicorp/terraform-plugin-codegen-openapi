@@ -281,8 +281,11 @@
 					},
 					{
 						"name": "map_stringified",
-						"single_nested": {
+						"map": {
 							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
 							"description": "This is a map with a stringifed value"
 						}
 					},

@@ -155,18 +155,20 @@ func TestProviderMapper_basic(t *testing.T) {
 						"nested_map": base.CreateSchemaProxy(&base.Schema{
 							Type:        []string{"object"},
 							Description: "hey this is a map!",
-							AdditionalProperties: base.CreateSchemaProxy(&base.Schema{
-								Type: []string{"object"},
-								Properties: map[string]*base.SchemaProxy{
-									"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
-										Type: []string{"boolean"},
-									}),
-									"deep_nested_int64": base.CreateSchemaProxy(&base.Schema{
-										Type:        []string{"integer"},
-										Description: "hey this is an int64!",
-									}),
-								},
-							}),
+							AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
+								A: base.CreateSchemaProxy(&base.Schema{
+									Type: []string{"object"},
+									Properties: map[string]*base.SchemaProxy{
+										"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
+											Type: []string{"boolean"},
+										}),
+										"deep_nested_int64": base.CreateSchemaProxy(&base.Schema{
+											Type:        []string{"integer"},
+											Description: "hey this is an int64!",
+										}),
+									},
+								}),
+							},
 						}),
 					},
 				}),

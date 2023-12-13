@@ -2540,15 +2540,21 @@
 																					},
 																					{
 																						"name": "limits",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					},
 																					{
 																						"name": "requests",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					}
@@ -4146,15 +4152,21 @@
 																					},
 																					{
 																						"name": "limits",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					},
 																					{
 																						"name": "requests",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					}
@@ -5773,15 +5785,21 @@
 																					},
 																					{
 																						"name": "limits",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					},
 																					{
 																						"name": "requests",
-																						"single_nested": {
+																						"map": {
 																							"computed_optional_required": "computed_optional",
+																							"element_type": {
+																								"string": {}
+																							},
 																							"description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																						}
 																					}
@@ -6345,8 +6363,11 @@
 														},
 														{
 															"name": "overhead",
-															"single_nested": {
+															"map": {
 																"computed_optional_required": "computed_optional",
+																"element_type": {
+																	"string": {}
+																},
 																"description": "Overhead represents the resource overhead associated with running a pod for a given RuntimeClass. This field will be autopopulated at admission time by the RuntimeClass admission controller. If the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests. The RuntimeClass admission controller will reject Pod create requests which have the overhead already set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero. More info: https://git.k8s.io/enhancements/keps/sig-node/688-pod-overhead/README.md"
 															}
 														},
@@ -7729,15 +7750,21 @@
 																													"attributes": [
 																														{
 																															"name": "limits",
-																															"single_nested": {
+																															"map": {
 																																"computed_optional_required": "computed_optional",
+																																"element_type": {
+																																	"string": {}
+																																},
 																																"description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																															}
 																														},
 																														{
 																															"name": "requests",
-																															"single_nested": {
+																															"map": {
 																																"computed_optional_required": "computed_optional",
+																																"element_type": {
+																																	"string": {}
+																																},
 																																"description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																															}
 																														}

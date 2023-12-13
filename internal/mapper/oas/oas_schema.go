@@ -53,8 +53,7 @@ type SchemaOpts struct {
 //
 // [JSON Schema - additionalProperties]: https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties
 func (s *OASSchema) IsMap() bool {
-	_, isMap := s.Schema.AdditionalProperties.(*base.SchemaProxy)
-	return isMap
+	return s.Schema.AdditionalProperties != nil && s.Schema.AdditionalProperties.IsA()
 }
 
 // SchemaErrorFromProperty is a helper function for creating an SchemaError struct for a property.
