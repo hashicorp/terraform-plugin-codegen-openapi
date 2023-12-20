@@ -16,6 +16,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func TestBuildSchemaFromRequest(t *testing.T) {
@@ -28,7 +29,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 		"default to application/json": {
 			op: &high.Operation{
 				RequestBody: &high.RequestBody{
-					Content: map[string]*high.MediaType{
+					Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 						"application/xml": {
 							Schema: base.CreateSchemaProxy(&base.Schema{
 								Description: "this is the wrong one!",
@@ -41,7 +42,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 								Type:        []string{"string"},
 							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -55,7 +56,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 		"utilizes other media types in sorted order": {
 			op: &high.Operation{
 				RequestBody: &high.RequestBody{
-					Content: map[string]*high.MediaType{
+					Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 						"application/xml": {
 							Schema: base.CreateSchemaProxy(&base.Schema{
 								Description: "this won't be used because of sorting!",
@@ -68,7 +69,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 								Type:        []string{"string"},
 							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -82,7 +83,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 		"utilizes other media types when nil schemas in priority media types": {
 			op: &high.Operation{
 				RequestBody: &high.RequestBody{
-					Content: map[string]*high.MediaType{
+					Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 						"application/json": {
 							Schema: nil,
 						},
@@ -95,7 +96,7 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 								Type:        []string{"string"},
 							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -152,14 +153,14 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 		"no media type schemas": {
 			op: &high.Operation{
 				RequestBody: &high.RequestBody{
-					Content: map[string]*high.MediaType{
+					Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 						"application/json": {
 							Schema: nil,
 						},
 						"application/xml": {
 							Schema: nil,
 						},
-					},
+					}),
 				},
 			},
 			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
@@ -196,19 +197,19 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 		"default to 200 and application/json": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"201": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
 										Type:        []string{"boolean"},
 									}),
 								},
-							},
+							}),
 						},
 						"200": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/xml": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
@@ -221,9 +222,9 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -237,19 +238,19 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 		"fallback to 201 and application/json": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"204": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
 										Type:        []string{"boolean"},
 									}),
 								},
-							},
+							}),
 						},
 						"201": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/xml": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
@@ -262,9 +263,9 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -278,19 +279,19 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 		"fallback to success code and any media type in sorted order": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"304": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
 										Type:        []string{"boolean"},
 									}),
 								},
-							},
+							}),
 						},
 						"204": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/xml": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this is the wrong one!",
@@ -303,9 +304,9 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedSchema: &oas.OASSchema{
@@ -362,38 +363,38 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		"no success response code media type schemas": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"300": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this won't be used!",
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
 						"skip-me!": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this won't be used!",
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
 						"199": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: base.CreateSchemaProxy(&base.Schema{
 										Description: "this won't be used!",
 										Type:        []string{"string"},
 									}),
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
@@ -401,15 +402,15 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		"200 response code with no valid schema": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"200": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: nil,
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
@@ -417,15 +418,15 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		"201 response code with no valid schema": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"201": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: nil,
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
@@ -433,15 +434,15 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 		"success response code with no valid schema": {
 			op: &high.Operation{
 				Responses: &high.Responses{
-					Codes: map[string]*high.Response{
+					Codes: orderedmap.ToOrderedMap(map[string]*high.Response{
 						"204": {
-							Content: map[string]*high.MediaType{
+							Content: orderedmap.ToOrderedMap(map[string]*high.MediaType{
 								"application/json": {
 									Schema: nil,
 								},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			expectedErrRegex: oas.ErrSchemaNotFound.Error(),
@@ -478,7 +479,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nullable_string_two"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"null", "string"},
 						Description: "hey there! I'm a nullable string type.",
@@ -487,7 +488,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 						Type:        []string{"string", "null"},
 						Description: "hey there! I'm a nullable string type, required.",
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -510,7 +511,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"stringable_number", "stringable_bool"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string", "boolean"},
 						Description: "hey there! I'm a stringable bool type, required.",
@@ -523,7 +524,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 						Type:        []string{"string", "number"},
 						Description: "hey there! I'm a stringable number type, required.",
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -553,7 +554,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nullable_string_two"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
 						AnyOf: []*base.SchemaProxy{
 							base.CreateSchemaProxy(&base.Schema{
@@ -576,7 +577,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -599,7 +600,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"stringable_number", "stringable_bool"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
 						AnyOf: []*base.SchemaProxy{
 							base.CreateSchemaProxy(&base.Schema{
@@ -633,7 +634,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -663,7 +664,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nullable_string_two"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nullable_string_one": base.CreateSchemaProxy(&base.Schema{
 						OneOf: []*base.SchemaProxy{
 							base.CreateSchemaProxy(&base.Schema{
@@ -686,7 +687,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -709,7 +710,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"stringable_number", "stringable_bool"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"stringable_bool": base.CreateSchemaProxy(&base.Schema{
 						OneOf: []*base.SchemaProxy{
 							base.CreateSchemaProxy(&base.Schema{
@@ -743,7 +744,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -773,7 +774,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of nullable strings.",
@@ -792,7 +793,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -821,7 +822,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of nullable strings.",
@@ -854,7 +855,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -883,7 +884,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of nullable strings.",
@@ -916,7 +917,7 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -978,12 +979,12 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 				AllOf: []*base.SchemaProxy{
 					base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"object"},
-						Properties: map[string]*base.SchemaProxy{
+						Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 							"nested_object": base.CreateSchemaProxy(&base.Schema{
 								Type:        []string{"object"},
 								Required:    []string{"string"},
 								Description: "hey there! I'm an object type.",
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"bool": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"boolean"},
 										Description: "hey there! I'm a bool type.",
@@ -992,9 +993,9 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 										Type:        []string{"string"},
 										Description: "hey there! I'm a string type, required.",
 									}),
-								},
+								}),
 							}),
-						},
+						}),
 					}),
 				},
 			}),
@@ -1028,7 +1029,7 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_allof_override"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"bool_allof_override": base.CreateSchemaProxy(&base.Schema{
 						Description: "Override the bool's description",
 						AllOf: []*base.SchemaProxy{
@@ -1047,7 +1048,7 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceBoolAttribute{
@@ -1216,7 +1217,7 @@ func TestBuildSchema_EdgeCases(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{},
 				Required: []string{"string", "object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Description: "hey there! I'm a string type, required.",
@@ -1225,14 +1226,14 @@ func TestBuildSchema_EdgeCases(t *testing.T) {
 						Type:        []string{},
 						Required:    []string{"bool"},
 						Description: "hey there! I'm an object type, required.",
-						Properties: map[string]*base.SchemaProxy{
+						Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 							"bool": base.CreateSchemaProxy(&base.Schema{
 								Type:        []string{"boolean"},
 								Description: "hey there! I'm a bool type, required.",
 							}),
-						},
+						}),
 					}),
-				},
+				}),
 			}),
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceSingleNestedAttribute{

@@ -10,19 +10,21 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func Test_ConfigExplorer_FindResources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems   map[string]*high.PathItem
+		pathItems   *orderedmap.Map[string, *high.PathItem]
 		config      config.Config
 		want        map[string]explorer.Resource
 		expectedErr error
@@ -50,7 +52,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Post: &high.Operation{
 						Description: "create op here",
@@ -71,7 +73,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						OperationId: "delete_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.Resource{
 				"test_resource": {
 					CreateOp: &high.Operation{
@@ -121,7 +123,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/one": {
 					Options: &high.Operation{
 						Description: "create op here",
@@ -144,7 +146,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						OperationId: "update_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.Resource{
 				"test_resource": {
 					CreateOp: &high.Operation{
@@ -182,7 +184,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems:   map[string]*high.PathItem{},
+			pathItems:   orderedmap.ToOrderedMap(map[string]*high.PathItem{}),
 			expectedErr: errors.New(`failed to extract 'test_resource.create': path '/fakepath' not found in OpenAPI spec`),
 		},
 		"non-existent read path throws error": {
@@ -196,7 +198,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems:   map[string]*high.PathItem{},
+			pathItems:   orderedmap.ToOrderedMap(map[string]*high.PathItem{}),
 			expectedErr: errors.New(`failed to extract 'test_resource.read': path '/fakepath' not found in OpenAPI spec`),
 		},
 		"non-existent update path throws error": {
@@ -210,7 +212,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems:   map[string]*high.PathItem{},
+			pathItems:   orderedmap.ToOrderedMap(map[string]*high.PathItem{}),
 			expectedErr: errors.New(`failed to extract 'test_resource.update': path '/fakepath' not found in OpenAPI spec`),
 		},
 		"non-existent delete path throws error": {
@@ -224,7 +226,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems:   map[string]*high.PathItem{},
+			pathItems:   orderedmap.ToOrderedMap(map[string]*high.PathItem{}),
 			expectedErr: errors.New(`failed to extract 'test_resource.delete': path '/fakepath' not found in OpenAPI spec`),
 		},
 		"non-existent method throws error": {
@@ -238,14 +240,14 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/{resource_id}": {
 					Put: &high.Operation{
 						Description: "update op here",
 						OperationId: "update_resource",
 					},
 				},
-			},
+			}),
 			expectedErr: errors.New(`failed to extract 'test_resource.update': method 'FAKE' not found at OpenAPI path '/resources/{resource_id}'`),
 		},
 		"schema options pass-through": {
@@ -276,7 +278,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Post: &high.Operation{
 						Description: "create op here",
@@ -289,7 +291,7 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						OperationId: "read_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.Resource{
 				"test_resource": {
 					CreateOp: &high.Operation{
@@ -350,7 +352,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems   map[string]*high.PathItem
+		pathItems   *orderedmap.Map[string, *high.PathItem]
 		config      config.Config
 		want        map[string]explorer.DataSource
 		expectedErr error
@@ -366,14 +368,14 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/{resource_id}": {
 					Get: &high.Operation{
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.DataSource{
 				"test_resource": {
 					ReadOp: &high.Operation{
@@ -399,14 +401,14 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/two/{resource_id}": {
 					Head: &high.Operation{
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.DataSource{
 				"test_resource": {
 					ReadOp: &high.Operation{
@@ -432,7 +434,7 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			pathItems:   map[string]*high.PathItem{},
+			pathItems:   orderedmap.ToOrderedMap(map[string]*high.PathItem{}),
 			expectedErr: errors.New(`failed to extract 'test_resource.read': path '/fakepath' not found in OpenAPI spec`),
 		},
 		"non-existent method throws error": {
@@ -446,14 +448,14 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/{resource_id}": {
 					Get: &high.Operation{
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
 				},
-			},
+			}),
 			expectedErr: errors.New(`failed to extract 'test_resource.read': method 'FAKE' not found at OpenAPI path '/resources/{resource_id}'`),
 		},
 		"schema options pass-through": {
@@ -480,14 +482,14 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 					},
 				},
 			},
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/{resource_id}": {
 					Get: &high.Operation{
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
 				},
-			},
+			}),
 			want: map[string]explorer.DataSource{
 				"test_resource": {
 					ReadOp: &high.Operation{
@@ -568,7 +570,7 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 			expectedSchema: &base.Schema{
 				Type:        []string{"object"},
 				Description: "This is the provider schema",
-				Extensions:  map[string]any{},
+				Extensions:  orderedmap.ToOrderedMap(map[string]*yaml.Node{}),
 			},
 		},
 	}
@@ -609,7 +611,7 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 					t.Fatalf("error building returned schema proxy: %s", err)
 				}
 
-				if diff := cmp.Diff(gotSchema, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{})); diff != "" {
+				if diff := cmp.Diff(gotSchema, testCase.expectedSchema, cmpopts.IgnoreUnexported(base.Schema{}), cmpopts.IgnoreFields(base.Schema{}, "Extensions")); diff != "" {
 					t.Errorf("unexpected difference: %s", diff)
 				}
 			}

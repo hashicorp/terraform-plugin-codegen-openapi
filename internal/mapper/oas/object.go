@@ -4,22 +4,25 @@
 package oas
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) {
 	objectElemTypes := []schema.ObjectAttributeType{}
 
-	// Guarantee the order of processing
-	propertyNames := util.SortedKeys(s.Schema.Properties)
-	for _, name := range propertyNames {
+	sortedProperties := orderedmap.SortAlpha(s.Schema.Properties)
+	for pair := range orderedmap.Iterate(context.TODO(), sortedProperties) {
+		name := pair.Key()
 
 		if s.IsPropertyIgnored(name) {
 			continue
 		}
 
-		pProxy := s.Schema.Properties[name]
+		pProxy := pair.Value()
 		schemaOpts := SchemaOpts{
 			Ignores: s.GetIgnoresForNested(name),
 		}

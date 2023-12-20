@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func TestProviderMapper_basic(t *testing.T) {
@@ -38,7 +39,7 @@ func TestProviderMapper_basic(t *testing.T) {
 				SchemaProxy: base.CreateSchemaProxy(&base.Schema{
 					Type:     []string{"object"},
 					Required: []string{"string_prop", "bool_prop"},
-					Properties: map[string]*base.SchemaProxy{
+					Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 						"bool_prop": base.CreateSchemaProxy(&base.Schema{
 							Type:        []string{"boolean"},
 							Description: "hey this is a bool, required!",
@@ -57,7 +58,7 @@ func TestProviderMapper_basic(t *testing.T) {
 							Format:      "float",
 							Description: "hey this is a float64!",
 						}),
-					},
+					}),
 				}),
 			},
 			want: &provider.Provider{
@@ -108,7 +109,7 @@ func TestProviderMapper_basic(t *testing.T) {
 				},
 				SchemaProxy: base.CreateSchemaProxy(&base.Schema{
 					Type: []string{"object"},
-					Properties: map[string]*base.SchemaProxy{
+					Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 						"bool_prop": base.CreateSchemaProxy(&base.Schema{
 							Type:        []string{"boolean"},
 							Description: "This boolean is going to be ignored!",
@@ -119,7 +120,7 @@ func TestProviderMapper_basic(t *testing.T) {
 						}),
 						"nested_obj": base.CreateSchemaProxy(&base.Schema{
 							Type: []string{"object"},
-							Properties: map[string]*base.SchemaProxy{
+							Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 								"bool_prop": base.CreateSchemaProxy(&base.Schema{
 									Type:        []string{"boolean"},
 									Description: "This boolean is going to be ignored!",
@@ -128,7 +129,7 @@ func TestProviderMapper_basic(t *testing.T) {
 									Type:        []string{"string"},
 									Description: "hey this is a string!",
 								}),
-							},
+							}),
 						}),
 						"nested_array": base.CreateSchemaProxy(&base.Schema{
 							Type:        []string{"array"},
@@ -139,14 +140,14 @@ func TestProviderMapper_basic(t *testing.T) {
 									Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 										A: base.CreateSchemaProxy(&base.Schema{
 											Type: []string{"object"},
-											Properties: map[string]*base.SchemaProxy{
+											Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 												"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
 													Type: []string{"boolean"},
 												}),
 												"deep_nested_int64": base.CreateSchemaProxy(&base.Schema{
 													Type: []string{"integer"},
 												}),
-											},
+											}),
 										}),
 									},
 								}),
@@ -158,7 +159,7 @@ func TestProviderMapper_basic(t *testing.T) {
 							AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 								A: base.CreateSchemaProxy(&base.Schema{
 									Type: []string{"object"},
-									Properties: map[string]*base.SchemaProxy{
+									Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 										"deep_nested_bool": base.CreateSchemaProxy(&base.Schema{
 											Type: []string{"boolean"},
 										}),
@@ -166,11 +167,11 @@ func TestProviderMapper_basic(t *testing.T) {
 											Type:        []string{"integer"},
 											Description: "hey this is an int64!",
 										}),
-									},
+									}),
 								}),
 							},
 						}),
-					},
+					}),
 				}),
 			},
 			want: &provider.Provider{

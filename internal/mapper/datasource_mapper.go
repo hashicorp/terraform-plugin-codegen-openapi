@@ -126,7 +126,7 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			}
 
 			computability := schema.ComputedOptional
-			if param.Required {
+			if param.Required != nil && *param.Required {
 				computability = schema.Required
 			}
 

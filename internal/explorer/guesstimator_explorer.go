@@ -4,12 +4,14 @@
 package explorer
 
 import (
+	"context"
 	"fmt"
 	"path"
 	"regexp"
 	"strings"
 
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 var _ Explorer = guesstimatorExplorer{}
@@ -128,8 +130,8 @@ func (e guesstimatorExplorer) FindDataSources() (map[string]DataSource, error) {
 func (e guesstimatorExplorer) groupPathItems() map[string]resourceOperations {
 	groups := map[string]resourceOperations{}
 
-	for name, pathItem := range e.spec.Paths.PathItems {
-		resource, isIdentity := convertPathToResourceName(name)
+	for pair := range orderedmap.Iterate(context.TODO(), e.spec.Paths.PathItems) {
+		resource, isIdentity := convertPathToResourceName(pair.Key())
 
 		_, ok := groups[resource]
 		if !ok {
@@ -139,12 +141,12 @@ func (e guesstimatorExplorer) groupPathItems() map[string]resourceOperations {
 			}
 		}
 
-		ops := pathItem.GetOperations()
-		for opName, op := range ops {
+		ops := pair.Value().GetOperations()
+		for opPair := range orderedmap.Iterate(context.TODO(), ops) {
 			if isIdentity {
-				groups[resource].IdentityOps[opName] = op
+				groups[resource].IdentityOps[opPair.Key()] = opPair.Value()
 			} else {
-				groups[resource].CollectionOps[opName] = op
+				groups[resource].CollectionOps[opPair.Key()] = opPair.Value()
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 // TODO: add error tests
@@ -31,7 +32,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list nested array type, required.",
@@ -39,7 +40,7 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -50,11 +51,11 @@ func TestBuildCollectionResource(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListNestedAttribute{
@@ -87,7 +88,7 @@ func TestBuildCollectionResource(t *testing.T) {
 		"list nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Deprecated: pointer(true),
@@ -95,16 +96,16 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListNestedAttribute{
@@ -130,7 +131,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						MinItems: pointer(int64(1)),
@@ -138,16 +139,16 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListNestedAttribute{
@@ -184,7 +185,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -193,7 +194,7 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -204,11 +205,11 @@ func TestBuildCollectionResource(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceSetNestedAttribute{
@@ -241,7 +242,7 @@ func TestBuildCollectionResource(t *testing.T) {
 		"set nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Format:     "set",
@@ -250,16 +251,16 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceSetNestedAttribute{
@@ -285,7 +286,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						Format:   "set",
@@ -294,16 +295,16 @@ func TestBuildCollectionResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceSetNestedAttribute{
@@ -340,7 +341,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of lists.",
@@ -350,7 +351,7 @@ func TestBuildCollectionResource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -359,7 +360,7 @@ func TestBuildCollectionResource(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -374,20 +375,20 @@ func TestBuildCollectionResource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -446,7 +447,7 @@ func TestBuildCollectionResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -458,7 +459,7 @@ func TestBuildCollectionResource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -467,7 +468,7 @@ func TestBuildCollectionResource(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -484,20 +485,20 @@ func TestBuildCollectionResource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceSetAttribute{
@@ -555,7 +556,7 @@ func TestBuildCollectionResource(t *testing.T) {
 		"list and set attribute - nested map results in element type": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"list_with_map": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list with a nested map of objects.",
@@ -565,7 +566,7 @@ func TestBuildCollectionResource(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"boolean"},
 												Description: "this won't be added, since it will map to element type",
@@ -574,7 +575,7 @@ func TestBuildCollectionResource(t *testing.T) {
 												Type:        []string{"string"},
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -590,7 +591,7 @@ func TestBuildCollectionResource(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -601,13 +602,13 @@ func TestBuildCollectionResource(t *testing.T) {
 												Format:      "int64",
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -694,7 +695,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list nested array type, required.",
@@ -702,7 +703,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -713,11 +714,11 @@ func TestBuildCollectionDataSource(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListNestedAttribute{
@@ -750,7 +751,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 		"list nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Deprecated: pointer(true),
@@ -758,16 +759,16 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListNestedAttribute{
@@ -793,7 +794,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						MinItems: pointer(int64(1)),
@@ -801,16 +802,16 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListNestedAttribute{
@@ -847,7 +848,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -856,7 +857,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -867,11 +868,11 @@ func TestBuildCollectionDataSource(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceSetNestedAttribute{
@@ -904,7 +905,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 		"set nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Format:     "set",
@@ -913,16 +914,16 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceSetNestedAttribute{
@@ -948,7 +949,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						Format:   "set",
@@ -957,16 +958,16 @@ func TestBuildCollectionDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceSetNestedAttribute{
@@ -1003,7 +1004,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of lists.",
@@ -1013,7 +1014,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -1022,7 +1023,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1037,20 +1038,20 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -1109,7 +1110,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -1121,7 +1122,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -1130,7 +1131,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1147,20 +1148,20 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceSetAttribute{
@@ -1218,7 +1219,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 		"list and set attribute - nested map results in element type": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"list_with_map": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list with a nested map of objects.",
@@ -1228,7 +1229,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"boolean"},
 												Description: "this won't be added, since it will map to element type",
@@ -1237,7 +1238,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 												Type:        []string{"string"},
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1253,7 +1254,7 @@ func TestBuildCollectionDataSource(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -1264,13 +1265,13 @@ func TestBuildCollectionDataSource(t *testing.T) {
 												Format:      "int64",
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -1357,7 +1358,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list nested array type, required.",
@@ -1365,7 +1366,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -1376,11 +1377,11 @@ func TestBuildCollectionProvider(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListNestedAttribute{
@@ -1413,7 +1414,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 		"list nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Deprecated: pointer(true),
@@ -1421,16 +1422,16 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListNestedAttribute{
@@ -1456,7 +1457,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						MinItems: pointer(int64(1)),
@@ -1464,16 +1465,16 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListNestedAttribute{
@@ -1510,7 +1511,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -1519,7 +1520,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_float64": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"number"},
 										Format:      "double",
@@ -1530,11 +1531,11 @@ func TestBuildCollectionProvider(t *testing.T) {
 										Format:      "int64",
 										Description: "hey there! I'm a nested int64 type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderSetNestedAttribute{
@@ -1567,7 +1568,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 		"set nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"array"},
 						Format:     "set",
@@ -1576,16 +1577,16 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderSetNestedAttribute{
@@ -1611,7 +1612,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:     []string{"array"},
 						Format:   "set",
@@ -1620,16 +1621,16 @@ func TestBuildCollectionProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderSetNestedAttribute{
@@ -1666,7 +1667,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of lists.",
@@ -1676,7 +1677,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -1685,7 +1686,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1700,20 +1701,20 @@ func TestBuildCollectionProvider(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{
@@ -1772,7 +1773,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_set_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_set_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Format:      "set",
@@ -1784,7 +1785,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"float64_prop": base.CreateSchemaProxy(&base.Schema{
 												Type:   []string{"number"},
 												Format: "double",
@@ -1793,7 +1794,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 												Type:   []string{"integer"},
 												Format: "int64",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1810,20 +1811,20 @@ func TestBuildCollectionProvider(t *testing.T) {
 								Items: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"bool_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"boolean"},
 											}),
 											"string_prop": base.CreateSchemaProxy(&base.Schema{
 												Type: []string{"string"},
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderSetAttribute{
@@ -1881,7 +1882,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 		"list and set attribute - nested map results in element type": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"list_with_map": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list with a nested map of objects.",
@@ -1891,7 +1892,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_boolean": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"boolean"},
 												Description: "this won't be added, since it will map to element type",
@@ -1900,7 +1901,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 												Type:        []string{"string"},
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
@@ -1916,7 +1917,7 @@ func TestBuildCollectionProvider(t *testing.T) {
 								AdditionalProperties: &base.DynamicValue[*base.SchemaProxy, bool]{
 									A: base.CreateSchemaProxy(&base.Schema{
 										Type: []string{"object"},
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -1927,13 +1928,13 @@ func TestBuildCollectionProvider(t *testing.T) {
 												Format:      "int64",
 												Description: "this won't be added, since it will map to element type",
 											}),
-										},
+										}),
 									}),
 								},
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{

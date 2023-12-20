@@ -13,9 +13,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func TestBuildNumberResource(t *testing.T) {
@@ -29,7 +31,7 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_prop_required", "float_float64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Format:      "double",
@@ -50,7 +52,7 @@ func TestBuildNumberResource(t *testing.T) {
 						Format:      "float",
 						Description: "hey there! I'm a float64 type, from a float, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceFloat64Attribute{
@@ -87,23 +89,23 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"float64_prop_required_default_non_zero"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop_default_non_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"number"},
 						Format:  "double",
-						Default: float64(123.45),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "123.45"},
 					}),
 					"float64_prop_default_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"number"},
 						Format:  "double",
-						Default: float64(0.0),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "0.0"},
 					}),
 					"float64_prop_required_default_non_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"number"},
 						Format:  "double",
-						Default: float64(123.45),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "123.45"},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceFloat64Attribute{
@@ -139,13 +141,13 @@ func TestBuildNumberResource(t *testing.T) {
 		"float64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Format:     "double",
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceFloat64Attribute{
@@ -161,13 +163,16 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"float64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:   []string{"number"},
 						Format: "double",
-						Enum:   []any{float64(1.2), float64(2.3)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1.2"},
+							{Kind: yaml.ScalarNode, Value: "2.3"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceFloat64Attribute{
@@ -194,7 +199,7 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type.",
@@ -203,7 +208,7 @@ func TestBuildNumberResource(t *testing.T) {
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceNumberAttribute{
@@ -225,12 +230,12 @@ func TestBuildNumberResource(t *testing.T) {
 		"number attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceNumberAttribute{
@@ -246,7 +251,7 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_list_prop_required", "float_float64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of float64s.",
@@ -287,7 +292,7 @@ func TestBuildNumberResource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -336,7 +341,7 @@ func TestBuildNumberResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of numbers.",
@@ -355,7 +360,7 @@ func TestBuildNumberResource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -412,7 +417,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_prop_required", "float_float64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Format:      "double",
@@ -433,7 +438,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 						Format:      "float",
 						Description: "hey there! I'm a float64 type, from a float, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceFloat64Attribute{
@@ -469,13 +474,13 @@ func TestBuildNumberDataSource(t *testing.T) {
 		"float64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Format:     "double",
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceFloat64Attribute{
@@ -491,13 +496,16 @@ func TestBuildNumberDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"float64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:   []string{"number"},
 						Format: "double",
-						Enum:   []any{float64(1.2), float64(2.3)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1.2"},
+							{Kind: yaml.ScalarNode, Value: "2.3"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceFloat64Attribute{
@@ -524,7 +532,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type.",
@@ -533,7 +541,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceNumberAttribute{
@@ -555,12 +563,12 @@ func TestBuildNumberDataSource(t *testing.T) {
 		"number attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceNumberAttribute{
@@ -576,7 +584,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_list_prop_required", "float_float64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of float64s.",
@@ -617,7 +625,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -666,7 +674,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of numbers.",
@@ -685,7 +693,7 @@ func TestBuildNumberDataSource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -742,7 +750,7 @@ func TestBuildNumberProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_prop_required", "float_float64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Format:      "double",
@@ -763,7 +771,7 @@ func TestBuildNumberProvider(t *testing.T) {
 						Format:      "float",
 						Description: "hey there! I'm a float64 type, from a float, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderFloat64Attribute{
@@ -799,13 +807,13 @@ func TestBuildNumberProvider(t *testing.T) {
 		"float64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Format:     "double",
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderFloat64Attribute{
@@ -821,13 +829,16 @@ func TestBuildNumberProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"float64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"float64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:   []string{"number"},
 						Format: "double",
-						Enum:   []any{float64(1.2), float64(2.3)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1.2"},
+							{Kind: yaml.ScalarNode, Value: "2.3"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderFloat64Attribute{
@@ -854,7 +865,7 @@ func TestBuildNumberProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type.",
@@ -863,7 +874,7 @@ func TestBuildNumberProvider(t *testing.T) {
 						Type:        []string{"number"},
 						Description: "hey there! I'm a number type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderNumberAttribute{
@@ -885,12 +896,12 @@ func TestBuildNumberProvider(t *testing.T) {
 		"number attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"number"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderNumberAttribute{
@@ -906,7 +917,7 @@ func TestBuildNumberProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"double_float64_list_prop_required", "float_float64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"double_float64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of float64s.",
@@ -947,7 +958,7 @@ func TestBuildNumberProvider(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{
@@ -996,7 +1007,7 @@ func TestBuildNumberProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"number_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"number_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of numbers.",
@@ -1015,7 +1026,7 @@ func TestBuildNumberProvider(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{
@@ -1080,7 +1091,10 @@ func TestGetFloatValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type: []string{"integer"},
-					Enum: []any{float64(1.2), float64(2.3)},
+					Enum: []*yaml.Node{
+						{Kind: yaml.ScalarNode, Value: "1.2"},
+						{Kind: yaml.ScalarNode, Value: "2.3"},
+					},
 				},
 			},
 			expected: []schema.Float64Validator{
