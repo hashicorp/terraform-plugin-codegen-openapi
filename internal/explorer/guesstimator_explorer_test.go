@@ -9,17 +9,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems         map[string]*high.PathItem
+		pathItems         *orderedmap.Map[string, *high.PathItem]
 		expectedResources []string
 	}{
 		"valid flat resource combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Post: &high.Operation{},
 				},
@@ -27,11 +28,11 @@ func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 					Get:    &high.Operation{},
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{"resources"},
 		},
 		"valid nested resource combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/verycool/verynice/resources": {
 					Post: &high.Operation{},
 				},
@@ -39,11 +40,11 @@ func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 					Get:    &high.Operation{},
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{"verycool_verynice_resources"},
 		},
 		"valid nested with id resource combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/verycool/{id}/verynice/resources": {
 					Post: &high.Operation{},
 				},
@@ -51,45 +52,45 @@ func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 					Get:    &high.Operation{},
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{"verycool_verynice_resources"},
 		},
 		"invalid resource combo - POST,DELETEbyID": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Post: &high.Operation{},
 				},
 				"/resources/{resource_id}": {
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{},
 		},
 		"invalid resource combo - GETbyID,DELETEbyID": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources/{resource_id}": {
 					Get:    &high.Operation{},
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{},
 		},
 		"invalid resource combo - GETbyID,POST": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Post: &high.Operation{},
 				},
 				"/resources/{resource_id}": {
 					Get: &high.Operation{},
 				},
-			},
+			}),
 			expectedResources: []string{},
 		},
 		"invalid resource combo - no ops": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources":               {},
 				"/resources/{resource_id}": {},
-			},
+			}),
 			expectedResources: []string{},
 		},
 	}
@@ -124,22 +125,22 @@ func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		pathItems           map[string]*high.PathItem
+		pathItems           *orderedmap.Map[string, *high.PathItem]
 		expectedDataSources []string
 	}{
 		"valid flat data source combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Get: &high.Operation{},
 				},
 				"/resources/{resource_id}": {
 					Get: &high.Operation{},
 				},
-			},
+			}),
 			expectedDataSources: []string{"resources_collection", "resources_by_id"},
 		},
 		"valid nested data source combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/verycool/verynice/resources": {
 					Post: &high.Operation{},
 				},
@@ -147,11 +148,11 @@ func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 					Get:    &high.Operation{},
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedDataSources: []string{"verycool_verynice_resources_by_id"},
 		},
 		"valid nested with id data source combo": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/verycool/{id}/verynice/resources": {
 					Get:  &high.Operation{},
 					Post: &high.Operation{},
@@ -159,11 +160,11 @@ func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 				"/verycool/{id}/verynice/resources/{resource_id}": {
 					Delete: &high.Operation{},
 				},
-			},
+			}),
 			expectedDataSources: []string{"verycool_verynice_resources_collection"},
 		},
 		"invalid data source combo - no matching ops": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources": {
 					Put:     &high.Operation{},
 					Post:    &high.Operation{},
@@ -182,14 +183,14 @@ func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 					Patch:   &high.Operation{},
 					Trace:   &high.Operation{},
 				},
-			},
+			}),
 			expectedDataSources: []string{},
 		},
 		"invalid data source combo - no ops": {
-			pathItems: map[string]*high.PathItem{
+			pathItems: orderedmap.ToOrderedMap(map[string]*high.PathItem{
 				"/resources":               {},
 				"/resources/{resource_id}": {},
-			},
+			}),
 			expectedDataSources: []string{},
 		},
 	}

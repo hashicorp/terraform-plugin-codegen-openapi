@@ -13,9 +13,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func TestBuildIntegerResource(t *testing.T) {
@@ -29,7 +31,7 @@ func TestBuildIntegerResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type.",
@@ -38,7 +40,7 @@ func TestBuildIntegerResource(t *testing.T) {
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceInt64Attribute{
@@ -61,20 +63,20 @@ func TestBuildIntegerResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop_required_default_non_zero"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop_default_non_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"integer"},
-						Default: int64(123),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "123"},
 					}),
 					"int64_prop_default_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"integer"},
-						Default: int64(0),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "0"},
 					}),
 					"int64_prop_required_default_non_zero": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"integer"},
-						Default: int64(123),
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "123"},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceInt64Attribute{
@@ -110,12 +112,12 @@ func TestBuildIntegerResource(t *testing.T) {
 		"int64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"integer"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceInt64Attribute{
@@ -131,7 +133,7 @@ func TestBuildIntegerResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of int64s.",
@@ -150,7 +152,7 @@ func TestBuildIntegerResource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -179,12 +181,15 @@ func TestBuildIntegerResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"integer"},
-						Enum: []any{int64(1), int64(2)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1"},
+							{Kind: yaml.ScalarNode, Value: "2"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceInt64Attribute{
@@ -239,7 +244,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type.",
@@ -248,7 +253,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceInt64Attribute{
@@ -270,12 +275,12 @@ func TestBuildIntegerDataSource(t *testing.T) {
 		"int64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"integer"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceInt64Attribute{
@@ -291,7 +296,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of int64s.",
@@ -310,7 +315,7 @@ func TestBuildIntegerDataSource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -339,12 +344,15 @@ func TestBuildIntegerDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"integer"},
-						Enum: []any{int64(1), int64(2)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1"},
+							{Kind: yaml.ScalarNode, Value: "2"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceInt64Attribute{
@@ -399,7 +407,7 @@ func TestBuildIntegerProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type.",
@@ -408,7 +416,7 @@ func TestBuildIntegerProvider(t *testing.T) {
 						Type:        []string{"integer"},
 						Description: "hey there! I'm an int64 type, required.",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderInt64Attribute{
@@ -430,12 +438,12 @@ func TestBuildIntegerProvider(t *testing.T) {
 		"int64 attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"integer"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderInt64Attribute{
@@ -451,7 +459,7 @@ func TestBuildIntegerProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of int64s.",
@@ -470,7 +478,7 @@ func TestBuildIntegerProvider(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{
@@ -499,12 +507,15 @@ func TestBuildIntegerProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"int64_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"int64_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"integer"},
-						Enum: []any{int64(1), int64(2)},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "1"},
+							{Kind: yaml.ScalarNode, Value: "2"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderInt64Attribute{
@@ -567,7 +578,10 @@ func TestGetIntegerValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type: []string{"integer"},
-					Enum: []any{int64(1), int64(2)},
+					Enum: []*yaml.Node{
+						{Kind: yaml.ScalarNode, Value: "1"},
+						{Kind: yaml.ScalarNode, Value: "2"},
+					},
 				},
 			},
 			expected: []schema.Int64Validator{

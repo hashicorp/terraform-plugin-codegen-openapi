@@ -117,27 +117,29 @@ func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) (*hig
 		return nil, nil
 	}
 
-	if paths == nil || paths.PathItems == nil || paths.PathItems[oasLocation.Path] == nil {
+	if paths == nil || paths.PathItems == nil || paths.PathItems.GetOrZero(oasLocation.Path) == nil {
 		return nil, fmt.Errorf("path '%s' not found in OpenAPI spec", oasLocation.Path)
 	}
 
+	pathItem, _ := paths.PathItems.Get(oasLocation.Path)
+
 	switch strings.ToLower(oasLocation.Method) {
 	case low.PostLabel:
-		return paths.PathItems[oasLocation.Path].Post, nil
+		return pathItem.Post, nil
 	case low.GetLabel:
-		return paths.PathItems[oasLocation.Path].Get, nil
+		return pathItem.Get, nil
 	case low.PutLabel:
-		return paths.PathItems[oasLocation.Path].Put, nil
+		return pathItem.Put, nil
 	case low.DeleteLabel:
-		return paths.PathItems[oasLocation.Path].Delete, nil
+		return pathItem.Delete, nil
 	case low.PatchLabel:
-		return paths.PathItems[oasLocation.Path].Patch, nil
+		return pathItem.Patch, nil
 	case low.OptionsLabel:
-		return paths.PathItems[oasLocation.Path].Options, nil
+		return pathItem.Options, nil
 	case low.HeadLabel:
-		return paths.PathItems[oasLocation.Path].Head, nil
+		return pathItem.Head, nil
 	case low.TraceLabel:
-		return paths.PathItems[oasLocation.Path].Trace, nil
+		return pathItem.Trace, nil
 	default:
 		return nil, fmt.Errorf("method '%s' not found at OpenAPI path '%s'", oasLocation.Method, oasLocation.Path)
 	}
@@ -158,7 +160,7 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 	}
 
 	// populate low-level schema, using root document.Index for resolving
-	err = lowSchema.Build(context.Background(), indexRef.Node, document.Index)
+	err = lowSchema.Build(context.TODO(), indexRef.Node, document.Index)
 	if err != nil {
 		return nil, fmt.Errorf("error populating low-level schema: %w", err)
 	}

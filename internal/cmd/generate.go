@@ -160,7 +160,7 @@ func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	}
 
 	// 7. Log a warning if the provider code spec is not valid based on the JSON schema
-	err = spec.Validate(context.Background(), bytes)
+	err = spec.Validate(context.TODO(), bytes)
 	if err != nil {
 		logger.Warn(
 			"generated provider code spec failed validation",

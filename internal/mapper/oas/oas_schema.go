@@ -4,12 +4,14 @@
 package oas
 
 import (
+	"context"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 type OASSchema struct {
@@ -73,9 +75,9 @@ func (s *OASSchema) getPropertyLineNumber(propName string) int {
 	}
 
 	// Check property nodes first for a line number
-	for k, v := range low.Properties.Value {
-		if k.Value == propName {
-			return v.NodeLineNumber()
+	for pair := range orderedmap.Iterate(context.TODO(), low.Properties.Value) {
+		if pair.Key().Value == propName {
+			return pair.Value().NodeLineNumber()
 		}
 	}
 

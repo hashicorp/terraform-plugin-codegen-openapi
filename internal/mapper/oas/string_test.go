@@ -13,9 +13,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 func TestBuildStringResource(t *testing.T) {
@@ -29,7 +31,7 @@ func TestBuildStringResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Description: "hey there! I'm a string type, not sensitive, required.",
@@ -39,7 +41,7 @@ func TestBuildStringResource(t *testing.T) {
 						Format:      "password",
 						Description: "hey there! I'm a string type, sensitive",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -63,23 +65,20 @@ func TestBuildStringResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop_required_default_non_empty"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop_default_empty": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"string"},
-						Format:  "double",
-						Default: "",
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: ""},
 					}),
 					"string_prop_default_non_empty": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"string"},
-						Format:  "double",
-						Default: "test value",
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "test value"},
 					}),
 					"string_prop_required_default_non_empty": base.CreateSchemaProxy(&base.Schema{
 						Type:    []string{"string"},
-						Format:  "double",
-						Default: "test value",
+						Default: &yaml.Node{Kind: yaml.ScalarNode, Value: "test value"},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -115,12 +114,12 @@ func TestBuildStringResource(t *testing.T) {
 		"string attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"string"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -136,7 +135,7 @@ func TestBuildStringResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of strings.",
@@ -155,7 +154,7 @@ func TestBuildStringResource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceListAttribute{
@@ -184,12 +183,15 @@ func TestBuildStringResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"string"},
-						Enum: []any{"one", "two"},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "one"},
+							{Kind: yaml.ScalarNode, Value: "two"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceStringAttribute{
@@ -244,7 +246,7 @@ func TestBuildStringDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Description: "hey there! I'm a string type, not sensitive, required.",
@@ -254,7 +256,7 @@ func TestBuildStringDataSource(t *testing.T) {
 						Format:      "password",
 						Description: "hey there! I'm a string type, sensitive",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceStringAttribute{
@@ -277,12 +279,12 @@ func TestBuildStringDataSource(t *testing.T) {
 		"string attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"string"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceStringAttribute{
@@ -298,7 +300,7 @@ func TestBuildStringDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of strings.",
@@ -317,7 +319,7 @@ func TestBuildStringDataSource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceListAttribute{
@@ -346,12 +348,15 @@ func TestBuildStringDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"string"},
-						Enum: []any{"one", "two"},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "one"},
+							{Kind: yaml.ScalarNode, Value: "two"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceStringAttribute{
@@ -406,7 +411,7 @@ func TestBuildStringProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"string"},
 						Description: "hey there! I'm a string type, not sensitive, required.",
@@ -416,7 +421,7 @@ func TestBuildStringProvider(t *testing.T) {
 						Format:      "password",
 						Description: "hey there! I'm a string type, sensitive",
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderStringAttribute{
@@ -439,12 +444,12 @@ func TestBuildStringProvider(t *testing.T) {
 		"string attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"string"},
 						Deprecated: pointer(true),
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderStringAttribute{
@@ -460,7 +465,7 @@ func TestBuildStringProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_list_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_list_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"array"},
 						Description: "hey there! I'm a list of strings.",
@@ -479,7 +484,7 @@ func TestBuildStringProvider(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderListAttribute{
@@ -508,12 +513,15 @@ func TestBuildStringProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"string_prop"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"string_prop": base.CreateSchemaProxy(&base.Schema{
 						Type: []string{"string"},
-						Enum: []any{"one", "two"},
+						Enum: []*yaml.Node{
+							{Kind: yaml.ScalarNode, Value: "one"},
+							{Kind: yaml.ScalarNode, Value: "two"},
+						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderStringAttribute{
@@ -576,7 +584,10 @@ func TestGetStringValidators(t *testing.T) {
 			schema: oas.OASSchema{
 				Schema: &base.Schema{
 					Type: []string{"string"},
-					Enum: []any{"one", "two"},
+					Enum: []*yaml.Node{
+						{Kind: yaml.ScalarNode, Value: "one"},
+						{Kind: yaml.ScalarNode, Value: "two"},
+					},
 				},
 			},
 			expected: []schema.StringValidator{

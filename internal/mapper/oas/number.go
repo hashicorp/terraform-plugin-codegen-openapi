@@ -25,9 +25,8 @@ func (s *OASSchema) BuildNumberResource(name string, computability schema.Comput
 		}
 
 		if s.Schema.Default != nil {
-			staticDefault, ok := s.Schema.Default.(float64)
-
-			if ok {
+			var staticDefault float64
+			if err := s.Schema.Default.Decode(&staticDefault); err == nil {
 				if computability == schema.Required {
 					result.ComputedOptionalRequired = schema.ComputedOptional
 				}
@@ -128,10 +127,9 @@ func (s *OASSchema) GetFloatValidators() []schema.Float64Validator {
 	if len(s.Schema.Enum) > 0 {
 		var enum []float64
 
-		for _, valueIface := range s.Schema.Enum {
-			value, ok := valueIface.(float64)
-
-			if !ok {
+		for _, valueNode := range s.Schema.Enum {
+			var value float64
+			if err := valueNode.Decode(&value); err != nil {
 				// could consider error/panic here to notify developers
 				continue
 			}

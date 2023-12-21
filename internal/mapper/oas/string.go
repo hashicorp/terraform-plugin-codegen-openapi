@@ -24,9 +24,8 @@ func (s *OASSchema) BuildStringResource(name string, computability schema.Comput
 	}
 
 	if s.Schema.Default != nil {
-		staticDefault, ok := s.Schema.Default.(string)
-
-		if ok {
+		var staticDefault string
+		if err := s.Schema.Default.Decode(&staticDefault); err == nil {
 			if computability == schema.Required {
 				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
@@ -89,10 +88,9 @@ func (s *OASSchema) GetStringValidators() []schema.StringValidator {
 	if len(s.Schema.Enum) > 0 {
 		var enum []string
 
-		for _, valueIface := range s.Schema.Enum {
-			value, ok := valueIface.(string)
-
-			if !ok {
+		for _, valueNode := range s.Schema.Enum {
+			var value string
+			if err := valueNode.Decode(&value); err != nil {
 				// could consider error/panic here to notify developers
 				continue
 			}

@@ -4,6 +4,7 @@
 package oas
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 var ErrMultiTypeSchema = errors.New("unsupported multi-type, attribute cannot be created")
@@ -20,7 +22,7 @@ var ErrSchemaNotFound = errors.New("no compatible schema found")
 // BuildSchemaFromRequest will extract and build the schema from the request body of an operation
 //   - Media type will default to "application/json", then continue to the next available media type with a schema
 func BuildSchemaFromRequest(op *high.Operation, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
-	if op == nil || op.RequestBody == nil || len(op.RequestBody.Content) == 0 {
+	if op == nil || op.RequestBody == nil || op.RequestBody.Content == nil || op.RequestBody.Content.Len() == 0 {
 		return nil, ErrSchemaNotFound
 	}
 
@@ -31,25 +33,24 @@ func BuildSchemaFromRequest(op *high.Operation, schemaOpts SchemaOpts, globalOpt
 //   - Response codes of 200 and then 201 will be prioritized, then will continue to the next available 2xx code
 //   - Media type will default to "application/json", then continue to the next available media type with a schema
 func BuildSchemaFromResponse(op *high.Operation, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
-	if op == nil || op.Responses == nil || len(op.Responses.Codes) == 0 {
+	if op == nil || op.Responses == nil || op.Responses.Codes == nil || op.Responses.Codes.Len() == 0 {
 		return nil, ErrSchemaNotFound
 	}
 
-	okResponse, ok := op.Responses.Codes[util.OAS_response_code_ok]
+	okResponse, ok := op.Responses.Codes.Get(util.OAS_response_code_ok)
 	if ok {
 		return getSchemaFromMediaType(okResponse.Content, schemaOpts, globalOpts)
 	}
 
-	createdResponse, ok := op.Responses.Codes[util.OAS_response_code_created]
+	createdResponse, ok := op.Responses.Codes.Get(util.OAS_response_code_created)
 	if ok {
 		return getSchemaFromMediaType(createdResponse.Content, schemaOpts, globalOpts)
 	}
 
-	// Guarantee the order of processing
-	codes := util.SortedKeys(op.Responses.Codes)
-	for _, code := range codes {
-		responseCode := op.Responses.Codes[code]
-		statusCode, err := strconv.Atoi(code)
+	sortedCodes := orderedmap.SortAlpha(op.Responses.Codes)
+	for pair := range orderedmap.Iterate(context.TODO(), sortedCodes) {
+		responseCode := pair.Value()
+		statusCode, err := strconv.Atoi(pair.Key())
 		if err != nil {
 			continue
 		}
@@ -62,8 +63,12 @@ func BuildSchemaFromResponse(op *high.Operation, schemaOpts SchemaOpts, globalOp
 	return nil, ErrSchemaNotFound
 }
 
-func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
-	jsonMediaType, ok := mediaTypes[util.OAS_mediatype_json]
+func getSchemaFromMediaType(mediaTypes *orderedmap.Map[string, *high.MediaType], schemaOpts SchemaOpts, globalOpts GlobalSchemaOpts) (*OASSchema, error) {
+	if mediaTypes == nil {
+		return nil, ErrSchemaNotFound
+	}
+
+	jsonMediaType, ok := mediaTypes.Get(util.OAS_mediatype_json)
 	if ok && jsonMediaType.Schema != nil {
 		s, err := BuildSchema(jsonMediaType.Schema, schemaOpts, globalOpts)
 		if err != nil {
@@ -72,10 +77,9 @@ func getSchemaFromMediaType(mediaTypes map[string]*high.MediaType, schemaOpts Sc
 		return s, nil
 	}
 
-	// Guarantee the order of processing
-	mediaTypeKeys := util.SortedKeys(mediaTypes)
-	for _, key := range mediaTypeKeys {
-		mediaType := mediaTypes[key]
+	sortedMediaTypes := orderedmap.SortAlpha(mediaTypes)
+	for pair := range orderedmap.Iterate(context.TODO(), sortedMediaTypes) {
+		mediaType := pair.Value()
 		if mediaType.Schema != nil {
 			s, err := BuildSchema(mediaType.Schema, schemaOpts, globalOpts)
 			if err != nil {
@@ -226,7 +230,7 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 	case 0:
 		// Properties are only valid applying to objects, it's possible tools might omit the type
 		// https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/79
-		if len(schema.Properties) > 0 {
+		if schema.Properties != nil && schema.Properties.Len() > 0 {
 			return util.OAS_type_object, nil
 		}
 

@@ -23,9 +23,8 @@ func (s *OASSchema) BuildIntegerResource(name string, computability schema.Compu
 	}
 
 	if s.Schema.Default != nil {
-		staticDefault, ok := s.Schema.Default.(int64)
-
-		if ok {
+		var staticDefault int64
+		if err := s.Schema.Default.Decode(&staticDefault); err == nil {
 			if computability == schema.Required {
 				result.ComputedOptionalRequired = schema.ComputedOptional
 			}
@@ -86,10 +85,9 @@ func (s *OASSchema) GetIntegerValidators() []schema.Int64Validator {
 	if len(s.Schema.Enum) > 0 {
 		var enum []int64
 
-		for _, valueIface := range s.Schema.Enum {
-			value, ok := valueIface.(int64)
-
-			if !ok {
+		for _, valueNode := range s.Schema.Enum {
+			var value int64
+			if err := valueNode.Decode(&value); err != nil {
 				// could consider error/panic here to notify developers
 				continue
 			}

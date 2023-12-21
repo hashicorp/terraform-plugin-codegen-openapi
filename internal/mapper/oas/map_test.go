@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/pb33f/libopenapi/orderedmap"
 )
 
 // TODO: add error tests
@@ -29,7 +30,7 @@ func TestBuildMapResource(t *testing.T) {
 		"map nested attribute with props": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
@@ -37,12 +38,12 @@ func TestBuildMapResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_password_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"object"},
 										Required:    []string{"nested_int64_required"},
 										Description: "hey there! I'm a single nested object type.",
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -53,18 +54,18 @@ func TestBuildMapResource(t *testing.T) {
 												Format:      "int64",
 												Description: "hey there! I'm a nested int64 type, required.",
 											}),
-										},
+										}),
 									}),
 									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"string"},
 										Format:      "password",
 										Description: "hey there! I'm a nested string type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceMapNestedAttribute{
@@ -114,7 +115,7 @@ func TestBuildMapResource(t *testing.T) {
 		"map nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
@@ -122,16 +123,16 @@ func TestBuildMapResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceMapNestedAttribute{
@@ -157,7 +158,7 @@ func TestBuildMapResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_map_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
@@ -165,16 +166,16 @@ func TestBuildMapResource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceMapNestedAttribute{
@@ -211,7 +212,7 @@ func TestBuildMapResource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"map_with_strings_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
@@ -231,7 +232,7 @@ func TestBuildMapResource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ResourceAttributes{
 				&attrmapper.ResourceMapAttribute{
@@ -288,7 +289,7 @@ func TestBuildMapDataSource(t *testing.T) {
 		"map nested attribute with props": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
@@ -296,12 +297,12 @@ func TestBuildMapDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_password_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"object"},
 										Required:    []string{"nested_int64_required"},
 										Description: "hey there! I'm a single nested object type.",
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -312,18 +313,18 @@ func TestBuildMapDataSource(t *testing.T) {
 												Format:      "int64",
 												Description: "hey there! I'm a nested int64 type, required.",
 											}),
-										},
+										}),
 									}),
 									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"string"},
 										Format:      "password",
 										Description: "hey there! I'm a nested string type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceMapNestedAttribute{
@@ -373,7 +374,7 @@ func TestBuildMapDataSource(t *testing.T) {
 		"map nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
@@ -381,16 +382,16 @@ func TestBuildMapDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceMapNestedAttribute{
@@ -416,7 +417,7 @@ func TestBuildMapDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_map_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
@@ -424,16 +425,16 @@ func TestBuildMapDataSource(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceMapNestedAttribute{
@@ -470,7 +471,7 @@ func TestBuildMapDataSource(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"map_with_strings_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
@@ -490,7 +491,7 @@ func TestBuildMapDataSource(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.DataSourceAttributes{
 				&attrmapper.DataSourceMapAttribute{
@@ -547,7 +548,7 @@ func TestBuildMapProvider(t *testing.T) {
 		"map nested attribute with props": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map nested type.",
@@ -555,12 +556,12 @@ func TestBuildMapProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_password_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_obj_prop": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"object"},
 										Required:    []string{"nested_int64_required"},
 										Description: "hey there! I'm a single nested object type.",
-										Properties: map[string]*base.SchemaProxy{
+										Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 											"nested_float64": base.CreateSchemaProxy(&base.Schema{
 												Type:        []string{"number"},
 												Format:      "double",
@@ -571,18 +572,18 @@ func TestBuildMapProvider(t *testing.T) {
 												Format:      "int64",
 												Description: "hey there! I'm a nested int64 type, required.",
 											}),
-										},
+										}),
 									}),
 									"nested_password_required": base.CreateSchemaProxy(&base.Schema{
 										Type:        []string{"string"},
 										Format:      "password",
 										Description: "hey there! I'm a nested string type, required.",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderMapNestedAttribute{
@@ -632,7 +633,7 @@ func TestBuildMapProvider(t *testing.T) {
 		"map nested attributes deprecated": {
 			schema: &base.Schema{
 				Type: []string{"object"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop": base.CreateSchemaProxy(&base.Schema{
 						Type:       []string{"object"},
 						Deprecated: pointer(true),
@@ -640,16 +641,16 @@ func TestBuildMapProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderMapNestedAttribute{
@@ -675,7 +676,7 @@ func TestBuildMapProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"nested_map_prop_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"nested_map_prop_required": base.CreateSchemaProxy(&base.Schema{
 						Type:          []string{"object"},
 						MinProperties: pointer(int64(1)),
@@ -683,16 +684,16 @@ func TestBuildMapProvider(t *testing.T) {
 							A: base.CreateSchemaProxy(&base.Schema{
 								Type:     []string{"object"},
 								Required: []string{"nested_int64_required"},
-								Properties: map[string]*base.SchemaProxy{
+								Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 									"nested_int64_required": base.CreateSchemaProxy(&base.Schema{
 										Type:   []string{"integer"},
 										Format: "int64",
 									}),
-								},
+								}),
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderMapNestedAttribute{
@@ -729,7 +730,7 @@ func TestBuildMapProvider(t *testing.T) {
 			schema: &base.Schema{
 				Type:     []string{"object"},
 				Required: []string{"map_with_strings_required"},
-				Properties: map[string]*base.SchemaProxy{
+				Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
 					"map_with_floats": base.CreateSchemaProxy(&base.Schema{
 						Type:        []string{"object"},
 						Description: "hey there! I'm a map type with floats.",
@@ -749,7 +750,7 @@ func TestBuildMapProvider(t *testing.T) {
 							}),
 						},
 					}),
-				},
+				}),
 			},
 			expectedAttributes: attrmapper.ProviderAttributes{
 				&attrmapper.ProviderMapAttribute{
