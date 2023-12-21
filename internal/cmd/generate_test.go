@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/cli"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
-	"github.com/mitchellh/cli"
 )
 
 func TestGenerate_WithConfig(t *testing.T) {

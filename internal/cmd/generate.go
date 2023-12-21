@@ -18,7 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
-	"github.com/mitchellh/cli"
+	"github.com/hashicorp/cli"
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/index"
 )

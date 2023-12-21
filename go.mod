@@ -4,9 +4,9 @@ go 1.21
 
 require (
 	github.com/google/go-cmp v0.6.0
+	github.com/hashicorp/cli v1.1.6
 	github.com/hashicorp/terraform-plugin-codegen-spec v0.1.0
 	github.com/mattn/go-colorable v0.1.13
-	github.com/mitchellh/cli v1.1.5
 	github.com/pb33f/libopenapi v0.13.22
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -18,13 +18,13 @@ require (
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 // indirect
-	github.com/fatih/color v1.15.0 // indirect
+	github.com/fatih/color v1.16.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.15 // indirect
-	github.com/mattn/go-isatty v0.0.18 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/posener/complete v1.2.3 // indirect
