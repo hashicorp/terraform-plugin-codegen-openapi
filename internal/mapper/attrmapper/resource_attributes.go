@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceAttribute interface {
@@ -20,6 +21,7 @@ type ResourceAttribute interface {
 
 type ResourceNestedAttribute interface {
 	ApplyNestedOverride([]string, explorer.Override) (ResourceAttribute, error)
+	NestedMerge([]string, ResourceAttribute, schema.ComputedOptionalRequired) (ResourceAttribute, error)
 }
 
 type ResourceAttributes []ResourceAttribute
@@ -52,6 +54,46 @@ func (targetSlice ResourceAttributes) Merge(mergeSlices ...ResourceAttributes) (
 				// Add this back to the original slice to avoid adding duplicate attributes from different mergeSlices
 				targetSlice = append(targetSlice, mergeAttribute)
 			}
+		}
+	}
+
+	return targetSlice, errResult
+}
+
+func (targetSlice ResourceAttributes) MergeAttribute(path []string, attribute ResourceAttribute, intermediateComputability schema.ComputedOptionalRequired) (ResourceAttributes, error) {
+	var errResult error
+	if len(path) == 0 {
+		return targetSlice, errResult
+	}
+	for i, target := range targetSlice {
+		if target.GetName() == path[0] {
+
+			if len(path) > 1 {
+				nestedTarget, ok := target.(ResourceNestedAttribute)
+				if !ok {
+					// TODO: error? there is a nested override for an attribute that is not a nested type
+					break
+				}
+
+				// The attribute we need to override is deeper nested, move up
+				nextPath := path[1:]
+
+				overriddenTarget, err := nestedTarget.NestedMerge(nextPath, attribute, intermediateComputability)
+				errResult = errors.Join(errResult, err)
+
+				targetSlice[i] = overriddenTarget
+
+			} else {
+				// No more path to traverse, apply merge, bidirectional
+				overriddenTarget, err := attribute.Merge(target)
+				errResult = errors.Join(errResult, err)
+				overriddenTarget, err = overriddenTarget.Merge(attribute)
+				errResult = errors.Join(errResult, err)
+
+				targetSlice[i] = overriddenTarget
+			}
+
+			break
 		}
 	}
 
