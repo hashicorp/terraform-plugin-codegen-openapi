@@ -141,44 +141,42 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// READ Parameters (optional)
 	// ****************
 	readParameterAttributes := attrmapper.ResourceAttributes{}
-	if explorerResource.ReadOp != nil && explorerResource.ReadOp.Parameters != nil {
-		for _, param := range explorerResource.ReadOp.Parameters {
-			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
-				continue
-			}
-
-			pLogger := logger.With("param", param.Name)
-			schemaOpts := oas.SchemaOpts{
-				Ignores:             explorerResource.SchemaOptions.Ignores,
-				OverrideDescription: param.Description,
-			}
-			globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
-
-			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
-			if schemaErr != nil {
-				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
-				continue
-			}
-
-			// Check for any aliases and replace the paramater name if found
-			paramName := param.Name
-			if aliasedName, ok := explorerResource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
-				pLogger = pLogger.With("param_alias", aliasedName)
-				paramName = aliasedName
-			}
-
-			if s.IsPropertyIgnored(paramName) {
-				continue
-			}
-
-			parameterAttribute, schemaErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
-			if schemaErr != nil {
-				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
-				continue
-			}
-
-			readParameterAttributes = append(readParameterAttributes, parameterAttribute)
+	for _, param := range explorerResource.ReadOpParameters() {
+		if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
+			continue
 		}
+
+		pLogger := logger.With("param", param.Name)
+		schemaOpts := oas.SchemaOpts{
+			Ignores:             explorerResource.SchemaOptions.Ignores,
+			OverrideDescription: param.Description,
+		}
+		globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
+
+		s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
+		if schemaErr != nil {
+			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
+			continue
+		}
+
+		// Check for any aliases and replace the paramater name if found
+		paramName := param.Name
+		if aliasedName, ok := explorerResource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+			pLogger = pLogger.With("param_alias", aliasedName)
+			paramName = aliasedName
+		}
+
+		if s.IsPropertyIgnored(paramName) {
+			continue
+		}
+
+		parameterAttribute, schemaErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+		if schemaErr != nil {
+			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
+			continue
+		}
+
+		readParameterAttributes = append(readParameterAttributes, parameterAttribute)
 	}
 
 	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas

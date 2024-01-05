@@ -21,12 +21,14 @@ type Resource struct {
 	ReadOp        *high.Operation
 	UpdateOp      *high.Operation
 	DeleteOp      *high.Operation
+	Parameters    []*high.Parameter
 	SchemaOptions SchemaOptions
 }
 
 // DataSource contains a Read operation and schema options for configuration.
 type DataSource struct {
 	ReadOp        *high.Operation
+	Parameters    []*high.Parameter
 	SchemaOptions SchemaOptions
 }
 

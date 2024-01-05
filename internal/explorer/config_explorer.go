@@ -81,11 +81,18 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 			continue
 		}
 
+		parameters, err := extractParameters(e.spec.Paths, resourceConfig.Read.Path)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.delete': %w", name, err))
+			continue
+		}
+
 		resources[name] = Resource{
 			CreateOp:      createOp,
 			ReadOp:        readOp,
 			UpdateOp:      updateOp,
 			DeleteOp:      deleteOp,
+			Parameters:    parameters,
 			SchemaOptions: extractSchemaOptions(resourceConfig.SchemaOptions),
 		}
 	}
@@ -103,8 +110,16 @@ func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.read': %w", name, err))
 			continue
 		}
+
+		parameters, err := extractParameters(e.spec.Paths, dataSourceConfig.Read.Path)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.delete': %w", name, err))
+			continue
+		}
+
 		dataSources[name] = DataSource{
 			ReadOp:        readOp,
+			Parameters:    parameters,
 			SchemaOptions: extractSchemaOptions(dataSourceConfig.SchemaOptions),
 		}
 	}
@@ -143,6 +158,17 @@ func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) (*hig
 	default:
 		return nil, fmt.Errorf("method '%s' not found at OpenAPI path '%s'", oasLocation.Method, oasLocation.Path)
 	}
+}
+
+func extractParameters(paths *high.Paths, path string) ([]*high.Parameter, error) {
+	// No need to search OAS if not defined
+	if paths.PathItems.GetOrZero(path) == nil {
+		return nil, fmt.Errorf("path '%s' not found in OpenAPI spec", path)
+	}
+
+	pathItem, _ := paths.PathItems.Get(path)
+
+	return pathItem.Parameters, nil
 }
 
 func extractSchemaProxy(document high.Document, componentRef string) (*highbase.SchemaProxy, error) {
