@@ -41,6 +41,11 @@ func TestGenerate_WithConfig(t *testing.T) {
 			configPath:     "testdata/edgecase/generator_config.yml",
 			goldenFilePath: "testdata/edgecase/provider_code_spec.json",
 		},
+		"Kubernetes API": {
+			oasSpecPath:    "testdata/kubernetes/openapi_spec.json",
+			configPath:     "testdata/kubernetes/generator_config.yml",
+			goldenFilePath: "testdata/kubernetes/provider_code_spec.json",
+		},
 	}
 	for name, testCase := range testCases {
 		name, testCase := name, testCase
