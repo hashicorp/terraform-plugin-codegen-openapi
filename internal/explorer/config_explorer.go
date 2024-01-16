@@ -81,12 +81,19 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 			continue
 		}
 
+		commonParameters, err := extractCommonParameters(e.spec.Paths, resourceConfig.Read.Path)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s' common parameters: %w", name, err))
+			continue
+		}
+
 		resources[name] = Resource{
-			CreateOp:      createOp,
-			ReadOp:        readOp,
-			UpdateOp:      updateOp,
-			DeleteOp:      deleteOp,
-			SchemaOptions: extractSchemaOptions(resourceConfig.SchemaOptions),
+			CreateOp:         createOp,
+			ReadOp:           readOp,
+			UpdateOp:         updateOp,
+			DeleteOp:         deleteOp,
+			CommonParameters: commonParameters,
+			SchemaOptions:    extractSchemaOptions(resourceConfig.SchemaOptions),
 		}
 	}
 
@@ -103,9 +110,17 @@ func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.read': %w", name, err))
 			continue
 		}
+
+		commonParameters, err := extractCommonParameters(e.spec.Paths, dataSourceConfig.Read.Path)
+		if err != nil {
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s' common parameters: %w", name, err))
+			continue
+		}
+
 		dataSources[name] = DataSource{
-			ReadOp:        readOp,
-			SchemaOptions: extractSchemaOptions(dataSourceConfig.SchemaOptions),
+			ReadOp:           readOp,
+			CommonParameters: commonParameters,
+			SchemaOptions:    extractSchemaOptions(dataSourceConfig.SchemaOptions),
 		}
 	}
 	return dataSources, errResult
@@ -143,6 +158,17 @@ func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) (*hig
 	default:
 		return nil, fmt.Errorf("method '%s' not found at OpenAPI path '%s'", oasLocation.Method, oasLocation.Path)
 	}
+}
+
+func extractCommonParameters(paths *high.Paths, path string) ([]*high.Parameter, error) {
+	// No need to search OAS if not defined
+	if paths.PathItems.GetOrZero(path) == nil {
+		return nil, fmt.Errorf("path '%s' not found in OpenAPI spec", path)
+	}
+
+	pathItem, _ := paths.PathItems.Get(path)
+
+	return pathItem.Parameters, nil
 }
 
 func extractSchemaProxy(document high.Document, componentRef string) (*highbase.SchemaProxy, error) {

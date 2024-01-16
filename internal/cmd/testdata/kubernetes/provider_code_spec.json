@@ -9221,6 +9221,27 @@
 							],
 							"description": "Most recently observed status of the Deployment."
 						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "name of the Deployment"
+						}
+					},
+					{
+						"name": "namespace",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "object name and auth scope, such as for teams and projects"
+						}
+					},
+					{
+						"name": "pretty",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "If 'true', then the output is pretty printed."
+						}
 					}
 				]
 			}

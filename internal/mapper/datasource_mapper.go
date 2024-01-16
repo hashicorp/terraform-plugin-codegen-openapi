@@ -107,48 +107,46 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 	// READ Parameters (optional)
 	// ****************
 	readParameterAttributes := attrmapper.DataSourceAttributes{}
-	if dataSource.ReadOp != nil && dataSource.ReadOp.Parameters != nil {
-		for _, param := range dataSource.ReadOp.Parameters {
-			if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
-				continue
-			}
-
-			pLogger := logger.With("param", param.Name)
-			schemaOpts := oas.SchemaOpts{
-				Ignores:             dataSource.SchemaOptions.Ignores,
-				OverrideDescription: param.Description,
-			}
-
-			s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
-			if schemaErr != nil {
-				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
-				continue
-			}
-
-			computability := schema.ComputedOptional
-			if param.Required != nil && *param.Required {
-				computability = schema.Required
-			}
-
-			// Check for any aliases and replace the paramater name if found
-			paramName := param.Name
-			if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
-				pLogger = pLogger.With("param_alias", aliasedName)
-				paramName = aliasedName
-			}
-
-			if s.IsPropertyIgnored(paramName) {
-				continue
-			}
-
-			parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramName, computability)
-			if schemaErr != nil {
-				log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
-				continue
-			}
-
-			readParameterAttributes = append(readParameterAttributes, parameterAttribute)
+	for _, param := range dataSource.ReadOpParameters() {
+		if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
+			continue
 		}
+
+		pLogger := logger.With("param", param.Name)
+		schemaOpts := oas.SchemaOpts{
+			Ignores:             dataSource.SchemaOptions.Ignores,
+			OverrideDescription: param.Description,
+		}
+
+		s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
+		if schemaErr != nil {
+			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
+			continue
+		}
+
+		computability := schema.ComputedOptional
+		if param.Required != nil && *param.Required {
+			computability = schema.Required
+		}
+
+		// Check for any aliases and replace the paramater name if found
+		paramName := param.Name
+		if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
+			pLogger = pLogger.With("param_alias", aliasedName)
+			paramName = aliasedName
+		}
+
+		if s.IsPropertyIgnored(paramName) {
+			continue
+		}
+
+		parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramName, computability)
+		if schemaErr != nil {
+			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
+			continue
+		}
+
+		readParameterAttributes = append(readParameterAttributes, parameterAttribute)
 	}
 
 	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
