@@ -81,19 +81,19 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 			continue
 		}
 
-		parameters, err := extractParameters(e.spec.Paths, resourceConfig.Read.Path)
+		commonParameters, err := extractCommonParameters(e.spec.Paths, resourceConfig.Read.Path)
 		if err != nil {
-			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.delete': %w", name, err))
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s' common parameters: %w", name, err))
 			continue
 		}
 
 		resources[name] = Resource{
-			CreateOp:      createOp,
-			ReadOp:        readOp,
-			UpdateOp:      updateOp,
-			DeleteOp:      deleteOp,
-			Parameters:    parameters,
-			SchemaOptions: extractSchemaOptions(resourceConfig.SchemaOptions),
+			CreateOp:         createOp,
+			ReadOp:           readOp,
+			UpdateOp:         updateOp,
+			DeleteOp:         deleteOp,
+			CommonParameters: commonParameters,
+			SchemaOptions:    extractSchemaOptions(resourceConfig.SchemaOptions),
 		}
 	}
 
@@ -111,16 +111,16 @@ func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 			continue
 		}
 
-		parameters, err := extractParameters(e.spec.Paths, dataSourceConfig.Read.Path)
+		commonParameters, err := extractCommonParameters(e.spec.Paths, dataSourceConfig.Read.Path)
 		if err != nil {
-			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.delete': %w", name, err))
+			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s' common parameters: %w", name, err))
 			continue
 		}
 
 		dataSources[name] = DataSource{
-			ReadOp:        readOp,
-			Parameters:    parameters,
-			SchemaOptions: extractSchemaOptions(dataSourceConfig.SchemaOptions),
+			ReadOp:           readOp,
+			CommonParameters: commonParameters,
+			SchemaOptions:    extractSchemaOptions(dataSourceConfig.SchemaOptions),
 		}
 	}
 	return dataSources, errResult
@@ -160,7 +160,7 @@ func extractOp(paths *high.Paths, oasLocation *config.OpenApiSpecLocation) (*hig
 	}
 }
 
-func extractParameters(paths *high.Paths, path string) ([]*high.Parameter, error) {
+func extractCommonParameters(paths *high.Paths, path string) ([]*high.Parameter, error) {
 	// No need to search OAS if not defined
 	if paths.PathItems.GetOrZero(path) == nil {
 		return nil, fmt.Errorf("path '%s' not found in OpenAPI spec", path)

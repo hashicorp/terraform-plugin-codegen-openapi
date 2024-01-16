@@ -50,6 +50,7 @@ In these OAS operations, the generator will search the `create` and `read` for s
     - Will attempt to use `application/json` content-type first. If not found, will grab the first available content-type with a schema (alphabetical order)
 4. `read` operation: [parameters](https://spec.openapis.org/oas/v3.1.0#parameterObject)
     - The generator will merge all `query` and `path` parameters to the root of the schema.
+    - The generator will consider as parameters the ones in the [OAS Path Item](https://spec.openapis.org/oas/v3.1.0#path-item-object) and the ones in the [OAS Operation](https://spec.openapis.org/oas/v3.1.0#operation-object), merged based on the rules in the specification
 
 All schemas found will be deep merged together, with the `requestBody` schema from the `create` operation being the **main schema** that the others will be merged on top. The deep merge has the following characteristics:
 
@@ -72,6 +73,7 @@ data_sources:
 The generator uses the `read` operation to map to the provider code specification. Multiple schemas will have the [OAS types mapped to Provider Attributes](#oas-types-to-provider-attributes) and then be merged together; with the final result being the [Data Source](https://developer.hashicorp.com/terraform/plugin/code-generation/specification#data-source) `schema`. The schemas that will be merged together (in priority order):
 1. `read` operation: [parameters](https://spec.openapis.org/oas/v3.1.0#parameterObject)
     - The generator will merge all `query` and `path` parameters to the root of the schema.
+    - The generator will consider as parameters the ones in the [Path Item Object](https://spec.openapis.org/oas/v3.1.0#path-item-object) and the ones in the [Operation Object](https://spec.openapis.org/oas/v3.1.0#operation-object), merged based on the rules in the specification
 2. `read` operation: response body in [responses](https://spec.openapis.org/oas/v3.1.0#responsesObject)
     - The response body is the only schema **required** for data sources. If not found, the generator will skip the data source without mapping.
     - Will attempt to use `200` or `201` response body. If not found, will grab the first available `2xx` response code with a schema (lexicographic order)
