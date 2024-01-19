@@ -1,6 +1,0 @@
-kind: ENHANCEMENTS
-body: Added data source and resource support for query and path parameters specified
-  in the [OAS Path Item](https://spec.openapis.org/oas/v3.1.0#path-item-object)
-time: 2024-01-16T10:27:58.255575839+01:00
-custom:
-  Issue: "114"
