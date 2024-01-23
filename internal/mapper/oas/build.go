@@ -234,7 +234,11 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 			return util.OAS_type_object, nil
 		}
 
-		return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
+		logger.Warn("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created", "err", err)
+
+		return util.OAS_type_object, nil
+
+		// return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
 	case 1:
 		return schema.Type[0], nil
 	case 2:

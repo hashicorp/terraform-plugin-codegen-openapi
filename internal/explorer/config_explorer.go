@@ -212,6 +212,7 @@ func extractOverrides(cfgOverrides map[string]config.Override) map[string]Overri
 	overrides := make(map[string]Override, len(cfgOverrides))
 	for key, cfgOverride := range cfgOverrides {
 		overrides[key] = Override{Description: cfgOverride.Description}
+		overrides[key] = Override{Schema: cfgOverride.SchemaOptions}
 	}
 
 	return overrides

@@ -82,6 +82,10 @@ type AttributeOptions struct {
 type Override struct {
 	// Description overrides the description that was mapped/merged from the OpenAPI specification.
 	Description string `yaml:"description"`
+	// Schema overrides the schema that was mapped/merged from the OpenAPI specification.
+	Schema SchemaOptions `yaml:"schema"`
+	// A power tool to perform any arbitrary override of or insertion - not validated against OpenAPI spec.
+	CustomOverrides map[string]string `yaml:"custom_overrides"`
 }
 
 // ParseConfig takes in a byte array (of YAML), unmarshals into a Config struct, and validates the result
