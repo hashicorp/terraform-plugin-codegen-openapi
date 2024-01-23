@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -332,7 +332,7 @@ func TestResourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 
 	testCases := map[string]struct {
 		attribute         attrmapper.ResourceSingleNestedAttribute
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"override description": {
@@ -351,7 +351,7 @@ func TestResourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 					Description:              pointer("old description"),
 				},
 			},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
@@ -391,7 +391,7 @@ func TestResourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 	testCases := map[string]struct {
 		attribute         attrmapper.ResourceSingleNestedAttribute
 		overridePath      []string
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"override nested attribute": {
@@ -420,7 +420,7 @@ func TestResourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 				},
 			},
 			overridePath: []string{"nested_attribute"},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
@@ -474,7 +474,7 @@ func TestResourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 				},
 			},
 			overridePath: []string{"nested_attribute", "double_nested_attribute"},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
@@ -835,7 +835,7 @@ func TestDataSourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 
 	testCases := map[string]struct {
 		attribute         attrmapper.DataSourceSingleNestedAttribute
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.DataSourceAttribute
 	}{
 		"override description": {
@@ -854,7 +854,7 @@ func TestDataSourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 					Description:              pointer("old description"),
 				},
 			},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.DataSourceSingleNestedAttribute{
@@ -894,7 +894,7 @@ func TestDataSourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 	testCases := map[string]struct {
 		attribute         attrmapper.DataSourceSingleNestedAttribute
 		overridePath      []string
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.DataSourceAttribute
 	}{
 		"override nested attribute": {
@@ -923,7 +923,7 @@ func TestDataSourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 				},
 			},
 			overridePath: []string{"nested_attribute"},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.DataSourceSingleNestedAttribute{
@@ -977,7 +977,7 @@ func TestDataSourceSingleNestedAttribute_ApplyNestedOverride(t *testing.T) {
 				},
 			},
 			overridePath: []string{"nested_attribute", "double_nested_attribute"},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.DataSourceSingleNestedAttribute{

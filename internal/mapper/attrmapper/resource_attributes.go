@@ -7,19 +7,19 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 )
 
 type ResourceAttribute interface {
 	GetName() string
 	Merge(ResourceAttribute) (ResourceAttribute, error)
-	ApplyOverride(explorer.Override) (ResourceAttribute, error)
+	ApplyOverride(config.Override) (ResourceAttribute, error)
 	ToSpec() resource.Attribute
 }
 
 type ResourceNestedAttribute interface {
-	ApplyNestedOverride([]string, explorer.Override) (ResourceAttribute, error)
+	ApplyNestedOverride([]string, config.Override) (ResourceAttribute, error)
 }
 
 type ResourceAttributes []ResourceAttribute
@@ -67,7 +67,7 @@ func (attributes ResourceAttributes) ToSpec() []resource.Attribute {
 	return specAttributes
 }
 
-func (attributes ResourceAttributes) ApplyOverrides(overrideMap map[string]explorer.Override) (ResourceAttributes, error) {
+func (attributes ResourceAttributes) ApplyOverrides(overrideMap map[string]config.Override) (ResourceAttributes, error) {
 	var errResult error
 	for key, override := range overrideMap {
 		var err error
@@ -78,7 +78,7 @@ func (attributes ResourceAttributes) ApplyOverrides(overrideMap map[string]explo
 	return attributes, errResult
 }
 
-func (attributes ResourceAttributes) ApplyOverride(path []string, override explorer.Override) (ResourceAttributes, error) {
+func (attributes ResourceAttributes) ApplyOverride(path []string, override config.Override) (ResourceAttributes, error) {
 	var errResult error
 	if len(path) == 0 {
 		return attributes, errResult
