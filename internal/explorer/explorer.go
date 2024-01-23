@@ -4,7 +4,9 @@
 package explorer
 
 import (
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
@@ -22,14 +24,14 @@ type Resource struct {
 	UpdateOp         *high.Operation
 	DeleteOp         *high.Operation
 	CommonParameters []*high.Parameter
-	SchemaOptions    SchemaOptions
+	SchemaOptions    config.SchemaOptions
 }
 
 // DataSource contains a Read operation and schema options for configuration.
 type DataSource struct {
 	ReadOp           *high.Operation
 	CommonParameters []*high.Parameter
-	SchemaOptions    SchemaOptions
+	SchemaOptions    config.SchemaOptions
 }
 
 // Provider contains a name and a schema.
@@ -37,18 +39,4 @@ type Provider struct {
 	Name        string
 	SchemaProxy *base.SchemaProxy
 	Ignores     []string
-}
-
-type SchemaOptions struct {
-	Ignores          []string
-	AttributeOptions AttributeOptions
-}
-
-type AttributeOptions struct {
-	Aliases   map[string]string
-	Overrides map[string]Override
-}
-
-type Override struct {
-	Description string
 }

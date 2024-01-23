@@ -92,9 +92,9 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "delete op here",
 						OperationId: "delete_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
+					SchemaOptions: config.SchemaOptions{
+						AttributeOptions: config.AttributeOptions{
+							Overrides: map[string]config.Override{},
 						},
 					},
 				},
@@ -165,9 +165,9 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "delete op here",
 						OperationId: "delete_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
+					SchemaOptions: config.SchemaOptions{
+						AttributeOptions: config.AttributeOptions{
+							Overrides: map[string]config.Override{},
 						},
 					},
 				},
@@ -302,13 +302,13 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
+					SchemaOptions: config.SchemaOptions{
 						Ignores: []string{"ignore1.abc", "ignore2.def"},
-						AttributeOptions: explorer.AttributeOptions{
+						AttributeOptions: config.AttributeOptions{
 							Aliases: map[string]string{
 								"otherId": "id",
 							},
-							Overrides: map[string]explorer.Override{
+							Overrides: map[string]config.Override{
 								"test": {
 									Description: "test description for override",
 								},
@@ -382,9 +382,9 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
+					SchemaOptions: config.SchemaOptions{
+						AttributeOptions: config.AttributeOptions{
+							Overrides: map[string]config.Override{},
 						},
 					},
 				},
@@ -415,9 +415,9 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
-						AttributeOptions: explorer.AttributeOptions{
-							Overrides: map[string]explorer.Override{},
+					SchemaOptions: config.SchemaOptions{
+						AttributeOptions: config.AttributeOptions{
+							Overrides: map[string]config.Override{},
 						},
 					},
 				},
@@ -496,13 +496,13 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					SchemaOptions: explorer.SchemaOptions{
+					SchemaOptions: config.SchemaOptions{
 						Ignores: []string{"ignore1.abc", "ignore2.def"},
-						AttributeOptions: explorer.AttributeOptions{
+						AttributeOptions: config.AttributeOptions{
 							Aliases: map[string]string{
 								"otherId": "id",
 							},
-							Overrides: map[string]explorer.Override{
+							Overrides: map[string]config.Override{
 								"test": {
 									Description: "test description for override",
 								},

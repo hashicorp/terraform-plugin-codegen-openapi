@@ -198,21 +198,22 @@ func extractSchemaProxy(document high.Document, componentRef string) (*highbase.
 	return highbase.CreateSchemaProxy(highSchema), nil
 }
 
-func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) SchemaOptions {
-	return SchemaOptions{
+func extractSchemaOptions(cfgSchemaOpts config.SchemaOptions) config.SchemaOptions {
+	return config.SchemaOptions{
 		Ignores: cfgSchemaOpts.Ignores,
-		AttributeOptions: AttributeOptions{
+		AttributeOptions: config.AttributeOptions{
 			Aliases:   cfgSchemaOpts.AttributeOptions.Aliases,
 			Overrides: extractOverrides(cfgSchemaOpts.AttributeOptions.Overrides),
 		},
 	}
 }
 
-func extractOverrides(cfgOverrides map[string]config.Override) map[string]Override {
-	overrides := make(map[string]Override, len(cfgOverrides))
+func extractOverrides(cfgOverrides map[string]config.Override) map[string]config.Override {
+	overrides := make(map[string]config.Override, len(cfgOverrides))
 	for key, cfgOverride := range cfgOverrides {
-		overrides[key] = Override{Description: cfgOverride.Description}
-		overrides[key] = Override{Schema: cfgOverride.SchemaOptions}
+		overrides[key] = config.Override{Description: cfgOverride.Description}
+		overrides[key] = config.Override{CustomOverrides: cfgOverride.CustomOverrides}
+		overrides[key] = config.Override{Schema: cfgOverride.Schema}
 	}
 
 	return overrides
