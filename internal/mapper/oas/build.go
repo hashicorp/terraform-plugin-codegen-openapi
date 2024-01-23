@@ -240,10 +240,12 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 			return util.OAS_type_object, nil
 		}
 
-		logger.Warn("schema type is empty - assigning default type of string", "err", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint"), schema.ParentProxy))
-		return util.OAS_type_string, nil
+		var err *SchemaError = SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute will default to type string"), schema.ParentProxy)
 
-		// return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
+		logger.Warn("schema type is empty - assigning default type of string", "err", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint"), schema.ParentProxy))
+		return util.OAS_type_string, err
+
+		// return util.OAS_type_string, SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
 	case 1:
 		return schema.Type[0], nil
 	case 2:
