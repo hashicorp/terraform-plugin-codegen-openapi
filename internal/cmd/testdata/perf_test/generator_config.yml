@@ -1,0 +1,11 @@
+provider:
+  name: backupdr
+
+resources:
+  slp:
+    create:
+      path:  /slp
+      method: POST
+    read:
+      path:  /slp
+      method: GET
