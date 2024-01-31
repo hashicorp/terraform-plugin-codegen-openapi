@@ -130,18 +130,6 @@ func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	// 3. Build out the OpenAPI model, this will recursively load all local + remote references into one cohesive model
 	model, errs := doc.BuildV3Model()
 
-	circularRefs := model.Index.GetResolver().GetSafeCircularReferences()
-
-	if len(circularRefs) > 0 {
-		for _, circularRef := range circularRefs {
-			logger.Warn(
-				"circular reference found in OpenAPI spec",
-				"circular_ref", circularRef.GenerateJourneyPath())
-		}
-
-		return errors.New("error building OpenAPI 3.x model: found circular references")
-	}
-
 	// 4. Log circular references as warnings and fail on any other model building errors
 	var errResult error
 	for _, err := range errs {
