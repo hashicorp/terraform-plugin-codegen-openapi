@@ -7,7 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 
+	"github.com/genelet/determined/dethcl"
 	"gopkg.in/yaml.v3"
 )
 
@@ -21,34 +23,34 @@ var attributeLocationRegex = regexp.MustCompile(`^[\w]+(?:\.[\w]+)*$`)
 
 // Config represents a YAML generator config.
 type Config struct {
-	Provider    Provider              `yaml:"provider"`
-	Resources   map[string]Resource   `yaml:"resources"`
-	DataSources map[string]DataSource `yaml:"data_sources"`
+	Provider    Provider              `yaml:"provider" hcl:"provider,block"`
+	Resources   map[string]Resource   `yaml:"resources" hcl:"resources,block"`
+	DataSources map[string]DataSource `yaml:"data_sources" hcl:"data_sources,block"`
 }
 
 // Provider generator config section.
 type Provider struct {
-	Name      string `yaml:"name"`
-	SchemaRef string `yaml:"schema_ref"`
+	Name      string `yaml:"name" hcl:"name"`
+	SchemaRef string `yaml:"schema_ref" hcl:"schema_ref,optional"`
 
 	// TODO: At some point, this should probably be refactored to work with the SchemaOptions struct
 	// Ignores are a slice of strings, representing an attribute location to ignore during mapping (dot-separated for nested attributes).
-	Ignores []string `yaml:"ignores"`
+	Ignores []string `yaml:"ignores" hcl:"ignores,optional"`
 }
 
 // Resource generator config section.
 type Resource struct {
-	Create        *OpenApiSpecLocation `yaml:"create"`
-	Read          *OpenApiSpecLocation `yaml:"read"`
-	Update        *OpenApiSpecLocation `yaml:"update"`
-	Delete        *OpenApiSpecLocation `yaml:"delete"`
-	SchemaOptions SchemaOptions        `yaml:"schema"`
+	Create        *OpenApiSpecLocation `yaml:"create" hcl:"create,block"`
+	Read          *OpenApiSpecLocation `yaml:"read" hcl:"read,block"`
+	Update        *OpenApiSpecLocation `yaml:"update" hcl:"update,block"`
+	Delete        *OpenApiSpecLocation `yaml:"delete" hcl:"delete,block"`
+	SchemaOptions SchemaOptions        `yaml:"schema" hcl:"schema,block"`
 }
 
 // DataSource generator config section.
 type DataSource struct {
-	Read          *OpenApiSpecLocation `yaml:"read"`
-	SchemaOptions SchemaOptions        `yaml:"schema"`
+	Read          *OpenApiSpecLocation `yaml:"read" hcl:"read,block"`
+	SchemaOptions SchemaOptions        `yaml:"schema" hcl:"schema,block"`
 }
 
 // OpenApiSpecLocation defines a location in an OpenAPI spec for an API operation.
@@ -56,37 +58,48 @@ type OpenApiSpecLocation struct {
 	// Matches the path key for a path item (refer to [OAS Paths Object]).
 	//
 	// [OAS Paths Object]: https://spec.openapis.org/oas/v3.1.0#paths-object
-	Path string `yaml:"path"`
+	Path string `yaml:"path" hcl:"path"`
 	// Matches the operation method in a path item: GET, POST, etc (refer to [OAS Path Item Object]).
 	//
 	// [OAS Path Item Object]: https://spec.openapis.org/oas/v3.1.0#pathItemObject
-	Method string `yaml:"method"`
+	Method string `yaml:"method" hcl:"method"`
 }
 
 // SchemaOptions generator config section. This section contains options for modifying the output of the generator.
 type SchemaOptions struct {
 	// Ignores are a slice of strings, representing an attribute location to ignore during mapping (dot-separated for nested attributes).
-	Ignores          []string         `yaml:"ignores"`
-	AttributeOptions AttributeOptions `yaml:"attributes"`
+	Ignores          []string         `yaml:"ignores" hcl:"ignores,optional"`
+	AttributeOptions AttributeOptions `yaml:"attributes" hcl:"attributes,block"`
 }
 
 // AttributeOptions generator config section. This section is used to modify the output of specific attributes.
 type AttributeOptions struct {
 	// Aliases are a map, with the key being a parameter name in an OpenAPI operation and the value being the new name (alias).
-	Aliases map[string]string `yaml:"aliases"`
+	Aliases map[string]string `yaml:"aliases" hcl:"aliases,optional"`
 	// Overrides are a map, with the key being an attribute location (dot-separated for nested attributes) and the value being overrides to apply to the attribute.
-	Overrides map[string]Override `yaml:"overrides"`
+	Overrides map[string]Override `yaml:"overrides" hcl:"overrides,block"`
 }
 
 // Override generator config section.
 type Override struct {
 	// Description overrides the description that was mapped/merged from the OpenAPI specification.
-	Description string `yaml:"description"`
+	Description string `yaml:"description" hcl:"description,optional"`
 }
 
-// ParseConfig takes in a byte array (of YAML), unmarshals into a Config struct, and validates the result
-func ParseConfig(bytes []byte) (*Config, error) {
+// ParseConfig takes in a byte array, unmarshals into a Config struct, and validates the result
+// By default the byte array is assumed to be YAML, but if data_type is "hcl" or "tf", it will be unmarshaled as HCL
+func ParseConfig(bytes []byte, data_type ...string) (*Config, error) {
 	var result Config
+	if data_type != nil {
+		t := strings.ToLower(data_type[0])
+		if t == "hcl" || t == "tf" {
+			err := dethcl.Unmarshal(bytes, &result)
+			if err != nil {
+				return nil, fmt.Errorf("error unmarshaling config: %w", err)
+			}
+			return &result, nil
+		}
+	}
 	err := yaml.Unmarshal(bytes, &result)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshaling config: %w", err)
