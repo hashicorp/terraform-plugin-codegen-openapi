@@ -3,14 +3,11 @@
 
 package config_test
 
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: MPL-2.0
-
 import (
 	"encoding/json"
 	"regexp"
-	"strings"
 	"testing"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 )
 
@@ -660,7 +657,7 @@ data_sources:
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := ParseConfig([]byte(testCase.input))
+			_, err := config.ParseConfig([]byte(testCase.input))
 			if err == nil {
 				t.Fatalf("Expected err to match %q, got nil", testCase.expectedErrRegex)
 			}
