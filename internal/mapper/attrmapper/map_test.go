@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
@@ -485,7 +485,7 @@ func TestResourceMapAttribute_ApplyOverride(t *testing.T) {
 
 	testCases := map[string]struct {
 		attribute         attrmapper.ResourceMapAttribute
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.ResourceAttribute
 	}{
 		"override description": {
@@ -499,7 +499,7 @@ func TestResourceMapAttribute_ApplyOverride(t *testing.T) {
 					},
 				},
 			},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.ResourceMapAttribute{
@@ -999,7 +999,7 @@ func TestDataSourceMapAttribute_ApplyOverride(t *testing.T) {
 
 	testCases := map[string]struct {
 		attribute         attrmapper.DataSourceMapAttribute
-		override          explorer.Override
+		override          config.Override
 		expectedAttribute attrmapper.DataSourceAttribute
 	}{
 		"override description": {
@@ -1013,7 +1013,7 @@ func TestDataSourceMapAttribute_ApplyOverride(t *testing.T) {
 					},
 				},
 			},
-			override: explorer.Override{
+			override: config.Override{
 				Description: "new description",
 			},
 			expectedAttribute: &attrmapper.DataSourceMapAttribute{
