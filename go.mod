@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/google/go-cmp v0.6.0
 	github.com/hashicorp/cli v1.1.6
-	github.com/hashicorp/terraform-plugin-codegen-spec v0.1.0
+	github.com/hashicorp/terraform-plugin-codegen-spec v0.1.1
 	github.com/mattn/go-colorable v0.1.13
 	github.com/pb33f/libopenapi v0.15.14
 	gopkg.in/yaml.v3 v3.0.1
