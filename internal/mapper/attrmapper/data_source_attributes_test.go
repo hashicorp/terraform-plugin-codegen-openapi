@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
@@ -204,13 +204,13 @@ func TestDataSourceAttributes_ApplyOverrides(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		overrides          map[string]explorer.Override
+		overrides          map[string]config.Override
 		attributes         attrmapper.DataSourceAttributes
 		expectedAttributes attrmapper.DataSourceAttributes
 	}{
 		// TODO: this may eventually return an error, but for now just returns without modification
 		"no matching overrides": {
-			overrides: map[string]explorer.Override{
+			overrides: map[string]config.Override{
 				"": {
 					Description: "new description",
 				},
@@ -241,7 +241,7 @@ func TestDataSourceAttributes_ApplyOverrides(t *testing.T) {
 			},
 		},
 		"matching overrides": {
-			overrides: map[string]explorer.Override{
+			overrides: map[string]config.Override{
 				"string_attribute": {
 					Description: "new string description",
 				},
@@ -283,7 +283,7 @@ func TestDataSourceAttributes_ApplyOverrides(t *testing.T) {
 			},
 		},
 		"matching nested overrides": {
-			overrides: map[string]explorer.Override{
+			overrides: map[string]config.Override{
 				"single_nested": {
 					Description: "new description",
 				},
