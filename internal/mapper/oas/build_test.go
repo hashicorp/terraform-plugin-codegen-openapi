@@ -770,6 +770,42 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 				},
 			},
 		},
+		"random types - oneOf": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				OneOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type: []string{"object"},
+						Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
+							"field": base.CreateSchemaProxy(&base.Schema{
+								Type: []string{"string"},
+							}),
+						}),
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type:  []string{"string"},
+						Title: "Cool Type!",
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					StringAttribute: resource.StringAttribute{ComputedOptionalRequired: "computed_optional"},
+					Name:            "cool_type",
+				},
+				&attrmapper.ResourceSingleNestedAttribute{
+					SingleNestedAttribute: resource.SingleNestedAttribute{ComputedOptionalRequired: "computed_optional"},
+					Name:                  "field_0",
+					Attributes: attrmapper.ResourceAttributes{
+						&attrmapper.ResourceStringAttribute{
+							StringAttribute: resource.StringAttribute{
+								ComputedOptionalRequired: schema.ComputedOptional,
+							},
+							Name: "field",
+						},
+					},
+				},
+			},
+		},
 		"list attributes with nullable element type - Type array": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type:     []string{"object"},

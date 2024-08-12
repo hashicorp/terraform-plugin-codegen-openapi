@@ -7,7 +7,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/util"
 
@@ -139,29 +141,33 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 	if len(s.AnyOf) > 0 {
 		if len(s.AnyOf) == 2 {
 			schema, err := getMultiTypeSchema(s.AnyOf[0], s.AnyOf[1])
-			if err != nil {
-				return nil, err
+			if err == nil {
+				return schema, nil
 			}
-
-			return schema, nil
 		}
 
-		// Dynamic type currently not supported
-		return nil, SchemaErrorFromNode(fmt.Errorf("found %d anyOf subschema(s), schema composition is currently not supported", len(s.AnyOf)), s, AnyOf)
+		schema, err := handleOneOfAnyOf(s.AnyOf)
+		if err != nil {
+			return nil, SchemaErrorFromNode(err, s, AnyOf)
+		}
+
+		return schema, nil
 	}
 
 	if len(s.OneOf) > 0 {
 		if len(s.OneOf) == 2 {
 			schema, err := getMultiTypeSchema(s.OneOf[0], s.OneOf[1])
-			if err != nil {
-				return nil, err
+			if err == nil {
+				return schema, nil
 			}
-
-			return schema, nil
 		}
 
-		// Dynamic type currently not supported
-		return nil, SchemaErrorFromNode(fmt.Errorf("found %d oneOf subschema(s), schema composition is currently not supported", len(s.OneOf)), s, OneOf)
+		schema, err := handleOneOfAnyOf(s.OneOf)
+		if err != nil {
+			return nil, SchemaErrorFromNode(err, s, OneOf)
+		}
+
+		return schema, nil
 	}
 
 	// If there is just one allOf, we can use it as the schema
@@ -182,6 +188,30 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 	compoundSchema, err := compoundAllOf(s)
 	if err != nil {
 		return nil, SchemaErrorFromNode(fmt.Errorf("%w, schema composition is currently not supported", err), s, AllOf)
+	}
+
+	return compoundSchema, nil
+}
+
+var oneOfAnyOfReg = regexp.MustCompile("[^a-zA-Z0-9_]+")
+
+func handleOneOfAnyOf(s []*base.SchemaProxy) (*base.Schema, error) {
+	compoundSchema := &base.Schema{Properties: orderedmap.New[string, *base.SchemaProxy]()}
+	for i, schema := range s {
+		schema, err := buildSchemaProxy(schema)
+		if err != nil {
+			return nil, fmt.Errorf("%v: %w", i, err)
+		}
+
+		key := "field_" + strconv.Itoa(i)
+		if schema.Title != "" {
+			key = schema.Title
+			key = strings.ToLower(key)
+			key = strings.ReplaceAll(key, " ", "_")
+			key = oneOfAnyOfReg.ReplaceAllString(key, "")
+		}
+
+		compoundSchema.Properties.Store(key, base.CreateSchemaProxy(schema))
 	}
 
 	return compoundSchema, nil
