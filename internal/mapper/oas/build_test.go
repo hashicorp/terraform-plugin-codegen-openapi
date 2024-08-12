@@ -1067,6 +1067,49 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 				},
 			},
 		},
+		"allOf with object composition": {
+			schemaProxy: base.CreateSchemaProxy(&base.Schema{
+				Type: []string{"object"},
+				AllOf: []*base.SchemaProxy{
+					base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"object"},
+						Required: []string{"string_allof_override"},
+						Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
+							"field1": base.CreateSchemaProxy(&base.Schema{
+								Description: "I m field1",
+								Type:        []string{"string"},
+							}),
+						}),
+					}),
+					base.CreateSchemaProxy(&base.Schema{
+						Type:     []string{"object"},
+						Required: []string{"string_allof_override"},
+						Properties: orderedmap.ToOrderedMap(map[string]*base.SchemaProxy{
+							"field2": base.CreateSchemaProxy(&base.Schema{
+								Description: "I m field2",
+								Type:        []string{"string"},
+							}),
+						}),
+					}),
+				},
+			}),
+			expectedAttributes: attrmapper.ResourceAttributes{
+				&attrmapper.ResourceStringAttribute{
+					Name: "field1",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("I m field1"),
+					},
+				},
+				&attrmapper.ResourceStringAttribute{
+					Name: "field2",
+					StringAttribute: resource.StringAttribute{
+						ComputedOptionalRequired: schema.ComputedOptional,
+						Description:              pointer("I m field2"),
+					},
+				},
+			},
+		},
 	}
 
 	for name, testCase := range testCases {
