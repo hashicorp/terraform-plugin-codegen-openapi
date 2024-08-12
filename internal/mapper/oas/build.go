@@ -267,6 +267,15 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 		return nil, err
 	}
 
+	if firstType == secondType {
+		s, err := compoundAllOfString([]*base.Schema{firstSchema, secondSchema})
+		if err != nil {
+			return nil, SchemaErrorFromNode(err, firstSchema, Type)
+		}
+
+		return s, nil
+	}
+
 	// Check for null type, if found, return the other type
 	if firstType == util.OAS_type_null {
 		return secondSchema, nil
