@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/util"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
@@ -180,7 +180,7 @@ func buildSchemaProxy(proxy *base.SchemaProxy) (*base.Schema, *SchemaError) {
 	}
 
 	// Combining multiple allOf schemas and their properties is possible here, but currently not supported
-	// See: https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/56
+	// See: https://github.com/raphaelfff/terraform-plugin-codegen-openapi/issues/56
 	return nil, SchemaErrorFromNode(fmt.Errorf("found %d allOf subschema(s), schema composition is currently not supported", len(s.AllOf)), s, AllOf)
 }
 
@@ -229,7 +229,7 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 	switch len(schema.Type) {
 	case 0:
 		// Properties are only valid applying to objects, it's possible tools might omit the type
-		// https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/79
+		// https://github.com/raphaelfff/terraform-plugin-codegen-openapi/issues/79
 		if schema.Properties != nil && schema.Properties.Len() > 0 {
 			return util.OAS_type_object, nil
 		}

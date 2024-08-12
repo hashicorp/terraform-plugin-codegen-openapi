@@ -7,8 +7,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
 )
 
 type ResourceAttribute interface {

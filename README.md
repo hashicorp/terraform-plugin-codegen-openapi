@@ -18,10 +18,10 @@ For more in-depth details about the design and internals of the OpenAPI Provider
 
 ### Installation
 
-You install a copy of the binary manually from the [releases](https://github.com/hashicorp/terraform-plugin-codegen-openapi/releases) tab, or install via the Go toolchain:
+You install a copy of the binary manually from the [releases](https://github.com/raphaelfff/terraform-plugin-codegen-openapi/releases) tab, or install via the Go toolchain:
 
 ```shell-session
-go install github.com/hashicorp/terraform-plugin-codegen-openapi/cmd/tfplugingen-openapi@latest
+go install github.com/raphaelfff/terraform-plugin-codegen-openapi/cmd/tfplugingen-openapi@latest
 ```
 
 ### Generate

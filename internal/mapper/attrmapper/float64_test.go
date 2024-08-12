@@ -7,11 +7,11 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 )
 
 func TestResourceFloat64Attribute_Merge(t *testing.T) {

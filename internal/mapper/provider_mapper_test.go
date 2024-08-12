@@ -8,14 +8,14 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	"github.com/pb33f/libopenapi/orderedmap"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func TestProviderMapper_basic(t *testing.T) {

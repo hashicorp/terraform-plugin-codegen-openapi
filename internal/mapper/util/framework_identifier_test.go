@@ -6,7 +6,7 @@ package util_test
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func TestFrameworkIdentifier(t *testing.T) {

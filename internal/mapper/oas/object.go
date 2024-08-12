@@ -6,9 +6,9 @@ package oas
 import (
 	"context"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 	"github.com/pb33f/libopenapi/orderedmap"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func (s *OASSchema) BuildObjectElementType() (schema.ElementType, *SchemaError) {

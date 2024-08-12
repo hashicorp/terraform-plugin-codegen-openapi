@@ -13,10 +13,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper"
 
 	"github.com/hashicorp/cli"
 	"github.com/pb33f/libopenapi"

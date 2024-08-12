@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/mapper/oas"
 )
 
 func pointer[T any](value T) *T {

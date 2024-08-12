@@ -243,13 +243,13 @@ If the field is only present in a schema other than the `read` operation `parame
 | [uniqueItems](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-uniqueItems)     | [`validators`](https://developer.hashicorp.com/terraform/plugin/code-generation/specification#validators)                            |
 
 ### Attribute Names
-After all attributes have been [mapped](#oas-types-to-provider-attributes) and any overrides/aliases have been applied, the attribute names mapped from the OAS will be converted (if needed) to valid [Terraform Identifiers](https://developer.hashicorp.com/terraform/language/syntax/configuration#identifiers). This [logic](https://github.com/hashicorp/terraform-plugin-codegen-openapi/blob/main/internal/mapper/util/framework_identifier.go#L25) performs the following, in order:
+After all attributes have been [mapped](#oas-types-to-provider-attributes) and any overrides/aliases have been applied, the attribute names mapped from the OAS will be converted (if needed) to valid [Terraform Identifiers](https://developer.hashicorp.com/terraform/language/syntax/configuration#identifiers). This [logic](https://github.com/raphaelfff/terraform-plugin-codegen-openapi/blob/main/internal/mapper/util/framework_identifier.go#L25) performs the following, in order:
 1. Removes all characters that are NOT alphanumeric or an underscore
 2. Removes all leading numbers
 3. Inserts an underscore between any lowercase letter that is immediately followed by an uppercase letter
 4. Lowercases the final result
 
-See the [test cases](https://github.com/hashicorp/terraform-plugin-codegen-openapi/blob/main/internal/mapper/util/framework_identifier_test.go#L15) for examples on the expectations of this conversion process.
+See the [test cases](https://github.com/raphaelfff/terraform-plugin-codegen-openapi/blob/main/internal/mapper/util/framework_identifier_test.go#L15) for examples on the expectations of this conversion process.
 
 This ensures all properties from an OAS are converted to valid Terraform identifiers, but can technically cause conflicts if multiple distinct OAS properties are scrubbed to the same value:
 - `Fake_Thing` -> `fake_thing`

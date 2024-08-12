@@ -6,7 +6,7 @@ package explorer_test
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
 
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/pb33f/libopenapi/orderedmap"

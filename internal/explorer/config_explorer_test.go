@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/explorer"
 	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"

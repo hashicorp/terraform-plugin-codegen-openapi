@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/cli"
 	"github.com/mattn/go-colorable"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
+	"github.com/raphaelfff/terraform-plugin-codegen-openapi/internal/cmd"
 )
 
 // version will be set by goreleaser via ldflags
