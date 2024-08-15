@@ -82,6 +82,8 @@ type AttributeOptions struct {
 type Override struct {
 	// Description overrides the description that was mapped/merged from the OpenAPI specification.
 	Description string `yaml:"description"`
+	// ComputedOptionalRequired overrides the inferred value from the OpenAPI specification.
+	ComputedOptionalRequired string `yaml:"computed_optional_required"`
 }
 
 // ParseConfig takes in a byte array (of YAML), unmarshals into a Config struct, and validates the result
