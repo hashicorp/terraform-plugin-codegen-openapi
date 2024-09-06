@@ -25,12 +25,12 @@ var (
 
 // SetValidatorSizeAtLeast returns a custom validator mapped to the
 // Setvalidator package SizeAtLeast function.
-func SetValidatorSizeAtLeast(min int64) *schema.CustomValidator {
+func SetValidatorSizeAtLeast(minimum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(SetValidatorPackage)
 	schemaDefinition.WriteString(".SizeAtLeast(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -43,12 +43,12 @@ func SetValidatorSizeAtLeast(min int64) *schema.CustomValidator {
 
 // SetValidatorSizeAtMost returns a custom validator mapped to the
 // Setvalidator package SizeAtMost function.
-func SetValidatorSizeAtMost(max int64) *schema.CustomValidator {
+func SetValidatorSizeAtMost(maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(SetValidatorPackage)
 	schemaDefinition.WriteString(".SizeAtMost(")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -61,14 +61,14 @@ func SetValidatorSizeAtMost(max int64) *schema.CustomValidator {
 
 // SetValidatorSizeBetween returns a custom validator mapped to the
 // Setvalidator package SizeBetween function.
-func SetValidatorSizeBetween(min, max int64) *schema.CustomValidator {
+func SetValidatorSizeBetween(minimum, maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(SetValidatorPackage)
 	schemaDefinition.WriteString(".SizeBetween(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(", ")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{

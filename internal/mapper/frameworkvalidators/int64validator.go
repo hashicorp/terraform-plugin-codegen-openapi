@@ -25,12 +25,12 @@ var (
 
 // Int64ValidatorAtLeast returns a custom validator mapped to the
 // int64validator package AtLeast function.
-func Int64ValidatorAtLeast(min int64) *schema.CustomValidator {
+func Int64ValidatorAtLeast(minimum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(Int64ValidatorPackage)
 	schemaDefinition.WriteString(".AtLeast(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -43,12 +43,12 @@ func Int64ValidatorAtLeast(min int64) *schema.CustomValidator {
 
 // Int64ValidatorAtMost returns a custom validator mapped to the
 // int64validator package AtMost function.
-func Int64ValidatorAtMost(max int64) *schema.CustomValidator {
+func Int64ValidatorAtMost(maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(Int64ValidatorPackage)
 	schemaDefinition.WriteString(".AtMost(")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -61,14 +61,14 @@ func Int64ValidatorAtMost(max int64) *schema.CustomValidator {
 
 // Int64ValidatorBetween returns a custom validator mapped to the
 // int64validator package Between function.
-func Int64ValidatorBetween(min, max int64) *schema.CustomValidator {
+func Int64ValidatorBetween(minimum, maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(Int64ValidatorPackage)
 	schemaDefinition.WriteString(".Between(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(", ")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{

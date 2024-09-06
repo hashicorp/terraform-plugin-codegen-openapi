@@ -25,12 +25,12 @@ var (
 
 // ListValidatorSizeAtLeast returns a custom validator mapped to the
 // listvalidator package SizeAtLeast function.
-func ListValidatorSizeAtLeast(min int64) *schema.CustomValidator {
+func ListValidatorSizeAtLeast(minimum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(ListValidatorPackage)
 	schemaDefinition.WriteString(".SizeAtLeast(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -43,12 +43,12 @@ func ListValidatorSizeAtLeast(min int64) *schema.CustomValidator {
 
 // ListValidatorSizeAtMost returns a custom validator mapped to the
 // listvalidator package SizeAtMost function.
-func ListValidatorSizeAtMost(max int64) *schema.CustomValidator {
+func ListValidatorSizeAtMost(maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(ListValidatorPackage)
 	schemaDefinition.WriteString(".SizeAtMost(")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
@@ -61,14 +61,14 @@ func ListValidatorSizeAtMost(max int64) *schema.CustomValidator {
 
 // ListValidatorSizeBetween returns a custom validator mapped to the
 // listvalidator package SizeBetween function.
-func ListValidatorSizeBetween(min, max int64) *schema.CustomValidator {
+func ListValidatorSizeBetween(minimum, maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(ListValidatorPackage)
 	schemaDefinition.WriteString(".SizeBetween(")
-	schemaDefinition.WriteString(strconv.FormatInt(min, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(", ")
-	schemaDefinition.WriteString(strconv.FormatInt(max, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{

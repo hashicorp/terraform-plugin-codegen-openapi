@@ -6,7 +6,7 @@ package explorer
 import high "github.com/pb33f/libopenapi/datamodel/high/v3"
 
 func mergeParameters(commonParameters []*high.Parameter, operation *high.Operation) []*high.Parameter {
-	mergedParameters := make([]*high.Parameter, len(commonParameters))
+	mergedParameters := make([]*high.Parameter, 0)
 	copy(mergedParameters, commonParameters)
 	if operation != nil {
 		for _, operationParameter := range operation.Parameters {

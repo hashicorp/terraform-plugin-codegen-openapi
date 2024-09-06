@@ -14,6 +14,8 @@ import (
 )
 
 func TestReadOpParameters_Resource(t *testing.T) {
+	t.Parallel()
+
 	testCases := map[string]struct {
 		readOp       *high.Operation
 		commonParams []*high.Parameter
@@ -341,6 +343,8 @@ func TestReadOpParameters_Resource(t *testing.T) {
 }
 
 func TestReadOpParameters_DataSource(t *testing.T) {
+	t.Parallel()
+
 	testCases := map[string]struct {
 		readOp       *high.Operation
 		commonParams []*high.Parameter
