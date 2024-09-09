@@ -19,7 +19,7 @@ func mergeParameters(commonParameters []*high.Parameter, operation *high.Operati
 				}
 			}
 			if !found {
-				mergedParameters = append(mergedParameters, operationParameter)
+				mergedParameters = append(mergedParameters, operationParameter) // nolint: makezero
 			}
 		}
 	}
