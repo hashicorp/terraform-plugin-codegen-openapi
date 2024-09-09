@@ -61,14 +61,14 @@ func StringValidatorLengthAtMost(maximum int64) *schema.CustomValidator {
 
 // StringValidatorLengthBetween returns a custom validator mapped to the
 // stringvalidator package LengthBetween function.
-func StringValidatorLengthBetween(minimum, maximumimum int64) *schema.CustomValidator {
+func StringValidatorLengthBetween(minimum, maximum int64) *schema.CustomValidator {
 	var schemaDefinition strings.Builder
 
 	schemaDefinition.WriteString(StringValidatorPackage)
 	schemaDefinition.WriteString(".LengthBetween(")
 	schemaDefinition.WriteString(strconv.FormatInt(minimum, 10))
 	schemaDefinition.WriteString(", ")
-	schemaDefinition.WriteString(strconv.FormatInt(maximumimum, 10))
+	schemaDefinition.WriteString(strconv.FormatInt(maximum, 10))
 	schemaDefinition.WriteString(")")
 
 	return &schema.CustomValidator{
