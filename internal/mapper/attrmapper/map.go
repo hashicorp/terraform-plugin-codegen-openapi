@@ -39,6 +39,12 @@ func (a *ResourceMapAttribute) Merge(mergeAttribute ResourceAttribute) (Resource
 func (a *ResourceMapAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
 
+	cor, err := ApplyComputedOptionalRequiredOverride(override.ComputedOptionalRequired)
+	if err != nil {
+		return nil, err
+	}
+	a.ComputedOptionalRequired = cor
+
 	return a, nil
 }
 

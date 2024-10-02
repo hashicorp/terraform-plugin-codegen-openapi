@@ -40,6 +40,12 @@ func (a *ResourceListNestedAttribute) Merge(mergeAttribute ResourceAttribute) (R
 func (a *ResourceListNestedAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
 
+	cor, err := ApplyComputedOptionalRequiredOverride(override.ComputedOptionalRequired)
+	if err != nil {
+		return nil, err
+	}
+	a.ComputedOptionalRequired = cor
+
 	return a, nil
 }
 

@@ -4,6 +4,8 @@
 package attrmapper
 
 import (
+	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
@@ -62,4 +64,21 @@ func mergeObjectAttributeTypes(targetAttrTypes []schema.ObjectAttributeType, mer
 	}
 
 	return targetAttrTypes
+}
+
+func ApplyComputedOptionalRequiredOverride(value string) (schema.ComputedOptionalRequired, error) {
+	switch value {
+	case "":
+		return "", nil // No override
+	case "computed":
+		return schema.Computed, nil
+	case "optional":
+		return schema.Optional, nil
+	case "required":
+		return schema.Required, nil
+	case "computed_optional":
+		return schema.ComputedOptional, nil
+	default:
+		return "", fmt.Errorf("invalid value for computed_optional_required: %s", value)
+	}
 }
