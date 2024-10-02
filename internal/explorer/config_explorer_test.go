@@ -41,9 +41,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							Path:   "/resources/{resource_id}",
 							Method: "GET",
 						},
-						Update: &config.OpenApiSpecLocation{
-							Path:   "/resources/{resource_id}",
-							Method: "PUT",
+						Update: []*config.OpenApiSpecLocation{
+							{
+								Path:   "/resources/{resource_id}",
+								Method: "PUT",
+							},
 						},
 						Delete: &config.OpenApiSpecLocation{
 							Path:   "/resources/{resource_id}",
@@ -84,9 +86,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					UpdateOp: &high.Operation{
-						Description: "update op here",
-						OperationId: "update_resource",
+					UpdateOps: []*high.Operation{
+						{
+							Description: "update op here",
+							OperationId: "update_resource",
+						},
 					},
 					DeleteOp: &high.Operation{
 						Description: "delete op here",
@@ -112,9 +116,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							Path:   "/resources/two/{resource_id}",
 							Method: "HEAD",
 						},
-						Update: &config.OpenApiSpecLocation{
-							Path:   "/resources/three/{resource_id}",
-							Method: "PATCH",
+						Update: []*config.OpenApiSpecLocation{
+							{
+								Path:   "/resources/three/{resource_id}",
+								Method: "PATCH",
+							},
 						},
 						Delete: &config.OpenApiSpecLocation{
 							Path:   "/resources/one",
@@ -157,9 +163,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 						Description: "read op here",
 						OperationId: "read_resource",
 					},
-					UpdateOp: &high.Operation{
-						Description: "update op here",
-						OperationId: "update_resource",
+					UpdateOps: []*high.Operation{
+						{
+							Description: "update op here",
+							OperationId: "update_resource",
+						},
 					},
 					DeleteOp: &high.Operation{
 						Description: "delete op here",
@@ -205,9 +213,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 			config: config.Config{
 				Resources: map[string]config.Resource{
 					"test_resource": {
-						Update: &config.OpenApiSpecLocation{
-							Path:   "/fakepath",
-							Method: "PUT",
+						Update: []*config.OpenApiSpecLocation{
+							{
+								Path:   "/fakepath",
+								Method: "PUT",
+							},
 						},
 					},
 				},
@@ -233,9 +243,11 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 			config: config.Config{
 				Resources: map[string]config.Resource{
 					"test_resource": {
-						Update: &config.OpenApiSpecLocation{
-							Path:   "/resources/{resource_id}",
-							Method: "FAKE",
+						Update: []*config.OpenApiSpecLocation{
+							{
+								Path:   "/resources/{resource_id}",
+								Method: "FAKE",
+							},
 						},
 					},
 				},

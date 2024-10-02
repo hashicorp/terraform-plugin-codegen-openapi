@@ -19,7 +19,7 @@ type Explorer interface {
 type Resource struct {
 	CreateOp         *high.Operation
 	ReadOp           *high.Operation
-	UpdateOp         *high.Operation
+	UpdateOps        []*high.Operation
 	DeleteOp         *high.Operation
 	CommonParameters []*high.Parameter
 	SchemaOptions    SchemaOptions

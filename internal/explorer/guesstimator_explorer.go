@@ -70,6 +70,7 @@ func (e guesstimatorExplorer) FindProvider() (Provider, error) {
 // Reference - [Terraform Resource Behavior]
 //
 // [Terraform Resource Behavior]: https://developer.hashicorp.com/terraform/language/resources/behavior#how-terraform-applies-a-configuration
+
 func (e guesstimatorExplorer) FindResources() (map[string]Resource, error) {
 	resourcesMap := map[string]Resource{}
 
@@ -89,11 +90,16 @@ func (e guesstimatorExplorer) FindResources() (map[string]Resource, error) {
 			createOp = group.IdentityOps["post"]
 		}
 
+		var updateOps []*high.Operation
+		if group.IdentityOps["put"] != nil {
+			updateOps = append(updateOps, group.IdentityOps["put"])
+		}
+
 		resourcesMap[name] = Resource{
-			CreateOp: createOp,
-			ReadOp:   group.IdentityOps["get"],
-			UpdateOp: group.IdentityOps["put"],
-			DeleteOp: group.IdentityOps["delete"],
+			CreateOp:  createOp,
+			ReadOp:    group.IdentityOps["get"],
+			UpdateOps: updateOps,
+			DeleteOp:  group.IdentityOps["delete"],
 		}
 	}
 
