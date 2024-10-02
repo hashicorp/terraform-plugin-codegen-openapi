@@ -270,7 +270,8 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 								},
 								Overrides: map[string]config.Override{
 									"test": {
-										Description: "test description for override",
+										Description:              "test description for override",
+										ComputedOptionalRequired: "computed_optional",
 									},
 								},
 							},
@@ -310,7 +311,8 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 							},
 							Overrides: map[string]explorer.Override{
 								"test": {
-									Description: "test description for override",
+									Description:              "test description for override",
+									ComputedOptionalRequired: "computed_optional",
 								},
 							},
 						},
