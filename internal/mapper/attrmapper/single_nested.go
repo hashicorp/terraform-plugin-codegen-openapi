@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceSingleNestedAttribute struct {
@@ -32,6 +33,9 @@ func (a *ResourceSingleNestedAttribute) Merge(mergeAttribute ResourceAttribute) 
 	if a.Description == nil || *a.Description == "" {
 		a.Description = singleNestedAttribute.Description
 	}
+	if ok && a.ComputedOptionalRequired == "" {
+		a.ComputedOptionalRequired = singleNestedAttribute.ComputedOptionalRequired
+	}
 	a.Attributes, _ = a.Attributes.Merge(singleNestedAttribute.Attributes)
 
 	return a, nil
@@ -39,6 +43,7 @@ func (a *ResourceSingleNestedAttribute) Merge(mergeAttribute ResourceAttribute) 
 
 func (a *ResourceSingleNestedAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
+	a.ComputedOptionalRequired = schema.ComputedOptionalRequired(override.ComputedOptionalRequired)
 
 	return a, nil
 }

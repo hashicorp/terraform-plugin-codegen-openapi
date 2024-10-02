@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceListAttribute struct {
@@ -31,6 +32,9 @@ func (a *ResourceListAttribute) Merge(mergeAttribute ResourceAttribute) (Resourc
 	if a.Description == nil || *a.Description == "" {
 		a.Description = listAttribute.Description
 	}
+	if ok && a.ComputedOptionalRequired == "" {
+		a.ComputedOptionalRequired = listAttribute.ComputedOptionalRequired
+	}
 	a.ElementType = mergeElementType(a.ElementType, listAttribute.ElementType)
 
 	return a, nil
@@ -38,6 +42,7 @@ func (a *ResourceListAttribute) Merge(mergeAttribute ResourceAttribute) (Resourc
 
 func (a *ResourceListAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
+	a.ComputedOptionalRequired = schema.ComputedOptionalRequired(override.ComputedOptionalRequired)
 
 	return a, nil
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceListNestedAttribute struct {
@@ -32,6 +33,9 @@ func (a *ResourceListNestedAttribute) Merge(mergeAttribute ResourceAttribute) (R
 	if a.Description == nil || *a.Description == "" {
 		a.Description = listNestedAttribute.Description
 	}
+	if ok && a.ComputedOptionalRequired == "" {
+		a.ComputedOptionalRequired = listNestedAttribute.ComputedOptionalRequired
+	}
 	a.NestedObject.Attributes, _ = a.NestedObject.Attributes.Merge(listNestedAttribute.NestedObject.Attributes)
 
 	return a, nil
@@ -39,6 +43,7 @@ func (a *ResourceListNestedAttribute) Merge(mergeAttribute ResourceAttribute) (R
 
 func (a *ResourceListNestedAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
+	a.ComputedOptionalRequired = schema.ComputedOptionalRequired(override.ComputedOptionalRequired)
 
 	return a, nil
 }

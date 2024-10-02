@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceNumberAttribute struct {
@@ -27,12 +28,16 @@ func (a *ResourceNumberAttribute) Merge(mergeAttribute ResourceAttribute) (Resou
 	if ok && (a.Description == nil || *a.Description == "") {
 		a.Description = numberAttribute.Description
 	}
+	if ok && a.ComputedOptionalRequired == "" {
+		a.ComputedOptionalRequired = numberAttribute.ComputedOptionalRequired
+	}
 
 	return a, nil
 }
 
 func (a *ResourceNumberAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
+	a.ComputedOptionalRequired = schema.ComputedOptionalRequired(override.ComputedOptionalRequired)
 
 	return a, nil
 }
