@@ -38,11 +38,11 @@ type Provider struct {
 
 // Resource generator config section.
 type Resource struct {
-	Create        *OpenApiSpecLocation `yaml:"create"`
-	Read          *OpenApiSpecLocation `yaml:"read"`
-	Update        *OpenApiSpecLocation `yaml:"update"`
-	Delete        *OpenApiSpecLocation `yaml:"delete"`
-	SchemaOptions SchemaOptions        `yaml:"schema"`
+	Create        *OpenApiSpecLocation   `yaml:"create"`
+	Read          *OpenApiSpecLocation   `yaml:"read"`
+	Update        []*OpenApiSpecLocation `yaml:"update"`
+	Delete        *OpenApiSpecLocation   `yaml:"delete"`
+	SchemaOptions SchemaOptions          `yaml:"schema"`
 }
 
 // DataSource generator config section.
@@ -169,9 +169,17 @@ func (r Resource) Validate() error {
 		result = errors.Join(result, fmt.Errorf("invalid read: %w", err))
 	}
 
-	err = r.Update.Validate()
-	if err != nil {
-		result = errors.Join(result, fmt.Errorf("invalid update: %w", err))
+	if r.Update != nil {
+		if len(r.Update) == 0 {
+			result = errors.Join(result, errors.New("must have at least one update object"))
+		} else {
+			for i, update := range r.Update {
+				err := update.Validate()
+				if err != nil {
+					result = errors.Join(result, fmt.Errorf("invalid update[%d]: %w", i, err))
+				}
+			}
+		}
 	}
 
 	err = r.Delete.Validate()

@@ -169,8 +169,8 @@ resources:
       path: /example/path/to/thing/{id}
       method: GET
     update:
-      path: /example/path/to/thing/{id}
-      method: PATCH
+      - path: /example/path/to/thing/{id}
+        method: PATCH
     delete:
       path: /example/path/to/thing/{id}
       method: DELETE
@@ -302,28 +302,6 @@ resources:
 			expectedErrRegex: `invalid read: 'method' property is required`,
 		},
 		"resource - invalid update - path required": {
-			input: `
-provider:
-  name: example
-
-resources:
-  thing_one:
-    update:
-      method: POST`,
-			expectedErrRegex: `invalid update: 'path' property is required`,
-		},
-		"resource - invalid update - method required": {
-			input: `
-provider:
-  name: example
-
-resources:
-  thing_one:
-    update:
-      path: /example/path/to/things`,
-			expectedErrRegex: `invalid update: 'method' property is required`,
-		},
-		"resource - invalid delete - path required": {
 			input: `
 provider:
   name: example

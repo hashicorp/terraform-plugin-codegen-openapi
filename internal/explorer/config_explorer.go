@@ -70,10 +70,14 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.read': %w", name, err))
 			continue
 		}
-		updateOp, err := extractOp(e.spec.Paths, resourceConfig.Update)
-		if err != nil {
-			errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.update': %w", name, err))
-			continue
+		var updateOps []*high.Operation
+		for _, updateLoc := range resourceConfig.Update {
+			updateOp, err := extractOp(e.spec.Paths, updateLoc)
+			if err != nil {
+				errResult = errors.Join(errResult, fmt.Errorf("failed to extract '%s.update': %w", name, err))
+				continue
+			}
+			updateOps = append(updateOps, updateOp)
 		}
 		deleteOp, err := extractOp(e.spec.Paths, resourceConfig.Delete)
 		if err != nil {
@@ -90,7 +94,7 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 		resources[name] = Resource{
 			CreateOp:         createOp,
 			ReadOp:           readOp,
-			UpdateOp:         updateOp,
+			UpdateOps:        updateOps,
 			DeleteOp:         deleteOp,
 			CommonParameters: commonParameters,
 			SchemaOptions:    extractSchemaOptions(resourceConfig.SchemaOptions),
