@@ -7,19 +7,19 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 )
 
 type DataSourceAttribute interface {
 	GetName() string
 	Merge(DataSourceAttribute) (DataSourceAttribute, error)
-	ApplyOverride(explorer.Override) (DataSourceAttribute, error)
+	ApplyOverride(config.Override) (DataSourceAttribute, error)
 	ToSpec() datasource.Attribute
 }
 
 type DataSourceNestedAttribute interface {
-	ApplyNestedOverride([]string, explorer.Override) (DataSourceAttribute, error)
+	ApplyNestedOverride([]string, config.Override) (DataSourceAttribute, error)
 }
 
 type DataSourceAttributes []DataSourceAttribute
@@ -67,7 +67,7 @@ func (attributes DataSourceAttributes) ToSpec() []datasource.Attribute {
 	return specAttributes
 }
 
-func (attributes DataSourceAttributes) ApplyOverrides(overrideMap map[string]explorer.Override) (DataSourceAttributes, error) {
+func (attributes DataSourceAttributes) ApplyOverrides(overrideMap map[string]config.Override) (DataSourceAttributes, error) {
 	var errResult error
 	for key, override := range overrideMap {
 		var err error
@@ -78,7 +78,7 @@ func (attributes DataSourceAttributes) ApplyOverrides(overrideMap map[string]exp
 	return attributes, errResult
 }
 
-func (attributes DataSourceAttributes) ApplyOverride(path []string, override explorer.Override) (DataSourceAttributes, error) {
+func (attributes DataSourceAttributes) ApplyOverride(path []string, override config.Override) (DataSourceAttributes, error) {
 	var errResult error
 	if len(path) == 0 {
 		return attributes, errResult

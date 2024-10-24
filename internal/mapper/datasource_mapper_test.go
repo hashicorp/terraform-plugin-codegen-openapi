@@ -26,7 +26,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 	testCases := map[string]struct {
 		readResponseSchema *base.SchemaProxy
 		readParams         []*high.Parameter
-		schemaOptions      explorer.SchemaOptions
+		schemaOptions      config.SchemaOptions
 		want               datasource.Attributes
 	}{
 		"merge primitives across all ops": {
@@ -622,8 +622,8 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 					}),
 				}),
 			}),
-			schemaOptions: explorer.SchemaOptions{
-				AttributeOptions: explorer.AttributeOptions{
+			schemaOptions: config.SchemaOptions{
+				AttributeOptions: config.AttributeOptions{
 					Aliases: map[string]string{
 						"read_path_parameter":  "attribute_required",
 						"read_query_parameter": "attribute_computed_optional",
@@ -646,7 +646,7 @@ func TestDataSourceMapper_basic_merges(t *testing.T) {
 			},
 		},
 		"ignore bool prop across all ops": {
-			schemaOptions: explorer.SchemaOptions{
+			schemaOptions: config.SchemaOptions{
 				Ignores: []string{
 					"bool_prop",
 					"nested_obj.bool_prop",
