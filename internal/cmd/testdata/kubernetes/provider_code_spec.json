@@ -40,7 +40,7 @@
 									"name": "creation_timestamp",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+										"description": "The last time this condition was updated."
 									}
 								},
 								{
@@ -54,7 +54,7 @@
 									"name": "deletion_timestamp",
 									"string": {
 										"computed_optional_required": "computed_optional",
-										"description": "DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.\n\nPopulated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+										"description": "The last time this condition was updated."
 									}
 								},
 								{
@@ -143,7 +143,7 @@
 													"name": "time",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "Time is the timestamp of when the ManagedFields entry was added. The timestamp will also be updated if a field is added, the manager changes any of the owned fields value or removes a field. The timestamp does not update when a field is removed from the entry because another manager took it over."
+														"description": "The last time this condition was updated."
 													}
 												}
 											]
@@ -252,7 +252,7 @@
 									}
 								}
 							],
-							"description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+							"description": "May contain labels and annotations that will be copied into the PVC when creating it. No other fields are allowed and will be rejected during validation."
 						}
 					},
 					{
@@ -352,7 +352,7 @@
 												}
 											}
 										],
-										"description": "Label selector for pods. Existing ReplicaSets whose pods are selected by this will be the ones affected by this deployment. It must match the pod template's labels."
+										"description": "selector is a label query over volumes to consider for binding."
 									}
 								},
 								{
@@ -369,14 +369,14 @@
 															"name": "max_surge",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The maximum number of pods that can be scheduled above the desired number of pods. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxUnavailable is 0. Absolute number is calculated from percentage by rounding up. Defaults to 25%. Example: when this is set to 30%, the new ReplicaSet can be scaled up immediately when the rolling update starts, such that the total number of old and new pods do not exceed 130% of desired pods. Once old pods have been killed, new ReplicaSet can be scaled up further, ensuring that total number of pods running at any time during the update is at most 130% of desired pods."
+																"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 															}
 														},
 														{
 															"name": "max_unavailable",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "The maximum number of pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). Absolute number is calculated from percentage by rounding down. This can not be 0 if MaxSurge is 0. Defaults to 25%. Example: when this is set to 30%, the old ReplicaSet can be scaled down to 70% of desired pods immediately when the rolling update starts. Once new pods are ready, old ReplicaSet can be scaled down further, followed by scaling up the new ReplicaSet, ensuring that the total number of pods available at all times during the update is at least 70% of desired pods."
+																"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 															}
 														}
 													],
@@ -418,7 +418,7 @@
 															"name": "creation_timestamp",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+																"description": "The last time this condition was updated."
 															}
 														},
 														{
@@ -432,7 +432,7 @@
 															"name": "deletion_timestamp",
 															"string": {
 																"computed_optional_required": "computed_optional",
-																"description": "DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.\n\nPopulated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+																"description": "The last time this condition was updated."
 															}
 														},
 														{
@@ -521,7 +521,7 @@
 																			"name": "time",
 																			"string": {
 																				"computed_optional_required": "computed_optional",
-																				"description": "Time is the timestamp of when the ManagedFields entry was added. The timestamp will also be updated if a field is added, the manager changes any of the owned fields value or removes a field. The timestamp does not update when a field is removed from the entry because another manager took it over."
+																				"description": "The last time this condition was updated."
 																			}
 																		}
 																	]
@@ -630,7 +630,7 @@
 															}
 														}
 													],
-													"description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+													"description": "May contain labels and annotations that will be copied into the PVC when creating it. No other fields are allowed and will be rejected during validation."
 												}
 											},
 											{
@@ -946,7 +946,7 @@
 																															}
 																														}
 																													],
-																													"description": "A label query over a set of resources, in this case pods."
+																													"description": "selector is a label query over volumes to consider for binding."
 																												}
 																											},
 																											{
@@ -1006,7 +1006,7 @@
 																															}
 																														}
 																													],
-																													"description": "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces."
+																													"description": "selector is a label query over volumes to consider for binding."
 																												}
 																											},
 																											{
@@ -1111,7 +1111,7 @@
 																												}
 																											}
 																										],
-																										"description": "A label query over a set of resources, in this case pods."
+																										"description": "selector is a label query over volumes to consider for binding."
 																									}
 																								},
 																								{
@@ -1171,7 +1171,7 @@
 																												}
 																											}
 																										],
-																										"description": "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces."
+																										"description": "selector is a label query over volumes to consider for binding."
 																									}
 																								},
 																								{
@@ -1276,7 +1276,7 @@
 																															}
 																														}
 																													],
-																													"description": "A label query over a set of resources, in this case pods."
+																													"description": "selector is a label query over volumes to consider for binding."
 																												}
 																											},
 																											{
@@ -1336,7 +1336,7 @@
 																															}
 																														}
 																													],
-																													"description": "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces."
+																													"description": "selector is a label query over volumes to consider for binding."
 																												}
 																											},
 																											{
@@ -1441,7 +1441,7 @@
 																												}
 																											}
 																										],
-																										"description": "A label query over a set of resources, in this case pods."
+																										"description": "selector is a label query over volumes to consider for binding."
 																									}
 																								},
 																								{
@@ -1501,7 +1501,7 @@
 																												}
 																											}
 																										],
-																										"description": "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces."
+																										"description": "selector is a label query over volumes to consider for binding."
 																									}
 																								},
 																								{
@@ -1654,7 +1654,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['\u003cKEY\u003e']`, `metadata.annotations['\u003cKEY\u003e']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs."
+																											"description": "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
 																										}
 																									},
 																									{
@@ -1687,7 +1687,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
+																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported."
 																										}
 																									},
 																									{
@@ -1893,7 +1893,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -1927,11 +1927,11 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
-																							"description": "PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
+																							"description": "PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The Pod's termination grace period countdown begins before the PreStop hook is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period (unless delayed by finalizers). Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
 																						}
 																					},
 																					{
@@ -2012,7 +2012,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -2046,7 +2046,7 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
@@ -2171,7 +2171,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -2244,7 +2244,7 @@
 																						}
 																					}
 																				],
-																				"description": "Periodic probe of container liveness. Container will be restarted if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -2423,7 +2423,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -2496,7 +2496,7 @@
 																						}
 																					}
 																				],
-																				"description": "Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -2704,7 +2704,7 @@
 																									}
 																								}
 																							],
-																							"description": "The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -2730,7 +2730,7 @@
 																									}
 																								}
 																							],
-																							"description": "The seccomp options to use by this container. If seccomp options are provided at both the pod \u0026 container level, the container options override the pod options. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The seccomp options to use by the containers in this pod. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -2767,7 +2767,7 @@
 																									}
 																								}
 																							],
-																							"description": "The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
+																							"description": "The Windows specific settings applied to all containers. If unspecified, the options within a container's SecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
 																						}
 																					}
 																				],
@@ -2888,7 +2888,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -3278,7 +3278,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['\u003cKEY\u003e']`, `metadata.annotations['\u003cKEY\u003e']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs."
+																											"description": "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
 																										}
 																									},
 																									{
@@ -3311,7 +3311,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
+																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported."
 																										}
 																									},
 																									{
@@ -3517,7 +3517,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -3551,11 +3551,11 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
-																							"description": "PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
+																							"description": "PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The Pod's termination grace period countdown begins before the PreStop hook is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period (unless delayed by finalizers). Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
 																						}
 																					},
 																					{
@@ -3636,7 +3636,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -3670,7 +3670,7 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
@@ -3678,7 +3678,7 @@
 																						}
 																					}
 																				],
-																				"description": "Lifecycle is not allowed for ephemeral containers."
+																				"description": "Actions that the management system should take in response to container lifecycle events. Cannot be updated."
 																			}
 																		},
 																		{
@@ -3795,7 +3795,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -3868,7 +3868,7 @@
 																						}
 																					}
 																				],
-																				"description": "Probes are not allowed for ephemeral containers."
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -4047,7 +4047,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -4120,7 +4120,7 @@
 																						}
 																					}
 																				],
-																				"description": "Probes are not allowed for ephemeral containers."
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -4201,7 +4201,7 @@
 																						}
 																					}
 																				],
-																				"description": "Resources are not allowed for ephemeral containers. Ephemeral containers use spare resources already allocated to the pod."
+																				"description": "Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 																			}
 																		},
 																		{
@@ -4328,7 +4328,7 @@
 																									}
 																								}
 																							],
-																							"description": "The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -4354,7 +4354,7 @@
 																									}
 																								}
 																							],
-																							"description": "The seccomp options to use by this container. If seccomp options are provided at both the pod \u0026 container level, the container options override the pod options. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The seccomp options to use by the containers in this pod. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -4391,11 +4391,11 @@
 																									}
 																								}
 																							],
-																							"description": "The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
+																							"description": "The Windows specific settings applied to all containers. If unspecified, the options within a container's SecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
 																						}
 																					}
 																				],
-																				"description": "Optional: SecurityContext defines the security options the ephemeral container should be run with. If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext."
+																				"description": "SecurityContext defines the security options the container should be run with. If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext. More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/"
 																			}
 																		},
 																		{
@@ -4512,7 +4512,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -4585,7 +4585,7 @@
 																						}
 																					}
 																				],
-																				"description": "Probes are not allowed for ephemeral containers."
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -4923,7 +4923,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['\u003cKEY\u003e']`, `metadata.annotations['\u003cKEY\u003e']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs."
+																											"description": "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
 																										}
 																									},
 																									{
@@ -4956,7 +4956,7 @@
 																													}
 																												}
 																											],
-																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
+																											"description": "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported."
 																										}
 																									},
 																									{
@@ -5162,7 +5162,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -5196,11 +5196,11 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
-																							"description": "PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
+																							"description": "PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The Pod's termination grace period countdown begins before the PreStop hook is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period (unless delayed by finalizers). Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
 																						}
 																					},
 																					{
@@ -5281,7 +5281,7 @@
 																												"name": "port",
 																												"string": {
 																													"computed_optional_required": "required",
-																													"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																													"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																												}
 																											},
 																											{
@@ -5315,7 +5315,7 @@
 																												}
 																											}
 																										],
-																										"description": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept for the backward compatibility. There are no validation of this field and lifecycle hooks will fail in runtime when tcp handler is specified."
+																										"description": "TCPSocket specifies an action involving a TCP port."
 																									}
 																								}
 																							],
@@ -5440,7 +5440,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -5513,7 +5513,7 @@
 																						}
 																					}
 																				],
-																				"description": "Periodic probe of container liveness. Container will be restarted if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -5692,7 +5692,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -5765,7 +5765,7 @@
 																						}
 																					}
 																				],
-																				"description": "Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+																				"description": "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
 																			}
 																		},
 																		{
@@ -5973,7 +5973,7 @@
 																									}
 																								}
 																							],
-																							"description": "The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -5999,7 +5999,7 @@
 																									}
 																								}
 																							],
-																							"description": "The seccomp options to use by this container. If seccomp options are provided at both the pod \u0026 container level, the container options override the pod options. Note that this field cannot be set when spec.os.name is windows."
+																							"description": "The seccomp options to use by the containers in this pod. Note that this field cannot be set when spec.os.name is windows."
 																						}
 																					},
 																					{
@@ -6036,7 +6036,7 @@
 																									}
 																								}
 																							],
-																							"description": "The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
+																							"description": "The Windows specific settings applied to all containers. If unspecified, the options within a container's SecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. Note that this field cannot be set when spec.os.name is linux."
 																						}
 																					}
 																				],
@@ -6157,7 +6157,7 @@
 																									"name": "port",
 																									"string": {
 																										"computed_optional_required": "required",
-																										"description": "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+																										"description": "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
 																									}
 																								},
 																								{
@@ -6880,7 +6880,7 @@
 																						}
 																					}
 																				],
-																				"description": "LabelSelector is used to find matching pods. Pods that match this label selector are counted to determine the number of pods in their corresponding topology domain."
+																				"description": "selector is a label query over volumes to consider for binding."
 																			}
 																		},
 																		{
@@ -7137,7 +7137,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef is Optional: SecretRef is reference to the authentication secret for User, default is empty. More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -7183,7 +7183,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef is optional: points to a secret object containing parameters used to connect to OpenStack."
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -7303,7 +7303,7 @@
 																									}
 																								}
 																							],
-																							"description": "nodePublishSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI NodePublishVolume and NodeUnpublishVolume calls. This field is optional, and  may be empty if no secret is required. If the secret object contains more than one secret, all secret references are passed."
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -7446,7 +7446,7 @@
 																						"name": "size_limit",
 																						"string": {
 																							"computed_optional_required": "computed_optional",
-																							"description": "sizeLimit is the total amount of local storage required for this EmptyDir volume. The size limit is also applicable for memory medium. The maximum usage on memory medium EmptyDir would be the minimum value between the SizeLimit specified here and the sum of memory limits of all containers in a pod. The default is nil which means that the limit is undefined. More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir"
+																							"description": "Specifies the output format of the exposed resources, defaults to \"1\""
 																						}
 																					}
 																				],
@@ -7482,7 +7482,7 @@
 																												"name": "creation_timestamp",
 																												"string": {
 																													"computed_optional_required": "computed_optional",
-																													"description": "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+																													"description": "The last time this condition was updated."
 																												}
 																											},
 																											{
@@ -7496,7 +7496,7 @@
 																												"name": "deletion_timestamp",
 																												"string": {
 																													"computed_optional_required": "computed_optional",
-																													"description": "DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.\n\nPopulated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+																													"description": "The last time this condition was updated."
 																												}
 																											},
 																											{
@@ -7585,7 +7585,7 @@
 																																"name": "time",
 																																"string": {
 																																	"computed_optional_required": "computed_optional",
-																																	"description": "Time is the timestamp of when the ManagedFields entry was added. The timestamp will also be updated if a field is added, the manager changes any of the owned fields value or removes a field. The timestamp does not update when a field is removed from the entry because another manager took it over."
+																																	"description": "The last time this condition was updated."
 																																}
 																															}
 																														]
@@ -8015,7 +8015,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef is Optional: secretRef is reference to the secret object containing sensitive information to pass to the plugin scripts. This may be empty if no secret object is specified. If the secret object contains more than one secret, all secrets are passed to the plugin scripts."
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					}
 																				],
@@ -8270,7 +8270,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef is the CHAP Secret for iSCSI target and initiator authentication"
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -8819,7 +8819,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef is name of the authentication secret for RBDUser. If provided overrides keyring. Default is nil. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -8882,7 +8882,7 @@
 																									}
 																								}
 																							],
-																							"description": "secretRef references to the secret for ScaleIO user and other sensitive information. If this is not provided, Login operation will fail."
+																							"description": "secretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
 																						}
 																					},
 																					{
@@ -9134,7 +9134,7 @@
 													"name": "last_transition_time",
 													"string": {
 														"computed_optional_required": "computed_optional",
-														"description": "Last time the condition transitioned from one status to another."
+														"description": "The last time this condition was updated."
 													}
 												},
 												{
