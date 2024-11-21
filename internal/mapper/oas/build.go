@@ -7,6 +7,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
+	"os"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
@@ -226,6 +228,10 @@ func getMultiTypeSchema(proxyOne *base.SchemaProxy, proxyTwo *base.SchemaProxy) 
 
 // retrieveType will return the JSON schema type. Support for multi-types is restricted to combinations of "null" and another type, i.e. ["null", "string"]
 func retrieveType(schema *base.Schema) (string, *SchemaError) {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelWarn,
+	}))
+
 	switch len(schema.Type) {
 	case 0:
 		// Properties are only valid applying to objects, it's possible tools might omit the type
@@ -234,7 +240,12 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 			return util.OAS_type_object, nil
 		}
 
-		return "", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
+		var err *SchemaError = SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute will default to type string"), schema.ParentProxy)
+
+		logger.Warn("schema type is empty - assigning default type of string", "err", SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint"), schema.ParentProxy))
+		return util.OAS_type_string, err
+
+		// return util.OAS_type_string, SchemaErrorFromProxy(errors.New("no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created"), schema.ParentProxy)
 	case 1:
 		return schema.Type[0], nil
 	case 2:

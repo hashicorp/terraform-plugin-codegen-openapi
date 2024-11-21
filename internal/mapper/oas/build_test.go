@@ -1103,7 +1103,7 @@ func TestBuildSchema_Errors(t *testing.T) {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
 				Type: []string{},
 			}),
-			expectedErrRegex: `no 'type' array or supported allOf, oneOf, anyOf constraint - attribute cannot be created`,
+			expectedErrRegex: `no 'type' array or supported allOf, oneOf, anyOf constraint - attribute will default to type string`,
 		},
 		"unsupported multi-type array": {
 			schemaProxy: base.CreateSchemaProxy(&base.Schema{
