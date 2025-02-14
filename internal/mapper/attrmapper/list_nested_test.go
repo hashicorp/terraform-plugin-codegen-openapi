@@ -526,7 +526,8 @@ func TestResourceListNestedAttribute_ApplyNestedOverride(t *testing.T) {
 			},
 			overridePath: []string{"nested_attribute", "double_nested_attribute"},
 			override: explorer.Override{
-				Description: "new description",
+				Description:              "new description",
+				ComputedOptionalRequired: string(schema.Optional),
 			},
 			expectedAttribute: &attrmapper.ResourceListNestedAttribute{
 				Name: "attribute",
@@ -539,7 +540,7 @@ func TestResourceListNestedAttribute_ApplyNestedOverride(t *testing.T) {
 									&attrmapper.ResourceStringAttribute{
 										Name: "double_nested_attribute",
 										StringAttribute: resource.StringAttribute{
-											ComputedOptionalRequired: schema.Required,
+											ComputedOptionalRequired: schema.Optional,
 											Description:              pointer("new description"),
 										},
 									},
