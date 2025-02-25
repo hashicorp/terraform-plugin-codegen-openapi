@@ -8,9 +8,10 @@ import (
 	"fmt"
 	"testing"
 
+	"gopkg.in/yaml.v3"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"gopkg.in/yaml.v3"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -321,13 +322,12 @@ func Test_ConfigExplorer_FindResources(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			explorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
-			got, err := explorer.FindResources()
+			configExplorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
+			got, err := configExplorer.FindResources()
 
 			if testCase.expectedErr != nil {
 				if err == nil {
@@ -515,13 +515,12 @@ func Test_ConfigExplorer_FindDataSources(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			explorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
-			got, err := explorer.FindDataSources()
+			configExplorer := explorer.NewConfigExplorer(high.Document{Paths: &high.Paths{PathItems: testCase.pathItems}}, testCase.config)
+			got, err := configExplorer.FindDataSources()
 
 			if testCase.expectedErr != nil {
 				if err == nil {
@@ -576,7 +575,6 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -586,8 +584,8 @@ func Test_ConfigExplorer_FindProvider(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			explorer := explorer.NewConfigExplorer(oasModel, testCase.config)
-			got, err := explorer.FindProvider()
+			configExplorer := explorer.NewConfigExplorer(oasModel, testCase.config)
+			got, err := configExplorer.FindProvider()
 
 			if err != nil {
 				t.Fatalf("was not expecting error, got: %s", err)

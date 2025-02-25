@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/cli"
+
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
 )
 
@@ -48,7 +49,7 @@ func TestGenerate_WithConfig(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

@@ -8,9 +8,11 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func TestReadOpParameters_Resource(t *testing.T) {
@@ -324,7 +326,6 @@ func TestReadOpParameters_Resource(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -335,7 +336,7 @@ func TestReadOpParameters_Resource(t *testing.T) {
 
 			mergedParameters := resource.ReadOpParameters()
 
-			if diff := cmp.Diff(mergedParameters, testCase.want, cmp.AllowUnexported(base.Schema{}, base.SchemaProxy{}, sync.Mutex{}, high.Parameter{})); diff != "" {
+			if diff := cmp.Diff(mergedParameters, testCase.want, cmpopts.IgnoreUnexported(sync.Mutex{}), cmp.AllowUnexported(base.Schema{}, base.SchemaProxy{}, high.Parameter{})); diff != "" {
 				t.Errorf("unexpected difference for resource: %s", diff)
 			}
 		})
@@ -653,7 +654,7 @@ func TestReadOpParameters_DataSource(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -664,7 +665,7 @@ func TestReadOpParameters_DataSource(t *testing.T) {
 
 			mergedParameters := dataSource.ReadOpParameters()
 
-			if diff := cmp.Diff(mergedParameters, testCase.want, cmp.AllowUnexported(base.Schema{}, base.SchemaProxy{}, sync.Mutex{}, high.Parameter{})); diff != "" {
+			if diff := cmp.Diff(mergedParameters, testCase.want, cmpopts.IgnoreUnexported(sync.Mutex{}), cmp.AllowUnexported(base.Schema{}, base.SchemaProxy{}, high.Parameter{})); diff != "" {
 				t.Errorf("unexpected difference for data source: %s", diff)
 			}
 		})
