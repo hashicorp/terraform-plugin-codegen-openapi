@@ -96,7 +96,6 @@ func Test_GuesstimatorExplorer_FindResources(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -196,7 +195,6 @@ func Test_GuesstimatorExplorer_FindDataSources(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()

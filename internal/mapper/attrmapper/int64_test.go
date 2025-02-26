@@ -7,11 +7,12 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 )
 
 func TestResourceInt64Attribute_Merge(t *testing.T) {
@@ -113,7 +114,7 @@ func TestResourceInt64Attribute_Merge(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -155,7 +156,7 @@ func TestResourceInt64Attribute_ApplyOverride(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -267,7 +268,7 @@ func TestDataSourceInt64Attribute_Merge(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -309,7 +310,7 @@ func TestDataSourceInt64Attribute_ApplyOverride(t *testing.T) {
 		},
 	}
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

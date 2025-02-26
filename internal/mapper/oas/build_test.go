@@ -7,10 +7,11 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
+	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -110,7 +111,6 @@ func TestBuildSchemaFromRequest(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -168,7 +168,7 @@ func TestBuildSchemaFromRequest_Errors(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		errRegex := regexp.MustCompile(testCase.expectedErrRegex)
 
 		t.Run(name, func(t *testing.T) {
@@ -320,7 +320,6 @@ func TestBuildSchemaFromResponse(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -450,7 +449,7 @@ func TestBuildSchemaFromResponse_Errors(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		errRegex := regexp.MustCompile(testCase.expectedErrRegex)
 
 		t.Run(name, func(t *testing.T) {
@@ -945,7 +944,6 @@ func TestBuildSchema_MultiTypes(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -1070,7 +1068,6 @@ func TestBuildSchema_AllOfSchemaComposition(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -1188,7 +1185,7 @@ func TestBuildSchema_Errors(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
+
 		errRegex := regexp.MustCompile(testCase.expectedErrRegex)
 
 		t.Run(name, func(t *testing.T) {
@@ -1264,7 +1261,6 @@ func TestBuildSchema_EdgeCases(t *testing.T) {
 	}
 
 	for name, testCase := range testCases {
-		name, testCase := name, testCase
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
