@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceSingleNestedAttribute struct {
@@ -46,6 +47,16 @@ func (a *ResourceSingleNestedAttribute) ApplyOverride(override explorer.Override
 func (a *ResourceSingleNestedAttribute) ApplyNestedOverride(path []string, override explorer.Override) (ResourceAttribute, error) {
 	var err error
 	a.Attributes, err = a.Attributes.ApplyOverride(path, override)
+
+	return a, err
+}
+
+func (a *ResourceSingleNestedAttribute) NestedMerge(path []string, attribute ResourceAttribute, intermediateComputability schema.ComputedOptionalRequired) (ResourceAttribute, error) {
+	var err error
+	a.Attributes, err = a.Attributes.MergeAttribute(path, attribute, intermediateComputability)
+	if err == nil {
+		a.ComputedOptionalRequired = intermediateComputability
+	}
 
 	return a, err
 }
@@ -94,6 +105,16 @@ func (a *DataSourceSingleNestedAttribute) ApplyOverride(override explorer.Overri
 func (a *DataSourceSingleNestedAttribute) ApplyNestedOverride(path []string, override explorer.Override) (DataSourceAttribute, error) {
 	var err error
 	a.Attributes, err = a.Attributes.ApplyOverride(path, override)
+
+	return a, err
+}
+
+func (a *DataSourceSingleNestedAttribute) NestedMerge(path []string, attribute DataSourceAttribute, intermediateComputability schema.ComputedOptionalRequired) (DataSourceAttribute, error) {
+	var err error
+	a.Attributes, err = a.Attributes.MergeAttribute(path, attribute, intermediateComputability)
+	if err == nil {
+		a.ComputedOptionalRequired = intermediateComputability
+	}
 
 	return a, err
 }
