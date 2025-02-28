@@ -353,7 +353,8 @@ func TestResourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 				},
 			},
 			override: explorer.Override{
-				Description: "new description",
+				ComputedOptionalRequired: "computed",
+				Description:              "new description",
 			},
 			expectedAttribute: &attrmapper.ResourceSingleNestedAttribute{
 				Name: "test_attribute",
@@ -366,7 +367,7 @@ func TestResourceSingleNestedAttribute_ApplyOverride(t *testing.T) {
 					},
 				},
 				SingleNestedAttribute: resource.SingleNestedAttribute{
-					ComputedOptionalRequired: schema.Required,
+					ComputedOptionalRequired: schema.Computed,
 					Description:              pointer("new description"),
 				},
 			},
