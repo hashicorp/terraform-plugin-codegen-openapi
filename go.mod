@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/cli v1.1.7
 	github.com/hashicorp/terraform-plugin-codegen-spec v0.2.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/pb33f/libopenapi v0.21.8
+	github.com/pb33f/libopenapi v0.21.11
 	gopkg.in/yaml.v3 v3.0.1
 )
 
