@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
 )
 
 func TestDataSourceAttributes_Merge(t *testing.T) {

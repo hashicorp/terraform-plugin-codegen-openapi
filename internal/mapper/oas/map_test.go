@@ -15,8 +15,8 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	"github.com/pb33f/libopenapi/orderedmap"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/oas"
 )
 
 // TODO: add error tests

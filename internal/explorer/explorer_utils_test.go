@@ -12,7 +12,7 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/util"
 )
 
 func TestReadOpParameters_Resource(t *testing.T) {

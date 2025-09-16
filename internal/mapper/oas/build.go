@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/util"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
@@ -257,7 +257,7 @@ func retrieveType(schema *base.Schema) (string, *SchemaError) {
 	switch len(schema.Type) {
 	case 0:
 		// Properties are only valid applying to objects, it's possible tools might omit the type
-		// https://github.com/hashicorp/terraform-plugin-codegen-openapi/issues/79
+		// https://github.com/starburstdata/terraform-plugin-codegen-openapi/issues/79
 		if schema.Properties != nil && schema.Properties.Len() > 0 {
 			return util.OAS_type_object, nil
 		}

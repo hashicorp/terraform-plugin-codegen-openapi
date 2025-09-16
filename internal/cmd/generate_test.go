@@ -11,7 +11,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/cli"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/cmd"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/cmd"
 )
 
 func TestGenerate_WithConfig(t *testing.T) {

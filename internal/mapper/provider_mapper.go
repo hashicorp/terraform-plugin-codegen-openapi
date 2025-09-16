@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/log"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/log"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/oas"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
