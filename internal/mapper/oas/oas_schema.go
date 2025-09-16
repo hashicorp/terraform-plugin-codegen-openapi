@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/pb33f/libopenapi/orderedmap"
 )
 
@@ -31,6 +32,13 @@ type GlobalSchemaOpts struct {
 	// create request for a resource, does not become required from a lower precedence operation, such as an
 	// read response for a resource.
 	OverrideComputability schema.ComputedOptionalRequired
+
+	// Document provides access to the full OpenAPI document for resolving external schema references
+	// in discriminator mappings (e.g., "#/components/schemas/S3CatalogGalaxyMetastore")
+	Document *high.Document
+
+	// DiscriminatorDepth tracks recursion depth to prevent infinite loops in discriminator resolution
+	DiscriminatorDepth int
 }
 
 // SchemaOpts is NOT passed recursively through built OASSchema structs, and will only be available to the top level schema. This is used
