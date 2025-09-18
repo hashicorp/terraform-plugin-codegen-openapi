@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
 var _ ResourceMapper = resourceMapper{}
@@ -25,13 +26,15 @@ type ResourceMapper interface {
 
 type resourceMapper struct {
 	resources map[string]explorer.Resource
+	document  *high.Document
 	//nolint:unused // Might be useful later!
 	cfg config.Config
 }
 
-func NewResourceMapper(resources map[string]explorer.Resource, cfg config.Config) ResourceMapper {
+func NewResourceMapper(resources map[string]explorer.Resource, document *high.Document, cfg config.Config) ResourceMapper {
 	return resourceMapper{
 		resources: resources,
+		document:  document,
 		cfg:       cfg,
 	}
 }
@@ -45,7 +48,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 		explorerResource := m.resources[name]
 		rLogger := logger.With("resource", name)
 
-		schema, err := generateResourceSchema(rLogger, explorerResource)
+		schema, err := generateResourceSchema(rLogger, explorerResource, m.document)
 		if err != nil {
 			log.WarnLogOnError(rLogger, err, "skipping resource schema mapping")
 			continue
@@ -60,7 +63,7 @@ func (m resourceMapper) MapToIR(logger *slog.Logger) ([]resource.Resource, error
 	return resourceSchemas, nil
 }
 
-func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resource) (*resource.Schema, error) {
+func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resource, document *high.Document) (*resource.Schema, error) {
 	resourceSchema := &resource.Schema{
 		Attributes: []resource.Attribute{},
 	}
@@ -73,7 +76,9 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	schemaOpts := oas.SchemaOpts{
 		Ignores: explorerResource.SchemaOptions.Ignores,
 	}
-	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, schemaOpts, oas.GlobalSchemaOpts{})
+	createRequestSchema, err := oas.BuildSchemaFromRequest(explorerResource.CreateOp, schemaOpts, oas.GlobalSchemaOpts{
+		Document: document,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -93,6 +98,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	}
 	globalSchemaOpts := oas.GlobalSchemaOpts{
 		OverrideComputability: schema.Computed,
+		Document:              document,
 	}
 	createResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.CreateOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
@@ -121,6 +127,7 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	}
 	globalSchemaOpts = oas.GlobalSchemaOpts{
 		OverrideComputability: schema.Computed,
+		Document:              document,
 	}
 	readResponseSchema, err := oas.BuildSchemaFromResponse(explorerResource.ReadOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
@@ -151,7 +158,10 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			Ignores:             explorerResource.SchemaOptions.Ignores,
 			OverrideDescription: param.Description,
 		}
-		globalSchemaOpts := oas.GlobalSchemaOpts{OverrideComputability: schema.ComputedOptional}
+		globalSchemaOpts := oas.GlobalSchemaOpts{
+			OverrideComputability: schema.ComputedOptional,
+			Document:              document,
+		}
 
 		s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, globalSchemaOpts)
 		if schemaErr != nil {
