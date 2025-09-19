@@ -4,11 +4,13 @@
 package attrmapper
 
 import (
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/provider"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type ResourceSingleNestedAttribute struct {
@@ -39,6 +41,23 @@ func (a *ResourceSingleNestedAttribute) Merge(mergeAttribute ResourceAttribute) 
 
 func (a *ResourceSingleNestedAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
 	a.Description = &override.Description
+
+	switch override.ComputedOptionalRequired {
+	case "": // No override
+	case "computed":
+		a.ComputedOptionalRequired = schema.Computed
+	case "optional":
+		a.ComputedOptionalRequired = schema.Optional
+	case "required":
+		a.ComputedOptionalRequired = schema.Required
+	case "computed_optional":
+		a.ComputedOptionalRequired = schema.ComputedOptional
+	default:
+		return nil, fmt.Errorf(
+			"invalid value for computed_optional_required: %s",
+			override.ComputedOptionalRequired,
+		)
+	}
 
 	return a, nil
 }
