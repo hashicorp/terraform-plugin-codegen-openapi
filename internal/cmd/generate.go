@@ -13,13 +13,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/config"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/explorer"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
 	"github.com/hashicorp/cli"
 	"github.com/pb33f/libopenapi"
+	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/pb33f/libopenapi/index"
 )
 
@@ -148,7 +149,7 @@ func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 
 	// 5. Generate provider code spec w/ config
 	oasExplorer := explorer.NewConfigExplorer(model.Model, *config)
-	providerCodeSpec, err := generateProviderCodeSpec(logger, oasExplorer, *config)
+	providerCodeSpec, err := generateProviderCodeSpec(logger, oasExplorer, &model.Model, *config)
 	if err != nil {
 		return err
 	}
@@ -181,7 +182,7 @@ func (cmd *GenerateCommand) runInternal(logger *slog.Logger) error {
 	return nil
 }
 
-func generateProviderCodeSpec(logger *slog.Logger, dora explorer.Explorer, cfg config.Config) (*spec.Specification, error) {
+func generateProviderCodeSpec(logger *slog.Logger, dora explorer.Explorer, document *high.Document, cfg config.Config) (*spec.Specification, error) {
 	// 1. Find TF resources in OAS
 	explorerResources, err := dora.FindResources()
 	if err != nil {
@@ -201,21 +202,21 @@ func generateProviderCodeSpec(logger *slog.Logger, dora explorer.Explorer, cfg c
 	}
 
 	// 4. Use TF info to generate provider code spec for resources
-	resourceMapper := mapper.NewResourceMapper(explorerResources, cfg)
+	resourceMapper := mapper.NewResourceMapper(explorerResources, document, cfg)
 	resourcesIR, err := resourceMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for resources: %w", err)
 	}
 
 	// 5. Use TF info to generate provider code spec for data sources
-	dataSourceMapper := mapper.NewDataSourceMapper(explorerDataSources, cfg)
+	dataSourceMapper := mapper.NewDataSourceMapper(explorerDataSources, document, cfg)
 	dataSourcesIR, err := dataSourceMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for data sources: %w", err)
 	}
 
 	// 6. Use TF info to generate provider code spec for provider
-	providerMapper := mapper.NewProviderMapper(explorerProvider, cfg)
+	providerMapper := mapper.NewProviderMapper(explorerProvider, document, cfg)
 	providerIR, err := providerMapper.MapToIR(logger)
 	if err != nil {
 		return nil, fmt.Errorf("error generating provider code spec for provider: %w", err)

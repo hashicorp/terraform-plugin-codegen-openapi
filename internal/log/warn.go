@@ -7,7 +7,7 @@ import (
 	"errors"
 	"log/slog"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/oas"
 )
 
 // WarnLogOnError inspects the error type and extracts additional information for structured logging if possible

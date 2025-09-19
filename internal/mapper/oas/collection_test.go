@@ -12,8 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/resource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/oas"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/attrmapper"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/oas"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pb33f/libopenapi/datamodel/high/base"

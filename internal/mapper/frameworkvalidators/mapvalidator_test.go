@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
+	"github.com/starburstdata/terraform-plugin-codegen-openapi/internal/mapper/frameworkvalidators"
 )
 
 func TestMapValidatorSizeAtLeast(t *testing.T) {

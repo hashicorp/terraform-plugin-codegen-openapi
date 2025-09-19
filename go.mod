@@ -1,4 +1,4 @@
-module github.com/hashicorp/terraform-plugin-codegen-openapi
+module github.com/starburstdata/terraform-plugin-codegen-openapi
 
 go 1.23.0
 
