@@ -1,4 +1,4 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright IBM Corp. 2023, 2025
 // SPDX-License-Identifier: MPL-2.0
 
 // Package mapper includes the types and methods for mapping provider, resource, and data source
