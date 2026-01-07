@@ -32,7 +32,12 @@ func (a *ResourceBoolAttribute) Merge(mergeAttribute ResourceAttribute) (Resourc
 }
 
 func (a *ResourceBoolAttribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
-	a.Description = &override.Description
+	if override.Description != "" {
+		a.Description = &override.Description
+	}
+	if override.Sensitive != nil {
+		a.Sensitive = override.Sensitive
+	}
 
 	return a, nil
 }
@@ -65,7 +70,12 @@ func (a *DataSourceBoolAttribute) Merge(mergeAttribute DataSourceAttribute) (Dat
 }
 
 func (a *DataSourceBoolAttribute) ApplyOverride(override explorer.Override) (DataSourceAttribute, error) {
-	a.Description = &override.Description
+	if override.Description != "" {
+		a.Description = &override.Description
+	}
+	if override.Sensitive != nil {
+		a.Sensitive = override.Sensitive
+	}
 
 	return a, nil
 }

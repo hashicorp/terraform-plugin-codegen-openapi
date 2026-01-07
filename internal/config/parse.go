@@ -82,6 +82,8 @@ type AttributeOptions struct {
 type Override struct {
 	// Description overrides the description that was mapped/merged from the OpenAPI specification.
 	Description string `yaml:"description"`
+	// Sensitive marks the attribute as sensitive, hiding its value in Terraform output.
+	Sensitive *bool `yaml:"sensitive"`
 }
 
 // ParseConfig takes in a byte array (of YAML), unmarshals into a Config struct, and validates the result

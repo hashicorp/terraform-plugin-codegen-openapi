@@ -32,7 +32,12 @@ func (a *ResourceFloat64Attribute) Merge(mergeAttribute ResourceAttribute) (Reso
 }
 
 func (a *ResourceFloat64Attribute) ApplyOverride(override explorer.Override) (ResourceAttribute, error) {
-	a.Description = &override.Description
+	if override.Description != "" {
+		a.Description = &override.Description
+	}
+	if override.Sensitive != nil {
+		a.Sensitive = override.Sensitive
+	}
 
 	return a, nil
 }
@@ -65,7 +70,12 @@ func (a *DataSourceFloat64Attribute) Merge(mergeAttribute DataSourceAttribute) (
 }
 
 func (a *DataSourceFloat64Attribute) ApplyOverride(override explorer.Override) (DataSourceAttribute, error) {
-	a.Description = &override.Description
+	if override.Description != "" {
+		a.Description = &override.Description
+	}
+	if override.Sensitive != nil {
+		a.Sensitive = override.Sensitive
+	}
 
 	return a, nil
 }

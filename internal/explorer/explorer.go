@@ -51,4 +51,5 @@ type AttributeOptions struct {
 
 type Override struct {
 	Description string
+	Sensitive   *bool
 }
