@@ -94,6 +94,7 @@ func (e configExplorer) FindResources() (map[string]Resource, error) {
 			DeleteOp:         deleteOp,
 			CommonParameters: commonParameters,
 			SchemaOptions:    extractSchemaOptions(resourceConfig.SchemaOptions),
+			Description:      getOperationTagDescription(e.spec, createOp),
 		}
 	}
 
@@ -121,6 +122,7 @@ func (e configExplorer) FindDataSources() (map[string]DataSource, error) {
 			ReadOp:           readOp,
 			CommonParameters: commonParameters,
 			SchemaOptions:    extractSchemaOptions(dataSourceConfig.SchemaOptions),
+			Description:      getOperationTagDescription(e.spec, readOp),
 		}
 	}
 	return dataSources, errResult
@@ -215,4 +217,22 @@ func extractOverrides(cfgOverrides map[string]config.Override) map[string]Overri
 	}
 
 	return overrides
+}
+
+// getTagDescription looks up the description for a tag name from the document's tags
+func getTagDescription(tags []*highbase.Tag, tagName string) string {
+	for _, tag := range tags {
+		if tag.Name == tagName {
+			return tag.Description
+		}
+	}
+	return ""
+}
+
+// getOperationTagDescription gets the description from the first tag of an operation
+func getOperationTagDescription(spec high.Document, op *high.Operation) string {
+	if op == nil || len(op.Tags) == 0 {
+		return ""
+	}
+	return getTagDescription(spec.Tags, op.Tags[0])
 }

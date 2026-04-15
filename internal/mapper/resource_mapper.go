@@ -186,5 +186,12 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	resourceAttributes, _ = resourceAttributes.ApplyOverrides(explorerResource.SchemaOptions.AttributeOptions.Overrides)
 
 	resourceSchema.Attributes = resourceAttributes.ToSpec()
+
+	// Set the resource-level description from OpenAPI tags if available
+	if explorerResource.Description != "" {
+		resourceSchema.Description = &explorerResource.Description
+		resourceSchema.MarkdownDescription = &explorerResource.Description
+	}
+
 	return resourceSchema, nil
 }
