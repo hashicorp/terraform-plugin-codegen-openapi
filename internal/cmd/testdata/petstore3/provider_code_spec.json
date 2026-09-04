@@ -43,7 +43,9 @@
 							"description": "Order status, possible values - 'placed', 'approved', or 'delivered'"
 						}
 					}
-				]
+				],
+				"description": "Access to Petstore orders",
+				"markdown_description": "Access to Petstore orders"
 			}
 		},
 		{
@@ -124,7 +126,9 @@
 							}
 						}
 					}
-				]
+				],
+				"description": "Everything about your Pets",
+				"markdown_description": "Everything about your Pets"
 			}
 		},
 		{
@@ -204,7 +208,9 @@
 							}
 						}
 					}
-				]
+				],
+				"description": "Everything about your Pets",
+				"markdown_description": "Everything about your Pets"
 			}
 		}
 	],
@@ -267,7 +273,9 @@
 							]
 						}
 					}
-				]
+				],
+				"description": "Access to Petstore orders",
+				"markdown_description": "Access to Petstore orders"
 			}
 		},
 		{
@@ -360,7 +368,9 @@
 							}
 						}
 					}
-				]
+				],
+				"description": "Everything about your Pets",
+				"markdown_description": "Everything about your Pets"
 			}
 		},
 		{
@@ -410,7 +420,9 @@
 							"description": "User Status"
 						}
 					}
-				]
+				],
+				"description": "Operations about user",
+				"markdown_description": "Operations about user"
 			}
 		}
 	],

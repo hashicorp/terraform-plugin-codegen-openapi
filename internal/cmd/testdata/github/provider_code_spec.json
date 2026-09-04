@@ -1185,7 +1185,9 @@
 							"computed_optional_required": "computed"
 						}
 					}
-				]
+				],
+				"description": "View, modify your gists.",
+				"markdown_description": "View, modify your gists."
 			}
 		},
 		{
@@ -6981,7 +6983,9 @@
 							"computed_optional_required": "computed"
 						}
 					}
-				]
+				],
+				"description": "Interact with GitHub Repos.",
+				"markdown_description": "Interact with GitHub Repos."
 			}
 		}
 	],
@@ -13175,7 +13179,9 @@
 							"description": "A repository on GitHub."
 						}
 					}
-				]
+				],
+				"description": "Interact with GitHub Repos.",
+				"markdown_description": "Interact with GitHub Repos."
 			}
 		}
 	],

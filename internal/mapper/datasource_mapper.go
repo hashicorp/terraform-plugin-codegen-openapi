@@ -156,5 +156,12 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 	dataSourceAttributes, _ = dataSourceAttributes.ApplyOverrides(dataSource.SchemaOptions.AttributeOptions.Overrides)
 
 	dataSourceSchema.Attributes = dataSourceAttributes.ToSpec()
+
+	// Set the data source-level description from OpenAPI tags if available
+	if dataSource.Description != "" {
+		dataSourceSchema.Description = &dataSource.Description
+		dataSourceSchema.MarkdownDescription = &dataSource.Description
+	}
+
 	return dataSourceSchema, nil
 }

@@ -23,6 +23,7 @@ type Resource struct {
 	DeleteOp         *high.Operation
 	CommonParameters []*high.Parameter
 	SchemaOptions    SchemaOptions
+	Description      string // Resource-level description from OpenAPI tags
 }
 
 // DataSource contains a Read operation and schema options for configuration.
@@ -30,6 +31,7 @@ type DataSource struct {
 	ReadOp           *high.Operation
 	CommonParameters []*high.Parameter
 	SchemaOptions    SchemaOptions
+	Description      string // DataSource-level description from OpenAPI tags
 }
 
 // Provider contains a name and a schema.
