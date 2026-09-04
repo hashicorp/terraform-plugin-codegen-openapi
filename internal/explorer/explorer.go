@@ -50,5 +50,6 @@ type AttributeOptions struct {
 }
 
 type Override struct {
-	Description string
+	Description              string
+	ComputedOptionalRequired string
 }

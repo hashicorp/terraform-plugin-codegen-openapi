@@ -145,11 +145,12 @@ func TestResourceInt64Attribute_ApplyOverride(t *testing.T) {
 			},
 			override: explorer.Override{
 				Description: "new description",
+				ComputedOptionalRequired: string(schema.Computed),
 			},
 			expectedAttribute: &attrmapper.ResourceInt64Attribute{
 				Name: "test_attribute",
 				Int64Attribute: resource.Int64Attribute{
-					ComputedOptionalRequired: schema.Required,
+					ComputedOptionalRequired: schema.Computed,
 					Description:              pointer("new description"),
 				},
 			},
