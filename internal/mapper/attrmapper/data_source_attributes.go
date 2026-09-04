@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
+	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 )
 
 type DataSourceAttribute interface {
@@ -20,6 +21,7 @@ type DataSourceAttribute interface {
 
 type DataSourceNestedAttribute interface {
 	ApplyNestedOverride([]string, explorer.Override) (DataSourceAttribute, error)
+	NestedMerge([]string, DataSourceAttribute, schema.ComputedOptionalRequired) (DataSourceAttribute, error)
 }
 
 type DataSourceAttributes []DataSourceAttribute
@@ -52,6 +54,46 @@ func (targetSlice DataSourceAttributes) Merge(mergeSlices ...DataSourceAttribute
 				// Add this back to the original slice to avoid adding duplicate attributes from different mergeSlices
 				targetSlice = append(targetSlice, mergeAttribute)
 			}
+		}
+	}
+
+	return targetSlice, errResult
+}
+
+func (targetSlice DataSourceAttributes) MergeAttribute(path []string, attribute DataSourceAttribute, intermediateComputability schema.ComputedOptionalRequired) (DataSourceAttributes, error) {
+	var errResult error
+	if len(path) == 0 {
+		return targetSlice, errResult
+	}
+	for i, target := range targetSlice {
+		if target.GetName() == path[0] {
+
+			if len(path) > 1 {
+				nestedTarget, ok := target.(DataSourceNestedAttribute)
+				if !ok {
+					// TODO: error? there is a nested override for an attribute that is not a nested type
+					break
+				}
+
+				// The attribute we need to override is deeper nested, move up
+				nextPath := path[1:]
+
+				overriddenTarget, err := nestedTarget.NestedMerge(nextPath, attribute, intermediateComputability)
+				errResult = errors.Join(errResult, err)
+
+				targetSlice[i] = overriddenTarget
+
+			} else {
+				// No more path to traverse, apply merge, bidirectional
+				overriddenTarget, err := attribute.Merge(target)
+				errResult = errors.Join(errResult, err)
+				overriddenTarget, err = overriddenTarget.Merge(attribute)
+				errResult = errors.Join(errResult, err)
+
+				targetSlice[i] = overriddenTarget
+			}
+
+			break
 		}
 	}
 

@@ -6,6 +6,7 @@ package mapper
 import (
 	"errors"
 	"log/slog"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -140,7 +141,6 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	readParameterAttributes := attrmapper.ResourceAttributes{}
 	for _, param := range explorerResource.ReadOpParameters() {
 		if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
 			continue
@@ -170,17 +170,20 @@ func generateResourceSchema(logger *slog.Logger, explorerResource explorer.Resou
 			continue
 		}
 
-		parameterAttribute, schemaErr := s.BuildResourceAttribute(paramName, schema.ComputedOptional)
+		paramPath := strings.Split(paramName, ".")
+
+		parameterAttribute, schemaErr := s.BuildResourceAttribute(paramPath[len(paramPath)-1], schema.ComputedOptional)
 		if schemaErr != nil {
 			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 			continue
 		}
 
-		readParameterAttributes = append(readParameterAttributes, parameterAttribute)
+		// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
+		readResponseAttributes, _ = readResponseAttributes.MergeAttribute(paramPath, parameterAttribute, schema.ComputedOptional)
 	}
 
 	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
-	resourceAttributes, _ := createRequestAttributes.Merge(createResponseAttributes, readResponseAttributes, readParameterAttributes)
+	resourceAttributes, _ := createRequestAttributes.Merge(createResponseAttributes, readResponseAttributes)
 
 	// TODO: handle error for overrides
 	resourceAttributes, _ = resourceAttributes.ApplyOverrides(explorerResource.SchemaOptions.AttributeOptions.Overrides)

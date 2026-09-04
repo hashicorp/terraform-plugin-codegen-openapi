@@ -6,6 +6,7 @@ package mapper
 import (
 	"fmt"
 	"log/slog"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/config"
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/explorer"
@@ -106,7 +107,6 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 	// ****************
 	// READ Parameters (optional)
 	// ****************
-	readParameterAttributes := attrmapper.DataSourceAttributes{}
 	for _, param := range dataSource.ReadOpParameters() {
 		if param.In != util.OAS_param_path && param.In != util.OAS_param_query {
 			continue
@@ -129,7 +129,7 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			computability = schema.Required
 		}
 
-		// Check for any aliases and replace the paramater name if found
+		// Check for any aliases and replace the parameter name if found
 		paramName := param.Name
 		if aliasedName, ok := dataSource.SchemaOptions.AttributeOptions.Aliases[param.Name]; ok {
 			pLogger = pLogger.With("param_alias", aliasedName)
@@ -140,17 +140,20 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			continue
 		}
 
-		parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramName, computability)
+		paramPath := strings.Split(paramName, ".")
+
+		parameterAttribute, schemaErr := s.BuildDataSourceAttribute(paramPath[len(paramPath)-1], computability)
 		if schemaErr != nil {
 			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 			continue
 		}
 
-		readParameterAttributes = append(readParameterAttributes, parameterAttribute)
+		// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
+		readResponseAttributes, _ = readResponseAttributes.MergeAttribute(paramPath, parameterAttribute, computability)
 	}
 
 	// TODO: currently, no errors can be returned from merging, but in the future we should consider raising errors/warnings for unexpected scenarios, like type mismatches between attribute schemas
-	dataSourceAttributes, _ := readParameterAttributes.Merge(readResponseAttributes)
+	dataSourceAttributes := readResponseAttributes
 
 	// TODO: handle error for overrides
 	dataSourceAttributes, _ = dataSourceAttributes.ApplyOverrides(dataSource.SchemaOptions.AttributeOptions.Overrides)
