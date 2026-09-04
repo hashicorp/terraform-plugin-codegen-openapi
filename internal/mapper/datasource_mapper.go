@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-openapi/internal/mapper/util"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/schema"
+	high "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
 var _ DataSourceMapper = dataSourceMapper{}
@@ -25,13 +26,15 @@ type DataSourceMapper interface {
 
 type dataSourceMapper struct {
 	dataSources map[string]explorer.DataSource
+	document    *high.Document
 	//nolint:unused // Might be useful later!
 	cfg config.Config
 }
 
-func NewDataSourceMapper(dataSources map[string]explorer.DataSource, cfg config.Config) DataSourceMapper {
+func NewDataSourceMapper(dataSources map[string]explorer.DataSource, document *high.Document, cfg config.Config) DataSourceMapper {
 	return dataSourceMapper{
 		dataSources: dataSources,
+		document:    document,
 		cfg:         cfg,
 	}
 }
@@ -45,7 +48,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 		dataSource := m.dataSources[name]
 		dLogger := logger.With("data_source", name)
 
-		schema, err := generateDataSourceSchema(dLogger, name, dataSource)
+		schema, err := generateDataSourceSchema(dLogger, name, dataSource, m.document)
 		if err != nil {
 			log.WarnLogOnError(dLogger, err, "skipping data source schema mapping")
 			continue
@@ -60,7 +63,7 @@ func (m dataSourceMapper) MapToIR(logger *slog.Logger) ([]datasource.DataSource,
 	return dataSourceSchemas, nil
 }
 
-func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explorer.DataSource) (*datasource.Schema, error) {
+func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explorer.DataSource, document *high.Document) (*datasource.Schema, error) {
 	dataSourceSchema := &datasource.Schema{
 		Attributes: []datasource.Attribute{},
 	}
@@ -75,6 +78,7 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 	}
 	globalSchemaOpts := oas.GlobalSchemaOpts{
 		OverrideComputability: schema.Computed,
+		Document:              document,
 	}
 	readResponseSchema, err := oas.BuildSchemaFromResponse(dataSource.ReadOp, schemaOpts, globalSchemaOpts)
 	if err != nil {
@@ -118,7 +122,9 @@ func generateDataSourceSchema(logger *slog.Logger, name string, dataSource explo
 			OverrideDescription: param.Description,
 		}
 
-		s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{})
+		s, schemaErr := oas.BuildSchema(param.Schema, schemaOpts, oas.GlobalSchemaOpts{
+			Document: document,
+		})
 		if schemaErr != nil {
 			log.WarnLogOnError(pLogger, schemaErr, "skipping mapping of read operation parameter")
 			continue
